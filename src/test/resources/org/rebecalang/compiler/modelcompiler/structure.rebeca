@@ -1,0 +1,79 @@
+
+env int c = 10 + 2;
+env int d = c + 1;
+
+reactiveclass Test1 (3) {
+	knownrebecs {
+	}
+	statevars {
+		Test1 t;
+		int g;// = (((t)));
+		int st1;// = 10 + f.x[f][G].k()[8]++;
+		//vv h;
+		int[6] abbas;
+	}
+		
+	Test1(Test1 rt, int f, int j) {
+		t = null;//rt;
+		c = 4 + 2;
+		int fdg = abbas[4];
+		t.sib(1, t);
+		int gg = 10;
+		int a = ?(11 + c , 2);
+	}
+
+	msgsrv initial(int[3] ac, byte bc) {
+	Test1 tt = new Test1():();
+
+	byte a = (byte)currentMessageArrival + tt;
+	//int pa = ?(0.25: 1, 0.5: 2);
+	short[3][5] j;
+	int[2][3] b = {{10, 5, 4}, {7, 1, 5}};
+	float tp = 1.1f;
+	for(;;);
+	//j = 10;
+	delay(1076656);
+	byte r;
+	self.h();// after (4);
+	for (int a = 10, b; 10 < j[1 + 1][4]; self.h()) {
+		switch(r + 4) {
+			case 5:;
+			case (byte)1.1 + 4:
+				f();
+				s.g();
+			default:
+				/*pAlt {
+					prob (0.012 + (0.002 * 0.556)): {
+						int b4;
+					}
+					prob (0.987): {
+						int a4 = 10;
+					}
+				}*/
+				break;
+		}
+		int bon = ?(1.1 + u(), 2);
+	}
+	if(?(true, false)){};
+	//else;
+	t.sib(1, self);
+	}
+	
+	int u (){}
+	msgsrv sib(int a, Test1 tt) {
+		int[2] bs= {12, 17444};
+		bib(self, bs).sib(10.1, self);
+	}
+	
+	Test1 bib(Test1 yt, int[2] x) {
+	}
+	
+	void h() {
+		assertion(10==20);
+	}
+}
+
+main {
+	Test1 t1():(t2, 10, (short)88);
+	Test1 t2():(t1, 12, (byte)78);
+}

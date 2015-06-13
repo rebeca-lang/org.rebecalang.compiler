@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" targetNamespace="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression"
+	xmlns="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression">
+
+	<xs:complexType name="Statement">
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
+	</xs:complexType>
+
+	<xs:complexType name="Expression">
+		<xs:complexContent>
+			<xs:extension base="Statement">
+				<xs:sequence>
+					<xs:element name="type" type="Type" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="TernaryExpression">
+		<xs:complexContent>
+			<xs:extension base="Expression">
+				<xs:sequence>
+					<xs:element name="condition" type="Expression" />
+					<xs:element name="left" type="Expression" />
+					<xs:element name="right" type="Expression" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="BinaryExpression">
+		<xs:complexContent>
+			<xs:extension base="Expression">
+				<xs:sequence>
+					<xs:element name="left" type="Expression" />
+					<xs:element name="right" type="Expression" />
+				</xs:sequence>
+				<xs:attribute name="operator" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="UnaryExpression">
+		<xs:complexContent>
+			<xs:extension base="Expression">
+				<xs:sequence>
+					<xs:element name="expression" type="Expression" />
+				</xs:sequence>
+				<xs:attribute name="operator" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="CastExpression">
+		<xs:complexContent>
+			<xs:extension base="Expression">
+				<xs:sequence>
+					<xs:element name="expression" type="Expression" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="NonDetExpression">
+		<xs:complexContent>
+			<xs:extension base="Expression">
+				<xs:sequence>
+					<xs:element name="choices" type="Expression" maxOccurs="unbounded"
+						minOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="Literal">
+		<xs:complexContent>
+			<xs:extension base="Expression">
+				<xs:attribute name="literalValue" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="PlusSubExpression">
+		<xs:complexContent>
+			<xs:extension base="Expression">
+				<xs:sequence>
+					<xs:element name="value" type="Expression" />
+				</xs:sequence>
+				<xs:attribute name="operator" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="PrimaryExpression">
+		<xs:complexContent>
+			<xs:extension base="Expression">
+				<xs:sequence>
+					<xs:element name="categoty" type="Category"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="Category">
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="RebecInstantiationPrimary">
+		<xs:complexContent>
+			<xs:extension base="PrimaryExpression">
+	            <xs:sequence>
+	                <xs:element name="bindings" type="Expression" maxOccurs="unbounded" minOccurs="0"/>
+					<xs:element name="arguments" type="Expression"  maxOccurs="unbounded" minOccurs="0"/>
+	            </xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="DotPrimary">
+		<xs:complexContent>
+			<xs:extension base="PrimaryExpression">
+				<xs:sequence>
+					<xs:element name="left" type="Expression" />
+					<xs:element name="right" type="PrimaryExpression" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="TermPrimary">
+		<xs:complexContent>
+			<xs:extension base="PrimaryExpression">
+				<xs:sequence>
+					<xs:element name="parentSuffixPrimary" type="ParentSuffixPrimary" />
+					<xs:element name="indices" type="Expression" maxOccurs="unbounded"
+						minOccurs="1" />
+				</xs:sequence>
+				<xs:attribute name="name" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ParentSuffixPrimary">
+		<xs:sequence>
+			<xs:element name="arguments" type="Expression" maxOccurs="unbounded"
+				minOccurs="0" />
+		</xs:sequence>
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
+	</xs:complexType>
+
+	<xs:complexType name="Type">
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
+	</xs:complexType>
+
+	<xs:complexType name="ArrayType">
+		<xs:complexContent>
+			<xs:extension base="Type">
+				<xs:sequence>
+					<xs:element name="dimensions" type="xs:int" maxOccurs="unbounded"
+						minOccurs="1" />
+					<xs:element name="primitiveType" type="PrimitiveType" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="PrimitiveType">
+		<xs:complexContent>
+			<xs:extension base="Type">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="BitIntType">
+		<xs:complexContent>
+			<xs:extension base="PrimitiveType">
+				<xs:attribute name="BitIntSize" type="xs:int" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="OrdinaryPrimitiveType">
+		<xs:complexContent>
+			<xs:extension base="PrimitiveType">
+				<xs:attribute name="name" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

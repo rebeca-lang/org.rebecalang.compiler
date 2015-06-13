@@ -1,0 +1,621 @@
+// new vesion : started at 93/1/8
+//delays are as follows:
+/*
+-   Packet generation time                                                                                          1	:gnrT 
+-   Routing delay                                                                                                   2	:routT = 2	
+-   Delay for transmission of an outReq (from an input port to an output port in the same router)                   1	:outRT = 1
+-   Delay for transmission of an outAck                                                                             1   :outAT = 1       *
+-   Delay of scheduling algorithm (if it is not negligible)                                                         2	:schdT
+-   Delay for transmission of inReq (from an output port to the input port of the neighboring router)               2	:inRT = 2
+-   Delay for transmission of inAck                                                                                 1   :inAT = 1       *
+-   Packet consumption delay                                                                                        1	:consT 
+																														:writeT = 4
+																														:readT = 13
+*/
+
+
+reactiveclass Manager(10){
+	
+	knownrebecs{
+		Router r00;
+		Router r10;
+		Router r20;
+		Router r30;
+		
+		Router r01;
+		Router r11;
+		Router r21;
+		Router r31;
+		
+		Router r02;
+		Router r12;
+		Router r22;
+		Router r32;
+		
+		Router r03;
+		Router r13;
+		Router r23;
+		Router r33;
+	}
+	
+	statevars{
+	}
+	
+	Manager(){
+	}
+	
+	msgsrv reset(){
+	//	r00.init(0,0);
+	//	r10.init(1,0);
+	//	r20.init(2,0);
+	//	r30.init(3,0);
+		
+	//	r01.init(0,1);
+	//	r11.init(1,1);
+	//	r21.init(2,1);
+	//	r31.init(3,1);
+		
+	//	r02.init(0,2);
+	//	r12.init(1,2);
+	// 	r22.init(2,2);
+	//	r32.init(3,2);
+		
+	//	r03.init(0,3);
+	//	r13.init(1,3);
+		r23.init(2,3);
+	//	r33.init(3,3);
+	//	r36.init(3,6);
+	}
+}
+
+reactiveclass Router(10) {
+
+	knownrebecs {
+		Manager manager;
+		Router N;  // : 0
+		Router E;  // : 1
+		Router S;  // : 2
+		Router W;  // : 3		
+	}
+	
+	statevars {  
+		short wholeCycle;       // the time period for reseting the model
+		byte inBufSize;
+		short maxTime; 			// using for estimating the time during witch packets recieved
+		
+		
+		byte Xid;
+		byte Yid;
+		
+		byte[4] inBufPtr;           //Pointers of each sides for output
+		
+		byte[2] inBufXN;		  // the size of arrays is equal with the buffersize , 
+		byte[2] inBufXE;          // Since we can't use varriable size arrays here, we used the value strictly.
+		byte[2] inBufXS;
+		byte[2] inBufXW;
+		
+		byte[2] inBufYN;				//buffers storing y of packets
+		byte[2] inBufYE;
+		byte[2] inBufYS;
+		byte[2] inBufYW;
+
+		boolean[4] inBufFull;
+		byte[4] inBufLen;       // Number of elements in the buffer   
+		
+		byte[4] outBufX;		// capacity 1 for each of the output buffers
+		byte[4] outBufY;
+		boolean[4] outBufFull; 	
+		
+		boolean [4] outReqEnable;		// for each input ports. means the port is waiting for outAck for recently sent packet, thus cannot send other packets.
+		boolean [4] inReqEnable;		// for each output ports. the same usage of outReqEnables for input ports.
+		
+		boolean[4] waitedInReq;			// For each Input Port, shows if the neigboring router has a waited inReq request
+		byte[4] waitedInReqX;		// Shows the (X of) destination of the waited packet if "waitedIReq" is "true"
+		byte[4] waitedInReqY;
+		
+		byte [4] waitedOutReq; 			// For each inputPort, shows if it is waiting for an output port to be empty 
+		
+		byte recieved;
+		
+		byte gnrT;
+		byte routT;
+		byte outRT;
+		byte outAT;
+		byte inAT;
+		byte inRT;
+		byte schdT;
+		byte consT;
+		byte writeT;
+		byte readT;
+	}
+	
+	Router(byte X, byte Y){
+		gnrT = 10;
+		routT = 2;
+		outRT = 1;
+		outAT = 1;
+		inRT = 2;
+		inAT = 1;
+		schdT = 2;
+		consT = 19;
+		writeT = 4;
+		readT = 13;
+		
+		
+		maxTime = 165;
+		wholeCycle = 600;
+		inBufSize = 2;
+		
+		Xid = X;
+		Yid = Y;
+			
+		for(byte i=0;i<4;i++){		
+			outReqEnable[i] = true;    // for each input port
+			inReqEnable[i] = true;		// for each output port
+			
+			waitedInReq[i] = false;     // wating inReq for each input port. maybe false or true
+			waitedInReqX[i] = 0;
+			waitedInReqY[i] = 0;
+			
+			waitedOutReq[i] = 0;           // wating outReq for each input port. maybe 0, 1, 2 or 3 
+			
+			inBufFull[i] = false;		
+			inBufPtr [i]= 0;  			// all selectors of round robin schedulers are set to begin from port 0, except the o scheduler for output buffer
+			inBufLen [i] = 0;
+			
+			outBufFull[i] = false;
+			outBufX[i] = 0;
+			outBufY[i] = 0;
+		}
+		inBufPtr [0]= 1; 				// round robin scheduler of 0 output buffer should start from 1 (not 0)
+		
+		for (byte i=0;i<inBufSize;i++){
+			inBufXN [i] = 0; 
+			inBufXE [i] = 0;
+			inBufXS [i] = 0;
+			inBufXW [i] = 0;
+			
+			inBufYN [i] = 0;
+			inBufYE [i] = 0;
+			inBufYS [i] = 0;
+			inBufYW [i] = 0;
+		}
+		recieved = 0;
+			
+	
+		//Traffic  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> should be written
+		if(Xid == 0 && Yid == 0){
+			self.inReq(0,2,3) after (gnrT);  // 10 is the producing time
+		}	
+	
+		if(X == 1 && Y == 0)
+			self.inReq(3,2,0) after (36);
+			
+		// destination
+		if(X == 2 && Y == 3){
+			self.reStart() after(wholeCycle);
+			self.checkRecieved()after(maxTime);
+			
+		}
+	}
+	
+	msgsrv init(byte X, byte Y){
+		for(byte i=0;i<4;i++){		
+			outReqEnable[i] = true;    // for each input port
+			inReqEnable[i] = true;		// for each output port
+			
+			waitedInReq[i] = false;     // wating inReq for each input port. maybe false or true
+			waitedInReqX[i] = 0;
+			waitedInReqY[i] = 0;
+			
+			waitedOutReq[i] = 0;           // wating outReq for each input port. maybe 0, 1, 2 or 3 
+			
+			inBufFull[i] = false;		
+			inBufPtr [i]= 0;  			// all selectors of round robin schedulers are set to begin from port 0, except the o scheduler for output buffer
+			inBufLen [i] = 0;
+			
+			outBufFull[i] = false;
+			outBufX[i] = 0;
+			outBufY[i] = 0;
+		}
+		inBufPtr [0]= 1; 				// round robin scheduler of 0 output buffer should start from 1 (not 0)
+		
+		for (byte i=0;i<inBufSize;i++){
+			inBufXN [i] = 0; 
+			inBufXE [i] = 0;
+			inBufXS [i] = 0;
+			inBufXW [i] = 0;
+			
+			inBufYN [i] = 0;
+			inBufYE [i] = 0;
+			inBufYS [i] = 0;
+			inBufYW [i] = 0;
+		}
+		recieved = 0;
+	
+		if(X == 2 && Y == 3){
+			self.reStart() after(wholeCycle);
+		}
+	}
+	
+	
+	// *********** Main routins ***************
+	
+	msgsrv inReq( byte inPort, byte Xtarget, byte Ytarget){
+			
+		if( inBufFull[inPort] == false ){   		// if the buffer is not full, store the packet(Xtarget, Ytarget) in it. 
+			if(inPort == 0){
+				inBufXN[inBufLen[inPort]] = Xtarget;
+				inBufYN[inBufLen[inPort]] = Ytarget;
+			} 
+			else if(inPort == 1){
+				inBufXE[inBufLen[inPort]] = Xtarget;
+				inBufYE[inBufLen[inPort]] = Ytarget;
+			}	
+			else if(inPort == 2){
+				inBufXS[inBufLen[inPort]] = Xtarget;
+				inBufYS[inBufLen[inPort]] = Ytarget;
+			} 
+			else if(inPort == 3){
+				inBufXW[inBufLen[inPort]] = Xtarget;
+				inBufYW[inBufLen[inPort]] = Ytarget;
+			}
+			inBufLen[inPort] = (turn)inBufLen[inPort] + 1; 		// update the number of elements in the port buffer
+			if(inBufLen[inPort] == inBufSize) 			// update the value of the bufFull varriable
+				inBufFull[inPort] = true;			
+			
+			if (sender == N)
+				N.inAck((byte)((inPort + 2) % 4))after(writeT+ inAT);	// buff-write-dly (4) + Ack-transmission-dly(1)			// sending acknowledgement to the sender, since the packet is stored.
+			else if (sender == E)
+				E.inAck((byte)((inPort + 2) % 4))after(writeT+ inAT);
+			else if (sender == S)
+				S.inAck((byte)((inPort + 2) % 4))after(writeT+ inAT);
+			else if (sender == W)
+				W.inAck((byte)((inPort + 2) % 4))after(writeT+ inAT);
+				
+		}else{
+			waitedInReq[inPort] = true;
+			waitedInReqX[inPort] = Xtarget;						// can be deleted. But to avoid informing the outBuffer of the neigbor,
+			waitedInReqY[inPort] = Ytarget;						// we save the packet (this action follows the original behaivior of the NoC)
+		}
+		if(inBufLen[inPort] == 1){
+			if(outReqEnable[inPort] == true){
+				self.route(inPort, Xtarget, Ytarget)after(writeT);// buff-write-dly (4)				// send the current packet(located in place 0)
+				outReqEnable[inPort] = false;
+			}
+		}	
+	}
+	
+	msgsrv route(byte inPort, byte Xtarget, byte Ytarget) {
+		if(Xtarget > Xid){		// Routing Algorithm XY: first move through horisental channels 
+			self.outReq(1, inPort)after(routT+ outRT);  // outReq-Transmission (1) // to the East , the first parameter is the outport number		
+		} 
+		else if(Xtarget < Xid){	
+			self.outReq(3, inPort)after(routT+ outRT);   // to the West
+		} 
+		else if(Ytarget > Yid){	
+			self.outReq(2, inPort)after(routT+ outRT);   // to the South
+		}
+		else if(Ytarget < Yid){	
+		
+			self.outReq(0, inPort)after(routT+ outRT);   // to the North
+		}
+		else if((Xtarget == Xid) && (Ytarget == Yid)){ // Here is the destination of the router
+			self. consume()after(routT);
+			self.outAck(inPort)after(routT);	// if here is the destination, the packet should be omited from the input-buffer(in other words the
+                         						// state of the input-buufer should be updated), we simply do this task by calling "outAck"
+		}	
+	}
+	
+	msgsrv consume(){
+		recieved = (byte)recieved + 1;  
+	}
+	
+	msgsrv inAck(byte outPort){						// an acknowledgement which is sent in response of an in req from an outport of a neigbor router
+		byte turn = inBufPtr[outPort];
+		outBufFull[outPort] = false;
+		inReqEnable[outPort] = true;
+		
+		for(byte i=0;i<4;i++){				// Choosing the next input port that can send a packet from the outPut port
+			if(waitedOutReq[turn] == outPort) {
+				if(turn == 0){
+					outBufX[outPort] = inBufXN[0];
+					outBufY[outPort] = inBufYN[0];
+				} 
+				else if(turn == 1){
+					outBufX[outPort] = inBufXE[0];
+					outBufY[outPort] = inBufYE[0];
+				}	
+				else if(turn == 2){
+					outBufX[outPort] = inBufXS[0];
+					outBufY[outPort] = inBufYS[0];
+				} 
+				else if(turn == 3){
+					outBufX[outPort] = inBufXW[0];
+					outBufY[outPort] = inBufYW[0];
+				}
+				
+				outBufFull[outPort] = true;   
+				self.outAck(turn)after((byte) schdT+ writeT+outAT);	       			// send the Acknowledgement for the outReq
+				
+				inBufPtr[outPort] = (byte)(turn + 1) % 4;
+			  	break;
+			}
+				turn = (byte)(turn + 1) % 4;
+				if (turn == outPort) turn = (turn)(turn + 1) % 4;
+		}		
+		if(outBufFull[outPort] == true){
+			self.inReq((byte)((outPort+2)%4), outBufX[outPort], outBufY[outPort])after((byte)(schdT+ readT+ writeT+ inRT));				// send the current packet(located in place 0)
+			inReqEnable[outPort] = false;
+		}	
+	}
+	
+	msgsrv outReq(byte outPort, byte inPort){
+		if( outBufFull[outPort] == false ){   		// if the buffer is not full, store the packet(Xtarget, Ytarget) in it. 
+			if(inPort == 0){
+				outBufX[outPort] = inBufXN[0];
+				outBufY[outPort] = inBufYN[0];
+			} 
+			else if(inPort == 1){
+				outBufX[outPort] = inBufXE[0];
+				outBufY[outPort] = inBufYE[0];
+			}	
+			else if(inPort == 2){
+				outBufX[outPort] = inBufXS[0];
+				outBufY[outPort] = inBufYS[0];
+			} 
+			else if(inPort == 3){
+				outBufX[outPort] = inBufXW[0];
+				outBufY[outPort] = inBufYW[0];
+			}
+			
+			outBufFull[outPort] = true;   
+			self.outAck(inPort)after(readT+ writeT+ outAT);	       			// send the Acknowledgement for the current outReq
+			
+			//if(outBufLen[outPort] == 1 && inReqEnable[outPort] == false){
+			//try to send the packet to the neigboring router
+			if(outPort == 0)
+				N.inReq(2, outBufX[outPort], outBufY[outPort])after(readT+ writeT+ inRT);
+			else if(outPort == 1)
+				E.inReq(3, outBufX[outPort], outBufY[outPort])after(readT+ writeT+ inRT);
+			else if(outPort == 2)
+				S.inReq(0, outBufX[outPort], outBufY[outPort])after(readT+ writeT+ inRT);
+			else if(outPort == 3)
+				W.inReq(1, outBufX[outPort], outBufY[outPort])after(readT+ writeT+ inRT);
+				
+			inReqEnable[outPort] = false;
+		
+		} else
+			waitedOutReq[inPort] = outPort;		    // The input port is wating for the outpot port
+	}
+	
+	msgsrv outAck(byte inPort){					// an acknowledgment which is ssent as a response of outreq of an input port of the router
+		byte lng;
+		byte packX;
+		byte packY;
+		
+		outReqEnable[inPort] = true;         	// enableing the inPort for sending other outReqs to output ports
+		
+		for(byte i= 1;i<inBufLen[inPort];i++){				// Shifting all elements of the buffer to one upper place
+			if(inPort == 0){
+				inBufXN[i - 1] = inBufXN[i];
+				inBufYN[i - 1] = inBufYN[i];
+			} 
+			else if(inPort == 1){
+				inBufXE[i - 1] = inBufXE[i];
+				inBufYE[i - 1] = inBufYE[i];
+			}	
+			else if(inPort == 2){
+				inBufXS[i - 1] = inBufXS[i];
+				inBufYS[i - 1] = inBufYS[i];
+			} 
+			else if(inPort == 3){
+				inBufXW[i - 1] = inBufXW[i];
+				inBufYW[i - 1] = inBufYW[i];
+			}
+		}
+		
+		inBufLen[inPort] = (byte)inBufLen[inPort] - 1;			//updating the length of the buffer
+		
+		if (waitedInReq[inPort] == true){			// If an inReq was waiting to store in this inputBuffer, store it and then inform the 
+			lng = inBufLen[inPort];                     //source neigbor via sending an acknowledgment
+			if(inPort == 0){
+				inBufXN[lng] = waitedInReqX[inPort];
+				inBufYN[lng] = waitedInReqY[inPort];
+				N.inAck(2)after(writeT+ inAT);								// sending an acknoledgement to the neigboure router
+			} 
+			else if(inPort == 1){
+				inBufXE[lng] = waitedInReqX[inPort];
+				inBufYE[lng] = waitedInReqY[inPort];
+				E.inAck(3)after(writeT+ inAT);
+			}	
+			else if(inPort == 2){
+				inBufXS[lng] = waitedInReqX[inPort];
+				inBufYS[lng] = waitedInReqY[inPort];
+				S.inAck(0)after(writeT+ inAT);
+			} 
+			else if(inPort == 3){
+				inBufXW[lng] = waitedInReqX[inPort];
+				inBufYW[lng] = waitedInReqY[inPort];
+				W.inAck(1)after(writeT+ inAT);
+			}
+			
+			inBufLen[inPort] = (byte)inBufLen[inPort] + 1;			//updating the length of the buffer
+		}
+		
+		if (inBufLen[inPort] > 0){
+			if(inPort == 0){
+				packX = inBufXN[0];
+				packY = inBufYN[0];
+			} 
+			else if(inPort == 1){
+				packX = inBufXE[0];
+				packY = inBufYE[0];
+			}	
+			else if(inPort == 2){
+				packX = inBufXS[0];
+				packY = inBufYS[0];
+			} 
+			else if(inPort == 3){
+				packX = inBufXW[0];
+				packY = inBufYW[0];
+			}
+			self.route(inPort, packX, packY)after(writeT);				// send the current packet(located in place 0)
+			outReqEnable[inPort] = false;
+		}
+	}
+	
+	// ********** routins for property checking ************
+	
+	msgsrv reStart(){
+		manager.reset();
+	}	
+	
+	msgsrv deadlineMiss(){
+		delay(5);
+	}
+	
+	msgsrv checkPoint(){
+		self.deadlineMiss() after(1)deadline(3);
+		self.deadlineMiss() after(1)deadline(3);
+	}
+	
+	msgsrv checkRecieved(){
+		
+		if (recieved ==1){
+			self.checkPoint();
+		}
+		/*if (recieved < 5 ){ 
+			self.checkPoint();
+		}
+		else if (recieved > 3){
+
+		}	*/
+	}	
+}
+
+main {
+//NoC 2*2
+	/*
+	Manager m(r00,r01,r10,r11):();
+	Router r00(m,r01,r10,r01,r10):(0,0);
+	Router r10(m,r11,r00,r11,r00):(1,0);
+
+	Router r01(m,r00,r11,r00,r11):(0,1);
+	Router r11(m,r10,r01,r10,r01):(1,1);
+	*/
+	
+//NoC 4*4
+	
+	Manager m(r00,r10,r20,r30,r01,r11,r21,r31,r02,r12,r22,r32,r03,r13,r23,r33):();
+	
+	Router r00(m,r03,r10,r01,r30):(0,0);
+	Router r10(m,r13,r20,r11,r00):(1,0);
+	Router r20(m,r23,r30,r21,r10):(2,0);
+	Router r30(m,r33,r00,r31,r20):(3,0);
+	
+	Router r01(m,r00,r11,r02,r31):(0,1);
+	Router r11(m,r10,r21,r12,r01):(1,1);
+	Router r21(m,r20,r31,r22,r11):(2,1);
+	Router r31(m,r30,r01,r32,r21):(3,1);
+	
+	Router r02(m,r01,r12,r03,r32):(0,2);
+	Router r12(m,r11,r22,r13,r02):(1,2);
+	Router r22(m,r21,r32,r23,r12):(2,2);
+	Router r32(m,r31,r02,r33,r22):(3,2);
+	
+	Router r03(m,r02,r13,r00,r33):(0,3);
+	Router r13(m,r12,r23,r10,r03):(1,3);
+	Router r23(m,r22,r33,r20,r13):(2,3);
+	Router r33(m,r32,r03,r30,r23):(3,3);
+	
+
+//NoC 8* 8
+/*	
+	Manager m(r00,r10,r20,r30,r40,r50,r60,r70,
+			  r01,r11,r21,r31,r41,r51,r61,r71,
+			  r02,r12,r22,r32,r42,r52,r62,r72,
+			  r03,r13,r23,r33,r43,r53,r63,r73,
+			  r04,r14,r24,r34,r44,r54,r64,r74,
+			  r05,r15,r25,r35,r45,r55,r65,r75,
+			  r06,r16,r26,r36,r46,r56,r66,r76,
+			  r07,r17,r27,r37,r47,r57,r67,r77
+			  ):();
+	
+	Router r00(m,r07,r10,r01,r70):(0,0);
+	Router r10(m,r17,r20,r11,r00):(1,0);
+	Router r20(m,r27,r30,r21,r10):(2,0);
+	Router r30(m,r37,r40,r31,r20):(3,0);
+	Router r40(m,r47,r50,r41,r30):(4,0);
+	Router r50(m,r57,r60,r51,r40):(5,0);
+	Router r60(m,r67,r70,r61,r50):(6,0);
+	Router r70(m,r77,r00,r71,r60):(7,0);
+	
+	Router r01(m,r00,r11,r02,r71):(0,1);
+	Router r11(m,r10,r21,r12,r01):(1,1);
+	Router r21(m,r20,r31,r22,r11):(2,1);
+	Router r31(m,r30,r41,r32,r21):(3,1);
+	Router r41(m,r40,r51,r42,r31):(4,1);
+	Router r51(m,r50,r61,r52,r41):(5,1);
+	Router r61(m,r60,r71,r62,r51):(6,1);
+	Router r71(m,r70,r01,r72,r61):(7,1);
+	
+	Router r02(m,r01,r12,r03,r72):(0,2);
+	Router r12(m,r11,r22,r13,r02):(1,2);
+	Router r22(m,r21,r32,r23,r12):(2,2);
+	Router r32(m,r31,r42,r33,r22):(3,2);
+	Router r42(m,r41,r52,r43,r32):(4,2);
+	Router r52(m,r51,r62,r53,r42):(5,2);
+	Router r62(m,r61,r72,r63,r52):(6,2);
+	Router r72(m,r71,r02,r73,r62):(7,2);
+	
+	Router r03(m,r02,r13,r04,r73):(0,3);
+	Router r13(m,r12,r23,r14,r03):(1,3);
+	Router r23(m,r22,r33,r24,r13):(2,3);
+	Router r33(m,r32,r43,r34,r23):(3,3);
+	Router r43(m,r42,r53,r44,r33):(4,3);
+	Router r53(m,r52,r63,r54,r43):(5,3);
+	Router r63(m,r62,r73,r64,r53):(6,3);
+	Router r73(m,r72,r03,r74,r63):(7,3);
+
+	Router r04(m,r03,r14,r05,r74):(0,4);
+	Router r14(m,r13,r24,r15,r04):(1,4);
+	Router r24(m,r23,r34,r25,r14):(2,4);
+	Router r34(m,r33,r44,r35,r24):(3,4);
+	Router r44(m,r43,r54,r45,r34):(4,4);
+	Router r54(m,r53,r64,r55,r44):(5,4);
+	Router r64(m,r63,r74,r65,r54):(6,4);
+	Router r74(m,r73,r04,r75,r64):(7,4);
+	
+	Router r05(m,r04,r15,r06,r75):(0,5);
+	Router r15(m,r14,r25,r16,r05):(1,5);
+	Router r25(m,r24,r35,r26,r15):(2,5);
+	Router r35(m,r34,r45,r36,r25):(3,5);
+	Router r45(m,r44,r55,r46,r35):(4,5);
+	Router r55(m,r54,r65,r56,r45):(5,5);
+	Router r65(m,r64,r75,r66,r55):(6,5);
+	Router r75(m,r74,r05,r76,r65):(7,5);
+	
+	Router r06(m,r05,r16,r07,r76):(0,6);
+	Router r16(m,r15,r26,r17,r06):(1,6);
+	Router r26(m,r25,r36,r27,r16):(2,6);
+	Router r36(m,r35,r46,r37,r26):(3,6);
+	Router r46(m,r45,r56,r47,r36):(4,6);
+	Router r56(m,r55,r66,r57,r46):(5,6);
+	Router r66(m,r65,r76,r67,r56):(6,6);
+	Router r76(m,r75,r06,r77,r66):(7,6);
+	
+	Router r07(m,r06,r17,r00,r77):(0,7);
+	Router r17(m,r16,r27,r10,r07):(1,7);
+	Router r27(m,r26,r37,r20,r17):(2,7);
+	Router r37(m,r36,r47,r30,r27):(3,7);
+	Router r47(m,r46,r57,r40,r37):(4,7);
+	Router r57(m,r56,r67,r50,r47):(5,7);
+	Router r67(m,r66,r77,r60,r57):(6,7);
+	Router r77(m,r76,r07,r70,r67):(7,7);
+*/	
+} 
+
+
+
+	

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" targetNamespace="http://rebecalang.org/compiler/modelcompiler/probabilisticrebecaexpression"
+	xmlns:corerebecaexp="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression"
+	xmlns="http://rebecalang.org/compiler/modelcompiler/probabilisticrebecaexpression">
+
+	<xs:import namespace="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression"
+		schemaLocation="corerebecaexpressionobjectmodel.xsd" />
+
+	<xs:complexType name="ProbabilisticExpression">
+		<xs:complexContent>
+			<xs:extension base="corerebecaexp:Expression">
+				<xs:sequence>
+					<xs:element name="choices" type="ProbabilisticAlternativeValue" maxOccurs="unbounded"
+						minOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ProbabilisticAlternativeValue">
+		<xs:sequence>
+			<xs:element name="probability" type="corerebecaexp:Expression"/>
+			<xs:element name="value" type="corerebecaexp:Expression"/>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

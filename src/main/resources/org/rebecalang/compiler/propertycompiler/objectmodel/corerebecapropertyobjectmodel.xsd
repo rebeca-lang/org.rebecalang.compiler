@@ -1,0 +1,47 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified"
+	targetNamespace="http://rebecalang.org/compiler/propertycompiler/corerebeca"
+	xmlns:corerebecaexp="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression"
+	xmlns="http://rebecalang.org/compiler/propertycompiler/corerebeca">
+
+
+	<xs:import
+		namespace="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression"
+		schemaLocation="../../modelcompiler/objectmodel/corerebecaexpressionobjectmodel.xsd" />
+
+	<xs:element name="PropertyModel">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Definitions" type="Definition"
+					maxOccurs="unbounded" minOccurs="0" />
+				<xs:element name="LTLDefinitions" type="LTLDefinition"
+					maxOccurs="unbounded" minOccurs="0" />
+				<xs:element name="CTLDefinitions" type="CTLDefinition"
+					maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="Definition">
+		<xs:sequence>
+			<xs:element name="Expression" type="corerebecaexp:Expression" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="CTLDefinition">
+		<xs:sequence>
+			<xs:element name="Expression" type="corerebecaexp:Expression" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="LTLDefinition">
+		<xs:sequence>
+			<xs:element name="Expression" type="corerebecaexp:Expression" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+
+</xs:schema>
