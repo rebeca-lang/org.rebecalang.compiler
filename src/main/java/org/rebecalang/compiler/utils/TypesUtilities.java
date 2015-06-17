@@ -299,13 +299,12 @@ public class TypesUtilities {
 			for (int dimention : aType.getDimensions())
 				retValueSuffix += "[" + (dimention == 0 ? "" : dimention) + "]";
 		}
-
 		if (expectedType instanceof BitIntType)
 			return "bitint" + retValueSuffix;
 		else if (expectedType instanceof OrdinaryPrimitiveType)
 			return ((OrdinaryPrimitiveType) expectedType).getName()
 					+ retValueSuffix;
-		throw new RuntimeException("Unknown Type \"" + expectedType + "\"");
+		throw new RuntimeException("Unknown Type " + expectedType);
 	}
 
 	public static CodeCompilationException getTypeMismatchException(Type base,
