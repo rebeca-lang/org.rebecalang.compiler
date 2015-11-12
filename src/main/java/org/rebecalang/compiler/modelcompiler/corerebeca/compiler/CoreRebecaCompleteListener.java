@@ -48,17 +48,6 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	void exitRelationalOp(@NotNull CoreRebecaCompleteParser.RelationalOpContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#unaryExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnaryExpression(@NotNull CoreRebecaCompleteParser.UnaryExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#unaryExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnaryExpression(@NotNull CoreRebecaCompleteParser.UnaryExpressionContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#expressionList}.
 	 * @param ctx the parse tree
 	 */
@@ -68,6 +57,17 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionList(@NotNull CoreRebecaCompleteParser.ExpressionListContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#unaryExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnaryExpression(@NotNull CoreRebecaCompleteParser.UnaryExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#unaryExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnaryExpression(@NotNull CoreRebecaCompleteParser.UnaryExpressionContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#type}.

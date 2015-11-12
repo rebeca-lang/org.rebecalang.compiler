@@ -49,17 +49,6 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	void exitRelationalOp(@NotNull TimedRebecaCompleteParser.RelationalOpContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#unaryExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnaryExpression(@NotNull TimedRebecaCompleteParser.UnaryExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#unaryExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnaryExpression(@NotNull TimedRebecaCompleteParser.UnaryExpressionContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#expressionList}.
 	 * @param ctx the parse tree
 	 */
@@ -69,6 +58,17 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionList(@NotNull TimedRebecaCompleteParser.ExpressionListContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#unaryExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnaryExpression(@NotNull TimedRebecaCompleteParser.UnaryExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#unaryExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnaryExpression(@NotNull TimedRebecaCompleteParser.UnaryExpressionContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#type}.

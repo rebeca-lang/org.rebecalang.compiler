@@ -1572,8 +1572,8 @@ public class CoreRebecaCompleteParser extends Parser {
 		public StatementExpressionContext statementExpression() {
 			return getRuleContext(StatementExpressionContext.class,0);
 		}
-		public TerminalNode ELSE() { return getToken(CoreRebecaCompleteParser.ELSE, 0); }
 		public TerminalNode FOR() { return getToken(CoreRebecaCompleteParser.FOR, 0); }
+		public TerminalNode ELSE() { return getToken(CoreRebecaCompleteParser.ELSE, 0); }
 		public List<TerminalNode> SEMI() { return getTokens(CoreRebecaCompleteParser.SEMI); }
 		public TerminalNode RPAREN() { return getToken(CoreRebecaCompleteParser.RPAREN, 0); }
 		public TerminalNode RETURN() { return getToken(CoreRebecaCompleteParser.RETURN, 0); }
@@ -3210,26 +3210,26 @@ public class CoreRebecaCompleteParser extends Parser {
 				if ( _alt==1 ) {
 					{
 					{
-					((AdditiveExpressionContext)_localctx).e =  new BinaryExpression(); ((BinaryExpression)_localctx.e).setLeft(((AdditiveExpressionContext)_localctx).e1.e); _localctx.e.setLineNumber(((AdditiveExpressionContext)_localctx).e1.e.getLineNumber()); _localctx.e.setCharacter(((AdditiveExpressionContext)_localctx).e1.e.getCharacter());
+					BinaryExpression e3 = new BinaryExpression(); e3.setLeft(_localctx.e); e3.setLineNumber(_localctx.e.getLineNumber()); e3.setCharacter(_localctx.e.getCharacter());
 					setState(653);
 					switch (_input.LA(1)) {
 					case PLUS:
 						{
 						setState(649); ((AdditiveExpressionContext)_localctx).PLUS = match(PLUS);
-						((BinaryExpression)_localctx.e).setOperator((((AdditiveExpressionContext)_localctx).PLUS!=null?((AdditiveExpressionContext)_localctx).PLUS.getText():null));
+						e3.setOperator((((AdditiveExpressionContext)_localctx).PLUS!=null?((AdditiveExpressionContext)_localctx).PLUS.getText():null));
 						}
 						break;
 					case SUB:
 						{
 						setState(651); ((AdditiveExpressionContext)_localctx).SUB = match(SUB);
-						((BinaryExpression)_localctx.e).setOperator((((AdditiveExpressionContext)_localctx).SUB!=null?((AdditiveExpressionContext)_localctx).SUB.getText():null));
+						e3.setOperator((((AdditiveExpressionContext)_localctx).SUB!=null?((AdditiveExpressionContext)_localctx).SUB.getText():null));
 						}
 						break;
 					default:
 						throw new NoViableAltException(this);
 					}
 					setState(655); ((AdditiveExpressionContext)_localctx).e2 = multiplicativeExpression();
-					((BinaryExpression)_localctx.e).setRight(((AdditiveExpressionContext)_localctx).e2.e);
+					e3.setRight(((AdditiveExpressionContext)_localctx).e2.e); ((AdditiveExpressionContext)_localctx).e =  e3;
 					}
 					} 
 				}
@@ -3305,32 +3305,32 @@ public class CoreRebecaCompleteParser extends Parser {
 				if ( _alt==1 ) {
 					{
 					{
-					((MultiplicativeExpressionContext)_localctx).e =  new BinaryExpression(); ((BinaryExpression)_localctx.e).setLeft(((MultiplicativeExpressionContext)_localctx).e1.e); _localctx.e.setLineNumber(((MultiplicativeExpressionContext)_localctx).e1.e.getLineNumber()); _localctx.e.setCharacter(((MultiplicativeExpressionContext)_localctx).e1.e.getCharacter());
+					BinaryExpression e3 = new BinaryExpression(); e3.setLeft(_localctx.e); e3.setLineNumber(_localctx.e.getLineNumber()); e3.setCharacter(_localctx.e.getCharacter());
 					setState(672);
 					switch (_input.LA(1)) {
 					case STAR:
 						{
 						setState(666); ((MultiplicativeExpressionContext)_localctx).STAR = match(STAR);
-						((BinaryExpression)_localctx.e).setOperator((((MultiplicativeExpressionContext)_localctx).STAR!=null?((MultiplicativeExpressionContext)_localctx).STAR.getText():null));
+						e3.setOperator((((MultiplicativeExpressionContext)_localctx).STAR!=null?((MultiplicativeExpressionContext)_localctx).STAR.getText():null));
 						}
 						break;
 					case SLASH:
 						{
 						setState(668); ((MultiplicativeExpressionContext)_localctx).SLASH = match(SLASH);
-						((BinaryExpression)_localctx.e).setOperator((((MultiplicativeExpressionContext)_localctx).SLASH!=null?((MultiplicativeExpressionContext)_localctx).SLASH.getText():null));
+						e3.setOperator((((MultiplicativeExpressionContext)_localctx).SLASH!=null?((MultiplicativeExpressionContext)_localctx).SLASH.getText():null));
 						}
 						break;
 					case PERCENT:
 						{
 						setState(670); ((MultiplicativeExpressionContext)_localctx).PERCENT = match(PERCENT);
-						((BinaryExpression)_localctx.e).setOperator((((MultiplicativeExpressionContext)_localctx).PERCENT!=null?((MultiplicativeExpressionContext)_localctx).PERCENT.getText():null));
+						e3.setOperator((((MultiplicativeExpressionContext)_localctx).PERCENT!=null?((MultiplicativeExpressionContext)_localctx).PERCENT.getText():null));
 						}
 						break;
 					default:
 						throw new NoViableAltException(this);
 					}
 					setState(674); ((MultiplicativeExpressionContext)_localctx).e2 = unaryExpression();
-					((BinaryExpression)_localctx.e).setRight(((MultiplicativeExpressionContext)_localctx).e2.e);
+					e3.setRight(((MultiplicativeExpressionContext)_localctx).e2.e); ((MultiplicativeExpressionContext)_localctx).e =  e3;
 					}
 					} 
 				}
@@ -3499,10 +3499,10 @@ public class CoreRebecaCompleteParser extends Parser {
 		public TerminalNode LPAREN(int i) {
 			return getToken(CoreRebecaCompleteParser.LPAREN, i);
 		}
-		public TerminalNode NEW() { return getToken(CoreRebecaCompleteParser.NEW, 0); }
 		public List<PrimaryContext> primary() {
 			return getRuleContexts(PrimaryContext.class);
 		}
+		public TerminalNode NEW() { return getToken(CoreRebecaCompleteParser.NEW, 0); }
 		public List<TerminalNode> DOT() { return getTokens(CoreRebecaCompleteParser.DOT); }
 		public UnaryExpressionContext unaryExpression() {
 			return getRuleContext(UnaryExpressionContext.class,0);

@@ -219,8 +219,18 @@ public class CoreRebecaSemanticCheck extends AbstractSemanticCheck {
 						.evaluate(expression, scopeHandler, compilerFeature,
 								container).getFirst().getFirst());
 			}
-			ReactiveClassDeclaration rcd = reactiveClasses.get(TypesUtilities
-					.getTypeName(mrd.getType()));
+			
+			try {
+				//If the instance type a rebec in the main section does not exist
+				TypesUtilities.getInstance().getType(mrd.getType());
+			} catch (CodeCompilationException e) {
+				e.setColumn(mrd.getCharacter());
+				e.setLine(mrd.getLineNumber());
+				container.addException(e);
+				continue;
+			}
+			ReactiveClassDeclaration rcd = reactiveClasses.get(TypesUtilities.getTypeName(mrd.getType()));
+			
 			List<FieldDeclaration> knownRebecs = rcd.getKnownRebecs();
 			List<Type> exprectedTypes = new LinkedList<Type>();
 			for (FieldDeclaration fd : knownRebecs) {
