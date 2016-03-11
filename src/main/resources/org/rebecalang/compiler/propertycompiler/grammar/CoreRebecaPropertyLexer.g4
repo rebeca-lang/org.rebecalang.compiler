@@ -9,9 +9,6 @@ LTL
 	:	'LTL'
 	;
 
-CTL
-	:	'CTL'
-	;
 
 THEN
 	:	'->'

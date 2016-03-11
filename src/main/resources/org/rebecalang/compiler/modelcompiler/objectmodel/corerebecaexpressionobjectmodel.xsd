@@ -96,14 +96,11 @@
 	<xs:complexType name="PrimaryExpression">
 		<xs:complexContent>
 			<xs:extension base="Expression">
-				<xs:sequence>
-					<xs:element name="categoty" type="Category"/>
-				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="Category">
+ 	<xs:complexType name="Label">
 		<xs:attribute name="name" type="xs:string" />
 	</xs:complexType>
 
@@ -133,6 +130,7 @@
 		<xs:complexContent>
 			<xs:extension base="PrimaryExpression">
 				<xs:sequence>
+					<xs:element name="label" type="Label"/>
 					<xs:element name="parentSuffixPrimary" type="ParentSuffixPrimary" />
 					<xs:element name="indices" type="Expression" maxOccurs="unbounded"
 						minOccurs="1" />
@@ -171,14 +169,6 @@
 	<xs:complexType name="PrimitiveType">
 		<xs:complexContent>
 			<xs:extension base="Type">
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-
-	<xs:complexType name="BitIntType">
-		<xs:complexContent>
-			<xs:extension base="PrimitiveType">
-				<xs:attribute name="BitIntSize" type="xs:int" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

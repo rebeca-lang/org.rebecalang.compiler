@@ -122,6 +122,7 @@
 		<xs:sequence>
 			<xs:element name="formalParameters" type="FormalParameterDeclaration" maxOccurs="unbounded" minOccurs="0"/>
 			<xs:element name="block" type="BlockStatement"/>
+			<xs:element name="accessModifier" type="AccessModifier"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string"/>
 		<xs:attribute name="lineNumber" type="xs:int"/>
@@ -260,6 +261,7 @@
 				<xs:sequence>
 					<xs:element name="variableDeclarators" type="VariableDeclarator" maxOccurs="unbounded" minOccurs="0"/>
 					<xs:element name="type" type="exp:Type"/>
+					<xs:element name="accessModifier" type="AccessModifier"/>
 				</xs:sequence>
     		</xs:extension>
     	</xs:complexContent>
@@ -301,5 +303,10 @@
     		</xs:extension>
     	</xs:complexContent>
 	</xs:complexType>
+	
+ 	<xs:complexType name="AccessModifier">
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
 	
 </xs:schema>

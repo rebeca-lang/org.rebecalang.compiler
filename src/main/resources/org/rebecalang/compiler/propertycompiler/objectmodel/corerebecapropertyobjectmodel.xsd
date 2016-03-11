@@ -16,8 +16,6 @@
 					maxOccurs="unbounded" minOccurs="0" />
 				<xs:element name="LTLDefinitions" type="LTLDefinition"
 					maxOccurs="unbounded" minOccurs="0" />
-				<xs:element name="CTLDefinitions" type="CTLDefinition"
-					maxOccurs="unbounded" minOccurs="0" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -29,12 +27,6 @@
 		<xs:attribute name="name" type="xs:string" />
 	</xs:complexType>
 
-	<xs:complexType name="CTLDefinition">
-		<xs:sequence>
-			<xs:element name="Expression" type="corerebecaexp:Expression" />
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" />
-	</xs:complexType>
 
 	<xs:complexType name="LTLDefinition">
 		<xs:sequence>

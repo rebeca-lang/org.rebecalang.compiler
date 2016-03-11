@@ -4,8 +4,12 @@
 
 package org.rebecalang.compiler.utils;
 
+import java.io.PrintStream;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class ExceptionContainer extends Exception {
     /**
@@ -44,8 +48,51 @@ public class ExceptionContainer extends Exception {
 		return warnings;
 	}
 
-	public boolean isEmpty() {
+	public boolean exceptionsIsEmpty() {
 		return exceptions.isEmpty();
 	}
-    
+	
+	public boolean warningsIsEmpty() {
+		return warnings.isEmpty();
+	}
+
+	public void clear() {
+		exceptions.clear();
+		warnings.clear();
+	}
+	
+	public void print(PrintStream printStream) {
+		printStream.println("Errors:");
+		Object[] errors = exceptions.toArray();
+		Arrays.sort(errors, new Comparator<Object>() {
+
+			public int compare(Object o1, Object o2) {
+				if (!(o1 instanceof CodeCompilationException))
+					return 1;
+				if (!(o2 instanceof CodeCompilationException))
+					return -1;
+				return (((CodeCompilationException)o1).getLine() > ((CodeCompilationException)o2).getLine() ? 1 : 
+					(((CodeCompilationException)o1).getLine() < ((CodeCompilationException)o2).getLine()) ? -1 :
+						(((CodeCompilationException)o1).getColumn() > ((CodeCompilationException)o2).getColumn() ? 1 : -1));
+			}
+		});
+		for (Object e : errors) {
+			if (e instanceof CodeCompilationException) {
+				CodeCompilationException cce = (CodeCompilationException) e;
+				printStream.println(cce);
+			} else {
+				((Exception)e).printStackTrace();
+			}
+		}
+		if (!warningsIsEmpty())
+			printStream.println("Warnings:");
+		for (Exception e : warnings) {
+			if (e instanceof CodeCompilationException) {
+				CodeCompilationException cce = (CodeCompilationException) e;
+				printStream.println(cce);
+			} else {
+				e.printStackTrace();
+			}
+		}		
+	}
 }

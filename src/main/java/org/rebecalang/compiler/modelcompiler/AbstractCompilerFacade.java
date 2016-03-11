@@ -1,7 +1,9 @@
 package org.rebecalang.compiler.modelcompiler;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Set;
 
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -10,23 +12,27 @@ import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenStream;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.ExceptionContainer;
+import org.rebecalang.compiler.utils.TypesUtilities;
 
 public abstract class AbstractCompilerFacade {
 
-	private Parser parser;
-	protected ExceptionContainer container;
+	protected Parser parser;
+	protected ExceptionContainer exceptionContainer;
 	protected RebecaModel rebecaModel;
-	protected Set<CompilerFeature> features;
+	protected Set<CompilerFeature> compilerFeatures;
+	protected ScopeHandler scopeHandler;
+	protected SymbolTable symbolTable;
 
 	public AbstractCompilerFacade(Class<? extends Parser> parserClass,
-			CommonTokenStream tokens, Set<CompilerFeature> features)
-			throws ExceptionContainer {
+			CommonTokenStream tokens, Set<CompilerFeature> features, ExceptionContainer exceptionContainer) {
 		try {
-			this.features = features;
+			this.exceptionContainer = exceptionContainer;
+			this.compilerFeatures = features;
 			Constructor<? extends Parser> constructor = parserClass
 					.getConstructor(TokenStream.class);
 			parser = constructor.newInstance(tokens);
@@ -55,23 +61,14 @@ public abstract class AbstractCompilerFacade {
 			public void syntaxError(Recognizer<?, ?> recognizer,
 					Object offendingSymbol, int line, int charPositionInLine,
 					String msg, RecognitionException e) {
-				container.addException(new CodeCompilationException(msg, line,
+				AbstractCompilerFacade.this.exceptionContainer.addException(new CodeCompilationException(msg, line,
 						charPositionInLine));
 			}
 		});
-		container = new ExceptionContainer();
+		if (exceptionContainer == null)
+			this.exceptionContainer = new ExceptionContainer();
 	}
 
-	/**
-	 * 
-	 * @param features
-	 * @return
-	 * @throws ExceptionContainer
-	 */
-	public RebecaModel compile(Set<CompilerFeature> features) {
-		rebecaModel = getRebecaModel(parser);
-		return rebecaModel;
-	}
 
 	/**
 	 * Semantic check of each type Rebeca model should be implemented by the
@@ -93,9 +90,30 @@ public abstract class AbstractCompilerFacade {
 	 *            corresponding RebecaModel object
 	 * @return The generated RebecaModel
 	 */
-	protected abstract RebecaModel getRebecaModel(Parser parser);
+	protected final void compile() {
+		try {
+			//Method "parser.rebecaModel()" is called
+			Method method = parser.getClass().getDeclaredMethod("rebecaModel", new Class[0]);
+			Object rebecaModelObj = method.invoke(parser);
 
-	public ExceptionContainer getExceptionContainer() {
-		return container;
+			//The result of calling the above method contains the Rebeca model which is stored in variable "r"
+			Field field = rebecaModelObj.getClass().getDeclaredField("r");
+			rebecaModel = (RebecaModel)field.get(rebecaModelObj);
+			for (ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode().getReactiveClassDeclaration())
+				TypesUtilities.getInstance().addReactiveClassType(rcd);
+
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException 
+				| IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Illegal Rebeca parser class ");
+		}
+	}
+	
+	public RebecaModel getRebecaModel() {
+		return rebecaModel;
+	}
+	
+	public SymbolTable getSymbolTable() {
+		return symbolTable;
 	}
 }

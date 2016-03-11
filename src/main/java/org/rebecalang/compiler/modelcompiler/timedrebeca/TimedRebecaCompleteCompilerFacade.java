@@ -4,71 +4,64 @@ import java.util.Set;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
-import org.rebecalang.compiler.modelcompiler.AbstractCompilerFacade;
-import org.rebecalang.compiler.modelcompiler.ScopeHandler;
-import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaSemanticCheck;
-import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaStatementObserver;
+import org.rebecalang.compiler.modelcompiler.ScopeHandler.ScopeException;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompilerFacade;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaCompleteParser;
+import org.rebecalang.compiler.modelcompiler.timedrebeca.statementsemanticchecker.expression.TimedPrimaryTermSemanticCheck;
 import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.TypesUtilities;
 
-public class TimedRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
+public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompilerFacade {
 
 	public TimedRebecaCompleteCompilerFacade(CommonTokenStream tokens,
-			Set<CompilerFeature> features) throws ExceptionContainer {
-		super(TimedRebecaCompleteParser.class, tokens, features);
+			Set<CompilerFeature> features, ExceptionContainer exceptionContainer) {
+		super(TimedRebecaCompleteParser.class, tokens, features, exceptionContainer);
+//		initialize();
 	}
-
-	public TimedRebecaCompleteCompilerFacade(Class<? extends Parser> parserClass, CommonTokenStream tokens,
-			Set<CompilerFeature> features) throws ExceptionContainer {
-		super(parserClass, tokens, features);
+	
+	public TimedRebecaCompleteCompilerFacade(Class<? extends Parser> parser, CommonTokenStream tokens,
+			Set<CompilerFeature> features, ExceptionContainer exceptionContainer) {
+		super(parser, tokens, features, exceptionContainer);
+//		initialize();
 	}
+	
+	
+	protected void initialize() {
+		super.initialize();
+		statementSemanticCheckContainer.getExpressionSemanticCheckContainer().
+			registerTranslator(TermPrimary.class, new TimedPrimaryTermSemanticCheck());
 
-	@Override
-	public RebecaModel getRebecaModel(Parser parser) {
-		return ((TimedRebecaCompleteParser) parser).rebecaModel().r;
-	}
-
-	@Override
-	public void semanticCheck(Set<CompilerFeature> features) {
-		semanticCheck(features, new TimedRebecaStatementObserver());
-	}
-
-	public void semanticCheck(Set<CompilerFeature> features, CoreRebecaStatementObserver observer) {
+		SynchMethodDeclaration method = new SynchMethodDeclaration();
+		method.setName("delay");
+		FormalParameterDeclaration fpd = new FormalParameterDeclaration();
+		fpd.setName("arg0");
+		fpd.setType(TypesUtilities.INT_TYPE);
+		method.getFormalParameters().add(fpd);
 		try {
-			TimedRebecaScopeHandler scopeHandler = new TimedRebecaScopeHandler(rebecaModel,
-					observer.getExpressionResolver(), features, container);
-			CoreRebecaSemanticCheck semanticCheck = new CoreRebecaSemanticCheck(
-					features, observer, scopeHandler, rebecaModel) {
-				@Override
-				protected void initializeScopeBeforeCheckMethods(
-						ScopeHandler scopeHandler) {
-					super.initializeScopeBeforeCheckMethods(scopeHandler);
-					SynchMethodDeclaration method = new SynchMethodDeclaration();
-					method.setName("delay");
-					FormalParameterDeclaration fpd = new FormalParameterDeclaration();
-					fpd.setName("arg0");
-					fpd.setType(TypesUtilities.INT_TYPE);
-					method.getFormalParameters().add(fpd);
-					scopeHandler.addMethodIntoMethodDictionary("", method,
-							TypesUtilities.VOID_TYPE,
-							TimedRebecaCategoriesUtilities.DELAY, 
-							new ExceptionContainer());
-				}
-
-				@Override
-				protected void initializeScopeBeforeCheckMainBlock(
-						ScopeHandler scopeHandler) {
-				}
-			};
-			semanticCheck.doSemanticCheck();
-		} catch (ExceptionContainer e) {
-			container.addAll(e);
+			symbolTable.addMethod(null, method,
+					TimedRebecaLabelUtility.DELAY);
+		} catch (ExceptionContainer ec) {
+			exceptionContainer.addAll(ec);
 		}
+
+		try {
+			scopeHandler.addVaribaleToCurrentScope("now", TypesUtilities.INT_TYPE, 
+					CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
+			scopeHandler.addVaribaleToCurrentScope("currentMessageArrival", TypesUtilities.INT_TYPE, 
+					CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
+			scopeHandler.addVaribaleToCurrentScope("currentMessageDeadline", TypesUtilities.INT_TYPE,
+					CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
+			scopeHandler.addVaribaleToCurrentScope("currentMessageWaitingTime", TypesUtilities.INT_TYPE,
+					CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
+		} catch (ScopeException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

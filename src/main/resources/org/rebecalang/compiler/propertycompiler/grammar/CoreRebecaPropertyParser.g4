@@ -34,13 +34,5 @@ propertyModel returns [PropertyModel pm]
 			$pm.getLTLDefinitions().add(ltlDefinition);} SEMI)*
 	RBRACE)?
 	
-	(CTL LBRACE
-		(id=IDENTIFIER COLON ctle = expression {
-			CTLDefinition ctlDefinition = new CTLDefinition();
-			ctlDefinition.setName($id.text);
-			ctlDefinition.setExpression($ctle.e);
-			$pm.getCTLDefinitions().add(ctlDefinition);} SEMI)*
-	RBRACE)?
-
 	RBRACE
 	;

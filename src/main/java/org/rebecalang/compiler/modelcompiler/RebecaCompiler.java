@@ -8,24 +8,27 @@ import java.util.Set;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
-import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompleteCompilerFacade;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
-import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.ProbabilisticRebecaCompleteCompilerFacade;
+import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.ProbabilisticRebecaCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler.ProbabilisticRebecaCompleteLexer;
-import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.ProbabilisticTimedRebecaCompleteCompilerFacade;
+import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.ProbabilisticTimedRebecaCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.compiler.ProbabilisticTimedRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.TimedRebecaCompleteCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaCompleteLexer;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.ExceptionContainer;
+import org.rebecalang.compiler.utils.Pair;
 
 public class RebecaCompiler {
 
-	public static AbstractCompilerFacade getAppropriateParser(
+	private ExceptionContainer exceptionContainer = new ExceptionContainer();
+	
+	private AbstractCompilerFacade getAppropriateParser(
 			Set<CompilerFeature> features, ANTLRInputStream input)
-			throws CodeCompilationException, ExceptionContainer {
+			throws CodeCompilationException {
 		
 		if (!(features.contains(CompilerFeature.CORE_2_0) ^ features
 				.contains(CompilerFeature.CORE_2_1) ^ features
@@ -59,21 +62,21 @@ public class RebecaCompiler {
 		if (features.contains(CompilerFeature.PROBABILISTIC_REBECA) && features.contains(CompilerFeature.TIMED_REBECA)) {
 			ProbabilisticTimedRebecaCompleteLexer lexer = new ProbabilisticTimedRebecaCompleteLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			return new ProbabilisticTimedRebecaCompleteCompilerFacade(tokens, features);
+			return new ProbabilisticTimedRebecaCompilerFacade(tokens, features, exceptionContainer);
 		}
 		if (features.contains(CompilerFeature.PROBABILISTIC_REBECA)) {
 			ProbabilisticRebecaCompleteLexer lexer = new ProbabilisticRebecaCompleteLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			return new ProbabilisticRebecaCompleteCompilerFacade(tokens, features);
+			return new ProbabilisticRebecaCompilerFacade(tokens, features, exceptionContainer);
 		}
 		if (features.contains(CompilerFeature.TIMED_REBECA)) {
 			TimedRebecaCompleteLexer lexer = new TimedRebecaCompleteLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			return new TimedRebecaCompleteCompilerFacade(tokens, features);
+			return new TimedRebecaCompleteCompilerFacade(tokens, features, exceptionContainer);
 		}
 		CoreRebecaCompleteLexer lexer = new CoreRebecaCompleteLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		return new CoreRebecaCompleteCompilerFacade(tokens, features);
+		return new CoreRebecaCompilerFacade(tokens, features, exceptionContainer);
 	}
 
 	public static CodeCompilationException createFeaturesIncompatibilityMessage(
@@ -89,56 +92,52 @@ public class RebecaCompiler {
 
 	public RebecaModel getRebecaFilesPartialModel(File rebecaFile,
 			Set<CompilerFeature> features) {
-		ExceptionContainer container = new ExceptionContainer();
+		exceptionContainer.clear();
 		ANTLRInputStream input = null;
 		try {
 			input = new ANTLRInputStream(new FileInputStream(rebecaFile));
 		} catch (IOException e) {
-			container.addException(e);
+			exceptionContainer.addException(e);
 			return null;
 		}
 		RebecaModel rebecaModel = null;
 		try {
 			AbstractCompilerFacade parser = getAppropriateParser(features, input);
-			rebecaModel = parser.compile(features);
+			parser.compile();
 			parser.semanticCheck(features);
 		} catch (RecognitionException e) {
-			container.addException(e);
+			exceptionContainer.addException(e);
 		} catch (CodeCompilationException e) {
-			container.addException(e);
-		} catch (ExceptionContainer e) {
-			container.addAll(e);
+			exceptionContainer.addException(e);
 		}
 		return rebecaModel;
 	}
 
-	public RebecaModel compileRebecaFile(File rebecaFile,
-			Set<CompilerFeature> features, ExceptionContainer container) {
+	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile,
+			Set<CompilerFeature> compilerFeatures) {
+		exceptionContainer.clear();
 		ANTLRInputStream input = null;
 		try {
 			input = new ANTLRInputStream(new FileInputStream(rebecaFile));
 		} catch (IOException e) {
-			container.addException(e);
+			exceptionContainer.addException(e);
 			return null;
 		}
 
-		RebecaModel rebecaModel = null;
 		try {
-			AbstractCompilerFacade parser = getAppropriateParser(features, input);
-			rebecaModel = parser.compile(features);
-			if (parser.getExceptionContainer().isEmpty()) {
-				parser.semanticCheck(features);
+			AbstractCompilerFacade parser = getAppropriateParser(compilerFeatures, input);
+			parser.compile();
+			if (exceptionContainer.exceptionsIsEmpty()) {
+				parser.semanticCheck(compilerFeatures);
 			}
-			container.addAll(parser.getExceptionContainer());
+			return new Pair<RebecaModel, SymbolTable>(parser.getRebecaModel(), parser.getSymbolTable());
 		} catch (RecognitionException e) {
-			container.addException(e);
-		} catch (ExceptionContainer ec) {
-			container.addAll(ec);
+			exceptionContainer.addException(e);
 		} catch (Exception e) {
-			if (container.getExceptions().size() == 0)
-				container.addException(e);
+			if (exceptionContainer.getExceptions().size() == 0)
+				exceptionContainer.addException(e);
 		}
-		return rebecaModel;
+		return null;
 	}
 
 	public void generateXMLFromRebecaFiles(File rebecaFile,
@@ -171,5 +170,9 @@ public class RebecaCompiler {
 //		if (container.getExceptions().size() > 0)
 //			throw container;
 	}
-
+	
+	public ExceptionContainer getExceptionContainer() {
+		return exceptionContainer;
+	}
+	
 }

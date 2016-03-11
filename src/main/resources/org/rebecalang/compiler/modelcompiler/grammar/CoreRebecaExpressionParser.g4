@@ -60,8 +60,8 @@ conditionalOrExpression returns [Expression e]
     :   
     	e1 = conditionalAndExpression {$e = $e1.e;}
         (BARBAR e2 = conditionalAndExpression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($BARBAR.text); e3.setLeft($e1.e); e3.setRight($e2.e);
-			e3.setLineNumber($e1.e.getLineNumber());e3.setCharacter($e1.e.getCharacter()); $e = e3;
+			e3.setOperator($BARBAR.text); e3.setLeft($e); e3.setRight($e2.e);
+			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
 			}
         )*
     ;
@@ -70,8 +70,8 @@ conditionalAndExpression returns [Expression e]
     :   
     	e1 = inclusiveOrExpression {$e = $e1.e;}
         (AMPAMP e2 = inclusiveOrExpression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($AMPAMP.text); e3.setLeft($e1.e); e3.setRight($e2.e);
-			e3.setLineNumber($e1.e.getLineNumber());e3.setCharacter($e1.e.getCharacter()); $e = e3;
+			e3.setOperator($AMPAMP.text); e3.setLeft($e); e3.setRight($e2.e);
+			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
 			}
         )*
     ;
@@ -80,8 +80,8 @@ inclusiveOrExpression returns [Expression e]
     :   
     	e1 = exclusiveOrExpression {$e = $e1.e;}
         (BAR e2 = exclusiveOrExpression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($BAR.text); e3.setLeft($e1.e); e3.setRight($e2.e);
-			e3.setLineNumber($e1.e.getLineNumber());e3.setCharacter($e1.e.getCharacter()); $e = e3;
+			e3.setOperator($BAR.text); e3.setLeft($e); e3.setRight($e2.e);
+			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
 			}
         )*
     ;
@@ -89,8 +89,8 @@ inclusiveOrExpression returns [Expression e]
 exclusiveOrExpression returns [Expression e]
     :   e1 = andExpression {$e = $e1.e;}
         (CARET e2 = andExpression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($CARET.text); e3.setLeft($e1.e); e3.setRight($e2.e);
-			e3.setLineNumber($e1.e.getLineNumber());e3.setCharacter($e1.e.getCharacter()); $e = e3;
+			e3.setOperator($CARET.text); e3.setLeft($e); e3.setRight($e2.e);
+			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
 			}
         )*
     ;
@@ -98,8 +98,8 @@ exclusiveOrExpression returns [Expression e]
 andExpression returns [Expression e]
     :   e1 = equalityExpression {$e = $e1.e;}
         (AMP e2 = equalityExpression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($AMP.text); e3.setLeft($e1.e); e3.setRight($e2.e);
-			e3.setLineNumber($e1.e.getLineNumber());e3.setCharacter($e1.e.getCharacter()); $e = e3;
+			e3.setOperator($AMP.text); e3.setLeft($e); e3.setRight($e2.e);
+			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
 			}
         )*
     ;
@@ -113,7 +113,7 @@ equalityExpression returns [Expression e]
             |   BANGEQ {((BinaryExpression)$e).setOperator($BANGEQ.text);}
             )
             e2 = instanceOfExpression {((BinaryExpression)$e).setRight($e2.e);}
-        )*
+        )?
     ;
 
 instanceOfExpression returns [Expression e]
@@ -127,8 +127,8 @@ relationalExpression returns [Expression e]
     :   
     	e1 = shiftExpression {$e = $e1.e;}
         (ro = relationalOp e2 = shiftExpression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($ro.ro); e3.setLeft($e1.e); e3.setRight($e2.e);
-			e3.setLineNumber($e1.e.getLineNumber());e3.setCharacter($e1.e.getCharacter()); $e = e3;
+			e3.setOperator($ro.ro); e3.setLeft($e); e3.setRight($e2.e);
+			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
 			}
         )*
     ;
@@ -144,8 +144,8 @@ shiftExpression returns [Expression e]
     :   
     	e1 = additiveExpression {$e = $e1.e;}
         (so = shiftOp e2 = additiveExpression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($so.so); e3.setLeft($e1.e); e3.setRight($e2.e);
-			e3.setLineNumber($e1.e.getLineNumber()); e3.setCharacter($e1.e.getCharacter()); $e = e3;
+			e3.setOperator($so.so); e3.setLeft($e); e3.setRight($e2.e);
+			e3.setLineNumber($e.getLineNumber()); e3.setCharacter($e.getCharacter()); $e = e3;
 			}
         )*
     ;

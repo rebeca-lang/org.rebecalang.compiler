@@ -1,33 +1,26 @@
 package org.rebecalang.compiler.utils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.rebecalang.compiler.modelcompiler.ScopeHandler;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayVariableInitializer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BitIntType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Category;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryVariableInitializer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableInitializer;
 
 public class TypesUtilities {
 
 	static TypesUtilities object;
 
 	private Map<String, String[]> compatibilityMap;
-	private Map<Type, Type> upperTypeMap;
+	private Map<Type, Type> superTypeMap;
 	private Map<String, OrdinaryPrimitiveType> reactiveClasses;
 	private Map<Type, ReactiveClassDeclaration> reactiveClassesMetaData;
 	private Map<String, OrdinaryPrimitiveType> primitiveTypes;
@@ -48,9 +41,6 @@ public class TypesUtilities {
 	public static final OrdinaryPrimitiveType NO_TYPE;
 	public static final OrdinaryPrimitiveType MSGSRV_TYPE;
 	public static final OrdinaryPrimitiveType CONSTRUCTOR_TYPE;
-
-	public static final OrdinaryPrimitiveType LOOP_STATEMENT_TYPE;
-	public static final OrdinaryPrimitiveType SWITCH_STATEMENT_TYPE;
 
 	public Comparator<Type> getCastableComparator() {
 		return new Comparator<Type>() {
@@ -112,16 +102,11 @@ public class TypesUtilities {
 		REACTIVE_CLASS_TYPE = new OrdinaryPrimitiveType();
 		REACTIVE_CLASS_TYPE.setName("reactive class");
 		NO_TYPE = new OrdinaryPrimitiveType();
-		NO_TYPE.setName("");
+		NO_TYPE.setName("no-type");
 		MSGSRV_TYPE = new OrdinaryPrimitiveType();
 		MSGSRV_TYPE.setName("message server");
 		CONSTRUCTOR_TYPE = new OrdinaryPrimitiveType();
 		CONSTRUCTOR_TYPE.setName("constructor");
-
-		LOOP_STATEMENT_TYPE = new OrdinaryPrimitiveType();
-		LOOP_STATEMENT_TYPE.setName("loop");
-		SWITCH_STATEMENT_TYPE = new OrdinaryPrimitiveType();
-		SWITCH_STATEMENT_TYPE.setName("switch");
 
 		object = new TypesUtilities();
 	}
@@ -133,10 +118,10 @@ public class TypesUtilities {
 		compatibilityMap.put("byte", new String[] { "short" });
 		compatibilityMap.put("float", new String[] { "double" });
 
-		upperTypeMap = new HashMap<Type, Type>();
-		upperTypeMap.put(BYTE_TYPE, INT_TYPE);
-		upperTypeMap.put(SHORT_TYPE, INT_TYPE);
-		upperTypeMap.put(FLOAT_TYPE, DOUBLE_TYPE);
+		superTypeMap = new HashMap<Type, Type>();
+		superTypeMap.put(BYTE_TYPE, INT_TYPE);
+		superTypeMap.put(SHORT_TYPE, INT_TYPE);
+		superTypeMap.put(FLOAT_TYPE, DOUBLE_TYPE);
 
 		reactiveClasses = new HashMap<String, OrdinaryPrimitiveType>();
 		reactiveClassesMetaData = new HashMap<Type, ReactiveClassDeclaration>();
@@ -154,6 +139,8 @@ public class TypesUtilities {
 		primitiveTypes.put(REACTIVE_CLASS_TYPE.getName(), REACTIVE_CLASS_TYPE);
 		primitiveTypes.put(NO_TYPE.getName(), NO_TYPE);
 		primitiveTypes.put(VOID_TYPE.getName(), VOID_TYPE);
+		
+//		typesAccessModifiers = new HashMap<Type, Map<String, AccessModifier>>();
 	}
 
 	public static TypesUtilities getInstance() {
@@ -209,7 +196,8 @@ public class TypesUtilities {
 		type.setCharacter(rcd.getCharacter());
 		reactiveClasses.put(rcd.getName(), type);
 		reactiveClassesMetaData.put(type, rcd);
-		upperTypeMap.put(type, REACTIVE_CLASS_TYPE);
+		superTypeMap.put(type, REACTIVE_CLASS_TYPE);
+		
 	}
 
 	public boolean canTypeCastTo(Type base, Type target) {
@@ -263,7 +251,7 @@ public class TypesUtilities {
 		return false;
 	}
 
-	public Type getTheBiggerType(Type lType, Type rType)
+	public Type getSuperType(Type lType, Type rType)
 			throws CodeCompilationException {
 		if (canTypeUpCastTo(lType, rType))
 			return rType;
@@ -272,8 +260,8 @@ public class TypesUtilities {
 		throw getTypeMismatchException(lType, rType);
 	}
 
-	public Type getUpperType(Type type) {
-		Type foundType = upperTypeMap.get(type);
+	public Type getSuperType(Type type) {
+		Type foundType = superTypeMap.get(type);
 		if (foundType == null)
 			return type;
 		return foundType;
@@ -312,133 +300,6 @@ public class TypesUtilities {
 		return new CodeCompilationException(
 				"Type mismatch: cannot convert from " + getTypeName(base)
 						+ " to " + getTypeName(target), 0, 0);
-	}
-
-	public void checkVariableInitializationType(Type type,
-			VariableInitializer variableInitializer,
-			ExpressionResolver expressionResolver, ScopeHandler scopeHandler,
-			Set<CompilerFeature> compilerFeatures) throws ExceptionContainer {
-		if (variableInitializer == null)
-			return;
-		ExceptionContainer container = new ExceptionContainer();
-		if (variableInitializer instanceof ArrayVariableInitializer) {
-			ArrayVariableInitializer original = (ArrayVariableInitializer) variableInitializer;
-
-			if (!(type instanceof ArrayType)) {
-				ArrayType temp = createDummyType((PrimitiveType) type, original
-						.getValues().size());
-				CodeCompilationException typeMismatchException = getTypeMismatchException(
-						type, temp);
-				typeMismatchException.setColumn(variableInitializer
-						.getCharacter());
-				typeMismatchException.setLine(variableInitializer
-						.getLineNumber());
-				container.addException(typeMismatchException);
-				throw container;
-			}
-
-			ArrayType retType = getArrayVariableInitializerType(original,
-					expressionResolver, scopeHandler, compilerFeatures);
-			variableInitializer.setType(retType);
-
-			if (!canTypeUpCastTo(retType, type)) {
-				CodeCompilationException cce = getTypeMismatchException(
-						retType, type);
-				cce.setColumn(variableInitializer.getCharacter());
-				cce.setLine(variableInitializer.getLineNumber());
-				container.addException(cce);
-				throw container;
-			}
-
-		} else if (variableInitializer instanceof OrdinaryVariableInitializer) {
-			Type retType = expressionResolver
-					.evaluate(
-							((OrdinaryVariableInitializer) variableInitializer)
-									.getValue(),
-							scopeHandler, compilerFeatures, container)
-					.getFirst().getFirst();
-			variableInitializer.setType(retType);
-			if (!container.getExceptions().isEmpty())
-				throw container;
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(retType, type)) {
-				CodeCompilationException cce = getTypeMismatchException(
-						retType, type);
-				cce.setColumn(variableInitializer.getCharacter());
-				cce.setLine(variableInitializer.getLineNumber());
-				container.addException(cce);
-				throw container;
-			}
-		} else {
-			throw new CompilerInternalErrorRuntimeException(
-					"Unknown vairable initializer type " + variableInitializer);
-		}
-		return;
-	}
-
-	private ArrayType getArrayVariableInitializerType(
-			ArrayVariableInitializer avi,
-			ExpressionResolver expressionResolver, ScopeHandler scopeHandler,
-			Set<CompilerFeature> compilerFeatures) throws ExceptionContainer {
-		ExceptionContainer container = new ExceptionContainer();
-
-		ArrayList<Type> innerTypes = new ArrayList<Type>();
-		for (VariableInitializer innerValue : avi.getValues()) {
-			Type innerType = null;
-			if (innerValue instanceof OrdinaryVariableInitializer) {
-				Pair<Pair<Type, Category>, Object> result = expressionResolver.evaluate(
-						((OrdinaryVariableInitializer) innerValue).getValue(),
-						scopeHandler, compilerFeatures, container);
-				if (result.getFirst().getFirst() == TypesUtilities.UNKNOWN_TYPE)
-					throw container;
-				if (result.getFirst().getFirst() instanceof ArrayType) {
-					container
-							.addException(getTypeMismatchException(result
-									.getFirst().getFirst(),
-									((ArrayType) result.getFirst().getFirst())
-											.getPrimitiveType()));
-					throw container;
-				}
-				innerType = result.getFirst().getFirst();
-			} else if (innerValue instanceof ArrayVariableInitializer) {
-				innerType = getArrayVariableInitializerType(
-						(ArrayVariableInitializer) innerValue,
-						expressionResolver, scopeHandler, compilerFeatures);
-			} else {
-				throw new CompilerInternalErrorRuntimeException("Unknown type "
-						+ innerValue);
-			}
-			innerTypes.add(innerType);
-		}
-		Type superType = innerTypes.get(0);
-		for (int cnt = 1; cnt < innerTypes.size(); cnt++) {
-			if (!canTypeUpCastTo(innerTypes.get(cnt), superType)) {
-				if (!canTypeUpCastTo(superType, innerTypes.get(cnt))) {
-					CodeCompilationException cce = getTypeMismatchException(
-							innerTypes.get(cnt), innerTypes.get(0));
-					cce.setLine(avi.getLineNumber());
-					cce.setColumn(avi.getCharacter());
-					container.addException(new CodeCompilationException(
-							"Type mismatch among elements of array initializer. "
-									+ cce.getMessage(), cce.getLine(), cce
-									.getColumn()));
-					throw container;
-				} else {
-					superType = innerTypes.get(cnt);
-				}
-			}
-		}
-
-		ArrayType retValue = new ArrayType();
-		retValue.getDimensions().add(avi.getValues().size());
-		if (superType instanceof ArrayType) {
-			retValue.setPrimitiveType(((ArrayType) superType)
-					.getPrimitiveType());
-			retValue.getDimensions().addAll(
-					((ArrayType) superType).getDimensions());
-		} else {
-			retValue.setPrimitiveType((PrimitiveType) superType);
-		}
-		return retValue;
 	}
 
 	public static ArrayType createDummyType(PrimitiveType baseType,
