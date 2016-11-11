@@ -101,6 +101,19 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAnnotation(@NotNull CoreRebecaCompleteParser.AnnotationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation(@NotNull CoreRebecaCompleteParser.AnnotationContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPrimary(@NotNull CoreRebecaCompleteParser.PrimaryContext ctx) { }
 	/**
 	 * {@inheritDoc}

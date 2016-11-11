@@ -3,6 +3,13 @@
 	elementFormDefault="qualified" targetNamespace="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression"
 	xmlns="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression">
 
+	<xs:complexType name="Annotation">
+		<xs:sequence>
+			<xs:element name="value" type="Expression" />
+		</xs:sequence>
+		<xs:attribute name="identifier" type="xs:string" />
+	</xs:complexType>
+
 	<xs:complexType name="Statement">
 		<xs:attribute name="lineNumber" type="xs:int" />
 		<xs:attribute name="character" type="xs:int" />

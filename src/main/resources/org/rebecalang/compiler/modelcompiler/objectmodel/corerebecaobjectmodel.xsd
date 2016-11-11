@@ -76,6 +76,8 @@
             </xs:sequence>
             <xs:attribute name="lineNumber" type="xs:int"/>
             <xs:attribute name="character" type="xs:int"/>
+            <xs:attribute name="endLineNumber" type="xs:int"/>
+            <xs:attribute name="endCharacter" type="xs:int"/>
         </xs:complexType>
     </xs:element>
 
@@ -100,12 +102,15 @@
 				<xs:element name="constructors" type="ConstructorDeclaration" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element name="msgsrvs" type="MsgsrvDeclaration" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element name="synchMethods" type="SynchMethodDeclaration" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="annotations" type="exp:Annotation" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
 
             <xs:attribute name="name" type="xs:string"/>
             <xs:attribute name="queueSize" type="xs:int"/>
             <xs:attribute name="lineNumber" type="xs:int"/>
             <xs:attribute name="character" type="xs:int"/>
+            <xs:attribute name="endLineNumber" type="xs:int"/>
+            <xs:attribute name="endCharacter" type="xs:int"/>
         </xs:complexType>
     </xs:element>
 	
@@ -127,6 +132,8 @@
 		<xs:attribute name="name" type="xs:string"/>
 		<xs:attribute name="lineNumber" type="xs:int"/>
 		<xs:attribute name="character" type="xs:int"/>
+        <xs:attribute name="endLineNumber" type="xs:int"/>
+        <xs:attribute name="endCharacter" type="xs:int"/>
     </xs:complexType>
 
 	<xs:complexType name="ConstructorDeclaration">
@@ -162,6 +169,8 @@
 				<xs:sequence>
 					<xs:element name="statements" type="exp:Statement" maxOccurs="unbounded" minOccurs="0"/>
 				</xs:sequence>
+		        <xs:attribute name="endLineNumber" type="xs:int"/>
+		        <xs:attribute name="endCharacter" type="xs:int"/>
     		</xs:extension>
     	</xs:complexContent>
     </xs:complexType>

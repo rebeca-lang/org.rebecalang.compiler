@@ -102,6 +102,19 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAnnotation(@NotNull TimedRebecaCompleteParser.AnnotationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation(@NotNull TimedRebecaCompleteParser.AnnotationContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPrimary(@NotNull TimedRebecaCompleteParser.PrimaryContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -81,6 +81,17 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	void exitType(@NotNull CoreRebecaCompleteParser.TypeContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#annotation}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation(@NotNull CoreRebecaCompleteParser.AnnotationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#annotation}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation(@NotNull CoreRebecaCompleteParser.AnnotationContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#primary}.
 	 * @param ctx the parse tree
 	 */

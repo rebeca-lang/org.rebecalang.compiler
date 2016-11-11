@@ -39,14 +39,22 @@ public class BinaryExpressionSemanticCheck extends
 			Set<String> assignmentOperators = new HashSet<String>();
 			assignmentOperators.addAll(Arrays.asList("=", "+=", "-=", "*=",
 					"/=", "%=", "~=", "^=", "&=", "|=", "<<=", ">>="));
-			if (assignmentOperators.contains(bExpression.getOperator())
-					&& !isInLValueStyle(bExpression.getLeft(), scopeHandler)) {
-				exceptionContainer
-						.getExceptions()
-						.add(new CodeCompilationException(
-								"The left-hand side of an assignment must be a variable",
-								bExpression.getLineNumber(), bExpression
-										.getCharacter()));
+			LValueState lValueState = isInLValueStyle(bExpression.getLeft(), scopeHandler);
+			if (assignmentOperators.contains(bExpression.getOperator())) {
+				if (lValueState == LValueState.NONE_VARIABLE)
+					exceptionContainer
+							.getExceptions()
+							.add(new CodeCompilationException(
+									"The left-hand side of an assignment must be a variable",
+									bExpression.getLineNumber(), bExpression
+											.getCharacter()));
+				if (lValueState == LValueState.CONSTANT)
+					exceptionContainer
+							.getExceptions()
+							.add(new CodeCompilationException(
+									"A constant variable cannot be in the left-hand side of an assignment",
+									bExpression.getLineNumber(), bExpression
+											.getCharacter()));
 			}
 			if (!assignmentOperators.contains(bExpression.getOperator())) {
 				returnValue.setSecond(SemanticCheckerUtils.evaluateConstantTerm(
@@ -67,19 +75,20 @@ public class BinaryExpressionSemanticCheck extends
 		return returnValue;
 	}
 
-	public static boolean isInLValueStyle(Expression expression, ScopeHandler scopeHandler) {
+	public static LValueState isInLValueStyle(Expression expression, ScopeHandler scopeHandler) {
 		if (!(expression instanceof PrimaryExpression))
-			return false;
+			return LValueState.NONE_VARIABLE;
 		if (expression instanceof TermPrimary) {
 			TermPrimary tPrimary = (TermPrimary) expression;
 			VariableInScopeSpecifier retreiveVariableFromScope;
 			try {
 				retreiveVariableFromScope = scopeHandler.retreiveVariableFromScope(tPrimary.getName());
-				if(retreiveVariableFromScope.getLabel() == CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE) {
-					return false;
+				if(retreiveVariableFromScope.getLabel() == CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE || 
+						retreiveVariableFromScope.getLabel() == CoreRebecaLabelUtility.KNOWNREBEC_VARIABLE ) {
+					return LValueState.CONSTANT;
 				}
 			} catch (ScopeException e) {
-				e.printStackTrace();
+				return LValueState.VARIABLE;
 			}
 		}
 		PrimaryExpression pExpression = (PrimaryExpression) expression;
@@ -87,7 +96,10 @@ public class BinaryExpressionSemanticCheck extends
 			pExpression = ((DotPrimary) pExpression).getRight();
 		}
 
-		return ((TermPrimary) pExpression).getParentSuffixPrimary() == null;
+		return (((TermPrimary) pExpression).getParentSuffixPrimary() == null ? LValueState.VARIABLE : LValueState.NONE_VARIABLE);
 	}
 
+	enum LValueState {
+		VARIABLE, CONSTANT, NONE_VARIABLE
+	}
 }

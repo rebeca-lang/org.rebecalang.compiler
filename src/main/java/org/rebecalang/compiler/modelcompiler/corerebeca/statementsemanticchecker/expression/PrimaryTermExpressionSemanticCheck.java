@@ -40,6 +40,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 							.retreiveVariableFromScope(termName);
 					termPrimary.setLabel(variableInScopeSpecifier.getLabel());
 					returnValue.setFirst(variableInScopeSpecifier.getType());
+					termPrimary.setType(variableInScopeSpecifier.getType());
 					Object value = variableInScopeSpecifier.getPrecompilationValue();
 					returnValue.setSecond(value);
 				} else {
@@ -55,6 +56,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 						VariableInScopeSpecifier owner = scopeHandler.retreiveVariableFromScope(CoreRebecaCompilerFacade.OWNER_REACTIVE_CLASS_KEY);
 						AccessModifier accessModifier = symbolTable.getSymbolAccessModifier(baseType, termName);
 						returnValue.setFirst(symbolType);
+						termPrimary.setType(symbolType);
 						if (accessModifier != AccessModifierUtilities.PUBLIC) {
 							if (symbolType != owner.getType())
 								exceptionContainer.getExceptions().add(
@@ -74,7 +76,6 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 				for (Expression expr : termPrimary
 						.getParentSuffixPrimary().getArguments()) {
 					Type argumentType = ((ExpressionSemanticCheckContainer)defaultContainer).check(expr).getFirst();
-					expr.setType(argumentType);
 					argumentTypes.add(argumentType);
 					if (argumentType == TypesUtilities.UNKNOWN_TYPE)
 						hasUnknownType = true;
@@ -107,6 +108,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 				}
 				termPrimary.setLabel(methodInSymbolTableSpecifier.getLabel());
 				returnValue.setFirst(methodInSymbolTableSpecifier.getReturnValue());
+				termPrimary.setType(methodInSymbolTableSpecifier.getReturnValue());
 			}
 			if (!termPrimary.getIndices().isEmpty()) {
 				if (!(returnValue.getFirst() instanceof ArrayType)) {

@@ -1,5 +1,10 @@
 parser grammar CoreRebecaExpressionParser;
 
+annotation returns [Annotation an]
+    :   {$an = new Annotation();} 
+    	'@' annotationName = IDENTIFIER {$an.setIdentifier($annotationName.text);}
+    	( LPAREN ( exp = expression {$an.setValue($exp.e);} )? RPAREN )?
+    ;
 
 type returns [Type t]
 	:

@@ -85,7 +85,7 @@ mainDeclaration returns [MainDeclaration md]
 		MAIN {$md.setLineNumber($MAIN.getLine());$md.setCharacter($MAIN.getCharPositionInLine());}
 		LBRACE
 		(mrd = mainRebecDefinition{$md.getMainRebecDefinition().add($mrd.mrd);})*
-		RBRACE
+		RBRACE {$md.setEndLineNumber($RBRACE.getLine());$md.setEndCharacter($RBRACE.getCharPositionInLine());}
 	;
 
 mainRebecDefinition returns [MainRebecDefinition mrd]
@@ -152,6 +152,7 @@ arrayInitializer returns [ArrayVariableInitializer avi]
 reactiveClassDeclaration returns[ReactiveClassDeclaration rcd]
     :   
     	{$rcd = new ReactiveClassDeclaration();}
+    	(an = annotation {$rcd.getAnnotations().add($an.an);})*
         REACTIVECLASS reactiveClassName = IDENTIFIER 
         	{	$rcd.setName($reactiveClassName.text); 
         		$rcd.setLineNumber($reactiveClassName.getLine()); $rcd.setCharacter($reactiveClassName.getCharPositionInLine());
@@ -173,7 +174,7 @@ reactiveClassDeclaration returns[ReactiveClassDeclaration rcd]
 		|	md = msgsrvDeclaration {$rcd.getMsgsrvs().add($md.md);}
 		|	smd = synchMethodDeclaration {$rcd.getSynchMethods().add($smd.smd);}
 		)*
-        RBRACE
+        RBRACE {$rcd.setEndLineNumber($RBRACE.getLine());$rcd.setEndCharacter($RBRACE.getCharPositionInLine());}
     ;
 	
 //////////////////////////////////
@@ -181,7 +182,7 @@ methodDeclaration [MethodDeclaration md]
 	:
 		name = IDENTIFIER {$md.setName($name.text); $md.setLineNumber($name.getLine());$md.setCharacter($name.getCharPositionInLine());}
 		fps = formalParameters {$md.getFormalParameters().addAll($fps.fps);}
-		b = block {$md.setBlock($b.bs);}
+		b = block {$md.setBlock($b.bs);$md.setEndLineNumber($b.bs.getEndLineNumber());$md.setEndCharacter($b.bs.getEndCharacter());}
 	;
 
 constructorDeclaration returns [ConstructorDeclaration cd]
@@ -238,7 +239,7 @@ block returns [BlockStatement bs]
     :   {$bs = new BlockStatement();}
         LBRACE {$bs.setLineNumber($LBRACE.getLine());$bs.setCharacter($LBRACE.getCharPositionInLine());}
         (s = statement {$bs.getStatements().add ($s.s);})*
-        RBRACE
+        RBRACE {$bs.setEndLineNumber($RBRACE.getLine());$bs.setEndCharacter($RBRACE.getCharPositionInLine());}
     ;
 
 statement returns [Statement s]

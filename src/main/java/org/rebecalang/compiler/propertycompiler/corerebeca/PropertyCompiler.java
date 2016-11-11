@@ -47,9 +47,9 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.UnaryExpressionSemanticCheck;
 import org.rebecalang.compiler.propertycompiler.corerebeca.compiler.CoreRebecaPropertyCompleteLexer;
 import org.rebecalang.compiler.propertycompiler.corerebeca.compiler.CoreRebecaPropertyCompleteParser;
-import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.Definition;
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.LTLDefinition;
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.PropertyModel;
+import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.Definition;
 import org.rebecalang.compiler.utils.AccessModifierUtilities;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerFeature;
@@ -197,6 +197,14 @@ public class PropertyCompiler {
 		finallyMethod.getFormalParameters().add(fpd);
 		finallyMethod.setReturnType(TypesUtilities.BOOLEAN_TYPE);
 		
+		SynchMethodDeclaration nextMethod = new SynchMethodDeclaration();
+		nextMethod.setName("X");
+		fpd = new FormalParameterDeclaration();
+		fpd.setName("arg0");
+		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		nextMethod.getFormalParameters().add(fpd);
+		nextMethod.setReturnType(TypesUtilities.BOOLEAN_TYPE);
+		
 		SynchMethodDeclaration untilMethod = new SynchMethodDeclaration();
 		untilMethod.setName("U");
 		fpd = new FormalParameterDeclaration();
@@ -209,12 +217,28 @@ public class PropertyCompiler {
 		untilMethod.getFormalParameters().add(fpd);
 		untilMethod.setReturnType(TypesUtilities.BOOLEAN_TYPE);
 		
+		SynchMethodDeclaration weakUntilMethod = new SynchMethodDeclaration();
+		weakUntilMethod.setName("W");
+		fpd = new FormalParameterDeclaration();
+		fpd.setName("arg0");
+		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		weakUntilMethod.getFormalParameters().add(fpd);
+		fpd = new FormalParameterDeclaration();
+		fpd.setName("arg1");
+		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		weakUntilMethod.getFormalParameters().add(fpd);
+		weakUntilMethod.setReturnType(TypesUtilities.BOOLEAN_TYPE);
+
 		try {
 			modelSymbolTable.addMethod(null, globallyMethod,
 					CoreRebecaLabelUtility.SYNCH_METHOD);
 			modelSymbolTable.addMethod(null, finallyMethod,
 					CoreRebecaLabelUtility.SYNCH_METHOD);
+			modelSymbolTable.addMethod(null, nextMethod,
+					CoreRebecaLabelUtility.SYNCH_METHOD);
 			modelSymbolTable.addMethod(null, untilMethod,
+					CoreRebecaLabelUtility.SYNCH_METHOD);
+			modelSymbolTable.addMethod(null, weakUntilMethod,
 					CoreRebecaLabelUtility.SYNCH_METHOD);
 		} catch (ExceptionContainer ec) {
 			exceptionContainer.addAll(ec);

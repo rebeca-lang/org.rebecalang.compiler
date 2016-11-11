@@ -17,7 +17,7 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		DEFINE=1, LTL=2, THEN=3, PROPERTY=4, INTLITERAL=5, FLOATLITERAL=6, DOUBLELITERAL=7, 
+		LTL=1, DEFINE=2, THEN=3, PROPERTY=4, INTLITERAL=5, FLOATLITERAL=6, DOUBLELITERAL=7, 
 		CHARLITERAL=8, STRINGLITERAL=9, WS=10, COMMENT=11, LINE_COMMENT=12, TRUE=13, 
 		FALSE=14, NULL=15, LPAREN=16, RPAREN=17, LBRACE=18, RBRACE=19, LBRACKET=20, 
 		RBRACKET=21, SEMI=22, COMMA=23, DOT=24, EQ=25, BANG=26, TILDA=27, QUES=28, 
@@ -32,7 +32,7 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 
 	public static final String[] tokenNames = {
 		"<INVALID>",
-		"'define'", "'LTL'", "'->'", "'property'", "INTLITERAL", "FLOATLITERAL", 
+		"'LTL'", "'define'", "'->'", "'property'", "INTLITERAL", "FLOATLITERAL", 
 		"DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", "WS", "COMMENT", "LINE_COMMENT", 
 		"'true'", "'false'", "'null'", "'('", "')'", "'{'", "'}'", "'['", "']'", 
 		"';'", "','", "'.'", "'='", "'!'", "'~'", "'?'", "':'", "'=='", "'&&'", 
@@ -42,7 +42,7 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		"IDENTIFIER"
 	};
 	public static final String[] ruleNames = {
-		"DEFINE", "LTL", "THEN", "PROPERTY", "INTLITERAL", "IntegerNumber", "HexPrefix", 
+		"LTL", "DEFINE", "THEN", "PROPERTY", "INTLITERAL", "IntegerNumber", "HexPrefix", 
 		"HexDigit", "LongSuffix", "NonIntegerNumber", "Exponent", "FloatSuffix", 
 		"DoubleSuffix", "FLOATLITERAL", "DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", 
 		"EscapeSequence", "WS", "COMMENT", "LINE_COMMENT", "TRUE", "FALSE", "NULL", 
@@ -88,7 +88,7 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\4\64\t"+
 		"\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\4:\t:\4;\t;\4<\t<\4=\t="+
 		"\4>\t>\4?\t?\4@\t@\4A\tA\4B\tB\4C\tC\4D\tD\4E\tE\4F\tF\4G\tG\4H\tH\3\2"+
-		"\3\2\3\2\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3"+
+		"\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3"+
 		"\5\3\5\3\5\3\5\3\5\3\6\3\6\3\7\3\7\3\7\7\7\u00ae\n\7\f\7\16\7\u00b1\13"+
 		"\7\3\7\3\7\6\7\u00b5\n\7\r\7\16\7\u00b6\3\7\3\7\6\7\u00bb\n\7\r\7\16\7"+
 		"\u00bc\5\7\u00bf\n\7\3\b\3\b\3\b\3\b\5\b\u00c5\n\b\3\t\3\t\3\n\3\n\3\13"+
@@ -134,7 +134,7 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		"\2\2\2\2i\3\2\2\2\2k\3\2\2\2\2m\3\2\2\2\2o\3\2\2\2\2q\3\2\2\2\2s\3\2\2"+
 		"\2\2u\3\2\2\2\2w\3\2\2\2\2y\3\2\2\2\2{\3\2\2\2\2}\3\2\2\2\2\177\3\2\2"+
 		"\2\2\u0081\3\2\2\2\2\u0083\3\2\2\2\2\u0085\3\2\2\2\2\u0087\3\2\2\2\2\u0089"+
-		"\3\2\2\2\2\u008b\3\2\2\2\3\u0091\3\2\2\2\5\u0098\3\2\2\2\7\u009c\3\2\2"+
+		"\3\2\2\2\2\u008b\3\2\2\2\3\u0091\3\2\2\2\5\u0095\3\2\2\2\7\u009c\3\2\2"+
 		"\2\t\u009f\3\2\2\2\13\u00a8\3\2\2\2\r\u00be\3\2\2\2\17\u00c4\3\2\2\2\21"+
 		"\u00c6\3\2\2\2\23\u00c8\3\2\2\2\25\u0107\3\2\2\2\27\u0109\3\2\2\2\31\u0112"+
 		"\3\2\2\2\33\u0114\3\2\2\2\35\u0116\3\2\2\2\37\u0119\3\2\2\2!\u011d\3\2"+
@@ -150,10 +150,10 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		"\3\2\2\2w\u01bf\3\2\2\2y\u01c2\3\2\2\2{\u01c5\3\2\2\2}\u01c7\3\2\2\2\177"+
 		"\u01ca\3\2\2\2\u0081\u01cc\3\2\2\2\u0083\u01ce\3\2\2\2\u0085\u01d1\3\2"+
 		"\2\2\u0087\u01d5\3\2\2\2\u0089\u01d8\3\2\2\2\u008b\u01dc\3\2\2\2\u008d"+
-		"\u01e4\3\2\2\2\u008f\u01e6\3\2\2\2\u0091\u0092\7f\2\2\u0092\u0093\7g\2"+
-		"\2\u0093\u0094\7h\2\2\u0094\u0095\7k\2\2\u0095\u0096\7p\2\2\u0096\u0097"+
-		"\7g\2\2\u0097\4\3\2\2\2\u0098\u0099\7N\2\2\u0099\u009a\7V\2\2\u009a\u009b"+
-		"\7N\2\2\u009b\6\3\2\2\2\u009c\u009d\7/\2\2\u009d\u009e\7@\2\2\u009e\b"+
+		"\u01e4\3\2\2\2\u008f\u01e6\3\2\2\2\u0091\u0092\7N\2\2\u0092\u0093\7V\2"+
+		"\2\u0093\u0094\7N\2\2\u0094\4\3\2\2\2\u0095\u0096\7f\2\2\u0096\u0097\7"+
+		"g\2\2\u0097\u0098\7h\2\2\u0098\u0099\7k\2\2\u0099\u009a\7p\2\2\u009a\u009b"+
+		"\7g\2\2\u009b\6\3\2\2\2\u009c\u009d\7/\2\2\u009d\u009e\7@\2\2\u009e\b"+
 		"\3\2\2\2\u009f\u00a0\7r\2\2\u00a0\u00a1\7t\2\2\u00a1\u00a2\7q\2\2\u00a2"+
 		"\u00a3\7r\2\2\u00a3\u00a4\7g\2\2\u00a4\u00a5\7t\2\2\u00a5\u00a6\7v\2\2"+
 		"\u00a6\u00a7\7{\2\2\u00a7\n\3\2\2\2\u00a8\u00a9\5\r\7\2\u00a9\f\3\2\2"+

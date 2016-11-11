@@ -5,6 +5,7 @@ import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PlusSubExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.BinaryExpressionSemanticCheck.LValueState;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
@@ -26,7 +27,7 @@ public class PlusSubExpressionSemanticCheck extends AbstractExpressionSemanticCh
 			cce.setLine(pspExpression.getValue().getLineNumber());
 			exceptionContainer.addException(cce);
 		}
-		if (!BinaryExpressionSemanticCheck.isInLValueStyle(pspExpression.getValue(), scopeHandler)) {
+		if (BinaryExpressionSemanticCheck.isInLValueStyle(pspExpression.getValue(), scopeHandler) != LValueState.VARIABLE) {
 			exceptionContainer.getExceptions().add(
 					new CodeCompilationException(
 							"Invalid argument to operation ++/--",

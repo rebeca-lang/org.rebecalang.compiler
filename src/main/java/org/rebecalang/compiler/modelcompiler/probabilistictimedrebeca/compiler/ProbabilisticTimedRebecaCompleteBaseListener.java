@@ -104,6 +104,19 @@ public class ProbabilisticTimedRebecaCompleteBaseListener implements Probabilist
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAnnotation(@NotNull ProbabilisticTimedRebecaCompleteParser.AnnotationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation(@NotNull ProbabilisticTimedRebecaCompleteParser.AnnotationContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPrimary(@NotNull ProbabilisticTimedRebecaCompleteParser.PrimaryContext ctx) { }
 	/**
 	 * {@inheritDoc}

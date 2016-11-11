@@ -44,6 +44,7 @@ public class ScopeHandler {
 	public void addVaribaleToCurrentScope(String variableName, Type type, Label label, Object precompilationValue, 
 			int lineNumber, int column) throws ScopeException {
 		VariableInScopeSpecifier info = null;
+//		System.out.println(variableName + ":" + lineNumber + ":" + column);
 		try {
 			info = retreiveVariableFromScope(variableName);
 		} catch (ScopeException se) {
@@ -65,7 +66,7 @@ public class ScopeHandler {
 		} else {
 			exceptionMessage = "Redeclaration of \""
 					+ TypesUtilities.getTypeName(type) + " " + variableName
-					+ "\", it previously declared in line "
+					+ "\", it has already been declared in line "
 					+ info.getLineNumber() + " column "
 					+ info.getColumn();
 		}
@@ -159,6 +160,20 @@ public class ScopeHandler {
 		}
 		
 		
+	}
+
+	public void updateVaribaleInCurrentScope(String variableName, Type type,
+			Label label, int lineNumber, int column) {
+		VariableInScopeSpecifier info = null;
+		try {
+			info = retreiveVariableFromScope(variableName);
+			info.setColumn(column);
+			info.setLineNumber(lineNumber);
+			info.setLabel(label);
+			info.setType(type);
+		} catch (ScopeException se) {
+			se.printStackTrace();
+		}
 	}
 
 }

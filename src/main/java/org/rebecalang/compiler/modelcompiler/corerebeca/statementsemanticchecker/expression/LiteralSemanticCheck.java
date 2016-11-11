@@ -14,30 +14,7 @@ public class LiteralSemanticCheck extends AbstractExpressionSemanticCheck {
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
 		Literal lExpression = (Literal) expression;
-		if (lExpression.getType() == TypesUtilities.INT_TYPE) {
-			try {
-				int value = Integer.parseInt(lExpression.getLiteralValue());
-				if (Byte.MIN_VALUE <= value && value <= Byte.MAX_VALUE) {
-					lExpression.setType(TypesUtilities.BYTE_TYPE);
-					returnValue.setSecond((byte) value);
-				} else if (Short.MIN_VALUE <= value
-						&& value <= Short.MAX_VALUE) {
-					lExpression.setType(TypesUtilities.SHORT_TYPE);
-					returnValue.setSecond((short) value);
-				} else if (Integer.MIN_VALUE <= value
-						&& value <= Integer.MAX_VALUE) {
-					lExpression.setType(TypesUtilities.INT_TYPE);
-					returnValue.setSecond(value);
-				}
-			} catch (NumberFormatException nfe) {
-				exceptionContainer.getExceptions().add(
-						SemanticCheckerUtils.getOutofRangeException(
-								lExpression.getLiteralValue(),
-								TypesUtilities.INT_TYPE,
-								lExpression.getLineNumber(),
-								lExpression.getCharacter()));
-			}
-		} else if (lExpression.getType() == TypesUtilities.DOUBLE_TYPE) {
+		if (lExpression.getType() == TypesUtilities.DOUBLE_TYPE) {
 			try {
 				double value = Double.parseDouble(lExpression
 						.getLiteralValue());
@@ -76,7 +53,30 @@ public class LiteralSemanticCheck extends AbstractExpressionSemanticCheck {
 								lExpression.getLineNumber(),
 								lExpression.getCharacter()));
 			}
-		}
+		} else if (TypesUtilities.getInstance().canTypeCastTo(lExpression.getType(), TypesUtilities.INT_TYPE)) {
+				try {
+					int value = Integer.parseInt(lExpression.getLiteralValue());
+					if (Byte.MIN_VALUE <= value && value <= Byte.MAX_VALUE) {
+						lExpression.setType(TypesUtilities.BYTE_TYPE);
+						returnValue.setSecond((byte) value);
+					} else if (Short.MIN_VALUE <= value
+							&& value <= Short.MAX_VALUE) {
+						lExpression.setType(TypesUtilities.SHORT_TYPE);
+						returnValue.setSecond((short) value);
+					} else if (Integer.MIN_VALUE <= value
+							&& value <= Integer.MAX_VALUE) {
+						lExpression.setType(TypesUtilities.INT_TYPE);
+						returnValue.setSecond(value);
+					}
+				} catch (NumberFormatException nfe) {
+					exceptionContainer.getExceptions().add(
+							SemanticCheckerUtils.getOutofRangeException(
+									lExpression.getLiteralValue(),
+									TypesUtilities.INT_TYPE,
+									lExpression.getLineNumber(),
+									lExpression.getCharacter()));
+				}
+			}
 		returnValue.setFirst(lExpression.getType());
 		return returnValue;
 	}

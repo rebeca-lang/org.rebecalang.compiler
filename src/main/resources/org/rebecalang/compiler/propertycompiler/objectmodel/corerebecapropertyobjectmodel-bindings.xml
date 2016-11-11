@@ -1,6 +1,15 @@
 <jxb:bindings xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" version="2.1">
 
+	<jxb:bindings schemaLocation="../../propertycompiler/objectmodel/generalpropertyobjectmodel.xsd">
+		<jxb:bindings node="//xs:complexType[@name='PropertyModel']">
+			<jxb:class ref="org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.PropertyModel" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Definition']">
+			<jxb:class ref="org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.Definition" />
+		</jxb:bindings>
+	</jxb:bindings>
+	
 	<jxb:bindings schemaLocation="../../modelcompiler/objectmodel/corerebecaexpressionobjectmodel.xsd">
 		<jxb:bindings node="//xs:complexType[@name='RebecInstantiationPrimary']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary" />
@@ -55,6 +64,12 @@
 		</jxb:bindings>
 		<jxb:bindings node="//xs:complexType[@name='Type']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Annotation']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Label']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label" />
 		</jxb:bindings>
 	</jxb:bindings>
 </jxb:bindings>

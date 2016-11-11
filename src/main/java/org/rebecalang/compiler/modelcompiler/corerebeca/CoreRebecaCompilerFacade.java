@@ -164,6 +164,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				semanticCheckOfMethod(rcd.getName(), md, CoreRebecaLabelUtility.MSGSRV);
 			}
 			for (SynchMethodDeclaration md : rcd.getSynchMethods()) {
+				scopeHandler.pushScopeRecord(null);
 				try {
 					scopeHandler.addVaribaleToCurrentScope(ScopeHandler.RETURN_VALUE_KEY_IN_SCOPE, md.getReturnType(),
 							CoreRebecaLabelUtility.LOCAL_VARIABLE, 0, 0);
@@ -171,6 +172,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 					e.printStackTrace();
 				}
 				semanticCheckOfMethod(rcd.getName(), md, CoreRebecaLabelUtility.SYNCH_METHOD);
+				scopeHandler.popScopeRecord();
 			}
 
 			scopeHandler.popScopeRecord();
@@ -187,6 +189,22 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 		FormalParameterDeclaration fpd = new FormalParameterDeclaration();
 		fpd.setName("arg0");
 		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		assersionMethod.getFormalParameters().add(fpd);
+		try {
+			symbolTable.addMethod(null, assersionMethod,
+					CoreRebecaLabelUtility.ASSERTION);
+		} catch (ExceptionContainer ec) {
+			exceptionContainer.addAll(ec);
+		}
+		assersionMethod = new SynchMethodDeclaration();
+		assersionMethod.setName("assertion");
+		fpd = new FormalParameterDeclaration();
+		fpd.setName("arg0");
+		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		assersionMethod.getFormalParameters().add(fpd);
+		fpd = new FormalParameterDeclaration();
+		fpd.setName("arg1");
+		fpd.setType(TypesUtilities.STRING_TYPE);
 		assersionMethod.getFormalParameters().add(fpd);
 		try {
 			symbolTable.addMethod(null, assersionMethod,
@@ -355,6 +373,10 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 		for (FieldDeclaration fd : rcd.getKnownRebecs()) {
 			statementSemanticCheckContainer.check(fd);
 			for (VariableDeclarator vd : fd.getVariableDeclarators()) {
+				scopeHandler.updateVaribaleInCurrentScope(vd.getVariableName(),
+						fd.getType(), CoreRebecaLabelUtility.KNOWNREBEC_VARIABLE, 
+						vd.getLineNumber(), vd.getCharacter());
+
 				if (vd.getVariableInitializer() != null) {
 					CodeCompilationException rce = new CodeCompilationException(
 							"Known rebecs are only initialized during instantiation",

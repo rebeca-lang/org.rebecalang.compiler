@@ -2,6 +2,7 @@ package org.rebecalang.compiler.modelcompiler;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Set;
 
@@ -113,21 +114,32 @@ public class RebecaCompiler {
 		return rebecaModel;
 	}
 
+	private AbstractCompilerFacade getParser(File rebecaFile, Set<CompilerFeature> compilerFeatures) 
+			throws FileNotFoundException, IOException, CodeCompilationException {
+		ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(rebecaFile));
+		return getAppropriateParser(compilerFeatures, input);
+	}
+	
+	public RebecaModel syntaxCheckRebecaFile(File rebecaFile, Set<CompilerFeature> compilerFeatures) {
+		Pair<RebecaModel,SymbolTable> result = compileRebecaFile(rebecaFile, compilerFeatures, false);
+		if (result != null)
+			return result.getFirst();
+		return null;
+	}
+
 	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile,
 			Set<CompilerFeature> compilerFeatures) {
+		return compileRebecaFile(rebecaFile, compilerFeatures, true);
+	}
+	
+	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile,
+			Set<CompilerFeature> compilerFeatures, boolean performSemanticCheck) {
 		exceptionContainer.clear();
-		ANTLRInputStream input = null;
-		try {
-			input = new ANTLRInputStream(new FileInputStream(rebecaFile));
-		} catch (IOException e) {
-			exceptionContainer.addException(e);
-			return null;
-		}
 
 		try {
-			AbstractCompilerFacade parser = getAppropriateParser(compilerFeatures, input);
+			AbstractCompilerFacade parser = getParser(rebecaFile, compilerFeatures);
 			parser.compile();
-			if (exceptionContainer.exceptionsIsEmpty()) {
+			if (exceptionContainer.exceptionsIsEmpty() && performSemanticCheck) {
 				parser.semanticCheck(compilerFeatures);
 			}
 			return new Pair<RebecaModel, SymbolTable>(parser.getRebecaModel(), parser.getSymbolTable());
@@ -174,5 +186,4 @@ public class RebecaCompiler {
 	public ExceptionContainer getExceptionContainer() {
 		return exceptionContainer;
 	}
-	
 }
