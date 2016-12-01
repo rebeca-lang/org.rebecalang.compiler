@@ -21,41 +21,10 @@ public class DotPrimaryExpressionSemanticCheck extends AbstractExpressionSemanti
 
 		Expression leftTerm = dotPrimary.getLeft();
 		Type leftTermType = ((ExpressionSemanticCheckContainer)defaultContainer).check(leftTerm, baseType).getFirst();
-		leftTerm.setType(leftTermType);
+		//TODO: make sure why I put such a setter here
+//		leftTerm.setType(leftTermType);
 		PrimaryExpression rightTerm = dotPrimary.getRight();
 		
-//		try {
-//			ReactiveClassDeclaration metaData = TypesUtilities.getInstance().getMetaData(leftTermType);
-//			
-//		} catch (CodeCompilationException cce) {
-//			cce.printStackTrace();
-//		}
-//		while (rightTerm instanceof DotPrimary) {
-//			TermPrimary tempLeft = (TermPrimary) ((DotPrimary)rightTerm).getLeft();
-//			AccessModifier fieldAccessModifier = TypesUtilities.getInstance().getFieldAccessModifier(leftTermType, tempLeft.getName());
-//			if (fieldAccessModifier == null) {
-//				break;
-//			} else {
-//				try {
-//					ReactiveClassDeclaration reactiveClassDeclaration = 
-//							TypesUtilities.getInstance().getMetaData(leftTermType);
-//					leftTermType = null;
-//					for (FieldDeclaration fieldDeclaration : reactiveClassDeclaration.getStatevars()) {
-//						for (VariableDeclarator variableDeclarator : fieldDeclaration.getVariableDeclarators())
-//							if (variableDeclarator.getVariableName().equals(tempLeft.getName())) {
-//								leftTermType = fieldDeclaration.getType();
-//								break;
-//							}
-//					}
-//					
-//				} catch (CodeCompilationException e) {
-//					exceptionContainer.addException(e);
-//				}
-//			}
-//			leftTermType = ((ExpressionSemanticCheckContainer)defaultContainer).check(rightTerm, leftTermType).getFirst();
-//			((DotPrimary) rightTerm).setType(leftTermType);
-//			rightTerm = ((DotPrimary) rightTerm).getRight();
-//		}
 		Type rightTermType = ((ExpressionSemanticCheckContainer)defaultContainer).check(rightTerm, leftTermType).getFirst();
 		expression.setType(rightTermType);
 		
