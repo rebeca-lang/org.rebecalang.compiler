@@ -34,8 +34,13 @@ public class TernaryExpressionSemanticCheck extends AbstractExpressionSemanticCh
 		}
 		// The type of left expression of ternary operator should be the
 		// same as the type of the right expression
-		if (!TypesUtilities.getInstance().canTypeUpCastTo(
+		if (TypesUtilities.getInstance().canTypeUpCastTo(
+				rType.getFirst(), lType.getFirst())) {
+			tExpression.setType(lType.getFirst());
+		} else if (TypesUtilities.getInstance().canTypeUpCastTo(
 				lType.getFirst(), rType.getFirst())) {
+			tExpression.setType(rType.getFirst());
+		} else {
 			CodeCompilationException cce = TypesUtilities
 					.getTypeMismatchException(rType.getFirst(),
 							lType.getFirst());
@@ -43,7 +48,7 @@ public class TernaryExpressionSemanticCheck extends AbstractExpressionSemanticCh
 			cce.setColumn(tExpression.getLeft().getCharacter());
 			exceptionContainer.addException(cce);
 		}
-		tExpression.setType(lType.getFirst());
+		
 		returnValue.setFirst(tExpression.getType());
 		if (cType.getSecond() != null) {
 			if (lType.getSecond() != null && rType.getSecond() != null)
