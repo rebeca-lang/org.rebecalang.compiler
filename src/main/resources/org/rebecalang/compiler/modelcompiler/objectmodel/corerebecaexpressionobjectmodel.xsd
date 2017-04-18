@@ -37,6 +37,17 @@
 		</xs:complexContent>
 	</xs:complexType>
 
+	<xs:complexType name="InstanceofExpression">
+		<xs:complexContent>
+			<xs:extension base="Expression">
+				<xs:sequence>
+					<xs:element name="value" type="Expression" />
+					<xs:element name="evaluationType" type="Type" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
 	<xs:complexType name="BinaryExpression">
 		<xs:complexContent>
 			<xs:extension base="Expression">

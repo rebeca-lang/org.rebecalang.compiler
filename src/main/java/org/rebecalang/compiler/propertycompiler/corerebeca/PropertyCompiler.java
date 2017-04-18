@@ -45,6 +45,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.RebecInstantiationExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.TernaryExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.UnaryExpressionSemanticCheck;
+import org.rebecalang.compiler.propertycompiler.PropertyCodeCompilationException;
 import org.rebecalang.compiler.propertycompiler.corerebeca.compiler.CoreRebecaPropertyCompleteLexer;
 import org.rebecalang.compiler.propertycompiler.corerebeca.compiler.CoreRebecaPropertyCompleteParser;
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.LTLDefinition;
@@ -130,7 +131,7 @@ public class PropertyCompiler {
 				public void syntaxError(Recognizer<?, ?> recognizer,
 						Object offendingSymbol, int line, int charPositionInLine,
 						String msg, RecognitionException e) {
-					PropertyCompiler.this.exceptionContainer.addException(new CodeCompilationException(msg, line,
+					PropertyCompiler.this.exceptionContainer.addException(new PropertyCodeCompilationException(msg, line,
 							charPositionInLine));
 				}
 			});
@@ -157,7 +158,7 @@ public class PropertyCompiler {
 				return propertyModel;
 			}
 		} catch (FileNotFoundException e) {
-			exceptionContainer.addException(new CodeCompilationException("Property file \"" + 
+			exceptionContainer.addException(new PropertyCodeCompilationException("Property file \"" + 
 					propertyFile.getName() + "\" not found.", 0, 0));
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -247,7 +248,7 @@ public class PropertyCompiler {
 		for (LTLDefinition ltlDefinition : propertyModel.getLTLDefinitions()) {
 			Pair<Type, Object> checkingResult = expressionSemanticCheckContainer.check(ltlDefinition.getExpression());
 			if (!TypesUtilities.getInstance().canTypeCastTo(checkingResult.getFirst(), TypesUtilities.BOOLEAN_TYPE)) {
-				exceptionContainer.addException(new CodeCompilationException(
+				exceptionContainer.addException(new PropertyCodeCompilationException(
 						"The result of an LTL formula must be evaluatable to boolean.", 
 						ltlDefinition.getExpression().getLineNumber(), ltlDefinition.getExpression().getCharacter()));
 			}

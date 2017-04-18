@@ -11,14 +11,14 @@ public class ANTLRFilesGenerator {
 //				base.replaceFirst("loc", "java") + "/corerebeca/compiler",
 //				grammarBase + "/CoreRebecaComplete.g4" };
 
-//		antlrArgs = new String[] {
-//				"-o", base.replaceFirst("loc", "java") + "/probabilistictimedrebeca/compiler",
-//				"-lib", ".",
-//				grammarBase + "/ProbabilisticTimedRebecaComplete.g4" };
+		antlrArgs = new String[] {
+				"-o", base.replaceFirst("loc", "java") + "/probabilistictimedrebeca/compiler",
+				"-lib", ".",
+				grammarBase + "/ProbabilisticTimedRebecaComplete.g4" };
 
-		antlrArgs = new String[] { "-o",
-				base.replaceFirst("loc", "java") + "/timedrebeca/compiler",
-				grammarBase + "/TimedRebecaComplete.g4" };
+//		antlrArgs = new String[] { "-o",
+//				base.replaceFirst("loc", "java") + "/timedrebeca/compiler",
+//				grammarBase + "/TimedRebecaComplete.g4" };
 
 //		antlrArgs = new String[] { "-o",
 //				base.replaceFirst("loc", "java") + "/probabilisticrebeca/compiler",

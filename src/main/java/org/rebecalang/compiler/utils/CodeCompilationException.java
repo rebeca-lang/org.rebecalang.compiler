@@ -6,9 +6,6 @@ package org.rebecalang.compiler.utils;
 
 public class CodeCompilationException extends Exception {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = -785667532009988465L;
 	private int line;
     private int column;

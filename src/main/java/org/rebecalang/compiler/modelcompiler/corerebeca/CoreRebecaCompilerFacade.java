@@ -29,6 +29,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MainRebecDefinition;
@@ -51,6 +52,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStateme
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.BinaryExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.CastExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.DotPrimaryExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.InstanceofExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.LiteralSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.NondetExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.PlusSubExpressionSemanticCheck;
@@ -112,6 +114,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 		expressionSemanticCheckContainer.registerTranslator(UnaryExpression.class, new UnaryExpressionSemanticCheck());
 		expressionSemanticCheckContainer.registerTranslator(BinaryExpression.class, new BinaryExpressionSemanticCheck());
 		expressionSemanticCheckContainer.registerTranslator(RebecInstantiationPrimary.class, new RebecInstantiationExpressionSemanticCheck());
+		expressionSemanticCheckContainer.registerTranslator(InstanceofExpression.class, new InstanceofExpressionSemanticCheck());
 
 		statementSemanticCheckContainer =
 				new StatementSemanticCheckContainer(expressionSemanticCheckContainer, scopeHandler, symbolTable,

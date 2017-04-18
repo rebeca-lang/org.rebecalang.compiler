@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" targetNamespace="http://rebecalang.org/compiler/modelcompiler/timedrebecaexpression"
+	xmlns:corerebecaexp="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression"
+	xmlns="http://rebecalang.org/compiler/modelcompiler/timedrebecaexpression">
+
+	<xs:import namespace="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression"
+		schemaLocation="corerebecaexpressionobjectmodel.xsd" />
+
+	<xs:complexType name="TimedRebecaParentSuffixPrimary">
+		<xs:complexContent>
+			<xs:extension base="corerebecaexp:ParentSuffixPrimary">
+				<xs:sequence>
+					<xs:element name="afterExpression" type="corerebecaexp:Expression" />
+					<xs:element name="deadlineExpression" type="corerebecaexp:Expression" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

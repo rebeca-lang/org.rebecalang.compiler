@@ -124,9 +124,15 @@ equalityExpression returns [Expression e]
 instanceOfExpression returns [Expression e]
     :   
     	e1 = relationalExpression {$e = $e1.e;}
-        //(INSTANCEOF type
-        //)?
+        (INSTANCEOF t=type {$e = new InstanceofExpression(); 
+        					((InstanceofExpression)$e).setValue($e1.e); 
+        					((InstanceofExpression)$e).setEvaluationType($t.t);
+        					$e.setType(TypesUtilities.BOOLEAN_TYPE);
+        					$e.setLineNumber($t.t.getLineNumber()); $e.setCharacter($t.t.getCharacter());
+        					}
+        )?
     ;
+
 
 relationalExpression returns [Expression e]
     :   
