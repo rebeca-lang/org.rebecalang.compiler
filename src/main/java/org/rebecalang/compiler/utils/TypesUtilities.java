@@ -44,7 +44,6 @@ public class TypesUtilities {
 
 	public Comparator<Type> getCastableComparator() {
 		return new Comparator<Type>() {
-			@Override
 			public int compare(Type base, Type target) {
 				if (!TypesUtilities.getInstance().canTypeUpCastTo(base, target))
 					return 1;
@@ -55,7 +54,6 @@ public class TypesUtilities {
 
 	public Comparator<Type> getExactComparator() {
 		return new Comparator<Type>() {
-			@Override
 			public int compare(Type base, Type target) {
 				if (base instanceof PrimitiveType) {
 					if (base != target)
