@@ -90,7 +90,7 @@ public class TypesUtilities {
 		CHAR_TYPE = new OrdinaryPrimitiveType();
 		CHAR_TYPE.setName("char");
 		STRING_TYPE = new OrdinaryPrimitiveType();
-		STRING_TYPE.setName("string");
+		STRING_TYPE.setName("String");
 		VOID_TYPE = new OrdinaryPrimitiveType();
 		VOID_TYPE.setName("void");
 		NULL_TYPE = new OrdinaryPrimitiveType();

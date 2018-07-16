@@ -2,11 +2,13 @@
 env int c = 10 + 2;
 env int d = c + 1;
 
+@messagebag(scheduler = "fifo")
 reactiveclass Test1 (3) {
 	knownrebecs {
 	}
 	statevars {
 		Test1 t;
+		String s;
 		int g;// = (((t)));
 		int st1;// = 10 + f.x[f][G].k()[8]++;
 		//vv h;
@@ -14,6 +16,9 @@ reactiveclass Test1 (3) {
 	}
 		
 	Test1(Test1 rt, int f, int j) {
+		String u;
+		s = "h";
+		u = s + 4 + u;
 		t = null;//rt;
 		c = 4 + 2;
 		int fdg = abbas[4];
@@ -24,6 +29,8 @@ reactiveclass Test1 (3) {
 
 	msgsrv initial(int[3] ac, byte bc) {
 	Test1 tt = new Test1():();
+
+	if (tt instanceof Test1) {}
 
 	byte a = (byte)currentMessageArrival + tt;
 	//int pa = ?(0.25: 1, 0.5: 2);

@@ -35,22 +35,30 @@ public class SemanticCheckerUtils {
 		Set<String> arithmeticFreeOperators = new HashSet<String>();
 		arithmeticFreeOperators.addAll(Arrays.asList("+", "-", "*", "/"));
 		if (arithmeticFreeOperators.contains(operator)) {
-			Type biggerType = TypesUtilities.getInstance().getSuperType(
-					lType, rType);
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
-					TypesUtilities.DOUBLE_TYPE)) {
-				CodeCompilationException cce = createEvaluateExceptionMessage2(
-						0, 0, operator, rType, lType);
-				if (cce == null)
-					return retValue;
-				throw cce;
-			} else {
-				if (TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
-						TypesUtilities.INT_TYPE)) {
-					retValue = TypesUtilities.INT_TYPE;
+			if (lType == TypesUtilities.STRING_TYPE) {
+				if (operator.equals("+")) {
+					return TypesUtilities.STRING_TYPE;
 				} else {
-					retValue = biggerType;
+					throw new CodeCompilationException("Incompatible operator for String type", 0, 0);					
 				}
+			} else {
+				Type biggerType = TypesUtilities.getInstance().getSuperType(
+						lType, rType);
+				if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
+						TypesUtilities.DOUBLE_TYPE)) {
+					CodeCompilationException cce = createEvaluateExceptionMessage2(
+							0, 0, operator, rType, lType);
+					if (cce == null)
+						return retValue;
+					throw cce;
+				} else {
+					if (TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
+							TypesUtilities.INT_TYPE)) {
+						retValue = TypesUtilities.INT_TYPE;
+					} else {
+						retValue = biggerType;
+					}
+				}				
 			}
 		}
 
