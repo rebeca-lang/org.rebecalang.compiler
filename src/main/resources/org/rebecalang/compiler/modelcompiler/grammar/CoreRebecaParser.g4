@@ -110,6 +110,7 @@ environmentVariables returns [List<FieldDeclaration> fds]
 fieldDeclaration returns [FieldDeclaration fd]
     :   
     	{$fd = new FieldDeclaration();}
+    	(an = annotation {$fd.getAnnotations().add($an.an);})*
     	t = type vds = variableDeclarators {$fd.setType($t.t); $fd.getVariableDeclarators().addAll($vds.vds);
     		$fd.setCharacter($t.t.getCharacter()); $fd.setLineNumber($t.t.getLineNumber());}
     ;
