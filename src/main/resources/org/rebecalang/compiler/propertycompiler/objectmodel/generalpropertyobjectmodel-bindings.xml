@@ -41,6 +41,9 @@
 		<jxb:bindings node="//xs:complexType[@name='PrimitiveType']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimitiveType" />
 		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='InstanceofExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression" />
+		</jxb:bindings>
 		<jxb:bindings node="//xs:complexType[@name='Statement']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement" />
 		</jxb:bindings>

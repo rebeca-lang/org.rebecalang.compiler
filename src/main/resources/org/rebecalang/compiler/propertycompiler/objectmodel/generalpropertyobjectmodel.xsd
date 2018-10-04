@@ -11,8 +11,16 @@
 
 	<xs:complexType name="PropertyModel">
 		<xs:sequence>
-			<xs:element name="Definitions" type="Definition" maxOccurs="unbounded" minOccurs="0" />
+			<xs:element name="definitions" type="Definition" maxOccurs="unbounded" minOccurs="0" />
+			<xs:element name="assertionDefinitions" type="AssertionDefinition" maxOccurs="unbounded" minOccurs="0" />
 		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="AssertionDefinition">
+		<xs:sequence>
+			<xs:element name="Expression" type="corerebecaexp:Expression" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
 	</xs:complexType>
 
 	<xs:complexType name="Definition">

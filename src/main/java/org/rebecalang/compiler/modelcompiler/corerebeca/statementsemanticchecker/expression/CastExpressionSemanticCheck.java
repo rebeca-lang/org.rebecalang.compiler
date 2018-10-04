@@ -23,12 +23,10 @@ public class CastExpressionSemanticCheck extends AbstractExpressionSemanticCheck
 					cExpression.getType());
 			if (!TypesUtilities.getInstance().canTypeCastTo(
 					expressionType.getFirst(), castType)) {
-				CodeCompilationException cce = TypesUtilities
-						.getTypeMismatchException(
-								expressionType.getFirst(), castType);
-				cce.setColumn(cExpression.getExpression().getCharacter());
-				cce.setLine(cExpression.getExpression().getLineNumber());
-				exceptionContainer.addException(cce);
+				
+				TypesUtilities.addTypeMismatchException(exceptionContainer, 
+						expressionType.getFirst(), castType,
+						cExpression.getExpression());
 			}
 			cExpression.setType(castType);
 			returnValue.setFirst(cExpression.getType());

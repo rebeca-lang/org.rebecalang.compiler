@@ -12,3 +12,7 @@ PROPERTY
 	:	'property'
 	;
 	
+ASSERTION
+	:	'Assertion'
+	;
+	

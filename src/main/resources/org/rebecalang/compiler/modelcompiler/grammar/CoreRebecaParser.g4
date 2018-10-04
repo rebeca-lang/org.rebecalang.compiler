@@ -158,6 +158,7 @@ reactiveClassDeclaration returns[ReactiveClassDeclaration rcd]
         	{	$rcd.setName($reactiveClassName.text); 
         		$rcd.setLineNumber($reactiveClassName.getLine()); $rcd.setCharacter($reactiveClassName.getCharPositionInLine());
         	}
+        //(EXTENDS baseReactiveClassName = IDENTIFIER)?
         LPAREN queueSize = INTLITERAL {if(!$queueSize.getText().equals("<missing INTLITERAL>")) $rcd.setQueueSize(Integer.parseInt($queueSize.text));} RPAREN
         LBRACE
 

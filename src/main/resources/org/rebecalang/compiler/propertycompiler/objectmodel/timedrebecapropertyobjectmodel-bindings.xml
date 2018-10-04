@@ -8,6 +8,9 @@
 		<jxb:bindings node="//xs:complexType[@name='Definition']">
 			<jxb:class ref="org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.Definition" />
 		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='AssertionDefinition']">
+			<jxb:class ref="org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.AssertionDefinition" />
+		</jxb:bindings>
 	</jxb:bindings>
 	
 	<jxb:bindings schemaLocation="../../modelcompiler/objectmodel/corerebecaexpressionobjectmodel.xsd">
@@ -49,6 +52,9 @@
 		</jxb:bindings>
 		<jxb:bindings node="//xs:complexType[@name='PrimitiveType']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimitiveType" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='InstanceofExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression" />
 		</jxb:bindings>
 		<jxb:bindings node="//xs:complexType[@name='Statement']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement" />

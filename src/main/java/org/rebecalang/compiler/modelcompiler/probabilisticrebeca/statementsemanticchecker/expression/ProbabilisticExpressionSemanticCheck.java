@@ -38,12 +38,8 @@ public class ProbabilisticExpressionSemanticCheck extends
 				if (!TypesUtilities.getInstance().canTypeUpCastTo(
 						evaluate.getFirst(),
 						TypesUtilities.DOUBLE_TYPE)) {
-					CodeCompilationException rce = TypesUtilities
-							.getTypeMismatchException(evaluate.getFirst(),
-									TypesUtilities.DOUBLE_TYPE);
-					rce.setLine(probabilisticExpression.getLineNumber());
-					rce.setColumn(probabilisticExpression.getCharacter());
-					exceptionContainer.addException(rce);
+					TypesUtilities.addTypeMismatchException(exceptionContainer, evaluate.getFirst(),
+							TypesUtilities.DOUBLE_TYPE, probabilisticExpression);
 				} else {
 					probs += ((Number) evaluate.getSecond()).doubleValue();
 				}

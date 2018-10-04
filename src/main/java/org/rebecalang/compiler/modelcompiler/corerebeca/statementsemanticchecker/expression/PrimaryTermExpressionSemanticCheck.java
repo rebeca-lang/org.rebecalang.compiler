@@ -46,12 +46,13 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 				} else {
 					Type symbolType = symbolTable.getSymbolType(baseType, termName);
 					if (symbolType == null) {
-						exceptionContainer.getExceptions().add(
-								new CodeCompilationException(
-										"Undifiend variable " + termName + " in the type "
-												+ TypesUtilities.getTypeName(baseType), 
-												termPrimary.getLineNumber(), 
-												termPrimary.getCharacter()));
+						if (baseType != TypesUtilities.UNKNOWN_TYPE)
+							exceptionContainer.getExceptions().add(
+									new CodeCompilationException(
+											"Undefiend variable " + termName + " in the type "
+													+ TypesUtilities.getTypeName(baseType), 
+													termPrimary.getLineNumber(), 
+													termPrimary.getCharacter()));
 					} else {
 						VariableInScopeSpecifier owner = scopeHandler.retreiveVariableFromScope(CoreRebecaCompilerFacade.OWNER_REACTIVE_CLASS_KEY);
 						AccessModifier accessModifier = symbolTable.getSymbolAccessModifier(baseType, termName);
@@ -116,8 +117,9 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 					arrayType.setPrimitiveType((PrimitiveType) returnValue
 							.getFirst());
 					arrayType.getDimensions().add(0);
-					throw TypesUtilities.getTypeMismatchException(
-							returnValue.getFirst(), arrayType);
+					TypesUtilities.addTypeMismatchException(exceptionContainer, 
+							returnValue.getFirst(), arrayType, termPrimary);
+					return returnValue;
 				}
 				ArrayType foundTypeInArray = (ArrayType) returnValue.getFirst();
 				if (termPrimary.getIndices().size() > foundTypeInArray
@@ -127,16 +129,18 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 							.getPrimitiveType());
 					for (int cnt = 0; cnt < termPrimary.getIndices().size(); cnt++)
 						arrayType.getDimensions().add(0);
-					throw TypesUtilities.getTypeMismatchException(
-							returnValue.getFirst(), arrayType);
+					TypesUtilities.addTypeMismatchException(exceptionContainer, 
+							returnValue.getFirst(), arrayType, termPrimary);
+					return returnValue;
 				}
 
 				for (Expression expr : termPrimary.getIndices()) {
 					Type type = ((ExpressionSemanticCheckContainer)defaultContainer).check(expr).getFirst();
 					if (!TypesUtilities.getInstance().canTypeCastTo(type,
 							TypesUtilities.INT_TYPE)) {
-						throw TypesUtilities.getTypeMismatchException(type,
-								TypesUtilities.INT_TYPE);
+						TypesUtilities.addTypeMismatchException(exceptionContainer, 
+								type, TypesUtilities.INT_TYPE, termPrimary);
+						return returnValue;
 					}
 				}
 				if (termPrimary.getIndices().size() == foundTypeInArray

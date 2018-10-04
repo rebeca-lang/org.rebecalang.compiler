@@ -66,13 +66,8 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 			if (!(type instanceof ArrayType)) {
 				ArrayType temp = TypesUtilities.createDummyType((PrimitiveType) type, original
 						.getValues().size());
-				CodeCompilationException typeMismatchException = TypesUtilities.getTypeMismatchException(
-						type, temp);
-				typeMismatchException.setColumn(variableInitializer
-						.getCharacter());
-				typeMismatchException.setLine(variableInitializer
-						.getLineNumber());
-				exceptionContainer.addException(typeMismatchException);
+				TypesUtilities.addTypeMismatchException(exceptionContainer, type, temp, 
+						variableInitializer.getCharacter(), variableInitializer.getLineNumber());
 				return;
 			}
 
@@ -80,11 +75,8 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 			variableInitializer.setType(retType);
 
 			if (!TypesUtilities.getInstance().canTypeUpCastTo(retType, type)) {
-				CodeCompilationException cce = TypesUtilities.getTypeMismatchException(
-						retType, type);
-				cce.setColumn(variableInitializer.getCharacter());
-				cce.setLine(variableInitializer.getLineNumber());
-				exceptionContainer.addException(cce);
+				TypesUtilities.addTypeMismatchException(exceptionContainer, retType, type, 
+						variableInitializer.getCharacter(), variableInitializer.getLineNumber());
 				return;
 			}
 
@@ -94,11 +86,8 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 									.getValue()).getFirst();
 			variableInitializer.setType(retType);
 			if (!TypesUtilities.getInstance().canTypeUpCastTo(retType, type)) {
-				CodeCompilationException cce = TypesUtilities.getTypeMismatchException(
-						retType, type);
-				cce.setColumn(variableInitializer.getCharacter());
-				cce.setLine(variableInitializer.getLineNumber());
-				exceptionContainer.addException(cce);
+				TypesUtilities.addTypeMismatchException(exceptionContainer, retType, type, 
+						variableInitializer.getCharacter(), variableInitializer.getLineNumber());
 				return;
 			}
 		} else {
@@ -117,11 +106,9 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 				Pair<Type, Object> result = expressionSemanticCheckContainer.check(
 						((OrdinaryVariableInitializer) innerValue).getValue());
 				if (result.getFirst() instanceof ArrayType) {
-					exceptionContainer
-							.addException(TypesUtilities.getTypeMismatchException(result
-									.getFirst(),
-									((ArrayType) result.getFirst())
-											.getPrimitiveType()));
+					TypesUtilities.addTypeMismatchException(exceptionContainer, 
+							result.getFirst(), ((ArrayType) result.getFirst()).getPrimitiveType(), 
+							innerValue.getCharacter(), innerValue.getLineNumber());
 					return null;
 				}
 				innerType = result.getFirst();
@@ -138,14 +125,10 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 		for (int cnt = 1; cnt < innerTypes.size(); cnt++) {
 			if (!TypesUtilities.getInstance().canTypeUpCastTo(innerTypes.get(cnt), superType)) {
 				if (!TypesUtilities.getInstance().canTypeUpCastTo(superType, innerTypes.get(cnt))) {
-					CodeCompilationException cce = TypesUtilities.getTypeMismatchException(
-							innerTypes.get(cnt), innerTypes.get(0));
-					cce.setLine(avi.getLineNumber());
-					cce.setColumn(avi.getCharacter());
-					exceptionContainer.addException(new CodeCompilationException(
-							"Type mismatch among elements of array initializer. "
-									+ cce.getMessage(), cce.getLine(), cce
-									.getColumn()));
+					TypesUtilities.addTypeMismatchException(exceptionContainer, 
+							innerTypes.get(cnt), innerTypes.get(0), 
+							avi.getCharacter(), avi.getLineNumber());
+//							"Type mismatch among elements of array initializer. "
 					return null;
 				} else {
 					superType = innerTypes.get(cnt);

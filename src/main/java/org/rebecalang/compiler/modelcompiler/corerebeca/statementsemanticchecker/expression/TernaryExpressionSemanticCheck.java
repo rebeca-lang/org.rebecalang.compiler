@@ -5,7 +5,6 @@ import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TernaryExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
-import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
 
@@ -25,12 +24,8 @@ public class TernaryExpressionSemanticCheck extends AbstractExpressionSemanticCh
 		// The ternary operator condition should be boolean expression
 		if (!TypesUtilities.getInstance().canTypeUpCastTo(
 				cType.getFirst(), TypesUtilities.BOOLEAN_TYPE)) {
-			CodeCompilationException cce = TypesUtilities
-					.getTypeMismatchException(cType.getFirst(),
-							TypesUtilities.BOOLEAN_TYPE);
-			cce.setLine(tExpression.getCondition().getLineNumber());
-			cce.setColumn(tExpression.getCondition().getCharacter());
-			exceptionContainer.addException(cce);
+			TypesUtilities.addTypeMismatchException(exceptionContainer, cType.getFirst(),
+							TypesUtilities.BOOLEAN_TYPE, tExpression);
 		}
 		// The type of left expression of ternary operator should be the
 		// same as the type of the right expression
@@ -41,12 +36,8 @@ public class TernaryExpressionSemanticCheck extends AbstractExpressionSemanticCh
 				lType.getFirst(), rType.getFirst())) {
 			tExpression.setType(rType.getFirst());
 		} else {
-			CodeCompilationException cce = TypesUtilities
-					.getTypeMismatchException(rType.getFirst(),
-							lType.getFirst());
-			cce.setLine(tExpression.getLeft().getLineNumber());
-			cce.setColumn(tExpression.getLeft().getCharacter());
-			exceptionContainer.addException(cce);
+			TypesUtilities.addTypeMismatchException(exceptionContainer, rType.getFirst(),
+					lType.getFirst(), tExpression);
 		}
 		
 		returnValue.setFirst(tExpression.getType());

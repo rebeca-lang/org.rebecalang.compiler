@@ -21,11 +21,7 @@ public class PlusSubExpressionSemanticCheck extends AbstractExpressionSemanticCh
 		
 		if (!TypesUtilities.getInstance().canTypeUpCastTo(type,
 				TypesUtilities.INT_TYPE)) {
-			CodeCompilationException cce = TypesUtilities
-					.getTypeMismatchException(type, TypesUtilities.INT_TYPE);
-			cce.setColumn(pspExpression.getValue().getCharacter());
-			cce.setLine(pspExpression.getValue().getLineNumber());
-			exceptionContainer.addException(cce);
+			TypesUtilities.addTypeMismatchException(exceptionContainer, type, TypesUtilities.INT_TYPE, pspExpression);
 		}
 		if (BinaryExpressionSemanticCheck.isInLValueStyle(pspExpression.getValue(), scopeHandler) != LValueState.VARIABLE) {
 			exceptionContainer.getExceptions().add(

@@ -49,13 +49,10 @@ public class SwitchStatementSemanticCheck extends AbstractStatementSemanticCheck
 							if (!TypesUtilities.getInstance().canTypeUpCastTo(
 									evaluate.getFirst(),
 									TypesUtilities.INT_TYPE)) {
-								CodeCompilationException rce = TypesUtilities
-										.getTypeMismatchException(
-												evaluate.getFirst(),
-												TypesUtilities.INT_TYPE);
-								rce.setLine(switchLabel.getLineNumber());
-								rce.setColumn(switchLabel.getCharacter());
-								exceptionContainer.addException(rce);
+								TypesUtilities.addTypeMismatchException(exceptionContainer, evaluate.getFirst(),
+										TypesUtilities.INT_TYPE, 
+										switchLabel.getCharacter(), switchLabel.getLineNumber());
+
 							} else {
 								if (caseOptions.contains(((Number) evaluate
 										.getSecond()).intValue())) {

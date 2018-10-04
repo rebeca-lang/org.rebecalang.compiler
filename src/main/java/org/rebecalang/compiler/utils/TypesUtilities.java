@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BitIntType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimitiveType;
@@ -98,7 +99,7 @@ public class TypesUtilities {
 		UNKNOWN_TYPE = new OrdinaryPrimitiveType();
 		UNKNOWN_TYPE.setName("unknown");
 		REACTIVE_CLASS_TYPE = new OrdinaryPrimitiveType();
-		REACTIVE_CLASS_TYPE.setName("reactive class");
+		REACTIVE_CLASS_TYPE.setName("ReactiveClass");
 		NO_TYPE = new OrdinaryPrimitiveType();
 		NO_TYPE.setName("no-type");
 		MSGSRV_TYPE = new OrdinaryPrimitiveType();
@@ -122,6 +123,8 @@ public class TypesUtilities {
 		superTypeMap.put(FLOAT_TYPE, DOUBLE_TYPE);
 
 		reactiveClasses = new HashMap<String, OrdinaryPrimitiveType>();
+		reactiveClasses.put(REACTIVE_CLASS_TYPE.getName(), REACTIVE_CLASS_TYPE);
+		
 		reactiveClassesMetaData = new HashMap<Type, ReactiveClassDeclaration>();
 
 		primitiveTypes = new HashMap<String, OrdinaryPrimitiveType>();
@@ -293,7 +296,7 @@ public class TypesUtilities {
 		throw new RuntimeException("Unknown Type " + expectedType);
 	}
 
-	public static CodeCompilationException getTypeMismatchException(Type base,
+	private static CodeCompilationException getTypeMismatchException(Type base,
 			Type target) {
 		return new CodeCompilationException(
 				"Type mismatch: cannot convert from " + getTypeName(base)
@@ -323,5 +326,22 @@ public class TypesUtilities {
 	public static OrdinaryPrimitiveType getBOOLEAN_TYPE() {
 		return BOOLEAN_TYPE;
 	}
+
+	public static void addTypeMismatchException(ExceptionContainer exceptionContainer, Type first, Type second,
+			int column, int line) {
+		if(first == TypesUtilities.UNKNOWN_TYPE || second == TypesUtilities.UNKNOWN_TYPE)
+			return;
+		CodeCompilationException cce = TypesUtilities
+				.getTypeMismatchException(
+						first, second);
+		cce.setColumn(column);
+		cce.setLine(line);
+		exceptionContainer.addException(cce);
+	}
 	
+	public static void addTypeMismatchException(ExceptionContainer exceptionContainer, Type first, Type second,
+			Expression expression) {
+		addTypeMismatchException(exceptionContainer, first, second,
+				expression.getCharacter(), expression.getLineNumber());
+	}
 }

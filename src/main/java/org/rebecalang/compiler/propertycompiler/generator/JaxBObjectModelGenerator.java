@@ -7,20 +7,16 @@ public class JaxBObjectModelGenerator {
 //				"-d", "src/main/java",
 //				"-b", "src/main/resources/org/rebecalang/compiler/propertycompiler/objectmodel/generalpropertyobjectmodel-bindings.xml", 
 //				"src/main/resources/org/rebecalang/compiler/propertycompiler/objectmodel/generalpropertyobjectmodel.xsd" };
+//		String[] arg = {
+//				"-p", "org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel",
+//				"-d", "src/main/java",
+//				"-b", "src/main/resources/org/rebecalang/compiler/propertycompiler/objectmodel/corerebecapropertyobjectmodel-bindings.xml", 
+//				"src/main/resources/org/rebecalang/compiler/propertycompiler/objectmodel/corerebecapropertyobjectmodel.xsd" };
 		String[] arg = {
-				"-p", "org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel",
+				"-p", "org.rebecalang.compiler.propertycompiler.timedrebeca.objectmodel",
 				"-d", "src/main/java",
-				"-b", "src/main/resources/org/rebecalang/compiler/propertycompiler/objectmodel/corerebecapropertyobjectmodel-bindings.xml", 
-				"src/main/resources/org/rebecalang/compiler/propertycompiler/objectmodel/corerebecapropertyobjectmodel.xsd" };
-//		String[] arg = {
-//				"-p", "org.rebecalang.compiler.propertycompiler.timedrebeca.objectmodel",
-//				"-d", "src/main/java",
-//				"-b", "src/main/resources/org/rebecalang/compiler/propertycompiler/objectmodel/timedrebecapropertyobjectmodel-bindings.xml", 
-//				"src/main/resources/org/rebecalang/compiler/propertycompiler/objectmodel/timedrebecapropertyobjectmodel.xsd" };
-//		String[] arg = {
-//				"-p", "org.rebecalang.compiler.propertycompiler.propertymodel",
-//				"-d", "src/main/java",
-//				"src/main/resources/org/rebecalang/compiler/propertyobjectmodel/propertiesobjectmodel.xsd" };
+				"-b", "src/main/resources/org/rebecalang/compiler/propertycompiler/objectmodel/timedrebecapropertyobjectmodel-bindings.xml", 
+				"src/main/resources/org/rebecalang/compiler/propertycompiler/objectmodel/timedrebecapropertyobjectmodel.xsd" };
 		com.sun.tools.xjc.XJCFacade.main(arg);
 
 	}

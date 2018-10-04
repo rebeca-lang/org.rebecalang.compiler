@@ -24,12 +24,8 @@ public class UnaryExpressionSemanticCheck extends AbstractExpressionSemanticChec
 		if (operator.equals("++") || operator.equals("--")) {
 			if (!TypesUtilities.getInstance().canTypeUpCastTo(
 					type.getFirst(), TypesUtilities.INT_TYPE)) {
-				CodeCompilationException cce = TypesUtilities
-						.getTypeMismatchException(type.getFirst(),
-								TypesUtilities.INT_TYPE);
-				cce.setColumn(uExpression.getExpression().getCharacter());
-				cce.setLine(uExpression.getExpression().getLineNumber());
-				exceptionContainer.addException(cce);
+				TypesUtilities.addTypeMismatchException(exceptionContainer, type.getFirst(),
+						TypesUtilities.INT_TYPE, uExpression);
 			}
 			if (BinaryExpressionSemanticCheck.isInLValueStyle(uExpression.getExpression(), scopeHandler) != LValueState.VARIABLE) {
 				exceptionContainer.getExceptions().add(
@@ -41,12 +37,8 @@ public class UnaryExpressionSemanticCheck extends AbstractExpressionSemanticChec
 		} else if (operator.equals("-")) {
 			if (!TypesUtilities.getInstance().canTypeUpCastTo(
 					type.getFirst(), TypesUtilities.DOUBLE_TYPE)) {
-				CodeCompilationException cce = TypesUtilities
-						.getTypeMismatchException(type.getFirst(),
-								TypesUtilities.INT_TYPE);
-				cce.setColumn(uExpression.getExpression().getCharacter());
-				cce.setLine(uExpression.getExpression().getLineNumber());
-				exceptionContainer.addException(cce);
+				TypesUtilities.addTypeMismatchException(exceptionContainer, type.getFirst(),
+						TypesUtilities.INT_TYPE, uExpression);
 			} else {
 				if (type.getSecond() != null)
 					returnValue.setSecond(SemanticCheckerUtils.evaluateConstantTerm("-", type
@@ -55,12 +47,8 @@ public class UnaryExpressionSemanticCheck extends AbstractExpressionSemanticChec
 		} else if (operator.equals("!")) {
 			if (!TypesUtilities.getInstance().canTypeUpCastTo(
 					type.getFirst(), TypesUtilities.BOOLEAN_TYPE)) {
-				CodeCompilationException cce = TypesUtilities
-						.getTypeMismatchException(type.getFirst(),
-								TypesUtilities.BOOLEAN_TYPE);
-				cce.setColumn(uExpression.getExpression().getCharacter());
-				cce.setLine(uExpression.getExpression().getLineNumber());
-				exceptionContainer.addException(cce);
+				TypesUtilities.addTypeMismatchException(exceptionContainer, type.getFirst(),
+						TypesUtilities.BOOLEAN_TYPE, uExpression);
 			} else {
 				if (type.getSecond() != null)
 					returnValue.setSecond(SemanticCheckerUtils.evaluateConstantTerm("!", type

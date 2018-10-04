@@ -37,12 +37,8 @@ public class PALTStatementSemanticCheck extends AbstractStatementSemanticCheck {
 			if (evaluate.getSecond() != null) {
 				if (!TypesUtilities.getInstance().canTypeUpCastTo(
 						evaluate.getFirst(), TypesUtilities.DOUBLE_TYPE)) {
-					CodeCompilationException rce = TypesUtilities
-							.getTypeMismatchException(evaluate.getFirst(),
-									TypesUtilities.DOUBLE_TYPE);
-					rce.setLine(switchLabel.getLineNumber());
-					rce.setColumn(switchLabel.getCharacter());
-					exceptionContainer.addException(rce);
+					TypesUtilities.addTypeMismatchException(exceptionContainer, evaluate.getFirst(),
+							TypesUtilities.DOUBLE_TYPE, switchLabel);
 				} else {
 					probs += ((Number) evaluate.getSecond()).doubleValue();
 				}

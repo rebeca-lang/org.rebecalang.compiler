@@ -210,6 +210,10 @@ REACTIVECLASS
 	:	'reactiveclass'
 	;
 	
+EXTENDS
+	:	'extends'
+	;
+	
 MSGSRV
 	: 	'msgsrv'
 	;
