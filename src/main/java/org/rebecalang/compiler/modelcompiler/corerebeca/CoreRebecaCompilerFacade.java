@@ -496,6 +496,12 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 								exprectedTypes.add(primitiveType);
 					}
 				}
+				try {
+					mrd.setType(TypesUtilities.getInstance().getType(mrd.getType()));
+				} catch (CodeCompilationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			try {
