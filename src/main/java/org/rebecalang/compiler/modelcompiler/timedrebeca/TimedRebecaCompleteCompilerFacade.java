@@ -61,7 +61,5 @@ public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompilerFacade 
 		} catch (ScopeException e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }

@@ -19,7 +19,7 @@ public class ProbabilisticRebecaCompilerFacade extends
 			CommonTokenStream tokens, Set<CompilerFeature> features, ExceptionContainer exceptionContainer) {
 		super(ProbabilisticRebecaCompleteParser.class, tokens, features, exceptionContainer);
 		
-		statementSemanticCheckContainer.registerTranslator(PAltStatement.class, new PALTStatementSemanticCheck());
+		statementSemanticCheckContainer.registerSemanticsChecker(PAltStatement.class, new PALTStatementSemanticCheck());
 		statementSemanticCheckContainer.getExpressionSemanticCheckContainer().
 			registerTranslator(ProbabilisticExpression.class, new ProbabilisticExpressionSemanticCheck());
 	}

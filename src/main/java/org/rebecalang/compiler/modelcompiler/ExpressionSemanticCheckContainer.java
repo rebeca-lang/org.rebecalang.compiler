@@ -25,7 +25,7 @@ public class ExpressionSemanticCheckContainer extends AbstractSemanticCheckConta
 	
 	public Pair<Type, Object> check(Expression expression, Type baseType) throws CompilerInternalErrorRuntimeException {
 		try {
-			AbstractExpressionSemanticCheck expressionSemanticCheck = (AbstractExpressionSemanticCheck) translatorsRepository.get(expression.getClass());
+			AbstractExpressionSemanticCheck expressionSemanticCheck = (AbstractExpressionSemanticCheck) semanticsCheckersRepository.get(expression.getClass());
 			return expressionSemanticCheck.check(expression, baseType);
 		} catch (NullPointerException e) {
 			throw new CompilerInternalErrorRuntimeException("Unknown semantic checker for an expression of type \"" +
@@ -34,7 +34,7 @@ public class ExpressionSemanticCheckContainer extends AbstractSemanticCheckConta
 	}
 	
 	public void registerTranslator(Class<? extends Expression> type, AbstractExpressionSemanticCheck translator) {
-		super.registerTranslator(type, translator);
+		super.registerSemanticsChecker(type, translator);
 		((AbstractExpressionSemanticCheck)translator).setExpressionSemanticCheckContainer(this);
 	}
 	

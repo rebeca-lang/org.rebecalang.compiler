@@ -17,14 +17,14 @@ public class StatementSemanticCheckContainer extends AbstractSemanticCheckContai
 	public StatementSemanticCheckContainer(ExpressionSemanticCheckContainer expressionSemanticCheckContainer,
 			ScopeHandler scopeHandler, SymbolTable symbolTable, Set<CompilerFeature> compilerFeature, ExceptionContainer exceptionContainer) {
 		super(scopeHandler, symbolTable, compilerFeature, exceptionContainer);
-		translatorsRepository.put(Statement.class, new EmptyStatementSemanticCheck());
+		semanticsCheckersRepository.put(Statement.class, new EmptyStatementSemanticCheck());
 		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
 	}
 	
 	@Override
-	public void registerTranslator(Class<? extends Statement> type,
+	public void registerSemanticsChecker(Class<? extends Statement> type,
 			AbstractSemanticCheck translator) {
-		super.registerTranslator(type, translator);
+		super.registerSemanticsChecker(type, translator);
 		((AbstractStatementSemanticCheck)translator).setExpressionSemanticCheckContainer(expressionSemanticCheckContainer);
 	}
 	
@@ -34,7 +34,7 @@ public class StatementSemanticCheckContainer extends AbstractSemanticCheckContai
 				check((Expression)statement);
 			} else {
 				AbstractStatementSemanticCheck statementSemanticCheck = 
-						(AbstractStatementSemanticCheck) translatorsRepository.get(statement.getClass());
+						(AbstractStatementSemanticCheck) semanticsCheckersRepository.get(statement.getClass());
 				statementSemanticCheck.check(statement);
 			}
 		} catch (NullPointerException e) {

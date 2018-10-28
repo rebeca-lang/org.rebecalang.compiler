@@ -119,15 +119,15 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 		statementSemanticCheckContainer =
 				new StatementSemanticCheckContainer(expressionSemanticCheckContainer, scopeHandler, symbolTable,
 						compilerFeatures, exceptionContainer);	
-		statementSemanticCheckContainer.registerTranslator(BlockStatement.class, new BlockStatementSemanticCheck());
-		statementSemanticCheckContainer.registerTranslator(BreakStatement.class, new BreakStatementSemanticCheck());
-		statementSemanticCheckContainer.registerTranslator(ConditionalStatement.class, new ConditionalStatementSemanticCheck());
-		statementSemanticCheckContainer.registerTranslator(ContinueStatement.class, new ContinueStatementSemanticCheck());
-		statementSemanticCheckContainer.registerTranslator(FieldDeclaration.class, new FieldDeclarationStatementSemanticCheck());
-		statementSemanticCheckContainer.registerTranslator(ForStatement.class, new ForStatementSemanticCheck());
-		statementSemanticCheckContainer.registerTranslator(WhileStatement.class, new WhileStatementSemanticCheck());
-		statementSemanticCheckContainer.registerTranslator(ReturnStatement.class, new ReturnStatementSemanticCheck());
-		statementSemanticCheckContainer.registerTranslator(SwitchStatement.class, new SwitchStatementSemanticCheck());
+		statementSemanticCheckContainer.registerSemanticsChecker(BlockStatement.class, new BlockStatementSemanticCheck());
+		statementSemanticCheckContainer.registerSemanticsChecker(BreakStatement.class, new BreakStatementSemanticCheck());
+		statementSemanticCheckContainer.registerSemanticsChecker(ConditionalStatement.class, new ConditionalStatementSemanticCheck());
+		statementSemanticCheckContainer.registerSemanticsChecker(ContinueStatement.class, new ContinueStatementSemanticCheck());
+		statementSemanticCheckContainer.registerSemanticsChecker(FieldDeclaration.class, new FieldDeclarationStatementSemanticCheck());
+		statementSemanticCheckContainer.registerSemanticsChecker(ForStatement.class, new ForStatementSemanticCheck());
+		statementSemanticCheckContainer.registerSemanticsChecker(WhileStatement.class, new WhileStatementSemanticCheck());
+		statementSemanticCheckContainer.registerSemanticsChecker(ReturnStatement.class, new ReturnStatementSemanticCheck());
+		statementSemanticCheckContainer.registerSemanticsChecker(SwitchStatement.class, new SwitchStatementSemanticCheck());
 	}
 
 	@Override

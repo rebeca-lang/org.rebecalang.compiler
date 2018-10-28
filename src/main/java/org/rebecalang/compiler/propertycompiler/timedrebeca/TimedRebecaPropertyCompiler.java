@@ -42,7 +42,7 @@ public class TimedRebecaPropertyCompiler extends GeneralPropertyCompiler {
 		
 		prepareForCompilation(rebecaModel, symbolTable, propertyFile, compilerFeatures);
 		
-		expressionSemanticCheckContainer.unregisterTranslator(TermPrimary.class);
+		expressionSemanticCheckContainer.unregisterSemanticsChecker(TermPrimary.class);
 		expressionSemanticCheckContainer.registerTranslator(TermPrimary.class,
 				new PrimaryTermExpressionSemanticCheck() {
 			@Override

@@ -10,7 +10,7 @@ import org.rebecalang.compiler.utils.ExceptionContainer;
 
 public abstract class AbstractSemanticCheckContainer {
 	
-	protected Hashtable<Class<? extends Statement>, AbstractSemanticCheck> translatorsRepository;
+	protected Hashtable<Class<? extends Statement>, AbstractSemanticCheck> semanticsCheckersRepository;
 	protected ExceptionContainer exceptionContainer;
 	protected ScopeHandler scopeHandler;
 	protected Set<CompilerFeature> compilerFeatures;
@@ -21,24 +21,24 @@ public abstract class AbstractSemanticCheckContainer {
 		this.scopeHandler = scopeHandler;
 		this.symbolTable = symbolTable;
 		this.compilerFeatures = compilerFeature;
-		translatorsRepository = new Hashtable<Class<? extends Statement>, AbstractSemanticCheck>();
+		semanticsCheckersRepository = new Hashtable<Class<? extends Statement>, AbstractSemanticCheck>();
 	}
 	
-	public void registerTranslator(Class<? extends Statement> type, AbstractSemanticCheck translator) {
+	public void registerSemanticsChecker(Class<? extends Statement> type, AbstractSemanticCheck translator) {
 		translator.setExceptionContainer(exceptionContainer);
 		translator.setScopeHandler(scopeHandler);
 		translator.setSymbolTable(symbolTable);
 		translator.setCompilerFeatures(compilerFeatures);
 		translator.setDefaultContainer(this);
-		translatorsRepository.put(type, translator);
+		semanticsCheckersRepository.put(type, translator);
 	}
 
-	public void unregisterTranslator(Class<? extends Expression> type) {
-		translatorsRepository.remove(type);
+	public void unregisterSemanticsChecker(Class<? extends Expression> type) {
+		semanticsCheckersRepository.remove(type);
 	}
 
 	public AbstractSemanticCheck getTranslator(Class<? extends Expression> type) {
-		return translatorsRepository.get(type);
+		return semanticsCheckersRepository.get(type);
 	}
 	public ExceptionContainer getExceptionContainer() {
 		return exceptionContainer;
