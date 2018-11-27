@@ -130,6 +130,17 @@ public interface CoreRebecaPropertyCompleteListener extends ParseTreeListener {
 	void exitConditionalOrExpression(@NotNull CoreRebecaPropertyCompleteParser.ConditionalOrExpressionContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#genericTypes}.
+	 * @param ctx the parse tree
+	 */
+	void enterGenericTypes(@NotNull CoreRebecaPropertyCompleteParser.GenericTypesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaPropertyCompleteParser#genericTypes}.
+	 * @param ctx the parse tree
+	 */
+	void exitGenericTypes(@NotNull CoreRebecaPropertyCompleteParser.GenericTypesContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#unaryExpression}.
 	 * @param ctx the parse tree
 	 */

@@ -178,22 +178,37 @@
 				<xs:sequence>
 					<xs:element name="dimensions" type="xs:int" maxOccurs="unbounded"
 						minOccurs="1" />
-					<xs:element name="primitiveType" type="PrimitiveType" />
+					<xs:element name="ordinaryPrimitiveType" type="OrdinaryPrimitiveType" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="PrimitiveType">
+	<xs:complexType name="GenericTypeInstance">
 		<xs:complexContent>
 			<xs:extension base="Type">
+				<xs:sequence>
+					<xs:element name="base" type="GenericType" maxOccurs="1"
+						minOccurs="1" />
+					<xs:element name="parameters" type="Type" maxOccurs="unbounded"
+						minOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="GenericType">
+		<xs:complexContent>
+			<xs:extension base="Type">
+				<xs:attribute name="name" type="xs:string" />
+				<xs:attribute name="numberOfParameters" type="xs:int" />
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="OrdinaryPrimitiveType">
 		<xs:complexContent>
-			<xs:extension base="PrimitiveType">
+			<xs:extension base="Type">
 				<xs:attribute name="name" type="xs:string" />
 			</xs:extension>
 		</xs:complexContent>

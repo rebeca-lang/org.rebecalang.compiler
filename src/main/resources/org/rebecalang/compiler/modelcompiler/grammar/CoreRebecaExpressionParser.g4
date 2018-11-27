@@ -8,11 +8,21 @@ annotation returns [Annotation an]
 
 type returns [Type t]
 	:
-		{$t = new PrimitiveType();}
 		typeName = IDENTIFIER
 		{$t = new OrdinaryPrimitiveType(); ((OrdinaryPrimitiveType)$t).setName($typeName.text);
 	 	 $t.setLineNumber($typeName.getLine());$t.setCharacter($typeName.getCharPositionInLine());}
-		(ds = dimensions {PrimitiveType newpt = (PrimitiveType)$t; $t = new ArrayType(); ((ArrayType)$t).setPrimitiveType(newpt); ((ArrayType)$t).getDimensions().addAll($ds.ds);})?
+		(gts = genericTypeParams 
+			{GenericType gt = new GenericType(); gt.setName(((OrdinaryPrimitiveType)$t).getName()); gt.setNumberOfParameters($gts.gts.size());
+			GenericTypeInstance gti = new GenericTypeInstance(); gti.setBase(gt); gti.getParameters().addAll($gts.gts); $t = gti;
+			$t.setLineNumber($typeName.getLine());$t.setCharacter($typeName.getCharPositionInLine());}
+		)?
+		(ds = dimensions {OrdinaryPrimitiveType newpt = (OrdinaryPrimitiveType)$t; $t = new ArrayType(); ((ArrayType)$t).setOrdinaryPrimitiveType(newpt); ((ArrayType)$t).getDimensions().addAll($ds.ds);})?
+	;
+
+genericTypeParams returns [List<Type> gts]
+	:
+		LT {$gts = new LinkedList<Type>();}
+		t = type {$gts.add($t.t);} (COMMA t = type {$gts.add($t.t);})* GT
 	;
 	
 dimensions returns [List<Integer> ds]

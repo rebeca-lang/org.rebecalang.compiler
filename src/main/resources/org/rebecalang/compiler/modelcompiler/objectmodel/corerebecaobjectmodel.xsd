@@ -39,7 +39,8 @@
                 <xs:element ref="RecordDeclaration" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element name="globalVariables" type="FieldDeclaration" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element name="environmentVariables" type="FieldDeclaration" maxOccurs="unbounded" minOccurs="0"/>
-                <xs:element ref="ReactiveClassDeclaration" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element name="reactiveClassDeclaration" type="ReactiveClassDeclaration" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element name="interfaceDeclaration" type="InterfaceDeclaration" maxOccurs="unbounded" minOccurs="0"/>
                 <xs:element ref="MainDeclaration"/>
             </xs:sequence>
             <xs:attribute name="lineNumber" type="xs:int"/>
@@ -93,26 +94,46 @@
             <xs:attribute name="character" type="xs:int"/>
         </xs:complexType>
     </xs:element>
-    
-    <xs:element name="ReactiveClassDeclaration">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="knownRebecs" type="FieldDeclaration" maxOccurs="unbounded" minOccurs="0"/>
-                <xs:element name="statevars" type="FieldDeclaration" maxOccurs="unbounded" minOccurs="0"/>
-				<xs:element name="constructors" type="ConstructorDeclaration" maxOccurs="unbounded" minOccurs="0"/>
-                <xs:element name="msgsrvs" type="MsgsrvDeclaration" maxOccurs="unbounded" minOccurs="0"/>
-                <xs:element name="synchMethods" type="SynchMethodDeclaration" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="annotations" type="exp:Annotation" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
 
-            <xs:attribute name="name" type="xs:string"/>
-            <xs:attribute name="queueSize" type="xs:int"/>
-            <xs:attribute name="lineNumber" type="xs:int"/>
-            <xs:attribute name="character" type="xs:int"/>
-            <xs:attribute name="endLineNumber" type="xs:int"/>
-            <xs:attribute name="endCharacter" type="xs:int"/>
-        </xs:complexType>
-    </xs:element>
+    <xs:complexType name="BaseClassDeclaration">
+	    <xs:sequence>
+	        <xs:element name="msgsrvs" type="MsgsrvDeclaration" maxOccurs="unbounded" minOccurs="0"/>
+	        <xs:element name="synchMethods" type="SynchMethodDeclaration" minOccurs="0" maxOccurs="unbounded"/>
+	        <xs:element name="annotations" type="exp:Annotation" minOccurs="0" maxOccurs="unbounded"/>
+	    </xs:sequence>
+	
+	    <xs:attribute name="name" type="xs:string"/>
+	    <xs:attribute name="lineNumber" type="xs:int"/>
+	    <xs:attribute name="character" type="xs:int"/>
+	    <xs:attribute name="endLineNumber" type="xs:int"/>
+	    <xs:attribute name="endCharacter" type="xs:int"/>
+    </xs:complexType>
+    
+    <xs:complexType name="InterfaceDeclaration">
+        <xs:complexContent>
+			<xs:extension base="BaseClassDeclaration">
+	            <xs:sequence>
+	                <xs:element name="extends" type="exp:Type" minOccurs="0" maxOccurs="unbounded"/>
+	            </xs:sequence>
+    		</xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+	
+    <xs:complexType name="ReactiveClassDeclaration">
+        <xs:complexContent>
+			<xs:extension base="BaseClassDeclaration">
+	            <xs:sequence>
+	                <xs:element name="knownRebecs" type="FieldDeclaration" maxOccurs="unbounded" minOccurs="0"/>
+	                <xs:element name="statevars" type="FieldDeclaration" maxOccurs="unbounded" minOccurs="0"/>
+					<xs:element name="constructors" type="ConstructorDeclaration" maxOccurs="unbounded" minOccurs="0"/>
+	                <xs:element name="extends" type="exp:Type" minOccurs="0" maxOccurs="1"/>
+	                <xs:element name="implements" type="exp:Type" minOccurs="0" maxOccurs="unbounded"/>
+	            </xs:sequence>
+	            <xs:attribute name="queueSize" type="xs:int"/>
+				<xs:attribute name="abstract" type="xs:boolean"/>
+    		</xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 	
     <xs:complexType name="FormalParameterDeclaration">
 		<xs:sequence>
@@ -129,6 +150,7 @@
 			<xs:element name="block" type="BlockStatement"/>
 			<xs:element name="accessModifier" type="AccessModifier"/>
 		</xs:sequence>
+		<xs:attribute name="abstract" type="xs:boolean" default="false"/>
 		<xs:attribute name="name" type="xs:string"/>
 		<xs:attribute name="lineNumber" type="xs:int"/>
 		<xs:attribute name="character" type="xs:int"/>

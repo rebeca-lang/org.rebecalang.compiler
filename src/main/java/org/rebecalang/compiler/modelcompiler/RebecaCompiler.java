@@ -31,9 +31,10 @@ public class RebecaCompiler {
 			Set<CompilerFeature> features, ANTLRInputStream input)
 			throws CodeCompilationException {
 		
-		if (!(features.contains(CompilerFeature.CORE_2_0) ^ features
-				.contains(CompilerFeature.CORE_2_1) ^ features
-				.contains(CompilerFeature.CORE_2_2))) {
+		if (!(features.contains(CompilerFeature.CORE_2_0) ^ 
+				features.contains(CompilerFeature.CORE_2_1) ^ 
+				features.contains(CompilerFeature.CORE_2_2) ^ 
+				features.contains(CompilerFeature.CORE_2_3))) {
 			throw createFeaturesIncompatibilityMessage(features);
 		}
 		if (features.contains(CompilerFeature.TIMED_REBECA)

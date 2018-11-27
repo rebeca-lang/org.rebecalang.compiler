@@ -158,6 +158,19 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterGenericTypes(@NotNull CoreRebecaPropertyCompleteParser.GenericTypesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGenericTypes(@NotNull CoreRebecaPropertyCompleteParser.GenericTypesContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterUnaryExpression(@NotNull CoreRebecaPropertyCompleteParser.UnaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}

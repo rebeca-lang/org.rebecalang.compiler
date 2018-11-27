@@ -14,7 +14,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.AccessModifier;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimitiveType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.AccessControlException;
@@ -114,7 +114,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 			if (!termPrimary.getIndices().isEmpty()) {
 				if (!(returnValue.getFirst() instanceof ArrayType)) {
 					ArrayType arrayType = new ArrayType();
-					arrayType.setPrimitiveType((PrimitiveType) returnValue
+					arrayType.setOrdinaryPrimitiveType((OrdinaryPrimitiveType) returnValue
 							.getFirst());
 					arrayType.getDimensions().add(0);
 					TypesUtilities.addTypeMismatchException(exceptionContainer, 
@@ -125,8 +125,8 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 				if (termPrimary.getIndices().size() > foundTypeInArray
 						.getDimensions().size()) {
 					ArrayType arrayType = new ArrayType();
-					arrayType.setPrimitiveType(foundTypeInArray
-							.getPrimitiveType());
+					arrayType.setOrdinaryPrimitiveType(foundTypeInArray
+						.getOrdinaryPrimitiveType());
 					for (int cnt = 0; cnt < termPrimary.getIndices().size(); cnt++)
 						arrayType.getDimensions().add(0);
 					TypesUtilities.addTypeMismatchException(exceptionContainer, 
@@ -145,11 +145,11 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 				}
 				if (termPrimary.getIndices().size() == foundTypeInArray
 						.getDimensions().size()) {
-					returnValue.setFirst(foundTypeInArray.getPrimitiveType());
+					returnValue.setFirst(foundTypeInArray.getOrdinaryPrimitiveType());
 				} else {
 					ArrayType arrayType = new ArrayType();
-					arrayType.setPrimitiveType(foundTypeInArray
-							.getPrimitiveType());
+					arrayType.setOrdinaryPrimitiveType(foundTypeInArray
+							.getOrdinaryPrimitiveType());
 					for (int cnt = 0; cnt < foundTypeInArray.getDimensions()
 							.size() - termPrimary.getIndices().size(); cnt++)
 						arrayType.getDimensions().add(

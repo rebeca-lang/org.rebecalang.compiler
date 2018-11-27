@@ -1,6 +1,6 @@
 grammar ProbabilisticRebecaComplete;
 
-import ProbabilisticRebecaLexer, ProbabilisticRebecaParser;
+import ProbabilisticRebecaLexer, ProbabilisticRebecaParser, CoreRebecaLexer, CoreRebecaParser;
 
 @lexer::header {
 	package org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler;

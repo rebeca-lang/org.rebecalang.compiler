@@ -158,6 +158,19 @@ public class TimedRebecaPropertyCompleteBaseListener implements TimedRebecaPrope
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterGenericTypes(@NotNull TimedRebecaPropertyCompleteParser.GenericTypesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGenericTypes(@NotNull TimedRebecaPropertyCompleteParser.GenericTypesContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterUnaryExpression(@NotNull TimedRebecaPropertyCompleteParser.UnaryExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}

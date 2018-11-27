@@ -13,7 +13,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclara
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MethodDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimitiveType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
@@ -91,10 +91,10 @@ public class SymbolTable {
 				Type fpType = fpd.getType();
 				if (fpType instanceof ArrayType) {
 					((ArrayType) fpType)
-							.setPrimitiveType((PrimitiveType) TypesUtilities
+							.setOrdinaryPrimitiveType((OrdinaryPrimitiveType) TypesUtilities
 									.getInstance().getType(
 											((ArrayType) fpType)
-													.getPrimitiveType()));
+													.getOrdinaryPrimitiveType()));
 				} else {
 					fpType = TypesUtilities.getInstance().getType(fpType);
 				}

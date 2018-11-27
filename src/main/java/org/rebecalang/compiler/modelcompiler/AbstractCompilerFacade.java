@@ -12,8 +12,10 @@ import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.TokenStream;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InterfaceDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.ExceptionContainer;
@@ -101,6 +103,43 @@ public abstract class AbstractCompilerFacade {
 			rebecaModel = (RebecaModel)field.get(rebecaModelObj);
 			for (ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode().getReactiveClassDeclaration())
 				TypesUtilities.getInstance().addReactiveClassType(rcd);
+			for (InterfaceDeclaration intd : rebecaModel.getRebecaCode().getInterfaceDeclaration())
+				TypesUtilities.getInstance().addInterfaceType(intd);
+
+			for (ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
+				if(rcd.getExtends() != null) {
+					try {
+						TypesUtilities.getInstance().addTypeCompatibility(
+								TypesUtilities.getInstance().getType(rcd.getName()),
+								rcd.getExtends()
+						);
+					} catch (CodeCompilationException e) {
+						exceptionContainer.addException(e);
+					}
+				}
+				for(Type intd : rcd.getImplements()) {
+					try {
+						TypesUtilities.getInstance().addTypeCompatibility(
+								TypesUtilities.getInstance().getType(rcd.getName()),
+								intd
+						);
+					} catch (CodeCompilationException e) {
+						exceptionContainer.addException(e);
+					}
+				}
+			}
+			for (InterfaceDeclaration intd : rebecaModel.getRebecaCode().getInterfaceDeclaration()) {
+				for(Type interfaceType : intd.getExtends()) {
+					try {
+						TypesUtilities.getInstance().addTypeCompatibility(
+								TypesUtilities.getInstance().getType(intd.getName()),
+								interfaceType
+						);
+					} catch (CodeCompilationException e) {
+						exceptionContainer.addException(e);
+					}
+				}
+			}
 
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException 
 				| IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {

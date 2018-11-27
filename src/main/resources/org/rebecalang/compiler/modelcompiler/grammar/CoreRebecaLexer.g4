@@ -210,8 +210,20 @@ REACTIVECLASS
 	:	'reactiveclass'
 	;
 	
+INTERFACE
+	:	'interface'
+	;
+	
+ABSTRACT
+	:	'abstract'
+	;
+	
 EXTENDS
 	:	'extends'
+	;
+	
+IMPLEMENTS
+	:	'implements'
 	;
 	
 MSGSRV

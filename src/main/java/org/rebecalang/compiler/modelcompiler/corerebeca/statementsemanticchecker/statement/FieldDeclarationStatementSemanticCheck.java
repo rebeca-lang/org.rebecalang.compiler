@@ -6,11 +6,11 @@ import org.rebecalang.compiler.modelcompiler.AbstractStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.ScopeHandler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayVariableInitializer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryVariableInitializer;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
@@ -25,11 +25,15 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 
 	@Override
 	public void check(Statement statement) throws CompilerInternalErrorRuntimeException {
+		Type fieldsType = TypesUtilities.UNKNOWN_TYPE;
 		FieldDeclaration fieldDeclaration = (FieldDeclaration) statement;
 		try {
 			fieldDeclaration.setType(TypesUtilities.getInstance().getType(fieldDeclaration.getType()));
+			fieldsType = fieldDeclaration.getType();
 		} catch (CodeCompilationException e) {
-			e.printStackTrace();
+			e.setColumn(fieldDeclaration.getCharacter());
+			e.setLine(fieldDeclaration.getLineNumber());
+			exceptionContainer.addException(e);
 		}
 		for (VariableDeclarator vd : fieldDeclaration.getVariableDeclarators()) {
 			try {
@@ -41,10 +45,10 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 				else if (scopeHandler.isInScopeOf(CoreRebecaLabelUtility.REACTIVE_CLASS))
 					label = CoreRebecaLabelUtility.STATE_VARIABLE;
 				scopeHandler.addVaribaleToCurrentScope(vd.getVariableName(),
-						fieldDeclaration.getType(), label, 
+						fieldsType, label, 
 						vd.getLineNumber(), vd.getCharacter());
 				checkVariableInitializationType(
-						fieldDeclaration.getType(),
+						fieldsType,
 						vd.getVariableInitializer());
 			} catch (ScopeException se) {
 				se.setColumn(vd.getCharacter());
@@ -64,7 +68,7 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 			ArrayVariableInitializer original = (ArrayVariableInitializer) variableInitializer;
 
 			if (!(type instanceof ArrayType)) {
-				ArrayType temp = TypesUtilities.createDummyType((PrimitiveType) type, original
+				ArrayType temp = TypesUtilities.createDummyType((OrdinaryPrimitiveType) type, original
 						.getValues().size());
 				TypesUtilities.addTypeMismatchException(exceptionContainer, type, temp, 
 						variableInitializer.getCharacter(), variableInitializer.getLineNumber());
@@ -107,7 +111,7 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 						((OrdinaryVariableInitializer) innerValue).getValue());
 				if (result.getFirst() instanceof ArrayType) {
 					TypesUtilities.addTypeMismatchException(exceptionContainer, 
-							result.getFirst(), ((ArrayType) result.getFirst()).getPrimitiveType(), 
+							result.getFirst(), ((ArrayType) result.getFirst()).getOrdinaryPrimitiveType(), 
 							innerValue.getCharacter(), innerValue.getLineNumber());
 					return null;
 				}
@@ -139,12 +143,12 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 		ArrayType retValue = new ArrayType();
 		retValue.getDimensions().add(avi.getValues().size());
 		if (superType instanceof ArrayType) {
-			retValue.setPrimitiveType(((ArrayType) superType)
-					.getPrimitiveType());
+			retValue.setOrdinaryPrimitiveType(((ArrayType) superType)
+					.getOrdinaryPrimitiveType());
 			retValue.getDimensions().addAll(
 					((ArrayType) superType).getDimensions());
 		} else {
-			retValue.setPrimitiveType((PrimitiveType) superType);
+			retValue.setOrdinaryPrimitiveType((OrdinaryPrimitiveType) superType);
 		}
 		return retValue;
 	}

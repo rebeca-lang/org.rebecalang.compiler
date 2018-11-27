@@ -30,6 +30,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclara
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InterfaceDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MainRebecDefinition;
@@ -220,20 +221,63 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			addField(null, rebecaModel.getRebecaCode().getEnvironmentVariables(), AccessModifierUtilities.PUBLIC);
 		}
 		
-		HashSet<String> reactiveClasses = new HashSet<String>();
+		HashSet<String> reactiveClassesAndInterfaces = new HashSet<String>();
 
+		for (InterfaceDeclaration interfaceDeclaration : rebecaModel.getRebecaCode().getInterfaceDeclaration()) {
+			// Check for repeated reactive class name
+			if (reactiveClassesAndInterfaces.contains(interfaceDeclaration.getName())) {
+				CodeCompilationException rce = new CodeCompilationException(
+						"Multiple definition of "
+								+ interfaceDeclaration.getName(),
+						interfaceDeclaration.getLineNumber(),
+						interfaceDeclaration.getCharacter());
+				exceptionContainer.addException(rce);
+				continue;
+			} else {
+				reactiveClassesAndInterfaces.add(interfaceDeclaration.getName());
+			}
+
+			try {
+				Type type = TypesUtilities.getInstance().getType(interfaceDeclaration.getName());
+				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getSynchMethods()) {
+					if (methodDeclaration.getName().equals(
+							interfaceDeclaration.getName())) {
+						exceptionContainer
+								.addException(new CodeCompilationException(
+										"Interfaces cannot have constructor",
+										methodDeclaration.getLineNumber(),
+										methodDeclaration.getCharacter()));
+					} else
+						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.SYNCH_METHOD);
+				}
+				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getMsgsrvs()) {
+					if (methodDeclaration.getName().equals(
+							interfaceDeclaration.getName())) {
+						exceptionContainer
+								.addException(new CodeCompilationException(
+										"Invalid usage of message-server specifier for the constructor",
+										methodDeclaration.getLineNumber(),
+										methodDeclaration.getCharacter()));
+					} else
+						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.MSGSRV);
+				}
+			} catch (CodeCompilationException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		for (ReactiveClassDeclaration reactiveClassDeclaration : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
 			// Check for repeated reactive class name
-			if (reactiveClasses.contains(reactiveClassDeclaration.getName())) {
+			if (reactiveClassesAndInterfaces.contains(reactiveClassDeclaration.getName())) {
 				CodeCompilationException rce = new CodeCompilationException(
-						"Multiple definition of reactiveclass "
+						"Multiple definition of "
 								+ reactiveClassDeclaration.getName(),
 						reactiveClassDeclaration.getLineNumber(),
 						reactiveClassDeclaration.getCharacter());
 				exceptionContainer.addException(rce);
 				continue;
 			} else {
-				reactiveClasses.add(reactiveClassDeclaration.getName());
+				reactiveClassesAndInterfaces.add(reactiveClassDeclaration.getName());
 			}
 
 			if (reactiveClassDeclaration.getConstructors().isEmpty()) {
@@ -355,11 +399,28 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			}
 		}
 
-		statementSemanticCheckContainer.check(md.getBlock());
-		
+		if (md.isAbstract()) {
+			if(md.getBlock() != null) {
+				exceptionContainer
+				.addException(new CodeCompilationException(
+						"Abstract methods do not specify body",
+						md.getLineNumber(),
+						md.getCharacter()));
+			}
+		} else {
+			if(md.getBlock() == null) {
+				exceptionContainer
+				.addException(new CodeCompilationException(
+						"This method requires a body instead of a semicolon",
+						md.getLineNumber(),
+						md.getCharacter()));
+			} else 
+				statementSemanticCheckContainer.check(md.getBlock());
+		}
+			
 		scopeHandler.popScopeRecord();
 	}
-
+	
 	private void addIntraReactiveClassVariablesToScope(ReactiveClassDeclaration rcd) {
 		for (FieldDeclaration fd : rcd.getStatevars()) {
 			statementSemanticCheckContainer.check(fd);
@@ -406,7 +467,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				if (vd.getVariableInitializer() == null) {
 					CodeCompilationException rce = new CodeCompilationException(
 							"Environment variable " + vd.getVariableName()
-									+ " have to be initialized",
+									+ " has to be initialized",
 							vd.getLineNumber(), vd.getCharacter());
 					exceptionContainer.addException(rce);
 				}
@@ -485,7 +546,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 						Type primitiveType = TypesUtilities.UNKNOWN_TYPE;
 						try {
 							primitiveType = TypesUtilities.getInstance().getType(
-									type.getPrimitiveType());
+									type.getOrdinaryPrimitiveType());
 						} catch (CodeCompilationException e) {
 							e.setColumn(fd.getCharacter());
 							e.setLine(fd.getLineNumber());

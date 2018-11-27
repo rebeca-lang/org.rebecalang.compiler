@@ -130,6 +130,17 @@ public interface TimedRebecaPropertyCompleteListener extends ParseTreeListener {
 	void exitConditionalOrExpression(@NotNull TimedRebecaPropertyCompleteParser.ConditionalOrExpressionContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link TimedRebecaPropertyCompleteParser#genericTypes}.
+	 * @param ctx the parse tree
+	 */
+	void enterGenericTypes(@NotNull TimedRebecaPropertyCompleteParser.GenericTypesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaPropertyCompleteParser#genericTypes}.
+	 * @param ctx the parse tree
+	 */
+	void exitGenericTypes(@NotNull TimedRebecaPropertyCompleteParser.GenericTypesContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link TimedRebecaPropertyCompleteParser#unaryExpression}.
 	 * @param ctx the parse tree
 	 */

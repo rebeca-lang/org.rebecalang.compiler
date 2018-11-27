@@ -17,7 +17,7 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		LTL=1, ASSERTION=2, DEFINE=3, THEN=4, PROPERTY=5, INTLITERAL=6, FLOATLITERAL=7, 
+		LTL=1, DEFINE=2, THEN=3, PROPERTY=4, ASSERTION=5, INTLITERAL=6, FLOATLITERAL=7, 
 		DOUBLELITERAL=8, CHARLITERAL=9, STRINGLITERAL=10, WS=11, COMMENT=12, LINE_COMMENT=13, 
 		TRUE=14, FALSE=15, NULL=16, LPAREN=17, RPAREN=18, LBRACE=19, RBRACE=20, 
 		LBRACKET=21, RBRACKET=22, SEMI=23, COMMA=24, DOT=25, EQ=26, BANG=27, TILDA=28, 
@@ -32,7 +32,7 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 
 	public static final String[] tokenNames = {
 		"<INVALID>",
-		"'LTL'", "'Assertion'", "'define'", "'->'", "'property'", "INTLITERAL", 
+		"'LTL'", "'define'", "'->'", "'property'", "'Assertion'", "INTLITERAL", 
 		"FLOATLITERAL", "DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", "WS", 
 		"COMMENT", "LINE_COMMENT", "'true'", "'false'", "'null'", "'('", "')'", 
 		"'{'", "'}'", "'['", "']'", "';'", "','", "'.'", "'='", "'!'", "'~'", 
@@ -42,7 +42,7 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		"'>>'", "'>>='", "IDENTIFIER"
 	};
 	public static final String[] ruleNames = {
-		"LTL", "ASSERTION", "DEFINE", "THEN", "PROPERTY", "INTLITERAL", "IntegerNumber", 
+		"LTL", "DEFINE", "THEN", "PROPERTY", "ASSERTION", "INTLITERAL", "IntegerNumber", 
 		"HexPrefix", "HexDigit", "LongSuffix", "NonIntegerNumber", "Exponent", 
 		"FloatSuffix", "DoubleSuffix", "FLOATLITERAL", "DOUBLELITERAL", "CHARLITERAL", 
 		"STRINGLITERAL", "EscapeSequence", "WS", "COMMENT", "LINE_COMMENT", "TRUE", 
@@ -89,8 +89,8 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\4\64\t"+
 		"\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\4:\t:\4;\t;\4<\t<\4=\t="+
 		"\4>\t>\4?\t?\4@\t@\4A\tA\4B\tB\4C\tC\4D\tD\4E\tE\4F\tF\4G\tG\4H\tH\4I"+
-		"\tI\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3"+
-		"\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\7"+
+		"\tI\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\5\3\5\3"+
+		"\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\7"+
 		"\3\7\3\b\3\b\3\b\7\b\u00ba\n\b\f\b\16\b\u00bd\13\b\3\b\3\b\6\b\u00c1\n"+
 		"\b\r\b\16\b\u00c2\3\b\3\b\6\b\u00c7\n\b\r\b\16\b\u00c8\5\b\u00cb\n\b\3"+
 		"\t\3\t\3\t\3\t\5\t\u00d1\n\t\3\n\3\n\3\13\3\13\3\f\6\f\u00d8\n\f\r\f\16"+
@@ -135,8 +135,8 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		"i\3\2\2\2\2k\3\2\2\2\2m\3\2\2\2\2o\3\2\2\2\2q\3\2\2\2\2s\3\2\2\2\2u\3"+
 		"\2\2\2\2w\3\2\2\2\2y\3\2\2\2\2{\3\2\2\2\2}\3\2\2\2\2\177\3\2\2\2\2\u0081"+
 		"\3\2\2\2\2\u0083\3\2\2\2\2\u0085\3\2\2\2\2\u0087\3\2\2\2\2\u0089\3\2\2"+
-		"\2\2\u008b\3\2\2\2\2\u008d\3\2\2\2\3\u0093\3\2\2\2\5\u0097\3\2\2\2\7\u00a1"+
-		"\3\2\2\2\t\u00a8\3\2\2\2\13\u00ab\3\2\2\2\r\u00b4\3\2\2\2\17\u00ca\3\2"+
+		"\2\2\u008b\3\2\2\2\2\u008d\3\2\2\2\3\u0093\3\2\2\2\5\u0097\3\2\2\2\7\u009e"+
+		"\3\2\2\2\t\u00a1\3\2\2\2\13\u00aa\3\2\2\2\r\u00b4\3\2\2\2\17\u00ca\3\2"+
 		"\2\2\21\u00d0\3\2\2\2\23\u00d2\3\2\2\2\25\u00d4\3\2\2\2\27\u0113\3\2\2"+
 		"\2\31\u0115\3\2\2\2\33\u011e\3\2\2\2\35\u0120\3\2\2\2\37\u0122\3\2\2\2"+
 		"!\u0125\3\2\2\2#\u0129\3\2\2\2%\u0130\3\2\2\2\'\u013a\3\2\2\2)\u0145\3"+
@@ -153,28 +153,28 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		"\2\u0085\u01da\3\2\2\2\u0087\u01dd\3\2\2\2\u0089\u01e1\3\2\2\2\u008b\u01e4"+
 		"\3\2\2\2\u008d\u01e8\3\2\2\2\u008f\u01f0\3\2\2\2\u0091\u01f2\3\2\2\2\u0093"+
 		"\u0094\7N\2\2\u0094\u0095\7V\2\2\u0095\u0096\7N\2\2\u0096\4\3\2\2\2\u0097"+
-		"\u0098\7C\2\2\u0098\u0099\7u\2\2\u0099\u009a\7u\2\2\u009a\u009b\7g\2\2"+
-		"\u009b\u009c\7t\2\2\u009c\u009d\7v\2\2\u009d\u009e\7k\2\2\u009e\u009f"+
-		"\7q\2\2\u009f\u00a0\7p\2\2\u00a0\6\3\2\2\2\u00a1\u00a2\7f\2\2\u00a2\u00a3"+
-		"\7g\2\2\u00a3\u00a4\7h\2\2\u00a4\u00a5\7k\2\2\u00a5\u00a6\7p\2\2\u00a6"+
-		"\u00a7\7g\2\2\u00a7\b\3\2\2\2\u00a8\u00a9\7/\2\2\u00a9\u00aa\7@\2\2\u00aa"+
-		"\n\3\2\2\2\u00ab\u00ac\7r\2\2\u00ac\u00ad\7t\2\2\u00ad\u00ae\7q\2\2\u00ae"+
-		"\u00af\7r\2\2\u00af\u00b0\7g\2\2\u00b0\u00b1\7t\2\2\u00b1\u00b2\7v\2\2"+
-		"\u00b2\u00b3\7{\2\2\u00b3\f\3\2\2\2\u00b4\u00b5\5\17\b\2\u00b5\16\3\2"+
-		"\2\2\u00b6\u00cb\7\62\2\2\u00b7\u00bb\4\63;\2\u00b8\u00ba\4\62;\2\u00b9"+
-		"\u00b8\3\2\2\2\u00ba\u00bd\3\2\2\2\u00bb\u00b9\3\2\2\2\u00bb\u00bc\3\2"+
-		"\2\2\u00bc\u00cb\3\2\2\2\u00bd\u00bb\3\2\2\2\u00be\u00c0\7\62\2\2\u00bf"+
-		"\u00c1\4\629\2\u00c0\u00bf\3\2\2\2\u00c1\u00c2\3\2\2\2\u00c2\u00c0\3\2"+
-		"\2\2\u00c2\u00c3\3\2\2\2\u00c3\u00cb\3\2\2\2\u00c4\u00c6\5\21\t\2\u00c5"+
-		"\u00c7\5\23\n\2\u00c6\u00c5\3\2\2\2\u00c7\u00c8\3\2\2\2\u00c8\u00c6\3"+
-		"\2\2\2\u00c8\u00c9\3\2\2\2\u00c9\u00cb\3\2\2\2\u00ca\u00b6\3\2\2\2\u00ca"+
-		"\u00b7\3\2\2\2\u00ca\u00be\3\2\2\2\u00ca\u00c4\3\2\2\2\u00cb\20\3\2\2"+
-		"\2\u00cc\u00cd\7\62\2\2\u00cd\u00d1\7z\2\2\u00ce\u00cf\7\62\2\2\u00cf"+
-		"\u00d1\7Z\2\2\u00d0\u00cc\3\2\2\2\u00d0\u00ce\3\2\2\2\u00d1\22\3\2\2\2"+
-		"\u00d2\u00d3\t\2\2\2\u00d3\24\3\2\2\2\u00d4\u00d5\t\3\2\2\u00d5\26\3\2"+
-		"\2\2\u00d6\u00d8\4\62;\2\u00d7\u00d6\3\2\2\2\u00d8\u00d9\3\2\2\2\u00d9"+
-		"\u00d7\3\2\2\2\u00d9\u00da\3\2\2\2\u00da\u00db\3\2\2\2\u00db\u00df\5E"+
-		"#\2\u00dc\u00de\4\62;\2\u00dd\u00dc\3\2\2\2\u00de\u00e1\3\2\2\2\u00df"+
+		"\u0098\7f\2\2\u0098\u0099\7g\2\2\u0099\u009a\7h\2\2\u009a\u009b\7k\2\2"+
+		"\u009b\u009c\7p\2\2\u009c\u009d\7g\2\2\u009d\6\3\2\2\2\u009e\u009f\7/"+
+		"\2\2\u009f\u00a0\7@\2\2\u00a0\b\3\2\2\2\u00a1\u00a2\7r\2\2\u00a2\u00a3"+
+		"\7t\2\2\u00a3\u00a4\7q\2\2\u00a4\u00a5\7r\2\2\u00a5\u00a6\7g\2\2\u00a6"+
+		"\u00a7\7t\2\2\u00a7\u00a8\7v\2\2\u00a8\u00a9\7{\2\2\u00a9\n\3\2\2\2\u00aa"+
+		"\u00ab\7C\2\2\u00ab\u00ac\7u\2\2\u00ac\u00ad\7u\2\2\u00ad\u00ae\7g\2\2"+
+		"\u00ae\u00af\7t\2\2\u00af\u00b0\7v\2\2\u00b0\u00b1\7k\2\2\u00b1\u00b2"+
+		"\7q\2\2\u00b2\u00b3\7p\2\2\u00b3\f\3\2\2\2\u00b4\u00b5\5\17\b\2\u00b5"+
+		"\16\3\2\2\2\u00b6\u00cb\7\62\2\2\u00b7\u00bb\4\63;\2\u00b8\u00ba\4\62"+
+		";\2\u00b9\u00b8\3\2\2\2\u00ba\u00bd\3\2\2\2\u00bb\u00b9\3\2\2\2\u00bb"+
+		"\u00bc\3\2\2\2\u00bc\u00cb\3\2\2\2\u00bd\u00bb\3\2\2\2\u00be\u00c0\7\62"+
+		"\2\2\u00bf\u00c1\4\629\2\u00c0\u00bf\3\2\2\2\u00c1\u00c2\3\2\2\2\u00c2"+
+		"\u00c0\3\2\2\2\u00c2\u00c3\3\2\2\2\u00c3\u00cb\3\2\2\2\u00c4\u00c6\5\21"+
+		"\t\2\u00c5\u00c7\5\23\n\2\u00c6\u00c5\3\2\2\2\u00c7\u00c8\3\2\2\2\u00c8"+
+		"\u00c6\3\2\2\2\u00c8\u00c9\3\2\2\2\u00c9\u00cb\3\2\2\2\u00ca\u00b6\3\2"+
+		"\2\2\u00ca\u00b7\3\2\2\2\u00ca\u00be\3\2\2\2\u00ca\u00c4\3\2\2\2\u00cb"+
+		"\20\3\2\2\2\u00cc\u00cd\7\62\2\2\u00cd\u00d1\7z\2\2\u00ce\u00cf\7\62\2"+
+		"\2\u00cf\u00d1\7Z\2\2\u00d0\u00cc\3\2\2\2\u00d0\u00ce\3\2\2\2\u00d1\22"+
+		"\3\2\2\2\u00d2\u00d3\t\2\2\2\u00d3\24\3\2\2\2\u00d4\u00d5\t\3\2\2\u00d5"+
+		"\26\3\2\2\2\u00d6\u00d8\4\62;\2\u00d7\u00d6\3\2\2\2\u00d8\u00d9\3\2\2"+
+		"\2\u00d9\u00d7\3\2\2\2\u00d9\u00da\3\2\2\2\u00da\u00db\3\2\2\2\u00db\u00df"+
+		"\5E#\2\u00dc\u00de\4\62;\2\u00dd\u00dc\3\2\2\2\u00de\u00e1\3\2\2\2\u00df"+
 		"\u00dd\3\2\2\2\u00df\u00e0\3\2\2\2\u00e0\u00e3\3\2\2\2\u00e1\u00df\3\2"+
 		"\2\2\u00e2\u00e4\5\31\r\2\u00e3\u00e2\3\2\2\2\u00e3\u00e4\3\2\2\2\u00e4"+
 		"\u0114\3\2\2\2\u00e5\u00e7\5E#\2\u00e6\u00e8\4\62;\2\u00e7\u00e6\3\2\2"+

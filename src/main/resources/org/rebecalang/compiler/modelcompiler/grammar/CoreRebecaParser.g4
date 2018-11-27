@@ -48,7 +48,11 @@ rebecaCode returns [RebecaCode rc]
     	{$rc = new RebecaCode();}
 		(rd = recordDeclaration {$rc.getRecordDeclaration().add($rd.rd);})*
 		(e = environmentVariables {$rc.getEnvironmentVariables().addAll($e.fds);})
-        (rcd = reactiveClassDeclaration {$rc.getReactiveClassDeclaration().add($rcd.rcd);})+
+        (
+        	rcd = reactiveClassDeclaration {$rc.getReactiveClassDeclaration().add($rcd.rcd);}
+        	|
+        	intd = interfaceDeclaration {$rc.getInterfaceDeclaration().add($intd.intd);}
+    	)+
         md = mainDeclaration  {$rc.setMainDeclaration($md.md);}
     ;
 
@@ -150,15 +154,69 @@ arrayInitializer returns [ArrayVariableInitializer avi]
     ;
 
 /////////////////////////////////////	
+interfaceDeclaration returns[InterfaceDeclaration intd]
+    :   
+    	{$intd = new InterfaceDeclaration();}
+    	(an = annotation {$intd.getAnnotations().add($an.an);})*
+        INTERFACE interfaceName = IDENTIFIER 
+        	{	$intd.setName($interfaceName.text); 
+        		$intd.setLineNumber($interfaceName.getLine()); $intd.setCharacter($interfaceName.getCharPositionInLine());
+        	}
+        (EXTENDS extendingInterfaceName = IDENTIFIER
+        	{
+        		OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
+        		opt.setName($extendingInterfaceName.text);
+        		$intd.getExtends().add(opt);
+        	}
+        	(COMMA extendingInterfaceName = IDENTIFIER
+        		{
+	        		opt = new OrdinaryPrimitiveType();
+	        		opt.setName($extendingInterfaceName.text);
+	        		$intd.getExtends().add(opt);
+        		}
+        	)* )?
+        LBRACE
+
+		( {MethodDeclaration md;}
+			(
+				MSGSRV {md = new MsgsrvDeclaration(); $intd.getMsgsrvs().add((MsgsrvDeclaration)md);} 
+				| 
+				t = type {md = new SynchMethodDeclaration(); ((SynchMethodDeclaration)md).setReturnType($t.t); $intd.getSynchMethods().add((SynchMethodDeclaration)md);}
+			)
+			name = IDENTIFIER {md.setName($name.text); md.setLineNumber($name.getLine());md.setCharacter($name.getCharPositionInLine());}
+			fps = formalParameters {md.getFormalParameters().addAll($fps.fps);} SEMI
+		)*
+        RBRACE {$intd.setEndLineNumber($RBRACE.getLine());$intd.setEndCharacter($RBRACE.getCharPositionInLine());}
+    ;
+    
 reactiveClassDeclaration returns[ReactiveClassDeclaration rcd]
     :   
     	{$rcd = new ReactiveClassDeclaration();}
     	(an = annotation {$rcd.getAnnotations().add($an.an);})*
-        REACTIVECLASS reactiveClassName = IDENTIFIER 
+        (ABSTRACT {$rcd.setAbstract(true);})? REACTIVECLASS reactiveClassName = IDENTIFIER 
         	{	$rcd.setName($reactiveClassName.text); 
         		$rcd.setLineNumber($reactiveClassName.getLine()); $rcd.setCharacter($reactiveClassName.getCharPositionInLine());
         	}
-        //(EXTENDS baseReactiveClassName = IDENTIFIER)?
+        (EXTENDS extendingReactiveClassName = IDENTIFIER 
+        	{
+        		OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
+        		opt.setName($extendingReactiveClassName.text);
+        		$rcd.setExtends(opt);
+        	}
+        )?
+        (IMPLEMENTS implementingInterfaceName = IDENTIFIER
+        	{
+        		OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
+        		opt.setName($implementingInterfaceName.text);
+        		$rcd.getImplements().add(opt);
+        	}
+        	(COMMA implementingInterfaceName = IDENTIFIER
+        		{
+	        		opt = new OrdinaryPrimitiveType();
+	        		opt.setName($implementingInterfaceName.text);
+	        		$rcd.getImplements().add(opt);
+        		}
+        	)* )?
         LPAREN queueSize = INTLITERAL {if(!$queueSize.getText().equals("<missing INTLITERAL>")) $rcd.setQueueSize(Integer.parseInt($queueSize.text));} RPAREN
         LBRACE
 
@@ -184,7 +242,11 @@ methodDeclaration [MethodDeclaration md]
 	:
 		name = IDENTIFIER {$md.setName($name.text); $md.setLineNumber($name.getLine());$md.setCharacter($name.getCharPositionInLine());}
 		fps = formalParameters {$md.getFormalParameters().addAll($fps.fps);}
-		b = block {$md.setBlock($b.bs);$md.setEndLineNumber($b.bs.getEndLineNumber());$md.setEndCharacter($b.bs.getEndCharacter());}
+		(
+			b = block {$md.setBlock($b.bs);$md.setEndLineNumber($b.bs.getEndLineNumber());$md.setEndCharacter($b.bs.getEndCharacter());}
+			|
+			SEMI
+		)
 	;
 
 constructorDeclaration returns [ConstructorDeclaration cd]
@@ -197,14 +259,14 @@ constructorDeclaration returns [ConstructorDeclaration cd]
 msgsrvDeclaration returns [MsgsrvDeclaration md]
     :
 		{$md = new MsgsrvDeclaration();}
-		MSGSRV
+		(ABSTRACT {$md.setAbstract(true);})? MSGSRV
 		methodDeclaration[{$md}]
 	;
 	
 synchMethodDeclaration returns [SynchMethodDeclaration smd]
 	:
         {$smd = new SynchMethodDeclaration();}
-        t = type {$smd.setReturnType($t.t);}
+        (ABSTRACT {$smd.setAbstract(true);})? t = type {$smd.setReturnType($t.t);}
 		methodDeclaration[{$smd}]
 	;
 
