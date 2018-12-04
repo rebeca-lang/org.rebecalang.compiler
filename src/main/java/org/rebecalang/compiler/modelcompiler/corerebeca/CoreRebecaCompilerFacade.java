@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.rebecalang.compiler.modelcompiler.AbstractCompilerFacade;
@@ -17,6 +18,7 @@ import org.rebecalang.compiler.modelcompiler.SymbolTableException;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteParser;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.AccessModifier;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BlockStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BreakStatement;
@@ -75,14 +77,18 @@ import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.TypesUtilities;
+
+import com.ibm.icu.impl.duration.impl.DataRecord.EZeroHandling;
+
 import org.antlr.v4.runtime.Parser;
+import org.apache.maven.artifact.repository.metadata.Metadata;
 
 public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 
 	public final static String OWNER_REACTIVE_CLASS_KEY = "$owner$";
 
 	protected StatementSemanticCheckContainer statementSemanticCheckContainer;
-	
+
 	public CoreRebecaCompilerFacade(CommonTokenStream tokens,
 			Set<CompilerFeature> features, ExceptionContainer exceptionContainer) {
 		super(CoreRebecaCompleteParser.class, tokens, features, exceptionContainer); 
@@ -96,12 +102,12 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 	}
 
 	protected void initialize() {
-		
+
 		symbolTable = new SymbolTable();
 
 		scopeHandler = new ScopeHandler(rebecaModel, compilerFeatures);
 		scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.RESERVED_WORD);
-		
+
 
 		ExpressionSemanticCheckContainer expressionSemanticCheckContainer = new ExpressionSemanticCheckContainer(
 				scopeHandler, symbolTable, compilerFeatures, exceptionContainer);	
@@ -137,12 +143,40 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 
 		scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.REBECA_MODEL);
 		addEnvironmentVariablesToScope();
-		
+
 		for (ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode()
 				.getReactiveClassDeclaration()) {
 			//Initializing the scope stack
 			scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.REACTIVE_CLASS);
-			addIntraReactiveClassVariablesToScope(rcd);
+
+
+
+
+			ReactiveClassDeclaration tempRC = rcd;
+			Stack <ReactiveClassDeclaration> extendStack = new Stack<ReactiveClassDeclaration>();
+
+			extendStack.push(rcd);
+
+			// adding ancestors variables (if any) to scope
+			while (tempRC.getExtends()!=null) {
+				ReactiveClassDeclaration metaData = null;
+				try {
+					metaData = (ReactiveClassDeclaration)TypesUtilities.getInstance().getMetaData(tempRC.getExtends());
+
+				} catch (CodeCompilationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(metaData !=null) {
+					extendStack.push(metaData);
+				}
+				tempRC = metaData;
+			}
+			while (!extendStack.isEmpty()) {
+
+				addIntraReactiveClassVariablesToScope(extendStack.pop());
+
+			}
 			try {
 				scopeHandler.addVaribaleToCurrentScope(
 						OWNER_REACTIVE_CLASS_KEY, TypesUtilities.getInstance().getType(rcd.getName()), 
@@ -153,7 +187,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			} catch (CodeCompilationException e) {
 				e.printStackTrace();
 			}
-			
+
 			//Semantic check of method likes constructs
 			for (MethodDeclaration md : rcd.getConstructors()) {
 				semanticCheckOfMethod(rcd.getName(), md, CoreRebecaLabelUtility.CONSTRUCTOR);
@@ -220,7 +254,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 		if (rebecaModel.getRebecaCode().getEnvironmentVariables() != null) {
 			addField(null, rebecaModel.getRebecaCode().getEnvironmentVariables(), AccessModifierUtilities.PUBLIC);
 		}
-		
+
 		HashSet<String> reactiveClassesAndInterfaces = new HashSet<String>();
 
 		for (InterfaceDeclaration interfaceDeclaration : rebecaModel.getRebecaCode().getInterfaceDeclaration()) {
@@ -229,8 +263,8 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				CodeCompilationException rce = new CodeCompilationException(
 						"Multiple definition of "
 								+ interfaceDeclaration.getName(),
-						interfaceDeclaration.getLineNumber(),
-						interfaceDeclaration.getCharacter());
+								interfaceDeclaration.getLineNumber(),
+								interfaceDeclaration.getCharacter());
 				exceptionContainer.addException(rce);
 				continue;
 			} else {
@@ -243,10 +277,10 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 					if (methodDeclaration.getName().equals(
 							interfaceDeclaration.getName())) {
 						exceptionContainer
-								.addException(new CodeCompilationException(
-										"Interfaces cannot have constructor",
-										methodDeclaration.getLineNumber(),
-										methodDeclaration.getCharacter()));
+						.addException(new CodeCompilationException(
+								"Interfaces cannot have constructor",
+								methodDeclaration.getLineNumber(),
+								methodDeclaration.getCharacter()));
 					} else
 						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.SYNCH_METHOD);
 				}
@@ -254,10 +288,10 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 					if (methodDeclaration.getName().equals(
 							interfaceDeclaration.getName())) {
 						exceptionContainer
-								.addException(new CodeCompilationException(
-										"Invalid usage of message-server specifier for the constructor",
-										methodDeclaration.getLineNumber(),
-										methodDeclaration.getCharacter()));
+						.addException(new CodeCompilationException(
+								"Invalid usage of message-server specifier for the constructor",
+								methodDeclaration.getLineNumber(),
+								methodDeclaration.getCharacter()));
 					} else
 						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.MSGSRV);
 				}
@@ -265,15 +299,15 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				e.printStackTrace();
 			}
 		}
-		
+
 		for (ReactiveClassDeclaration reactiveClassDeclaration : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
 			// Check for repeated reactive class name
 			if (reactiveClassesAndInterfaces.contains(reactiveClassDeclaration.getName())) {
 				CodeCompilationException rce = new CodeCompilationException(
 						"Multiple definition of "
 								+ reactiveClassDeclaration.getName(),
-						reactiveClassDeclaration.getLineNumber(),
-						reactiveClassDeclaration.getCharacter());
+								reactiveClassDeclaration.getLineNumber(),
+								reactiveClassDeclaration.getCharacter());
 				exceptionContainer.addException(rce);
 				continue;
 			} else {
@@ -324,14 +358,15 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 						cnt--;
 					}
 				}
+
 				for (MethodDeclaration methodDeclaration : reactiveClassDeclaration.getSynchMethods()) {
 					if (methodDeclaration.getName().equals(
 							reactiveClassDeclaration.getName())) {
 						exceptionContainer
-								.addException(new CodeCompilationException(
-										"Invalid return type for the constructor",
-										methodDeclaration.getLineNumber(),
-										methodDeclaration.getCharacter()));
+						.addException(new CodeCompilationException(
+								"Invalid return type for the constructor",
+								methodDeclaration.getLineNumber(),
+								methodDeclaration.getCharacter()));
 						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
 					} else 
 						addMethod(type, methodDeclaration, AccessModifierUtilities.PRIVATE, CoreRebecaLabelUtility.SYNCH_METHOD);
@@ -340,10 +375,10 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 					if (methodDeclaration.getName().equals(
 							reactiveClassDeclaration.getName())) {
 						exceptionContainer
-								.addException(new CodeCompilationException(
-										"Invalid usage of message-server specifier for the constructor",
-										methodDeclaration.getLineNumber(),
-										methodDeclaration.getCharacter()));
+						.addException(new CodeCompilationException(
+								"Invalid usage of message-server specifier for the constructor",
+								methodDeclaration.getLineNumber(),
+								methodDeclaration.getCharacter()));
 						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
 					} else
 						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.MSGSRV);
@@ -353,7 +388,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			}
 		}
 	}
-	
+
 	private void addMethod(Type container, MethodDeclaration methodDecleration,
 			AccessModifier defaultAccessModifier, Label label) {
 		if (methodDecleration.getAccessModifier() == null)
@@ -380,7 +415,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 
 	private void semanticCheckOfMethod(String reactiveClassName, MethodDeclaration md, Label label) {
 		scopeHandler.pushScopeRecord(label);
-		
+
 		// Adding the parameters of the method
 		for (FormalParameterDeclaration fpd : md.getFormalParameters()) {
 			try {
@@ -417,10 +452,10 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			} else 
 				statementSemanticCheckContainer.check(md.getBlock());
 		}
-			
+
 		scopeHandler.popScopeRecord();
 	}
-	
+
 	private void addIntraReactiveClassVariablesToScope(ReactiveClassDeclaration rcd) {
 		for (FieldDeclaration fd : rcd.getStatevars()) {
 			statementSemanticCheckContainer.check(fd);
@@ -433,7 +468,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				}
 			}
 		}
-		
+
 		for (FieldDeclaration fd : rcd.getKnownRebecs()) {
 			statementSemanticCheckContainer.check(fd);
 			for (VariableDeclarator vd : fd.getVariableDeclarators()) {
@@ -461,13 +496,13 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 						fd.getLineNumber(), fd.getCharacter());
 				exceptionContainer.addException(rce);
 			}
-			
+
 			statementSemanticCheckContainer.check(fd);
 			for (VariableDeclarator vd : fd.getVariableDeclarators()) {
 				if (vd.getVariableInitializer() == null) {
 					CodeCompilationException rce = new CodeCompilationException(
 							"Environment variable " + vd.getVariableName()
-									+ " has to be initialized",
+							+ " has to be initialized",
 							vd.getLineNumber(), vd.getCharacter());
 					exceptionContainer.addException(rce);
 				}
@@ -505,7 +540,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				}
 			}
 		}
-		
+
 		HashMap<String, ReactiveClassDeclaration> reactiveClasses = new HashMap<String, ReactiveClassDeclaration>();
 		for (ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode()
 				.getReactiveClassDeclaration()) {
@@ -515,8 +550,8 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				.getMainDeclaration().getMainRebecDefinition()) {
 			String methodName = (compilerFeatures
 					.contains(CompilerFeature.CORE_2_0) ? "initial"
-					: TypesUtilities.getTypeName(mrd.getType()));
-			
+							: TypesUtilities.getTypeName(mrd.getType()));
+
 			LinkedList<Type> constructorArgumentsTypes = new LinkedList<Type>();
 			for (Expression expression : mrd.getArguments()) {
 				constructorArgumentsTypes.add(statementSemanticCheckContainer.check(expression).getFirst());
@@ -525,7 +560,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			for (Expression expression : mrd.getBindings()) {
 				knownRebecsBindingsTypes.add(statementSemanticCheckContainer.check(expression).getFirst());
 			}
-			
+
 			ReactiveClassDeclaration rcd = reactiveClasses.get(TypesUtilities.getTypeName(mrd.getType()));			
 			List<FieldDeclaration> knownRebecs = rcd.getKnownRebecs();
 			List<Type> exprectedTypes = new LinkedList<Type>();
@@ -575,7 +610,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			}
 			if (!TypesUtilities.areTheSame(knownRebecsBindingsTypes,
 					exprectedTypes, TypesUtilities.getInstance()
-							.getCastableComparator())) {
+					.getCastableComparator())) {
 				CodeCompilationException rce = new CodeCompilationException(
 						createCheckMainBindingsExceptionMessage(knownRebecs,
 								knownRebecsBindingsTypes, rcd.getName()),
@@ -605,7 +640,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			actual = actual.substring(2);
 
 		return "The " + reactiveClassName + " knownrebecs type binding of ("
-				+ expected + ")" + " is not applicable for the arguments ("
-				+ actual + ")";
+		+ expected + ")" + " is not applicable for the arguments ("
+		+ actual + ")";
 	}
 }

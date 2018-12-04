@@ -275,5 +275,4 @@ public class BaseClassDeclaration {
     public void setEndCharacter(Integer value) {
         this.endCharacter = value;
     }
-
 }

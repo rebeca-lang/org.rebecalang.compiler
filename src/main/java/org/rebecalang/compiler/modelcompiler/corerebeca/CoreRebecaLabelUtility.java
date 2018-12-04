@@ -23,7 +23,7 @@ public class CoreRebecaLabelUtility {
 	public final static Label RESERVED_WORD;
 	public static final Label KNOWNREBEC_VARIABLE;
 	
-
+	
 	static {
 		REBECA_MODEL = new Label();
 		REBECA_MODEL.setName("rebeca-model");
@@ -59,5 +59,6 @@ public class CoreRebecaLabelUtility {
 		EXPRESSION.setName("expression");
 		RESERVED_WORD = new Label();
 		RESERVED_WORD.setName("reserver-word");
+	
 	}
 }

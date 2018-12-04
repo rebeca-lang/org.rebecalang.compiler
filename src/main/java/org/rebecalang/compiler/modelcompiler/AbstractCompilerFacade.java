@@ -105,10 +105,12 @@ public abstract class AbstractCompilerFacade {
 				TypesUtilities.getInstance().addReactiveClassType(rcd);
 			for (InterfaceDeclaration intd : rebecaModel.getRebecaCode().getInterfaceDeclaration())
 				TypesUtilities.getInstance().addInterfaceType(intd);
-
+			
 			for (ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
 				if(rcd.getExtends() != null) {
 					try {
+						rcd.setExtends(TypesUtilities.getInstance().getType(rcd.getExtends()));
+
 						TypesUtilities.getInstance().addTypeCompatibility(
 								TypesUtilities.getInstance().getType(rcd.getName()),
 								rcd.getExtends()
@@ -119,6 +121,7 @@ public abstract class AbstractCompilerFacade {
 				}
 				for(Type intd : rcd.getImplements()) {
 					try {
+						// TODO set the type of interfaces based on the data in typeUtils
 						TypesUtilities.getInstance().addTypeCompatibility(
 								TypesUtilities.getInstance().getType(rcd.getName()),
 								intd

@@ -48,7 +48,8 @@ public class RebecaCompiler {
 
 		if (features.contains(CompilerFeature.TIMED_REBECA)
 				|| features.contains(CompilerFeature.PROBABILISTIC_REBECA)) {
-			if (!(features.contains(CompilerFeature.CORE_2_1) || features.contains(CompilerFeature.CORE_2_2)))
+			if (!(features.contains(CompilerFeature.CORE_2_1) || features.contains(CompilerFeature.CORE_2_2) 
+					|| features.contains(CompilerFeature.CORE_2_3)))
 				throw createFeaturesIncompatibilityMessage(features);
 		}
 
@@ -130,7 +131,7 @@ public class RebecaCompiler {
 
 	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile,
 			Set<CompilerFeature> compilerFeatures) {
-		return compileRebecaFile(rebecaFile, compilerFeatures, true);
+		return compileRebecaFile (rebecaFile, compilerFeatures, true);
 	}
 	
 	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile,

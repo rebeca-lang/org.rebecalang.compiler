@@ -13,8 +13,10 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompilerFacade
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.AccessModifier;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.AccessControlException;
@@ -27,15 +29,14 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
-		Pair<Type, Object> returnValue = new Pair<Type, Object>(
-				TypesUtilities.UNKNOWN_TYPE, null);
+		Pair<Type, Object> returnValue = new Pair<Type, Object>(TypesUtilities.UNKNOWN_TYPE, null);
 		TermPrimary termPrimary = (TermPrimary) expression;
 		String termName = termPrimary.getName();
 		try {
 			if (termPrimary.getParentSuffixPrimary() == null) {
 				// The term specifies access to a variable
 				if (baseType == TypesUtilities.NO_TYPE) {
-					
+
 					VariableInScopeSpecifier variableInScopeSpecifier = scopeHandler
 							.retreiveVariableFromScope(termName);
 					termPrimary.setLabel(variableInScopeSpecifier.getLabel());
@@ -47,26 +48,24 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 					Type symbolType = symbolTable.getSymbolType(baseType, termName);
 					if (symbolType == null) {
 						if (baseType != TypesUtilities.UNKNOWN_TYPE)
-							exceptionContainer.getExceptions().add(
-									new CodeCompilationException(
-											"Undefiend variable " + termName + " in the type "
-													+ TypesUtilities.getTypeName(baseType), 
-													termPrimary.getLineNumber(), 
-													termPrimary.getCharacter()));
+							exceptionContainer.getExceptions()
+							.add(new CodeCompilationException(
+									"Undefiend variable " + termName + " in the type "
+											+ TypesUtilities.getTypeName(baseType),
+											termPrimary.getLineNumber(), termPrimary.getCharacter()));
 					} else {
-						VariableInScopeSpecifier owner = scopeHandler.retreiveVariableFromScope(CoreRebecaCompilerFacade.OWNER_REACTIVE_CLASS_KEY);
+						VariableInScopeSpecifier owner = scopeHandler
+								.retreiveVariableFromScope(CoreRebecaCompilerFacade.OWNER_REACTIVE_CLASS_KEY);
 						AccessModifier accessModifier = symbolTable.getSymbolAccessModifier(baseType, termName);
 						returnValue.setFirst(symbolType);
 						termPrimary.setType(symbolType);
 						if (accessModifier != AccessModifierUtilities.PUBLIC) {
 							if (symbolType != owner.getType())
-								exceptionContainer.getExceptions().add(
-										new AccessControlException(
-												"Invalid access to the variable "
-												+ termName + " of the type "
-												+ TypesUtilities.getTypeName(baseType), 
-												termPrimary.getLineNumber(), 
-												termPrimary.getCharacter()));
+								exceptionContainer.getExceptions()
+								.add(new AccessControlException(
+										"Invalid access to the variable " + termName + " of the type "
+												+ TypesUtilities.getTypeName(baseType),
+												termPrimary.getLineNumber(), termPrimary.getCharacter()));
 						}
 					}
 				}
@@ -74,38 +73,40 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 				// Term specifies method call (synch method or message server)
 				boolean hasUnknownType = false;
 				List<Type> argumentTypes = new LinkedList<Type>();
-				for (Expression expr : termPrimary
-						.getParentSuffixPrimary().getArguments()) {
-					Type argumentType = ((ExpressionSemanticCheckContainer)defaultContainer).check(expr).getFirst();
+				for (Expression expr : termPrimary.getParentSuffixPrimary().getArguments()) {
+					Type argumentType = ((ExpressionSemanticCheckContainer) defaultContainer).check(expr).getFirst();
 					argumentTypes.add(argumentType);
 					if (argumentType == TypesUtilities.UNKNOWN_TYPE)
 						hasUnknownType = true;
 				}
 				if (hasUnknownType)
 					return returnValue;
-				
-				MethodInSymbolTableSpecifier methodInSymbolTableSpecifier;
+				///
+				MethodInSymbolTableSpecifier methodInSymbolTableSpecifier = null;
 				if (baseType == TypesUtilities.NO_TYPE) {
 					Type selfType = scopeHandler.retreiveVariableFromScope("self").getType();
 					try {
-						methodInSymbolTableSpecifier = symbolTable.getMethodSpecification(selfType, termName, argumentTypes);
+						// methodInSymbolTableSpecifier = symbolTable.getMethodSpecification(selfType,
+						// termName, argumentTypes);
+						methodInSymbolTableSpecifier = checkMethodInParents(selfType, termName, argumentTypes);
+
 					} catch (SymbolTableException se) {
+					
 						methodInSymbolTableSpecifier = 
 								symbolTable.getMethodSpecification(TypesUtilities.NO_TYPE, termName, argumentTypes);
 					}
 				} else {
-					methodInSymbolTableSpecifier = symbolTable.getMethodSpecification(baseType, termName, argumentTypes);
+						methodInSymbolTableSpecifier = checkMethodInParents(baseType, termName, argumentTypes);
+
 				}
 				if (methodInSymbolTableSpecifier.getLabel() == CoreRebecaLabelUtility.CONSTRUCTOR) {
-					exceptionContainer.getExceptions().add(
-							new CodeCompilationException(
-									"The method " + termName +
-									SymbolTable.convertMethodArgumentsToString(argumentTypes) +
-									" is undefined" +
-									(baseType == null || baseType == TypesUtilities.NO_TYPE ? "" :
-									" for the type " + TypesUtilities.getTypeName(baseType)), 
-											termPrimary.getLineNumber(), 
-											termPrimary.getCharacter()));
+					exceptionContainer.getExceptions()
+					.add(new CodeCompilationException(
+							"The method " + termName + SymbolTable.convertMethodArgumentsToString(argumentTypes)
+							+ " is undefined"
+							+ (baseType == null || baseType == TypesUtilities.NO_TYPE ? ""
+									: " for the type " + TypesUtilities.getTypeName(baseType)),
+							termPrimary.getLineNumber(), termPrimary.getCharacter()));
 				}
 				termPrimary.setLabel(methodInSymbolTableSpecifier.getLabel());
 				returnValue.setFirst(methodInSymbolTableSpecifier.getReturnValue());
@@ -114,46 +115,39 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 			if (!termPrimary.getIndices().isEmpty()) {
 				if (!(returnValue.getFirst() instanceof ArrayType)) {
 					ArrayType arrayType = new ArrayType();
-					arrayType.setOrdinaryPrimitiveType((OrdinaryPrimitiveType) returnValue
-							.getFirst());
+					arrayType.setOrdinaryPrimitiveType((OrdinaryPrimitiveType) returnValue.getFirst());
 					arrayType.getDimensions().add(0);
-					TypesUtilities.addTypeMismatchException(exceptionContainer, 
-							returnValue.getFirst(), arrayType, termPrimary);
+					TypesUtilities.addTypeMismatchException(exceptionContainer, returnValue.getFirst(), arrayType,
+							termPrimary);
 					return returnValue;
 				}
 				ArrayType foundTypeInArray = (ArrayType) returnValue.getFirst();
-				if (termPrimary.getIndices().size() > foundTypeInArray
-						.getDimensions().size()) {
+				if (termPrimary.getIndices().size() > foundTypeInArray.getDimensions().size()) {
 					ArrayType arrayType = new ArrayType();
-					arrayType.setOrdinaryPrimitiveType(foundTypeInArray
-						.getOrdinaryPrimitiveType());
+					arrayType.setOrdinaryPrimitiveType(foundTypeInArray.getOrdinaryPrimitiveType());
 					for (int cnt = 0; cnt < termPrimary.getIndices().size(); cnt++)
 						arrayType.getDimensions().add(0);
-					TypesUtilities.addTypeMismatchException(exceptionContainer, 
-							returnValue.getFirst(), arrayType, termPrimary);
+					TypesUtilities.addTypeMismatchException(exceptionContainer, returnValue.getFirst(), arrayType,
+							termPrimary);
 					return returnValue;
 				}
 
 				for (Expression expr : termPrimary.getIndices()) {
-					Type type = ((ExpressionSemanticCheckContainer)defaultContainer).check(expr).getFirst();
-					if (!TypesUtilities.getInstance().canTypeCastTo(type,
-							TypesUtilities.INT_TYPE)) {
-						TypesUtilities.addTypeMismatchException(exceptionContainer, 
-								type, TypesUtilities.INT_TYPE, termPrimary);
+					Type type = ((ExpressionSemanticCheckContainer) defaultContainer).check(expr).getFirst();
+					if (!TypesUtilities.getInstance().canTypeCastTo(type, TypesUtilities.INT_TYPE)) {
+						TypesUtilities.addTypeMismatchException(exceptionContainer, type, TypesUtilities.INT_TYPE,
+								termPrimary);
 						return returnValue;
 					}
 				}
-				if (termPrimary.getIndices().size() == foundTypeInArray
-						.getDimensions().size()) {
+				if (termPrimary.getIndices().size() == foundTypeInArray.getDimensions().size()) {
 					returnValue.setFirst(foundTypeInArray.getOrdinaryPrimitiveType());
 				} else {
 					ArrayType arrayType = new ArrayType();
-					arrayType.setOrdinaryPrimitiveType(foundTypeInArray
-							.getOrdinaryPrimitiveType());
-					for (int cnt = 0; cnt < foundTypeInArray.getDimensions()
-							.size() - termPrimary.getIndices().size(); cnt++)
-						arrayType.getDimensions().add(
-								foundTypeInArray.getDimensions().get(cnt));
+					arrayType.setOrdinaryPrimitiveType(foundTypeInArray.getOrdinaryPrimitiveType());
+					for (int cnt = 0; cnt < foundTypeInArray.getDimensions().size()
+							- termPrimary.getIndices().size(); cnt++)
+						arrayType.getDimensions().add(foundTypeInArray.getDimensions().get(cnt));
 					returnValue.setFirst(arrayType);
 				}
 
@@ -167,4 +161,23 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 		return returnValue;
 	}
 
+	private MethodInSymbolTableSpecifier checkMethodInParents (Type type, String termName, List<Type> argumentTypes) throws CodeCompilationException {
+
+		MethodInSymbolTableSpecifier methodInSymbolTableSpecifier = null;
+		while(true) {
+			try {
+				methodInSymbolTableSpecifier = symbolTable.getMethodSpecification(type, termName, argumentTypes);
+				return methodInSymbolTableSpecifier;
+			}
+			catch(SymbolTableException ste) {
+				ReactiveClassDeclaration rcd = (ReactiveClassDeclaration)TypesUtilities.getInstance().getMetaData(type);
+
+				if (rcd.getExtends() == null)
+					throw ste;
+				type = rcd.getExtends();
+			}
+
+
+		} 	
+	}
 }

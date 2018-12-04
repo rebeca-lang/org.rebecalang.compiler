@@ -253,7 +253,8 @@ public class TypesUtilities {
 				Type candidate = compatibilityCandidates.removeFirst();
 				if (candidate ==  target)
 					return true;
-				compatibilityCandidates.addAll(compatibilityMap.get(candidate));
+				if(compatibilityMap.containsKey(candidate))
+					compatibilityCandidates.addAll(compatibilityMap.get(candidate));
 			} while (!compatibilityCandidates.isEmpty());
 		} else if (base instanceof GenericTypeInstance) {
 			if (!(target instanceof GenericTypeInstance))
@@ -299,7 +300,7 @@ public class TypesUtilities {
 			for (int dimention : aType.getDimensions())
 				retValueSuffix += "[" + (dimention == 0 ? "" : dimention) + "]";
 		}
-		else if (expectedType instanceof OrdinaryPrimitiveType)
+		if (expectedType instanceof OrdinaryPrimitiveType)
 			return ((OrdinaryPrimitiveType) expectedType).getName()
 					+ retValueSuffix;
 		else if (expectedType instanceof GenericType) {
