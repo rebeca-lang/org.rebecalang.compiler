@@ -31,6 +31,8 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InterfaceDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
@@ -222,6 +224,27 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 	}
 
 	private void initalizeSymbolTable() {
+		SynchMethodDeclaration getAllActorsMD = new SynchMethodDeclaration();
+		getAllActorsMD.setName("getAllActors");
+		try {
+			GenericType genericListType = (GenericType)TypesUtilities.getInstance().getType("ArrayList<?>");
+			GenericTypeInstance genericTypeInstanceListOfActors = new GenericTypeInstance();
+			genericTypeInstanceListOfActors.setBase(genericListType);
+			TypesUtilities.getInstance();
+			genericTypeInstanceListOfActors.getParameters().add(TypesUtilities.REACTIVE_CLASS_TYPE);
+			getAllActorsMD.setReturnType(genericTypeInstanceListOfActors);
+		} catch (CodeCompilationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			symbolTable.addMethod(null, getAllActorsMD, CoreRebecaLabelUtility.SYNCH_METHOD);
+		} catch (ExceptionContainer e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		SynchMethodDeclaration assersionMethod = new SynchMethodDeclaration();
 		assersionMethod.setName("assertion");
 		FormalParameterDeclaration fpd = new FormalParameterDeclaration();

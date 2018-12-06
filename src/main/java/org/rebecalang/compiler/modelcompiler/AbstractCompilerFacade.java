@@ -101,8 +101,17 @@ public abstract class AbstractCompilerFacade {
 			//The result of calling the above method contains the Rebeca model which is stored in variable "r"
 			Field field = rebecaModelObj.getClass().getDeclaredField("r");
 			rebecaModel = (RebecaModel)field.get(rebecaModelObj);
-			for (ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode().getReactiveClassDeclaration())
+			for (ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
 				TypesUtilities.getInstance().addReactiveClassType(rcd);
+				try {
+					Type rcdType = TypesUtilities.getInstance().getType(rcd.getName());
+					TypesUtilities.getInstance().addTypeCompatibility(rcdType, TypesUtilities.REACTIVE_CLASS_TYPE);
+
+				} catch (CodeCompilationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			for (InterfaceDeclaration intd : rebecaModel.getRebecaCode().getInterfaceDeclaration())
 				TypesUtilities.getInstance().addInterfaceType(intd);
 			

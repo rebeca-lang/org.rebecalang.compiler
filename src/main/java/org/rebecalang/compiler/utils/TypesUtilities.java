@@ -144,7 +144,7 @@ public class TypesUtilities {
 		
 		//TODO: Temporary support for generic list
 		GenericType list = new GenericType();
-		list.setName("List");
+		list.setName("ArrayList");
 		list.setNumberOfParameters(1);
 		types.put(list.getName() + "<?>", list);
 	}
@@ -175,6 +175,8 @@ public class TypesUtilities {
 			try {
 				GenericTypeInstance gti = (GenericTypeInstance)type;
 				gti.setBase((GenericType) getType(gti.getBase()));
+				for (int i = 0; i < gti.getParameters().size(); i++)
+					gti.getParameters().set(i, TypesUtilities.getInstance().getType(gti.getParameters().get(i)));
 				types.put(getTypeName(gti), gti);
 				return gti;
 			} catch (CodeCompilationException e) {

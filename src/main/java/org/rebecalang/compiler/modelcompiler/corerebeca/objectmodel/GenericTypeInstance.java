@@ -49,6 +49,7 @@ public class GenericTypeInstance
     protected GenericType base;
     @XmlElement(required = true)
     protected List<Type> parameters;
+  
 
     /**
      * Gets the value of the base property.
@@ -96,6 +97,8 @@ public class GenericTypeInstance
      * 
      * 
      */
+    
+    
     public List<Type> getParameters() {
         if (parameters == null) {
             parameters = new ArrayList<Type>();
