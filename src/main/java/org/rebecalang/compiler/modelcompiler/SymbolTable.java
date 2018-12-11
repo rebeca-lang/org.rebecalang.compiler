@@ -112,10 +112,13 @@ public class SymbolTable {
 		try {
 			MethodInSymbolTableSpecifier foundExactMatch = findExactMatch(signatures, newMethodArguments);
 			if (foundExactMatch == null) {
-				Type type = (label == CoreRebecaLabelUtility.MSGSRV) ? TypesUtilities.MSGSRV_TYPE:
-					(label == CoreRebecaLabelUtility.SYNCH_METHOD) ? ((SynchMethodDeclaration)methodDecleration).getReturnType() :
-					TypesUtilities.NO_TYPE;
-					MethodInSymbolTableSpecifier newMethod = 
+				Type type = TypesUtilities.NO_TYPE;
+				if ( label == CoreRebecaLabelUtility.MSGSRV ) 
+					type = TypesUtilities.MSGSRV_TYPE;
+				else if ( label == CoreRebecaLabelUtility.SYNCH_METHOD || 
+						label == CoreRebecaLabelUtility.BUILT_IN_METHOD )
+					type = ((SynchMethodDeclaration)methodDecleration).getReturnType();
+				MethodInSymbolTableSpecifier newMethod = 
 						new MethodInSymbolTableSpecifier(methodDecleration.getName(),
 								label, type, newMethodArguments);
 				signatures.add(newMethod);

@@ -6,6 +6,7 @@ public class CoreRebecaLabelUtility {
 	public final static Label REBECA_MODEL;
 	public final static Label REACTIVE_CLASS;
 	public final static Label SYNCH_METHOD;
+	public final static Label BUILT_IN_METHOD;
 	public final static Label MSGSRV;
 	public final static Label CONSTRUCTOR;
 	public final static Label MAIN;
@@ -31,6 +32,8 @@ public class CoreRebecaLabelUtility {
 		REACTIVE_CLASS.setName("reactive-class");
 		SYNCH_METHOD = new Label();
 		SYNCH_METHOD.setName("synch-method");
+		BUILT_IN_METHOD = new Label();
+		BUILT_IN_METHOD.setName("built-in-method");
 		MSGSRV = new Label();
 		MSGSRV.setName("message-server");
 		CONSTRUCTOR = new Label();

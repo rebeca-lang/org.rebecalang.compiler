@@ -141,6 +141,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 
 	@Override
 	public void semanticCheck(Set<CompilerFeature> features) {
+
 		initalizeSymbolTable();
 
 		scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.REBECA_MODEL);
@@ -230,24 +231,78 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			GenericType genericListType = (GenericType)TypesUtilities.getInstance().getType("ArrayList<?>");
 			GenericTypeInstance genericTypeInstanceListOfActors = new GenericTypeInstance();
 			genericTypeInstanceListOfActors.setBase(genericListType);
-			TypesUtilities.getInstance();
 			genericTypeInstanceListOfActors.getParameters().add(TypesUtilities.REACTIVE_CLASS_TYPE);
 			getAllActorsMD.setReturnType(genericTypeInstanceListOfActors);
-		} catch (CodeCompilationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		try {
 			symbolTable.addMethod(null, getAllActorsMD, CoreRebecaLabelUtility.SYNCH_METHOD);
 		} catch (ExceptionContainer e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			exceptionContainer.addAll(e1);
+		} catch (CodeCompilationException e1) {
+			exceptionContainer.addException(e1);
+		}
+		
+		SynchMethodDeclaration listSize = new SynchMethodDeclaration();
+		listSize.setName("size");
+		try {
+			GenericType genericListType = (GenericType)TypesUtilities.getInstance().getType("ArrayList<?>");
+			listSize.setReturnType(TypesUtilities.INT_TYPE);
+			symbolTable.addMethod(genericListType, listSize, CoreRebecaLabelUtility.BUILT_IN_METHOD);
+			} catch (ExceptionContainer e1) {
+				exceptionContainer.addAll(e1);
+			} catch (CodeCompilationException e1) {
+				exceptionContainer.addException(e1);
+			}
+		
+		SynchMethodDeclaration listGetItem = new SynchMethodDeclaration();
+		listGetItem.setName("get");
+		FormalParameterDeclaration fpd = new FormalParameterDeclaration();
+		fpd.setName("arg0");
+		fpd.setType(TypesUtilities.INT_TYPE);
+		listGetItem.getFormalParameters().add(fpd);
+		try {
+			GenericType genericListType = (GenericType)TypesUtilities.getInstance().getType("ArrayList<?>");
+			listGetItem.setReturnType(TypesUtilities.UNKNOWN_TYPE);
+			symbolTable.addMethod(genericListType, listGetItem, CoreRebecaLabelUtility.BUILT_IN_METHOD);
+			} catch (ExceptionContainer e1) {
+				exceptionContainer.addAll(e1);
+			} catch (CodeCompilationException e1) {
+				exceptionContainer.addException(e1);
+			}
+		
+		SynchMethodDeclaration sqrtMethod = new SynchMethodDeclaration();
+		sqrtMethod.setName("sqrt");
+		fpd = new FormalParameterDeclaration();
+		fpd.setName("arg0");
+		fpd.setType(TypesUtilities.DOUBLE_TYPE);
+		sqrtMethod.getFormalParameters().add(fpd);
+		sqrtMethod.setReturnType(TypesUtilities.DOUBLE_TYPE);
+		try {
+			symbolTable.addMethod(null, sqrtMethod,
+					CoreRebecaLabelUtility.BUILT_IN_METHOD);
+		} catch (ExceptionContainer ec) {
+			exceptionContainer.addAll(ec);
+		}
+		
+		SynchMethodDeclaration powMethod = new SynchMethodDeclaration();
+		powMethod.setName("pow");
+		fpd = new FormalParameterDeclaration();
+		fpd.setName("arg0");
+		fpd.setType(TypesUtilities.DOUBLE_TYPE);
+		powMethod.getFormalParameters().add(fpd);
+		fpd = new FormalParameterDeclaration();
+		fpd.setName("arg1");
+		fpd.setType(TypesUtilities.DOUBLE_TYPE);
+		powMethod.getFormalParameters().add(fpd);
+		powMethod.setReturnType(TypesUtilities.DOUBLE_TYPE);
+		try {
+			symbolTable.addMethod(null, powMethod,
+					CoreRebecaLabelUtility.BUILT_IN_METHOD);
+		} catch (ExceptionContainer ec) {
+			exceptionContainer.addAll(ec);
 		}
 		
 		SynchMethodDeclaration assersionMethod = new SynchMethodDeclaration();
 		assersionMethod.setName("assertion");
-		FormalParameterDeclaration fpd = new FormalParameterDeclaration();
+		fpd = new FormalParameterDeclaration();
 		fpd.setName("arg0");
 		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
 		assersionMethod.getFormalParameters().add(fpd);
@@ -297,6 +352,13 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			try {
 				Type type = TypesUtilities.getInstance().getType(interfaceDeclaration.getName());
 				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getSynchMethods()) {
+					SynchMethodDeclaration smd = (SynchMethodDeclaration) methodDeclaration;
+					try {
+						smd.setReturnType(TypesUtilities.getInstance().getType(smd.getReturnType()));
+					}catch (CodeCompilationException e) {
+						smd.setReturnType(TypesUtilities.UNKNOWN_TYPE);
+						exceptionContainer.addException(e);
+					}
 					if (methodDeclaration.getName().equals(
 							interfaceDeclaration.getName())) {
 						exceptionContainer
@@ -383,6 +445,13 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				}
 
 				for (MethodDeclaration methodDeclaration : reactiveClassDeclaration.getSynchMethods()) {
+					SynchMethodDeclaration smd = (SynchMethodDeclaration) methodDeclaration;
+					try {
+						smd.setReturnType(TypesUtilities.getInstance().getType(smd.getReturnType()));
+					}catch (CodeCompilationException e) {
+						smd.setReturnType(TypesUtilities.UNKNOWN_TYPE);
+						exceptionContainer.addException(e);
+					}
 					if (methodDeclaration.getName().equals(
 							reactiveClassDeclaration.getName())) {
 						exceptionContainer

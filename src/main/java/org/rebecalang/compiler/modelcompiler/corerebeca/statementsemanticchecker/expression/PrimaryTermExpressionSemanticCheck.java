@@ -15,6 +15,8 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.AccessModifi
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
@@ -60,7 +62,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 						returnValue.setFirst(symbolType);
 						termPrimary.setType(symbolType);
 						if (accessModifier != AccessModifierUtilities.PUBLIC) {
-							if (symbolType != owner.getType())
+							if (baseType != owner.getType())
 								exceptionContainer.getExceptions()
 								.add(new AccessControlException(
 										"Invalid access to the variable " + termName + " of the type "
@@ -163,18 +165,25 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 
 	private MethodInSymbolTableSpecifier checkMethodInParents (Type type, String termName, List<Type> argumentTypes) throws CodeCompilationException {
 
+		Type lookupBaseType = type;
 		MethodInSymbolTableSpecifier methodInSymbolTableSpecifier = null;
+		if (lookupBaseType instanceof GenericTypeInstance) {
+			lookupBaseType = ((GenericTypeInstance) lookupBaseType).getBase();
+		}
 		while(true) {
 			try {
-				methodInSymbolTableSpecifier = symbolTable.getMethodSpecification(type, termName, argumentTypes);
+				methodInSymbolTableSpecifier = symbolTable.getMethodSpecification(lookupBaseType, termName, argumentTypes);
+				// TODO this code only works for GenericType with 1 parameters
+				if ( methodInSymbolTableSpecifier.getReturnValue() == TypesUtilities.UNKNOWN_TYPE )
+					methodInSymbolTableSpecifier.setReturnValue(((GenericTypeInstance) type).getParameters().get(0));
 				return methodInSymbolTableSpecifier;
 			}
 			catch(SymbolTableException ste) {
-				ReactiveClassDeclaration rcd = (ReactiveClassDeclaration)TypesUtilities.getInstance().getMetaData(type);
+				ReactiveClassDeclaration rcd = (ReactiveClassDeclaration)TypesUtilities.getInstance().getMetaData(lookupBaseType);
 
 				if (rcd.getExtends() == null)
 					throw ste;
-				type = rcd.getExtends();
+				lookupBaseType = rcd.getExtends();
 			}
 
 
