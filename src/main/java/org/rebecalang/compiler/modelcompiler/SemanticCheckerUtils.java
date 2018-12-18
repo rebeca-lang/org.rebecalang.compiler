@@ -14,6 +14,20 @@ import org.rebecalang.compiler.utils.TypesUtilities;
 
 public class SemanticCheckerUtils {
 
+	public static Type getCommonSuperType(Type lType, Type rType) throws CodeCompilationException {
+		if (TypesUtilities.getInstance().canTypeUpCastTo(lType, rType)) {
+			if (rType == TypesUtilities.NULL_TYPE)
+				return lType;
+			return rType;
+		}
+		if (TypesUtilities.getInstance().canTypeUpCastTo(rType, lType)) {
+			if (lType == TypesUtilities.NULL_TYPE)
+				return rType;
+			return lType;
+		}
+		throw TypesUtilities.getTypeMismatchException(lType, rType);
+	}
+
 	public static Type getResultType(String operator, Type lType, Type rType)
 			throws CodeCompilationException {
 		Type retValue = TypesUtilities.UNKNOWN_TYPE;
@@ -42,8 +56,7 @@ public class SemanticCheckerUtils {
 					throw new CodeCompilationException("Incompatible operator for String type", 0, 0);					
 				}
 			} else {
-				Type biggerType = TypesUtilities.getInstance().getSuperType(
-						lType, rType);
+				Type biggerType = getCommonSuperType(lType, rType);
 				if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
 						TypesUtilities.DOUBLE_TYPE)) {
 					CodeCompilationException cce = createEvaluateExceptionMessage2(
@@ -82,8 +95,7 @@ public class SemanticCheckerUtils {
 		Set<String> arithmeticIntegerOperators = new HashSet<String>();
 		arithmeticIntegerOperators.addAll(Arrays.asList("%", ">>", "<<"));
 		if (arithmeticIntegerOperators.contains(operator)) {
-			Type biggerType = TypesUtilities.getInstance().getSuperType(
-					lType, rType);
+			Type biggerType = getCommonSuperType(lType, rType);
 			if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
 					TypesUtilities.INT_TYPE)) {
 				CodeCompilationException cce = createEvaluateExceptionMessage2(
@@ -116,8 +128,7 @@ public class SemanticCheckerUtils {
 		Set<String> bitwiseOperators = new HashSet<String>();
 		bitwiseOperators.addAll(Arrays.asList("|", "&", "^", "~"));
 		if (bitwiseOperators.contains(operator)) {
-			Type biggerType = TypesUtilities.getInstance().getSuperType(
-					lType, rType);
+			Type biggerType = getCommonSuperType(lType, rType);
 			if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
 					TypesUtilities.INT_TYPE)
 					&& !TypesUtilities.getInstance().canTypeUpCastTo(
@@ -154,8 +165,7 @@ public class SemanticCheckerUtils {
 		Set<String> relationalOperators = new HashSet<String>();
 		relationalOperators.addAll(Arrays.asList("<", ">", "<=", ">="));
 		if (relationalOperators.contains(operator)) {
-			Type biggerType = TypesUtilities.getInstance().getSuperType(
-					lType, rType);
+			Type biggerType = getCommonSuperType(lType, rType);
 			if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
 					TypesUtilities.DOUBLE_TYPE)) {
 				CodeCompilationException cce = createEvaluateExceptionMessage2(
@@ -172,8 +182,7 @@ public class SemanticCheckerUtils {
 		Set<String> relationalEQOperators = new HashSet<String>();
 		relationalEQOperators.addAll(Arrays.asList("==", "!="));
 		if (relationalEQOperators.contains(operator)) {
-			Type biggerType = TypesUtilities.getInstance().getSuperType(
-					lType, rType);
+			Type biggerType = getCommonSuperType(lType, rType);
 			if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
 					TypesUtilities.DOUBLE_TYPE)
 					&& !TypesUtilities.getInstance().canTypeUpCastTo(

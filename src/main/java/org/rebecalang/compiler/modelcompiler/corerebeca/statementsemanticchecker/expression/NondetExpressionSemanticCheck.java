@@ -2,13 +2,13 @@ package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecke
 
 import org.rebecalang.compiler.modelcompiler.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.SemanticCheckerUtils;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
-import org.rebecalang.compiler.utils.TypesUtilities;
 
 public class NondetExpressionSemanticCheck extends AbstractExpressionSemanticCheck {
 
@@ -25,8 +25,8 @@ public class NondetExpressionSemanticCheck extends AbstractExpressionSemanticChe
 			try {
 				// The type is set to the biggest type in comparison to the
 				// new choices
-				type = (type == null ? ndTerm.getFirst() : TypesUtilities
-						.getInstance().getSuperType(type,
+				type = (type == null ? ndTerm.getFirst() : 
+					SemanticCheckerUtils.getCommonSuperType(type,
 								ndTerm.getFirst()));
 				if (ndTerm.getSecond() == null) {
 					CodeCompilationException cce = new CodeCompilationException(

@@ -13,9 +13,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompilerFacade
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.AccessModifier;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;

@@ -8,17 +8,17 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Parser;
 import org.rebecalang.compiler.modelcompiler.AbstractCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.ScopeHandler;
-import org.rebecalang.compiler.modelcompiler.SymbolTable;
 import org.rebecalang.compiler.modelcompiler.ScopeHandler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.SymbolTable;
 import org.rebecalang.compiler.modelcompiler.SymbolTableException;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteParser;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.AccessModifier;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BlockStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BreakStatement;
@@ -79,11 +79,6 @@ import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.TypesUtilities;
-
-import com.ibm.icu.impl.duration.impl.DataRecord.EZeroHandling;
-
-import org.antlr.v4.runtime.Parser;
-import org.apache.maven.artifact.repository.metadata.Metadata;
 
 public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 

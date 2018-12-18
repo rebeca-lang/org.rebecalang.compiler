@@ -24,7 +24,6 @@ public class TypesUtilities {
 	private Map<String, Type> types;
 	private Map<Type, BaseClassDeclaration> reactiveClassesAndInterfacesMetaData;
 	private Map<Type, List<Type>> compatibilityMap;
-//	private Map<Type, Type> superTypeMap;
 
 	public static final OrdinaryPrimitiveType INT_TYPE;
 	public static final OrdinaryPrimitiveType SHORT_TYPE;
@@ -232,6 +231,11 @@ public class TypesUtilities {
 	public boolean canTypeUpCastTo(Type base, Type target) {
 		if (base == null)
 			return target == null;
+		if (target == TypesUtilities.NULL_TYPE)
+			return canTypeUpCastTo(base, TypesUtilities.REACTIVE_CLASS_TYPE);
+		if (base == TypesUtilities.NULL_TYPE)
+			return canTypeUpCastTo(target, TypesUtilities.REACTIVE_CLASS_TYPE);
+		
 		if (base instanceof ArrayType) {
 			if (!(target instanceof ArrayType))
 				return false;
@@ -249,6 +253,7 @@ public class TypesUtilities {
 		if (base instanceof OrdinaryPrimitiveType) {
 			if (!(target instanceof OrdinaryPrimitiveType))
 				return false;
+			
 			LinkedList<Type> compatibilityCandidates = new LinkedList<Type>();
 			compatibilityCandidates.add(base);
 			do {
@@ -273,14 +278,14 @@ public class TypesUtilities {
 		return false;
 	}
 
-	public Type getSuperType(Type lType, Type rType)
-			throws CodeCompilationException {
-		if (canTypeUpCastTo(lType, rType))
-			return rType;
-		if (canTypeUpCastTo(rType, lType))
-			return lType;
-		throw getTypeMismatchException(lType, rType);
-	}
+//	public Type getSuperType(Type lType, Type rType)
+//			throws CodeCompilationException {
+//		if (canTypeUpCastTo(lType, rType))
+//			return rType;
+//		if (canTypeUpCastTo(rType, lType))
+//			return lType;
+//		throw getTypeMismatchException(lType, rType);
+//	}
 
 	public static boolean areTheSame(List<Type> base, List<Type> target,
 			Comparator<Type> comp) {
@@ -324,7 +329,7 @@ public class TypesUtilities {
 		throw new RuntimeException("Unknown Type " + expectedType);
 	}
 
-	private static CodeCompilationException getTypeMismatchException(Type base,
+	public static CodeCompilationException getTypeMismatchException(Type base,
 			Type target) {
 		return new CodeCompilationException(
 				"Type mismatch: cannot convert from " + getTypeName(base)
