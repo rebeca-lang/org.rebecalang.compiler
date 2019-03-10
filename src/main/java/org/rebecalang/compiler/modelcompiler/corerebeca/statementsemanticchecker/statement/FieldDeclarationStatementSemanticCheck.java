@@ -44,7 +44,7 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 					label = CoreRebecaLabelUtility.LOCAL_VARIABLE;
 				else if (scopeHandler.isInScopeOf(CoreRebecaLabelUtility.REACTIVE_CLASS))
 					label = CoreRebecaLabelUtility.STATE_VARIABLE;
-				scopeHandler.addVaribaleToCurrentScope(vd.getVariableName(),
+				scopeHandler.addVariableToCurrentScope(vd.getVariableName(),
 						fieldsType, label, 
 						vd.getLineNumber(), vd.getCharacter());
 				checkVariableInitializationType(

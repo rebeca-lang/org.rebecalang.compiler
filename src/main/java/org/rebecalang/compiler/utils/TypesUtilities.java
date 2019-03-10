@@ -125,7 +125,7 @@ public class TypesUtilities {
 
 		types = new HashMap<String, Type>();
 		types.put(REACTIVE_CLASS_TYPE.getName(), REACTIVE_CLASS_TYPE);
-		
+
 		reactiveClassesAndInterfacesMetaData = new HashMap<Type, BaseClassDeclaration>();
 
 		types.put(INT_TYPE.getName(), INT_TYPE);
@@ -140,7 +140,7 @@ public class TypesUtilities {
 		types.put(REACTIVE_CLASS_TYPE.getName(), REACTIVE_CLASS_TYPE);
 		types.put(NO_TYPE.getName(), NO_TYPE);
 		types.put(VOID_TYPE.getName(), VOID_TYPE);
-		
+
 		//TODO: Temporary support for generic list
 		GenericType list = new GenericType();
 		list.setName("ArrayList");
@@ -152,10 +152,23 @@ public class TypesUtilities {
 		return object;
 	}
 
+	public boolean hasType(String typeName) {
+		return types.get(typeName) != null;
+	}
+	public boolean hasType(Type type) {
+		if (type instanceof ArrayType) {
+			ArrayType arrayType = (ArrayType) type;
+			return hasType(arrayType.getOrdinaryPrimitiveType());
+		} else if (type instanceof GenericTypeInstance) {
+			return hasType(getTypeName(type));			
+		}
+		return hasType(((OrdinaryPrimitiveType)type).getName());	
+	}
+
 	public Type getType(String typeName) throws CodeCompilationException {
 		Type retValue = types.get(typeName);
 		if (retValue == null) {
-			throw new CodeCompilationException("Unknows type " + typeName, 0, 0);
+			throw new CodeCompilationException("Unknown type " + typeName, 0, 0);
 		}
 		return retValue;
 	}
@@ -170,7 +183,7 @@ public class TypesUtilities {
 				return getType(getTypeName(type));
 			} catch (CodeCompilationException e) {
 			}
-			
+
 			try {
 				GenericTypeInstance gti = (GenericTypeInstance)type;
 				gti.setBase((GenericType) getType(gti.getBase()));
@@ -192,14 +205,14 @@ public class TypesUtilities {
 		}
 		return rcd;
 	}
-	
+
 	public void addTypeCompatibility(Type subType, Type superType) {
 		if(!compatibilityMap.containsKey(subType))
 			compatibilityMap.put(subType, new LinkedList<Type>());
 		compatibilityMap.get(subType).add(superType);
-		
+
 	}
-	
+
 	public void addReactiveClassType(ReactiveClassDeclaration rcd) {		
 		OrdinaryPrimitiveType type = new OrdinaryPrimitiveType();
 		type.setName(rcd.getName());
@@ -235,7 +248,7 @@ public class TypesUtilities {
 			return canTypeUpCastTo(base, TypesUtilities.REACTIVE_CLASS_TYPE);
 		if (base == TypesUtilities.NULL_TYPE)
 			return canTypeUpCastTo(target, TypesUtilities.REACTIVE_CLASS_TYPE);
-		
+
 		if (base instanceof ArrayType) {
 			if (!(target instanceof ArrayType))
 				return false;
@@ -245,7 +258,7 @@ public class TypesUtilities {
 				return false;
 			for (int cnt = 0; cnt < aTarget.getDimensions().size(); cnt++)
 				if (aTarget.getDimensions().get(cnt) != aBase.getDimensions()
-						.get(cnt))
+				.get(cnt))
 					return false;
 			base = aBase.getOrdinaryPrimitiveType();
 			target = aTarget.getOrdinaryPrimitiveType();
@@ -253,7 +266,7 @@ public class TypesUtilities {
 		if (base instanceof OrdinaryPrimitiveType) {
 			if (!(target instanceof OrdinaryPrimitiveType))
 				return false;
-			
+
 			LinkedList<Type> compatibilityCandidates = new LinkedList<Type>();
 			compatibilityCandidates.add(base);
 			do {
@@ -278,14 +291,14 @@ public class TypesUtilities {
 		return false;
 	}
 
-//	public Type getSuperType(Type lType, Type rType)
-//			throws CodeCompilationException {
-//		if (canTypeUpCastTo(lType, rType))
-//			return rType;
-//		if (canTypeUpCastTo(rType, lType))
-//			return lType;
-//		throw getTypeMismatchException(lType, rType);
-//	}
+	//	public Type getSuperType(Type lType, Type rType)
+	//			throws CodeCompilationException {
+	//		if (canTypeUpCastTo(lType, rType))
+	//			return rType;
+	//		if (canTypeUpCastTo(rType, lType))
+	//			return lType;
+	//		throw getTypeMismatchException(lType, rType);
+	//	}
 
 	public static boolean areTheSame(List<Type> base, List<Type> target,
 			Comparator<Type> comp) {
@@ -324,7 +337,7 @@ public class TypesUtilities {
 			for(Type parameters : gti.getParameters())
 				typeInstanceName += ',' + getTypeName(parameters);
 			return gti.getBase().getName() + '<' + typeInstanceName.substring(1) + '>';
-			
+
 		}
 		throw new RuntimeException("Unknown Type " + expectedType);
 	}
@@ -333,7 +346,7 @@ public class TypesUtilities {
 			Type target) {
 		return new CodeCompilationException(
 				"Type mismatch: cannot convert from " + getTypeName(base)
-						+ " to " + getTypeName(target), 0, 0);
+				+ " to " + getTypeName(target), 0, 0);
 	}
 
 	public static ArrayType createDummyType(OrdinaryPrimitiveType baseType,
@@ -371,7 +384,7 @@ public class TypesUtilities {
 		cce.setLine(line);
 		exceptionContainer.addException(cce);
 	}
-	
+
 	public static void addTypeMismatchException(ExceptionContainer exceptionContainer, Type first, Type second,
 			Expression expression) {
 		addTypeMismatchException(exceptionContainer, first, second,

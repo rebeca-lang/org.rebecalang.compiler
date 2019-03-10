@@ -36,7 +36,7 @@ public class ScopeHandler {
 		scopeStack.pop();
 	}
 
-	public void addVaribaleToCurrentScope(String variableName, Type type, Label label, 
+	public void addVariableToCurrentScope(String variableName, Type type, Label label, 
 			int lineNumber, int column) throws ScopeException {
 		addVaribaleToCurrentScope(variableName, type, label, null, lineNumber, column);
 	}

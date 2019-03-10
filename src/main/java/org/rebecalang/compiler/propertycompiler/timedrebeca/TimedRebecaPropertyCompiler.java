@@ -120,7 +120,7 @@ public class TimedRebecaPropertyCompiler extends GeneralPropertyCompiler {
 		super.basicSemanticCheck(propertyModel);
 		
 		try {
-			scopeHandler.addVaribaleToCurrentScope("time", TypesUtilities.INT_TYPE, 
+			scopeHandler.addVariableToCurrentScope("time", TypesUtilities.INT_TYPE, 
 					CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE, 0, 0);
 		} catch (ScopeException e) {
 			e.printStackTrace();

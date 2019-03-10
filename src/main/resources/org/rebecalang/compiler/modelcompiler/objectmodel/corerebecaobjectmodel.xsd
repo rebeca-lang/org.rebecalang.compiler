@@ -130,7 +130,7 @@
 	                <xs:element name="implements" type="exp:Type" minOccurs="0" maxOccurs="unbounded"/>
 	            </xs:sequence>
 	            <xs:attribute name="queueSize" type="xs:int"/>
-				<xs:attribute name="abstract" type="xs:boolean"/>
+				<xs:attribute name="abstract" type="xs:boolean" default="false"/>
     		</xs:extension>
         </xs:complexContent>
     </xs:complexType>

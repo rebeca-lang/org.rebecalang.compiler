@@ -27,7 +27,7 @@ public class RebecaCompiler {
 
 	private ExceptionContainer exceptionContainer = new ExceptionContainer();
 	
-	private AbstractCompilerFacade getAppropriateParser(
+	private AbstractCompilerFacade getAppropriateCompilerFacade(
 			Set<CompilerFeature> features, ANTLRInputStream input)
 			throws CodeCompilationException {
 		
@@ -93,42 +93,6 @@ public class RebecaCompiler {
 				+ "]", 0, 0);
 	}
 
-	public RebecaModel getRebecaFilesPartialModel(File rebecaFile,
-			Set<CompilerFeature> features) {
-		exceptionContainer.clear();
-		ANTLRInputStream input = null;
-		try {
-			input = new ANTLRInputStream(new FileInputStream(rebecaFile));
-		} catch (IOException e) {
-			exceptionContainer.addException(e);
-			return null;
-		}
-		RebecaModel rebecaModel = null;
-		try {
-			AbstractCompilerFacade parser = getAppropriateParser(features, input);
-			parser.compile();
-			parser.semanticCheck(features);
-		} catch (RecognitionException e) {
-			exceptionContainer.addException(e);
-		} catch (CodeCompilationException e) {
-			exceptionContainer.addException(e);
-		}
-		return rebecaModel;
-	}
-
-	private AbstractCompilerFacade getParser(File rebecaFile, Set<CompilerFeature> compilerFeatures) 
-			throws FileNotFoundException, IOException, CodeCompilationException {
-		ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(rebecaFile));
-		return getAppropriateParser(compilerFeatures, input);
-	}
-	
-	public RebecaModel syntaxCheckRebecaFile(File rebecaFile, Set<CompilerFeature> compilerFeatures) {
-		Pair<RebecaModel,SymbolTable> result = compileRebecaFile(rebecaFile, compilerFeatures, false);
-		if (result != null)
-			return result.getFirst();
-		return null;
-	}
-
 	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile,
 			Set<CompilerFeature> compilerFeatures) {
 		return compileRebecaFile (rebecaFile, compilerFeatures, true);
@@ -139,12 +103,13 @@ public class RebecaCompiler {
 		exceptionContainer.clear();
 
 		try {
-			AbstractCompilerFacade parser = getParser(rebecaFile, compilerFeatures);
-			parser.compile();
+			ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(rebecaFile));
+			AbstractCompilerFacade compilerFacade = getAppropriateCompilerFacade(compilerFeatures, input);
+			compilerFacade.compile();
 			if (exceptionContainer.exceptionsIsEmpty() && performSemanticCheck) {
-				parser.semanticCheck(compilerFeatures);
+				compilerFacade.semanticCheck(compilerFeatures);
 			}
-			return new Pair<RebecaModel, SymbolTable>(parser.getRebecaModel(), parser.getSymbolTable());
+			return new Pair<RebecaModel, SymbolTable>(compilerFacade.getRebecaModel(), compilerFacade.getSymbolTable());
 		} catch (RecognitionException e) {
 			exceptionContainer.addException(e);
 		} catch (Exception e) {

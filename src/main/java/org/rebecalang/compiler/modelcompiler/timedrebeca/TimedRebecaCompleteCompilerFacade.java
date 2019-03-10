@@ -50,13 +50,13 @@ public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompilerFacade 
 		}
 
 		try {
-			scopeHandler.addVaribaleToCurrentScope("now", TypesUtilities.INT_TYPE, 
+			scopeHandler.addVariableToCurrentScope("now", TypesUtilities.INT_TYPE, 
 					CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
-			scopeHandler.addVaribaleToCurrentScope("currentMessageArrival", TypesUtilities.INT_TYPE, 
+			scopeHandler.addVariableToCurrentScope("currentMessageArrival", TypesUtilities.INT_TYPE, 
 					CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
-			scopeHandler.addVaribaleToCurrentScope("currentMessageDeadline", TypesUtilities.INT_TYPE,
+			scopeHandler.addVariableToCurrentScope("currentMessageDeadline", TypesUtilities.INT_TYPE,
 					CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
-			scopeHandler.addVaribaleToCurrentScope("currentMessageWaitingTime", TypesUtilities.INT_TYPE,
+			scopeHandler.addVariableToCurrentScope("currentMessageWaitingTime", TypesUtilities.INT_TYPE,
 					CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
 		} catch (ScopeException e) {
 			e.printStackTrace();

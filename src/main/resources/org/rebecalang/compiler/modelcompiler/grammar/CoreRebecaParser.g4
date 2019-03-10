@@ -166,12 +166,16 @@ interfaceDeclaration returns[InterfaceDeclaration intd]
         	{
         		OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
         		opt.setName($extendingInterfaceName.text);
+        		opt.setLineNumber($extendingInterfaceName.getLine());
+        		opt.setCharacter($extendingInterfaceName.getCharPositionInLine());
         		$intd.getExtends().add(opt);
         	}
         	(COMMA extendingInterfaceName = IDENTIFIER
         		{
 	        		opt = new OrdinaryPrimitiveType();
 	        		opt.setName($extendingInterfaceName.text);
+	        		opt.setLineNumber($extendingInterfaceName.getLine());
+	        		opt.setCharacter($extendingInterfaceName.getCharPositionInLine());
 	        		$intd.getExtends().add(opt);
         		}
         	)* )?
@@ -180,8 +184,6 @@ interfaceDeclaration returns[InterfaceDeclaration intd]
 		( {MethodDeclaration md;}
 			(
 				MSGSRV {md = new MsgsrvDeclaration(); $intd.getMsgsrvs().add((MsgsrvDeclaration)md);} 
-				| 
-				t = type {md = new SynchMethodDeclaration(); ((SynchMethodDeclaration)md).setReturnType($t.t); $intd.getSynchMethods().add((SynchMethodDeclaration)md);}
 			)
 			name = IDENTIFIER {md.setName($name.text); md.setLineNumber($name.getLine());md.setCharacter($name.getCharPositionInLine());}
 			fps = formalParameters {md.getFormalParameters().addAll($fps.fps);} SEMI
@@ -201,6 +203,8 @@ reactiveClassDeclaration returns[ReactiveClassDeclaration rcd]
         	{
         		OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
         		opt.setName($extendingReactiveClassName.text);
+        		opt.setLineNumber($extendingReactiveClassName.getLine());
+        		opt.setCharacter($extendingReactiveClassName.getCharPositionInLine());
         		$rcd.setExtends(opt);
         	}
         )?
@@ -208,12 +212,16 @@ reactiveClassDeclaration returns[ReactiveClassDeclaration rcd]
         	{
         		OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
         		opt.setName($implementingInterfaceName.text);
+        		opt.setLineNumber($implementingInterfaceName.getLine());
+        		opt.setCharacter($implementingInterfaceName.getCharPositionInLine());
         		$rcd.getImplements().add(opt);
         	}
         	(COMMA implementingInterfaceName = IDENTIFIER
         		{
 	        		opt = new OrdinaryPrimitiveType();
 	        		opt.setName($implementingInterfaceName.text);
+	        		opt.setLineNumber($implementingInterfaceName.getLine());
+	        		opt.setCharacter($implementingInterfaceName.getCharPositionInLine());
 	        		$rcd.getImplements().add(opt);
         		}
         	)* )?

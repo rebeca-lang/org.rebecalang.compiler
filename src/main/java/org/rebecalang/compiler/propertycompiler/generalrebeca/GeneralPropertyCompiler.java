@@ -85,9 +85,9 @@ public abstract class GeneralPropertyCompiler {
 		dummy.setName("DUMMY");
 		TypesUtilities.getInstance().addReactiveClassType(dummy);
 		try {
-			scopeHandler.addVaribaleToCurrentScope(CoreRebecaCompilerFacade.OWNER_REACTIVE_CLASS_KEY, 
+			scopeHandler.addVariableToCurrentScope(CoreRebecaCompilerFacade.OWNER_REACTIVE_CLASS_KEY, 
 					TypesUtilities.getInstance().getType(dummy.getName()), null, 0, 0);
-			scopeHandler.addVaribaleToCurrentScope("self", 
+			scopeHandler.addVariableToCurrentScope("self", 
 					TypesUtilities.getInstance().getType(dummy.getName()), null, 0, 0);
 		} catch (ScopeException e) {
 			e.printStackTrace();
@@ -126,14 +126,14 @@ public abstract class GeneralPropertyCompiler {
 					.getRebecaCode().getEnvironmentVariables()) {
 				for (VariableDeclarator variableDeclarator : fieldDeclaration
 						.getVariableDeclarators())
-					scopeHandler.addVaribaleToCurrentScope(
+					scopeHandler.addVariableToCurrentScope(
 							variableDeclarator.getVariableName(),
 							fieldDeclaration.getType(),
 							CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE, 0, 0);
 			}
 			for (MainRebecDefinition mainRebecDefinition : rebecaModel
 					.getRebecaCode().getMainDeclaration().getMainRebecDefinition()) {
-					scopeHandler.addVaribaleToCurrentScope(
+					scopeHandler.addVariableToCurrentScope(
 							mainRebecDefinition.getName(),
 							mainRebecDefinition.getType(),
 							CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE, 0, 0);
@@ -194,7 +194,7 @@ public abstract class GeneralPropertyCompiler {
 		for (Definition definition : propertyModel.getDefinitions()) {
 			Pair<Type,Object> checkingResult = expressionSemanticCheckContainer.check(definition.getExpression());
 			try {
-				scopeHandler.addVaribaleToCurrentScope(definition.getName(), checkingResult.getFirst(), 
+				scopeHandler.addVariableToCurrentScope(definition.getName(), checkingResult.getFirst(), 
 						CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE, 0, 0);
 			} catch (ScopeException e) {
 				e.printStackTrace();
@@ -205,7 +205,7 @@ public abstract class GeneralPropertyCompiler {
 		for (AssertionDefinition definition : propertyModel.getAssertionDefinitions()) {
 			Pair<Type,Object> checkingResult = expressionSemanticCheckContainer.check(definition.getExpression());
 			try {
-				scopeHandler.addVaribaleToCurrentScope(definition.getName(), checkingResult.getFirst(), 
+				scopeHandler.addVariableToCurrentScope(definition.getName(), checkingResult.getFirst(), 
 						CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE, 0, 0);
 			} catch (ScopeException e) {
 				e.printStackTrace();

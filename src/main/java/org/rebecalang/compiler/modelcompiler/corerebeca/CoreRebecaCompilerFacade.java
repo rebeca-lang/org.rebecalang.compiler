@@ -9,6 +9,7 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
+import org.hamcrest.core.IsInstanceOf;
 import org.rebecalang.compiler.modelcompiler.AbstractCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.ScopeHandler;
@@ -17,22 +18,19 @@ import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.SymbolTable;
 import org.rebecalang.compiler.modelcompiler.SymbolTableException;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteParser;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.AccessModifier;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BlockStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BreakStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConditionalStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConstructorDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ContinueStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InterfaceDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
@@ -74,7 +72,6 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement.ReturnStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement.SwitchStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement.WhileStatementSemanticCheck;
-import org.rebecalang.compiler.utils.AccessModifierUtilities;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.ExceptionContainer;
@@ -133,7 +130,12 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 		statementSemanticCheckContainer.registerSemanticsChecker(ReturnStatement.class, new ReturnStatementSemanticCheck());
 		statementSemanticCheckContainer.registerSemanticsChecker(SwitchStatement.class, new SwitchStatementSemanticCheck());
 	}
+	private boolean coreVersionIsCompatibleWithInheritanceAndInterfaceDeclaration() {
 
+		return !(compilerFeatures.contains(CompilerFeature.CORE_2_0) || 
+				compilerFeatures.contains(CompilerFeature.CORE_2_1) ||
+				compilerFeatures.contains(CompilerFeature.CORE_2_2));
+	}
 	@Override
 	public void semanticCheck(Set<CompilerFeature> features) {
 
@@ -148,27 +150,39 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.REACTIVE_CLASS);
 
 
+			if((rcd.getExtends() != null || rcd.isAbstract()) && !coreVersionIsCompatibleWithInheritanceAndInterfaceDeclaration()) {
 
+				CodeCompilationException cce = new CodeCompilationException(
+						"Rebeca core prior to 2.3 dose not support inheritance",
+						rcd.getLineNumber(), rcd.getCharacter());
+				exceptionContainer.addException(cce);
+			}
 
 			ReactiveClassDeclaration tempRC = rcd;
 			Stack <ReactiveClassDeclaration> extendStack = new Stack<ReactiveClassDeclaration>();
 
 			extendStack.push(rcd);
 
-			// adding ancestors variables (if any) to scope
-			while (tempRC.getExtends()!=null) {
-				ReactiveClassDeclaration metaData = null;
+			// adding ancestors variables (if any) to scope 
+			Set<String> reactiveClassNamesForLoopBreaking = new HashSet<String>();
+			reactiveClassNamesForLoopBreaking.add(rcd.getName());
+			
+			while (tempRC.getExtends() != null) {
+				
 				try {
-					metaData = (ReactiveClassDeclaration)TypesUtilities.getInstance().getMetaData(tempRC.getExtends());
-
-				} catch (CodeCompilationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if(metaData !=null) {
+					ReactiveClassDeclaration metaData = (ReactiveClassDeclaration)TypesUtilities.getInstance().getMetaData(tempRC.getExtends());
 					extendStack.push(metaData);
+					
+					if(reactiveClassNamesForLoopBreaking.contains(metaData.getName())){
+						break;
+					}
+					reactiveClassNamesForLoopBreaking.add(metaData.getName());
+					tempRC = metaData;
+					
+				} catch (CodeCompilationException e) {
+					// This case has been handled before
+					break;
 				}
-				tempRC = metaData;
 			}
 			while (!extendStack.isEmpty()) {
 
@@ -176,10 +190,10 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 
 			}
 			try {
-				scopeHandler.addVaribaleToCurrentScope(
+				scopeHandler.addVariableToCurrentScope(
 						OWNER_REACTIVE_CLASS_KEY, TypesUtilities.getInstance().getType(rcd.getName()), 
 						CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
-				scopeHandler.addVaribaleToCurrentScope("self",
+				scopeHandler.addVariableToCurrentScope("self",
 						TypesUtilities.getInstance().getType(rcd.getName()), 
 						CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
 			} catch (CodeCompilationException e) {
@@ -191,18 +205,34 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				semanticCheckOfMethod(rcd.getName(), md, CoreRebecaLabelUtility.CONSTRUCTOR);
 			}
 			try {
-				scopeHandler.addVaribaleToCurrentScope("sender", TypesUtilities.REACTIVE_CLASS_TYPE, 
+				scopeHandler.addVariableToCurrentScope("sender", TypesUtilities.REACTIVE_CLASS_TYPE, 
 						CoreRebecaLabelUtility.RESERVED_WORD, 0, 0);
 			} catch (ScopeException e) {
 				e.printStackTrace();
 			}
 			for (MethodDeclaration md : rcd.getMsgsrvs()) {
+
 				semanticCheckOfMethod(rcd.getName(), md, CoreRebecaLabelUtility.MSGSRV);
+				if(md.isAbstract() && !coreVersionIsCompatibleWithInheritanceAndInterfaceDeclaration()) {
+
+					CodeCompilationException cce = new CodeCompilationException(
+							"Rebeca core prior to 2.3 dose not support abstract message servers",
+							md.getLineNumber(), md.getCharacter());
+					exceptionContainer.addException(cce);
+				}
 			}
 			for (SynchMethodDeclaration md : rcd.getSynchMethods()) {
+
+				if(md.isAbstract() && !coreVersionIsCompatibleWithInheritanceAndInterfaceDeclaration()) {
+
+					CodeCompilationException cce = new CodeCompilationException(
+							"Rebeca core prior to 2.3 dose not support abstract methods",
+							md.getLineNumber(), md.getCharacter());
+					exceptionContainer.addException(cce);
+				}
 				scopeHandler.pushScopeRecord(null);
 				try {
-					scopeHandler.addVaribaleToCurrentScope(ScopeHandler.RETURN_VALUE_KEY_IN_SCOPE, md.getReturnType(),
+					scopeHandler.addVariableToCurrentScope(ScopeHandler.RETURN_VALUE_KEY_IN_SCOPE, md.getReturnType(),
 							CoreRebecaLabelUtility.LOCAL_VARIABLE, 0, 0);
 				} catch (ScopeException e) {
 					e.printStackTrace();
@@ -219,287 +249,6 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 		scopeHandler.popScopeRecord();
 	}
 
-	private void initalizeSymbolTable() {
-		SynchMethodDeclaration getAllActorsMD = new SynchMethodDeclaration();
-		getAllActorsMD.setName("getAllActors");
-		try {
-			GenericType genericListType = (GenericType)TypesUtilities.getInstance().getType("ArrayList<?>");
-			GenericTypeInstance genericTypeInstanceListOfActors = new GenericTypeInstance();
-			genericTypeInstanceListOfActors.setBase(genericListType);
-			genericTypeInstanceListOfActors.getParameters().add(TypesUtilities.REACTIVE_CLASS_TYPE);
-			getAllActorsMD.setReturnType(genericTypeInstanceListOfActors);
-			symbolTable.addMethod(null, getAllActorsMD, CoreRebecaLabelUtility.SYNCH_METHOD);
-		} catch (ExceptionContainer e1) {
-			exceptionContainer.addAll(e1);
-		} catch (CodeCompilationException e1) {
-			exceptionContainer.addException(e1);
-		}
-		
-		SynchMethodDeclaration listSize = new SynchMethodDeclaration();
-		listSize.setName("size");
-		try {
-			GenericType genericListType = (GenericType)TypesUtilities.getInstance().getType("ArrayList<?>");
-			listSize.setReturnType(TypesUtilities.INT_TYPE);
-			symbolTable.addMethod(genericListType, listSize, CoreRebecaLabelUtility.BUILT_IN_METHOD);
-			} catch (ExceptionContainer e1) {
-				exceptionContainer.addAll(e1);
-			} catch (CodeCompilationException e1) {
-				exceptionContainer.addException(e1);
-			}
-		
-		SynchMethodDeclaration listGetItem = new SynchMethodDeclaration();
-		listGetItem.setName("get");
-		FormalParameterDeclaration fpd = new FormalParameterDeclaration();
-		fpd.setName("arg0");
-		fpd.setType(TypesUtilities.INT_TYPE);
-		listGetItem.getFormalParameters().add(fpd);
-		try {
-			GenericType genericListType = (GenericType)TypesUtilities.getInstance().getType("ArrayList<?>");
-			listGetItem.setReturnType(TypesUtilities.UNKNOWN_TYPE);
-			symbolTable.addMethod(genericListType, listGetItem, CoreRebecaLabelUtility.BUILT_IN_METHOD);
-			} catch (ExceptionContainer e1) {
-				exceptionContainer.addAll(e1);
-			} catch (CodeCompilationException e1) {
-				exceptionContainer.addException(e1);
-			}
-		
-		SynchMethodDeclaration sqrtMethod = new SynchMethodDeclaration();
-		sqrtMethod.setName("sqrt");
-		fpd = new FormalParameterDeclaration();
-		fpd.setName("arg0");
-		fpd.setType(TypesUtilities.DOUBLE_TYPE);
-		sqrtMethod.getFormalParameters().add(fpd);
-		sqrtMethod.setReturnType(TypesUtilities.DOUBLE_TYPE);
-		try {
-			symbolTable.addMethod(null, sqrtMethod,
-					CoreRebecaLabelUtility.BUILT_IN_METHOD);
-		} catch (ExceptionContainer ec) {
-			exceptionContainer.addAll(ec);
-		}
-		
-		SynchMethodDeclaration powMethod = new SynchMethodDeclaration();
-		powMethod.setName("pow");
-		fpd = new FormalParameterDeclaration();
-		fpd.setName("arg0");
-		fpd.setType(TypesUtilities.DOUBLE_TYPE);
-		powMethod.getFormalParameters().add(fpd);
-		fpd = new FormalParameterDeclaration();
-		fpd.setName("arg1");
-		fpd.setType(TypesUtilities.DOUBLE_TYPE);
-		powMethod.getFormalParameters().add(fpd);
-		powMethod.setReturnType(TypesUtilities.DOUBLE_TYPE);
-		try {
-			symbolTable.addMethod(null, powMethod,
-					CoreRebecaLabelUtility.BUILT_IN_METHOD);
-		} catch (ExceptionContainer ec) {
-			exceptionContainer.addAll(ec);
-		}
-		
-		SynchMethodDeclaration assersionMethod = new SynchMethodDeclaration();
-		assersionMethod.setName("assertion");
-		fpd = new FormalParameterDeclaration();
-		fpd.setName("arg0");
-		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
-		assersionMethod.getFormalParameters().add(fpd);
-		try {
-			symbolTable.addMethod(null, assersionMethod,
-					CoreRebecaLabelUtility.ASSERTION);
-		} catch (ExceptionContainer ec) {
-			exceptionContainer.addAll(ec);
-		}
-		assersionMethod = new SynchMethodDeclaration();
-		assersionMethod.setName("assertion");
-		fpd = new FormalParameterDeclaration();
-		fpd.setName("arg0");
-		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
-		assersionMethod.getFormalParameters().add(fpd);
-		fpd = new FormalParameterDeclaration();
-		fpd.setName("arg1");
-		fpd.setType(TypesUtilities.STRING_TYPE);
-		assersionMethod.getFormalParameters().add(fpd);
-		try {
-			symbolTable.addMethod(null, assersionMethod,
-					CoreRebecaLabelUtility.ASSERTION);
-		} catch (ExceptionContainer ec) {
-			exceptionContainer.addAll(ec);
-		}
-
-		if (rebecaModel.getRebecaCode().getEnvironmentVariables() != null) {
-			addField(null, rebecaModel.getRebecaCode().getEnvironmentVariables(), AccessModifierUtilities.PUBLIC);
-		}
-
-		HashSet<String> reactiveClassesAndInterfaces = new HashSet<String>();
-
-		for (InterfaceDeclaration interfaceDeclaration : rebecaModel.getRebecaCode().getInterfaceDeclaration()) {
-			// Check for repeated reactive class name
-			if (reactiveClassesAndInterfaces.contains(interfaceDeclaration.getName())) {
-				CodeCompilationException rce = new CodeCompilationException(
-						"Multiple definition of "
-								+ interfaceDeclaration.getName(),
-								interfaceDeclaration.getLineNumber(),
-								interfaceDeclaration.getCharacter());
-				exceptionContainer.addException(rce);
-				continue;
-			} else {
-				reactiveClassesAndInterfaces.add(interfaceDeclaration.getName());
-			}
-
-			try {
-				Type type = TypesUtilities.getInstance().getType(interfaceDeclaration.getName());
-				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getSynchMethods()) {
-					SynchMethodDeclaration smd = (SynchMethodDeclaration) methodDeclaration;
-					try {
-						smd.setReturnType(TypesUtilities.getInstance().getType(smd.getReturnType()));
-					}catch (CodeCompilationException e) {
-						smd.setReturnType(TypesUtilities.UNKNOWN_TYPE);
-						exceptionContainer.addException(e);
-					}
-					if (methodDeclaration.getName().equals(
-							interfaceDeclaration.getName())) {
-						exceptionContainer
-						.addException(new CodeCompilationException(
-								"Interfaces cannot have constructor",
-								methodDeclaration.getLineNumber(),
-								methodDeclaration.getCharacter()));
-					} else
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.SYNCH_METHOD);
-				}
-				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getMsgsrvs()) {
-					if (methodDeclaration.getName().equals(
-							interfaceDeclaration.getName())) {
-						exceptionContainer
-						.addException(new CodeCompilationException(
-								"Invalid usage of message-server specifier for the constructor",
-								methodDeclaration.getLineNumber(),
-								methodDeclaration.getCharacter()));
-					} else
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.MSGSRV);
-				}
-			} catch (CodeCompilationException e) {
-				e.printStackTrace();
-			}
-		}
-
-		for (ReactiveClassDeclaration reactiveClassDeclaration : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
-			// Check for repeated reactive class name
-			if (reactiveClassesAndInterfaces.contains(reactiveClassDeclaration.getName())) {
-				CodeCompilationException rce = new CodeCompilationException(
-						"Multiple definition of "
-								+ reactiveClassDeclaration.getName(),
-								reactiveClassDeclaration.getLineNumber(),
-								reactiveClassDeclaration.getCharacter());
-				exceptionContainer.addException(rce);
-				continue;
-			} else {
-				reactiveClassesAndInterfaces.add(reactiveClassDeclaration.getName());
-			}
-
-			if (reactiveClassDeclaration.getConstructors().isEmpty()) {
-				if (!compilerFeatures.contains(CompilerFeature.CORE_2_0)) {
-					ConstructorDeclaration defaultConstructor = new ConstructorDeclaration();
-					defaultConstructor.setName(reactiveClassDeclaration.getName());
-					defaultConstructor.setBlock(new BlockStatement());
-					reactiveClassDeclaration.getConstructors().add(defaultConstructor);
-				}
-			}
-			try {
-				Type type = TypesUtilities.getInstance().getType(reactiveClassDeclaration.getName());
-				addField(type, reactiveClassDeclaration.getKnownRebecs(), AccessModifierUtilities.PRIVATE);
-				addField(type, reactiveClassDeclaration.getStatevars(), AccessModifierUtilities.PRIVATE);
-				for (int cnt = 0; cnt < reactiveClassDeclaration.getConstructors().size(); cnt++) {
-					ConstructorDeclaration constructorDeclaration = reactiveClassDeclaration.getConstructors().get(cnt);
-					if (compilerFeatures.contains(CompilerFeature.CORE_2_0)) {
-						CodeCompilationException rce = new CodeCompilationException(
-								"Rebeca core 2.0 dose not support constructor",
-								constructorDeclaration.getLineNumber(),
-								constructorDeclaration.getCharacter());
-						exceptionContainer.addException(rce);
-					}
-					if (constructorDeclaration.getName().equals(
-							reactiveClassDeclaration.getName())) {
-						addMethod(type, constructorDeclaration, 
-								AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
-					} else {
-						exceptionContainer.addException(new CodeCompilationException(
-								"Return type for the method is missing",
-								constructorDeclaration.getLineNumber(),
-								constructorDeclaration.getCharacter()));
-						SynchMethodDeclaration smd = new SynchMethodDeclaration();
-						smd.setBlock(constructorDeclaration.getBlock());
-						smd.setCharacter(constructorDeclaration.getCharacter());
-						smd.setLineNumber(constructorDeclaration.getLineNumber());
-						smd.setName(constructorDeclaration.getName());
-						smd.setReturnType(TypesUtilities.NO_TYPE);
-						smd.setAccessModifier(constructorDeclaration.getAccessModifier());
-						addMethod(type, smd, 
-								AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.SYNCH_METHOD);
-						reactiveClassDeclaration.getConstructors().remove(cnt);
-						reactiveClassDeclaration.getSynchMethods().add(smd);
-						cnt--;
-					}
-				}
-
-				for (MethodDeclaration methodDeclaration : reactiveClassDeclaration.getSynchMethods()) {
-					SynchMethodDeclaration smd = (SynchMethodDeclaration) methodDeclaration;
-					try {
-						smd.setReturnType(TypesUtilities.getInstance().getType(smd.getReturnType()));
-					}catch (CodeCompilationException e) {
-						smd.setReturnType(TypesUtilities.UNKNOWN_TYPE);
-						exceptionContainer.addException(e);
-					}
-					if (methodDeclaration.getName().equals(
-							reactiveClassDeclaration.getName())) {
-						exceptionContainer
-						.addException(new CodeCompilationException(
-								"Invalid return type for the constructor",
-								methodDeclaration.getLineNumber(),
-								methodDeclaration.getCharacter()));
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
-					} else 
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PRIVATE, CoreRebecaLabelUtility.SYNCH_METHOD);
-				}
-				for (MethodDeclaration methodDeclaration : reactiveClassDeclaration.getMsgsrvs()) {
-					if (methodDeclaration.getName().equals(
-							reactiveClassDeclaration.getName())) {
-						exceptionContainer
-						.addException(new CodeCompilationException(
-								"Invalid usage of message-server specifier for the constructor",
-								methodDeclaration.getLineNumber(),
-								methodDeclaration.getCharacter()));
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
-					} else
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.MSGSRV);
-				}
-			} catch (CodeCompilationException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private void addMethod(Type container, MethodDeclaration methodDecleration,
-			AccessModifier defaultAccessModifier, Label label) {
-		if (methodDecleration.getAccessModifier() == null)
-			methodDecleration.setAccessModifier(defaultAccessModifier);
-		try {
-			symbolTable.addMethod(container, methodDecleration, label);
-		} catch (ExceptionContainer ec) {
-			exceptionContainer.addAll(ec);
-		}
-	}
-
-	private void addField(Type container, List<FieldDeclaration> fieldDeclarations, AccessModifier defaultModifier) {
-		for (FieldDeclaration fieldDeclaration : fieldDeclarations) {
-			try {
-				fieldDeclaration.setType(TypesUtilities.getInstance().getType(fieldDeclaration.getType()));
-				if(fieldDeclaration.getAccessModifier() == null)
-					fieldDeclaration.setAccessModifier(defaultModifier);
-				symbolTable.addVarible(container, fieldDeclaration);
-			} catch (CodeCompilationException e) {
-				exceptionContainer.addException(e);
-			}
-		}
-	}
-
 	private void semanticCheckOfMethod(String reactiveClassName, MethodDeclaration md, Label label) {
 		scopeHandler.pushScopeRecord(label);
 
@@ -507,7 +256,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 		for (FormalParameterDeclaration fpd : md.getFormalParameters()) {
 			try {
 				fpd.setType(TypesUtilities.getInstance().getType(fpd.getType()));
-				scopeHandler.addVaribaleToCurrentScope(fpd.getName(), fpd.getType(),
+				scopeHandler.addVariableToCurrentScope(fpd.getName(), fpd.getType(),
 						CoreRebecaLabelUtility.METHOD_PARAMETER_VARIABLE,
 						fpd.getLineNumber(), fpd.getCharacter());
 			} catch (ScopeException se) {
@@ -616,9 +365,24 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 					Type type = TypesUtilities.getInstance().getType(
 							mrd.getType());
 					mrd.setType(type);
-					scopeHandler.addVaribaleToCurrentScope(mrd.getName(), type, 
+					scopeHandler.addVariableToCurrentScope(mrd.getName(), type, 
 							CoreRebecaLabelUtility.LOCAL_VARIABLE,
 							mrd.getLineNumber(), mrd.getCharacter());
+					BaseClassDeclaration mrdMetaData = TypesUtilities.getInstance().getMetaData(mrd.getType());
+					if (mrdMetaData instanceof InterfaceDeclaration) {
+						CodeCompilationException rce = new CodeCompilationException(
+								"Cannot instantiate from interface " + mrdMetaData.getName(),
+								mrd.getLineNumber(), mrd.getCharacter());
+						this.exceptionContainer.addException(rce);	
+					} else if (mrdMetaData instanceof ReactiveClassDeclaration) {
+						ReactiveClassDeclaration rcd = (ReactiveClassDeclaration) mrdMetaData;
+						if (rcd.isAbstract()) {
+							CodeCompilationException rce = new CodeCompilationException(
+									"Cannot instantiate from abstract reactiveclass " + rcd.getName(),
+									mrd.getLineNumber(), mrd.getCharacter());
+							this.exceptionContainer.addException(rce);
+						}
+					}
 				} catch (CodeCompilationException cce) {
 					cce.setColumn(mrd.getCharacter());
 					cce.setLine(mrd.getLineNumber());
