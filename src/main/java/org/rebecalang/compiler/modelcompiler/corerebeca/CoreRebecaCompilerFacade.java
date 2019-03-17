@@ -452,7 +452,7 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 			}
 
 			try {
-				symbolTable.getMethodSpecification(mrd.getType(), methodName,
+				symbolTable.getCastableMethodSpecification(mrd.getType(), methodName,
 						constructorArgumentsTypes);
 			} catch (SymbolTableException ste) {
 				ste.setColumn(mrd.getCharacter());

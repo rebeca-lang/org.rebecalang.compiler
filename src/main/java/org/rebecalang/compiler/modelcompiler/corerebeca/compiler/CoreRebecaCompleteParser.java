@@ -1214,7 +1214,7 @@ public class CoreRebecaCompleteParser extends Parser {
 				{
 				setState(287);
 				match(MSGSRV);
-				md = new MsgsrvDeclaration(); _localctx.intd.getMsgsrvs().add((MsgsrvDeclaration)md);
+				md = new MsgsrvDeclaration(); md.setAbstract(true); _localctx.intd.getMsgsrvs().add((MsgsrvDeclaration)md);
 				}
 				setState(290);
 				((InterfaceDeclarationContext)_localctx).name = match(IDENTIFIER);

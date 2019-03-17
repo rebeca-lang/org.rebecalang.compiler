@@ -93,7 +93,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 					} catch (SymbolTableException se) {
 					
 						methodInSymbolTableSpecifier = 
-								symbolTable.getMethodSpecification(TypesUtilities.NO_TYPE, termName, argumentTypes);
+								symbolTable.getCastableMethodSpecification(TypesUtilities.NO_TYPE, termName, argumentTypes);
 					}
 				} else {
 						methodInSymbolTableSpecifier = checkMethodInParents(baseType, termName, argumentTypes);
@@ -170,7 +170,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 		}
 		while(true) {
 			try {
-				methodInSymbolTableSpecifier = symbolTable.getMethodSpecification(lookupBaseType, termName, argumentTypes);
+				methodInSymbolTableSpecifier = symbolTable.getCastableMethodSpecification(lookupBaseType, termName, argumentTypes);
 				// TODO this code only works for GenericType with 1 parameters
 				if ( methodInSymbolTableSpecifier.getReturnValue() == TypesUtilities.UNKNOWN_TYPE )
 					methodInSymbolTableSpecifier.setReturnValue(((GenericTypeInstance) type).getParameters().get(0));

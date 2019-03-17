@@ -23,6 +23,10 @@ public class ANTLRFilesGenerator {
 //				base.replaceFirst("loc", "java") + "/probabilisticrebeca/compiler",
 //				grammarBase + "/ProbabilisticRebecaComplete.g4" 
 //				};
+		
+//		antlrArgs = new String[] { "-Xexact-output-dir", "-o",
+//				base.replaceFirst("loc", "java") + "/hybridrebeca/compiler",
+//				grammarBase + "/HybridRebecaComplete.g4" };
 
 		org.antlr.v4.Tool.main(antlrArgs);
 

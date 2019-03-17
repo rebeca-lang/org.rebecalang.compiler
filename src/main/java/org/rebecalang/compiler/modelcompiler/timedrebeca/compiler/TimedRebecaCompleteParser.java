@@ -1371,7 +1371,7 @@ public class TimedRebecaCompleteParser extends Parser {
 				{
 				setState(325);
 				match(MSGSRV);
-				md = new MsgsrvDeclaration(); _localctx.intd.getMsgsrvs().add((MsgsrvDeclaration)md);
+				md = new MsgsrvDeclaration(); md.setAbstract(true); _localctx.intd.getMsgsrvs().add((MsgsrvDeclaration)md);
 				}
 				setState(328);
 				((InterfaceDeclarationContext)_localctx).name = match(IDENTIFIER);

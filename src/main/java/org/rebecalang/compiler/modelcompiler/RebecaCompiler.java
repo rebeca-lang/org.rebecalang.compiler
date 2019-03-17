@@ -12,6 +12,8 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.HybridRebecaCompleteCompilerFacade;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.compiler.HybridRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.ProbabilisticRebecaCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler.ProbabilisticRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.ProbabilisticTimedRebecaCompilerFacade;
@@ -52,7 +54,10 @@ public class RebecaCompiler {
 					|| features.contains(CompilerFeature.CORE_2_3)))
 				throw createFeaturesIncompatibilityMessage(features);
 		}
-
+		if (features.contains(CompilerFeature.HYBRID_REBECA)
+				&& features.contains(CompilerFeature.CORE_2_0)) {
+			throw createFeaturesIncompatibilityMessage(features);
+		}
 		if (features.contains(CompilerFeature.SYSTEM_C)
 				&& !features.contains(CompilerFeature.CORE_2_0)) {
 			throw createFeaturesIncompatibilityMessage(features);
@@ -76,6 +81,11 @@ public class RebecaCompiler {
 			TimedRebecaCompleteLexer lexer = new TimedRebecaCompleteLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			return new TimedRebecaCompleteCompilerFacade(tokens, features, exceptionContainer);
+		}
+		if (features.contains(CompilerFeature.HYBRID_REBECA)) {
+			HybridRebecaCompleteLexer lexer = new HybridRebecaCompleteLexer(input);
+			CommonTokenStream tokens = new CommonTokenStream(lexer);
+			return new HybridRebecaCompleteCompilerFacade(tokens, features, exceptionContainer);
 		}
 		CoreRebecaCompleteLexer lexer = new CoreRebecaCompleteLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);

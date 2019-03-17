@@ -183,7 +183,7 @@ interfaceDeclaration returns[InterfaceDeclaration intd]
 
 		( {MethodDeclaration md;}
 			(
-				MSGSRV {md = new MsgsrvDeclaration(); $intd.getMsgsrvs().add((MsgsrvDeclaration)md);} 
+				MSGSRV {md = new MsgsrvDeclaration(); md.setAbstract(true); $intd.getMsgsrvs().add((MsgsrvDeclaration)md);} 
 			)
 			name = IDENTIFIER {md.setName($name.text); md.setLineNumber($name.getLine());md.setCharacter($name.getCharPositionInLine());}
 			fps = formalParameters {md.getFormalParameters().addAll($fps.fps);} SEMI

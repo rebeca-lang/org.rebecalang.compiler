@@ -233,13 +233,13 @@ public class SymbolTable {
 		}
 	}
 
-	public MethodInSymbolTableSpecifier getMethodSpecification(Type type, String methodName,
+	public MethodInSymbolTableSpecifier getCastableMethodSpecification(Type type, String methodName,
 			List<Type> argumentsTypes) throws SymbolTableException {
 		Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>> methods = methodsSymbolTable.get(type);
 		
 		if (methods == null)
 			throw new SymbolTableException("The type " + TypesUtilities.getTypeName(type) +
-					" has not registered in the symbol table", 0, 0);
+					" is not registered in the symbol table", 0, 0);
 		List<MethodInSymbolTableSpecifier> methodInSymbolTableSpecifiers = methods.get(methodName);
 		if (methodInSymbolTableSpecifiers == null)
 			throw new SymbolTableException("The method " + methodName +
@@ -248,6 +248,30 @@ public class SymbolTable {
 					(type == null || type == TypesUtilities.NO_TYPE ? "" :
 					" for the type " + TypesUtilities.getTypeName(type)), 0, 0);
 		MethodInSymbolTableSpecifier foundMatch = findCastableMatch(methodInSymbolTableSpecifiers, argumentsTypes);
+		if (foundMatch == null)
+			throw new SymbolTableException("The method " + methodName +
+					convertMethodArgumentsToString(argumentsTypes) +
+					" is undefined" +
+					(type == null || type == TypesUtilities.NO_TYPE ? "" :
+					" for the type " + TypesUtilities.getTypeName(type)), 0, 0);
+		return foundMatch;
+	}
+	
+	public MethodInSymbolTableSpecifier getExactMethodSpecification(Type type, String methodName,
+			List<Type> argumentsTypes) throws SymbolTableException {
+		Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>> methods = methodsSymbolTable.get(type);
+		
+		if (methods == null)
+			throw new SymbolTableException("The type " + TypesUtilities.getTypeName(type) +
+					" is not registered in the symbol table", 0, 0);
+		List<MethodInSymbolTableSpecifier> methodInSymbolTableSpecifiers = methods.get(methodName);
+		if (methodInSymbolTableSpecifiers == null)
+			throw new SymbolTableException("The method " + methodName +
+					convertMethodArgumentsToString(argumentsTypes) +
+					" is undefined" +
+					(type == null || type == TypesUtilities.NO_TYPE ? "" :
+					" for the type " + TypesUtilities.getTypeName(type)), 0, 0);
+		MethodInSymbolTableSpecifier foundMatch = findExactMatch(methodInSymbolTableSpecifiers, argumentsTypes);
 		if (foundMatch == null)
 			throw new SymbolTableException("The method " + methodName +
 					convertMethodArgumentsToString(argumentsTypes) +

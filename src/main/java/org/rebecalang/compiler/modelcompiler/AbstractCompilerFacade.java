@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -447,8 +448,154 @@ public abstract class AbstractCompilerFacade {
 				e.printStackTrace();
 			}
 		}
+		interfaceCollisionDetection();
 	}
 
+	private void interfaceCollisionDetection() {
+		for(ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
+			Hashtable<MethodSignatureBean, Pair<Type, Integer>> visitedMethods = new Hashtable<MethodSignatureBean, Pair<Type, Integer>>();
+			Set<String> visitedClasses = new HashSet<String>();
+			getParentMethods(rcd, visitedMethods, rcd, visitedClasses);
+		}
+		for(InterfaceDeclaration id : rebecaModel.getRebecaCode().getInterfaceDeclaration()) {
+			Hashtable<MethodSignatureBean, Pair<Type, Integer>> visitedMethods = new Hashtable<MethodSignatureBean, Pair<Type, Integer>>();
+			Set<String> visitedClasses = new HashSet<String>();
+			getParentMethods(id, visitedMethods, id, visitedClasses);
+		}
+	}
+
+	private void getParentMethods(BaseClassDeclaration parent, Hashtable<MethodSignatureBean, Pair<Type, Integer>> visitedMethods, BaseClassDeclaration root, Set<String> visitedClasses) {
+
+		if(parent instanceof ReactiveClassDeclaration) {
+			ReactiveClassDeclaration rcd = (ReactiveClassDeclaration)parent;
+			if(visitedClasses.contains(rcd.getName()))
+				return;
+			visitedClasses.add(rcd.getName());
+			if(rcd.getExtends()!=null)
+				try {
+					getParentMethods(TypesUtilities.getInstance().getMetaData(rcd.getExtends()), visitedMethods, root, visitedClasses);
+
+				} catch (CodeCompilationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			if (rcd.getImplements() != null) {
+				try {
+					for (Type id : rcd.getImplements())
+						getParentMethods(TypesUtilities.getInstance().getMetaData(id), visitedMethods, root, visitedClasses);
+
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+
+			}
+			for (MethodDeclaration md : rcd.getMsgsrvs()) {
+				LinkedList<Type> params = new LinkedList<Type>();
+				for (FormalParameterDeclaration fpd : md.getFormalParameters()) {
+					try {
+						params.add(TypesUtilities.getInstance().getType(fpd.getType()));
+					} catch (CodeCompilationException e) {
+						//This case will be handled later
+					}
+				}
+				MethodSignatureBean msb = new MethodSignatureBean(md.getName(), params);
+				Type returnType;
+				try {
+					returnType = (symbolTable.getExactMethodSpecification(TypesUtilities.getInstance().getType(rcd.getName()), 
+							md.getName(), params)).getReturnValue();
+					if (!visitedMethods.containsKey(msb)){
+						visitedMethods.put(msb, new Pair<Type, Integer>(returnType, md.getLineNumber()));
+					} else if (visitedMethods.get(msb).getFirst() != returnType) {
+						exceptionContainer
+						.addException(createInterfaceCollisionException(visitedMethods, root, md, msb));
+					}
+				} catch (CodeCompilationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			for (MethodDeclaration md : rcd.getSynchMethods()) {
+				LinkedList<Type> params = new LinkedList<Type>();
+				for (FormalParameterDeclaration fpd : md.getFormalParameters()) {
+					try {
+						params.add(TypesUtilities.getInstance().getType(fpd.getType()));
+					} catch (CodeCompilationException e) {
+						//This case will be handled later
+					}				}
+				MethodSignatureBean msb = new MethodSignatureBean(md.getName(), params);
+				Type returnType;
+				try {
+					returnType = symbolTable.getExactMethodSpecification(TypesUtilities.getInstance().getType(rcd.getName()), 
+							md.getName(), params).getReturnValue();
+					if (!visitedMethods.containsKey(msb)){
+						visitedMethods.put(msb, new Pair<Type, Integer>(returnType, md.getLineNumber()));
+					} else if (visitedMethods.get(msb).getFirst() != returnType) {
+						exceptionContainer
+						.addException(createInterfaceCollisionException(visitedMethods, root, md, msb));
+					}
+				} catch (CodeCompilationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		} else if (parent instanceof InterfaceDeclaration) {
+			InterfaceDeclaration intd = (InterfaceDeclaration)parent;
+
+			if (intd.getExtends() != null) {
+				try {
+					for (Type id : intd.getExtends())
+						getParentMethods(TypesUtilities.getInstance().getMetaData(id), visitedMethods, root, visitedClasses);
+
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+
+			}
+			for (MethodDeclaration md : intd.getMsgsrvs()) {
+				LinkedList<Type> params = new LinkedList<Type>();
+				for (FormalParameterDeclaration fpd : md.getFormalParameters()) {
+					try {
+						params.add(TypesUtilities.getInstance().getType(fpd.getType()));
+					} catch (CodeCompilationException e) {
+						//This case will be handled later
+					}
+				}
+				MethodSignatureBean msb = new MethodSignatureBean(md.getName(), params);
+				Type returnType;
+				try {
+					returnType = symbolTable.getExactMethodSpecification(TypesUtilities.getInstance().getType(intd.getName()), 
+							md.getName(), params).getReturnValue();
+					if (!visitedMethods.containsKey(msb)){
+						visitedMethods.put(msb, new Pair<Type, Integer>(returnType, md.getLineNumber()));
+					} else if (visitedMethods.get(msb).getFirst() != returnType) {
+						exceptionContainer
+						.addException(createInterfaceCollisionException(visitedMethods, root, md, msb));
+					}
+				} catch (CodeCompilationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		}
+
+	}
+
+
+	private CodeCompilationException createInterfaceCollisionException(
+			Hashtable<MethodSignatureBean, Pair<Type, Integer>> visitedMethods, BaseClassDeclaration rcd,
+			MethodDeclaration md, MethodSignatureBean msb) {
+		return new CodeCompilationException(
+				(rcd instanceof ReactiveClassDeclaration ? "Reactiveclass " : "Interface ") +
+				rcd.getName() + " has interface collision in return type of method " + md.getName() + " in line " 
+				+ visitedMethods.get(msb).getSecond() +
+				" with method " + md.getName() + " in line " + md.getLineNumber(),
+				rcd.getLineNumber(),
+				rcd.getCharacter());
+	}
 
 	public void checkForInterfaceInheritanceLoop(InterfaceDeclaration interfaceDeclaration) {
 
@@ -483,6 +630,7 @@ public abstract class AbstractCompilerFacade {
 
 			}
 		}
+
 	}
 
 
@@ -566,9 +714,9 @@ public abstract class AbstractCompilerFacade {
 				return false;
 			return true;
 		}
-	
+
 	}
-	
+
 	private Set<MethodSignatureBean> getParentUnimplementedAbstractMethods(ReactiveClassDeclaration parentClassDeclaration, Set<String> reactiveClassNames) {
 
 		// Loop Breaker: to continue compiling in the case of having loop inheritance already addressed
@@ -659,7 +807,11 @@ public abstract class AbstractCompilerFacade {
 	private void checkForUnimplementedAbstractMethods (MethodDeclaration md, Set<MethodSignatureBean> unimplementedAbstractMethods) {
 		LinkedList<Type> msgSrvParams = new LinkedList<Type>();
 		for(FormalParameterDeclaration fpd : md.getFormalParameters()) {
-			msgSrvParams.add(fpd.getType());
+			try {
+				msgSrvParams.add(TypesUtilities.getInstance().getType(fpd.getType()));
+			} catch (CodeCompilationException e) {
+				//This case will be handled later
+			}
 		}
 		MethodSignatureBean msgSrvSign = new MethodSignatureBean(md.getName(), msgSrvParams);
 		if (md.isAbstract()) {

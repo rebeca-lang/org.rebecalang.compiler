@@ -14,9 +14,6 @@
 		<jxb:bindings node="//xs:complexType[@name='BinaryExpression']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression" />
 		</jxb:bindings>
-		<jxb:bindings node="//xs:complexType[@name='BitIntType']">
-			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BitIntType" />
-		</jxb:bindings>
 		<jxb:bindings node="//xs:complexType[@name='CastExpression']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression" />
 		</jxb:bindings>
@@ -38,9 +35,6 @@
 		<jxb:bindings node="//xs:complexType[@name='ParentSuffixPrimary']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.parentSuffixPrimary" />
 		</jxb:bindings>
-		<jxb:bindings node="//xs:complexType[@name='PrimitiveType']">
-			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimitiveType" />
-		</jxb:bindings>
 		<jxb:bindings node="//xs:complexType[@name='Statement']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement" />
 		</jxb:bindings>
@@ -56,8 +50,23 @@
 		<jxb:bindings node="//xs:complexType[@name='Type']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type" />
 		</jxb:bindings>
-		<jxb:bindings node="//xs:complexType[@name='Category']">
-			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Category" />
+		<jxb:bindings node="//xs:complexType[@name='Annotation']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation" />
 		</jxb:bindings>
-	</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='GenericType']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericType" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='GenericTypeInstance']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='InstanceofExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Label']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='RebecInstantiationPrimary']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary" />
+		</jxb:bindings>
+</jxb:bindings>
 </jxb:bindings>
