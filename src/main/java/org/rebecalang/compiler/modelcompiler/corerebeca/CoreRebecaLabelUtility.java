@@ -61,7 +61,7 @@ public class CoreRebecaLabelUtility {
 		EXPRESSION = new Label();
 		EXPRESSION.setName("expression");
 		RESERVED_WORD = new Label();
-		RESERVED_WORD.setName("reserver-word");
+		RESERVED_WORD.setName("reserved-word");
 	
 	}
 }

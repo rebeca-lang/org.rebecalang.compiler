@@ -88,6 +88,7 @@ public class ReactiveClassDeclaration
      * 
      * 
      */
+
     public List<FieldDeclaration> getKnownRebecs() {
         if (knownRebecs == null) {
             knownRebecs = new ArrayList<FieldDeclaration>();
@@ -257,5 +258,6 @@ public class ReactiveClassDeclaration
     public void setAbstract(Boolean value) {
         this._abstract = value;
     }
+    
 
 }

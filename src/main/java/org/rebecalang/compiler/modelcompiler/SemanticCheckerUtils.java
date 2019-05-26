@@ -251,9 +251,9 @@ public class SemanticCheckerUtils {
 		try {
 			Object value = null;
 			if (right != null && left != null) {
-				value = engine.eval(left + operator + right);
+				value = engine.eval("(" + left + ")" + operator + "(" + right + ")");
 			} else if (left != null) {
-				value = engine.eval(left.toString());
+				value = engine.eval(operator + "(" + left.toString() + ")");
 			}
 			return value;
 			

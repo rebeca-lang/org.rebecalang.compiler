@@ -25,6 +25,8 @@ public class ConditionalStatementSemanticCheck extends AbstractStatementSemantic
 					conditionalStatement.getCondition().getCharacter());
 			exceptionContainer.addException(rce);
 		}
+		conditionalStatement.getCondition().setType(TypesUtilities.BOOLEAN_TYPE);
+
 		if (conditionalStatement.getStatement() != null) {
 			scopeHandler.pushScopeRecord(null);
 			((StatementSemanticCheckContainer)defaultContainer).check(conditionalStatement.getStatement());
