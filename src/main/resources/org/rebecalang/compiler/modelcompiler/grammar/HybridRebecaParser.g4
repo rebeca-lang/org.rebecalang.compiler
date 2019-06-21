@@ -40,6 +40,33 @@ physicalClassDeclaration returns[PhysicalClassDeclaration pcd]
 
 		(	cd = constructorDeclaration {$pcd.getConstructors().add($cd.cd);}
 		|	smd = synchMethodDeclaration {$pcd.getSynchMethods().add($smd.smd);}
+		|   modeDeclaration
 		)*
         RBRACE {$pcd.setEndLineNumber($RBRACE.getLine());$pcd.setEndCharacter($RBRACE.getCharPositionInLine());}
     ;
+modeDeclaration 
+	:
+	MODE IDENTIFIER LBRACE
+	INV (expression) LBRACE
+		expression*
+	RBRACE
+	GUARD (expression) LBRACE
+		expression*
+	RBRACE
+	RBRACE
+	;
+    
+primary returns [TermPrimary tp]
+    :   
+    id1 = IDENTIFIER {$tp = new TermPrimary(); $tp.setName($id1.text);
+					  $tp.setLineNumber($id1.getLine()); $tp.setCharacter($id1.getCharPositionInLine());}
+    (	lp = LPAREN 
+    	{ParentSuffixPrimary psp = new ParentSuffixPrimary(); 
+    	 psp.setLineNumber($lp.getLine()); psp.setCharacter($lp.getCharPositionInLine());
+    	 $tp.setParentSuffixPrimary(psp);}
+		(el = expressionList {$tp.getParentSuffixPrimary().getArguments().addAll($el.el);})?
+		RPAREN
+    )?
+	(LBRACKET e2 = expression RBRACKET {$tp.getIndices().add($e2.e);})* (PRIME)?
+    ;    
+    

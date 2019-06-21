@@ -260,6 +260,7 @@ methodDeclaration [MethodDeclaration md]
 constructorDeclaration returns [ConstructorDeclaration cd]
 	:
 		{$cd = new ConstructorDeclaration();}
+    	(an = annotation {$cd.getAnnotations().add($an.an);})*
 		methodDeclaration[{$cd}]
 	;
 	
@@ -267,6 +268,7 @@ constructorDeclaration returns [ConstructorDeclaration cd]
 msgsrvDeclaration returns [MsgsrvDeclaration md]
     :
 		{$md = new MsgsrvDeclaration();}
+    	(an = annotation {$md.getAnnotations().add($an.an);})*
 		(ABSTRACT {$md.setAbstract(true);})? MSGSRV
 		methodDeclaration[{$md}]
 	;
@@ -274,6 +276,7 @@ msgsrvDeclaration returns [MsgsrvDeclaration md]
 synchMethodDeclaration returns [SynchMethodDeclaration smd]
 	:
         {$smd = new SynchMethodDeclaration();}
+    	(an = annotation {$smd.getAnnotations().add($an.an);})*
         (ABSTRACT {$smd.setAbstract(true);})? t = type {$smd.setReturnType($t.t);}
 		methodDeclaration[{$smd}]
 	;

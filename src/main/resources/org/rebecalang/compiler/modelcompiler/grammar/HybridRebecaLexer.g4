@@ -17,3 +17,6 @@ GUARD
 PRIORITIES
 	:	'priorities'
 	;
+PRIME
+	:	'\''
+	;

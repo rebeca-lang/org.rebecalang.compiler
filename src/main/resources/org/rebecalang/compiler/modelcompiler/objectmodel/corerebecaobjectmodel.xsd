@@ -148,6 +148,7 @@
 			<xs:element name="formalParameters" type="FormalParameterDeclaration" maxOccurs="unbounded" minOccurs="0"/>
 			<xs:element name="block" type="BlockStatement"/>
 			<xs:element name="accessModifier" type="AccessModifier"/>
+	        <xs:element name="annotations" type="exp:Annotation" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="abstract" type="xs:boolean" default="false"/>
 		<xs:attribute name="name" type="xs:string"/>
