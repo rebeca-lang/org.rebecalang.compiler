@@ -118,9 +118,13 @@ public class SymbolTable {
 				else if ( label == CoreRebecaLabelUtility.SYNCH_METHOD || 
 						label == CoreRebecaLabelUtility.BUILT_IN_METHOD )
 					type = ((SynchMethodDeclaration)methodDecleration).getReturnType();
+				List<String> paramsName = new LinkedList<String>();
+				for(FormalParameterDeclaration parameterDeclaration : methodDecleration.getFormalParameters() ) {
+					paramsName.add(parameterDeclaration.getName());
+				}
 				MethodInSymbolTableSpecifier newMethod = 
 						new MethodInSymbolTableSpecifier(methodDecleration.getName(),
-								label, type, newMethodArguments);
+								label, type, newMethodArguments, paramsName);
 				signatures.add(newMethod);
 			} else {
 				String exceptionMessage = "Duplicate method " + methodDecleration.getName()
@@ -168,7 +172,7 @@ public class SymbolTable {
 		MethodInSymbolTableSpecifier foundSignature = null;
 		if (!candidates.isEmpty()) {
 			for (MethodInSymbolTableSpecifier signature : candidates) {
-				if (TypesUtilities.areTheSame(lookFor, signature.getArguments(),
+				if (TypesUtilities.areTheSame(lookFor, signature.getArgumentsTypes(),
 						comp)) {
 					if (foundSignature == null) {
 						foundSignature = signature;
@@ -196,16 +200,18 @@ public class SymbolTable {
 		private String name;
 		private Label label;
 		private Type returnValue;
-		private LinkedList<Type> arguments;
+		private List<Type> argumentsTypes;
+		private List<String> argumentsNames;
 		
 
 		public MethodInSymbolTableSpecifier(String name, Label label,
-				Type returnValue, LinkedList<Type> arguments) {
+				Type returnValue, List<Type> arguments, List<String> argumentsNames) {
 			super();
 			this.name = name;
 			this.label = label;
 			this.returnValue = returnValue;
-			this.arguments = arguments;
+			this.argumentsTypes = arguments;
+			this.setArgumentsNames(argumentsNames);
 		}
 		public String getName() {
 			return name;
@@ -225,11 +231,17 @@ public class SymbolTable {
 		public void setReturnValue(Type returnValue) {
 			this.returnValue = returnValue;
 		}
-		public LinkedList<Type> getArguments() {
-			return arguments;
+		public List<Type> getArgumentsTypes() {
+			return argumentsTypes;
 		}
 		public void setArguments(LinkedList<Type> arguments) {
-			this.arguments = arguments;
+			this.argumentsTypes = arguments;
+		}
+		public List<String> getArgumentsNames() {
+			return argumentsNames;
+		}
+		public void setArgumentsNames(List<String> argumentsNames) {
+			this.argumentsNames = argumentsNames;
 		}
 	}
 

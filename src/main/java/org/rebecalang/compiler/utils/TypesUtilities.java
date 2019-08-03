@@ -213,6 +213,10 @@ public class TypesUtilities {
 
 	}
 
+	public void addNewType(OrdinaryPrimitiveType newType) {
+		types.put(newType.getName(), newType);
+	}
+	
 	public void addReactiveClassType(ReactiveClassDeclaration rcd) {		
 		OrdinaryPrimitiveType type = new OrdinaryPrimitiveType();
 		type.setName(rcd.getName());

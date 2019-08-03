@@ -293,7 +293,6 @@
 					<xs:element name="variableDeclarators" type="VariableDeclarator" maxOccurs="unbounded" minOccurs="0"/>
 					<xs:element name="type" type="exp:Type"/>
 					<xs:element name="accessModifier" type="AccessModifier"/>
-	                <xs:element name="annotations" type="exp:Annotation" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
     		</xs:extension>
     	</xs:complexContent>

@@ -280,8 +280,9 @@ primary returns [TermPrimary tp]
     ;
 
 expressionList returns [List<Expression> el]
-    :   {$el = new LinkedList<Expression>();}
-        e = expression {$el.add($e.e);} (COMMA e = expression {$el.add($e.e);})*
+    :   {$el = new LinkedList<Expression>(); LinkedList<Annotation> ans = new LinkedList<Annotation>();}
+        (a = annotation {ans.add($a.an);})* e = expression {$e.e.getAnnotations().addAll(ans); ans.clear(); $el.add($e.e);} 
+		(COMMA (a = annotation {ans.add($a.an);})* e = expression {$e.e.getAnnotations().addAll(ans); ans.clear(); $el.add($e.e);})*
     ;
 
 	

@@ -4,8 +4,10 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.ExceptionContainer;
+import org.rebecalang.compiler.utils.Pair;
 
 public class RebecaCompilerTestCase {
 
@@ -40,10 +42,24 @@ public class RebecaCompilerTestCase {
 		Set<CompilerFeature> features = new HashSet<CompilerFeature>();
 		features.add(CompilerFeature.CORE_2_1);
 		features.add(CompilerFeature.TIMED_REBECA);
-//		File rebecaFile = new File(base + "/structure.rebeca");
-		File rebecaFile = new File("/Users/ekhamespanah/Desktop/Academics/Rebeca/workspace/org.rebecalang.rmc/src/test/resources/org/rebecalang/rmc/testcase/TinyOSPV6-TDMA.rebeca");
+		File rebecaFile = new File(base + "/structure.rebeca");
+//		File rebecaFile = new File("/Users/ekhamespanah/Desktop/Academics/Rebeca/workspace/org.rebecalang.rmc/src/test/resources/org/rebecalang/rmc/testcase/TinyOSPV6-TDMA.rebeca");
 		RebecaCompiler compiler = new RebecaCompiler();
-		compiler.compileRebecaFile(rebecaFile, features);
+		Pair<RebecaModel,SymbolTable> compileRebecaFile = compiler.compileRebecaFile(rebecaFile, features);
+		if(compiler.getExceptionContainer().getExceptions().size() != 0) {
+			throw compiler.getExceptionContainer();
+		}
+	}
+
+//	@Test()
+	public void testHybridRebeca() throws Exception {
+		Set<CompilerFeature> features = new HashSet<CompilerFeature>();
+		features.add(CompilerFeature.CORE_2_3);
+		features.add(CompilerFeature.HYBRID_REBECA);
+		File rebecaFile = new File(base + "/VendingMachine.rebeca");
+//		File rebecaFile = new File("/Users/ekhamespanah/Desktop/Academics/Rebeca/workspace/org.rebecalang.rmc/src/test/resources/org/rebecalang/rmc/testcase/TinyOSPV6-TDMA.rebeca");
+		RebecaCompiler compiler = new RebecaCompiler();
+		Pair<RebecaModel,SymbolTable> compileRebecaFile = compiler.compileRebecaFile(rebecaFile, features);
 		if(compiler.getExceptionContainer().getExceptions().size() != 0) {
 			throw compiler.getExceptionContainer();
 		}
@@ -81,7 +97,7 @@ public class RebecaCompilerTestCase {
 		try {
 			
 			RebecaCompilerTestCase rcts = new RebecaCompilerTestCase();
-			rcts.testTimedRebeca();
+			rcts.testHybridRebeca();
 //			rcts.testRebeca2_2();
 //			rcts.testProbabilisticTimedRebeca();
 //			rcts.testProbabilisticRebeca();

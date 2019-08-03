@@ -129,7 +129,7 @@ public abstract class AbstractCompilerFacade {
 		}
 	}
 
-	private void fillTypeSystem() {
+	protected void fillTypeSystem() {
 		for (ReactiveClassDeclaration reactiveClassDeclaration : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
 			if(TypesUtilities.getInstance().hasType(reactiveClassDeclaration.getName())) {
 				CodeCompilationException rce = new CodeCompilationException(
@@ -230,7 +230,7 @@ public abstract class AbstractCompilerFacade {
 
 
 	@SafeVarargs
-	private final void addGlobalMethodToSymbolTable(Label methodLabel, Type base, String name, Type returnType, Pair<Type,String>... arguments) {
+	protected final void addGlobalMethodToSymbolTable(Label methodLabel, Type base, String name, Type returnType, Pair<Type,String>... arguments) {
 
 		SynchMethodDeclaration methodDeclaration = new SynchMethodDeclaration();
 		methodDeclaration.setName(name);
@@ -250,7 +250,7 @@ public abstract class AbstractCompilerFacade {
 		}
 	}
 
-	private void addGlobalMethods() {
+	protected void addingGlobalMethods() {
 		try {
 			GenericType genericListType = (GenericType)TypesUtilities.getInstance().getType("ArrayList<?>");
 			GenericTypeInstance genericTypeInstanceListOfActors = new GenericTypeInstance();
@@ -283,75 +283,21 @@ public abstract class AbstractCompilerFacade {
 	}
 
 	protected void initalizeSymbolTable() {
-		addGlobalMethods();
+		addingGlobalMethods();
 
 		if (rebecaModel.getRebecaCode().getEnvironmentVariables() != null) {
 			addFields(null, rebecaModel.getRebecaCode().getEnvironmentVariables(), AccessModifierUtilities.PUBLIC);
 		}
 
 
-		for (InterfaceDeclaration interfaceDeclaration : rebecaModel.getRebecaCode().getInterfaceDeclaration()) {
+		addingInterfacesToSymbolTableInInitialization();
 
-			checkForInterfaceInheritanceLoop(interfaceDeclaration);
+		addingReactiveclassesToSymbolTableInInitialization();
+		interfaceCollisionDetection();
+	}
 
-			try {
-				Type type = TypesUtilities.getInstance().getType(interfaceDeclaration.getName());
-				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getSynchMethods()) {
-					SynchMethodDeclaration smd = (SynchMethodDeclaration) methodDeclaration;
-					try {
-						smd.setReturnType(TypesUtilities.getInstance().getType(smd.getReturnType()));
-					}catch (CodeCompilationException e) {
-						smd.setReturnType(TypesUtilities.UNKNOWN_TYPE);
-						exceptionContainer.addException(e);
-					}
-					if (methodDeclaration.getName().equals(
-							interfaceDeclaration.getName())) {
-						exceptionContainer
-						.addException(new CodeCompilationException(
-								"Interfaces cannot have constructor",
-								methodDeclaration.getLineNumber(),
-								methodDeclaration.getCharacter()));
-					} else
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PROTECTED, CoreRebecaLabelUtility.SYNCH_METHOD);
-				}
-				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getMsgsrvs()) {
-					if (methodDeclaration.getName().equals(
-							interfaceDeclaration.getName())) {
-						exceptionContainer
-						.addException(new CodeCompilationException(
-								"Invalid usage of message-server specifier for the constructor",
-								methodDeclaration.getLineNumber(),
-								methodDeclaration.getCharacter()));
-					} else
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.MSGSRV);
-				}
-			} catch (CodeCompilationException e) {
-				e.printStackTrace();
-			}
-			for (Type implementedInterfaceDeclaration : interfaceDeclaration.getExtends()) {
 
-				try {
-					if(!TypesUtilities.getInstance().hasType(implementedInterfaceDeclaration)) {
-						CodeCompilationException rce = new CodeCompilationException(
-								"Unknown interface "
-										+ TypesUtilities.getTypeName(implementedInterfaceDeclaration),
-										implementedInterfaceDeclaration.getLineNumber(),
-										implementedInterfaceDeclaration.getCharacter());
-						exceptionContainer.addException(rce);
-					} else if (!(TypesUtilities.getInstance().getMetaData(implementedInterfaceDeclaration) instanceof InterfaceDeclaration)) {
-						exceptionContainer
-						.addException(new CodeCompilationException(
-								"Interfaces can only extend other interfaces",
-								interfaceDeclaration.getLineNumber(),
-								interfaceDeclaration.getCharacter()));
-					}
-				} catch (CodeCompilationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
+	protected void addingReactiveclassesToSymbolTableInInitialization() {
 		for (ReactiveClassDeclaration reactiveClassDeclaration : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
 
 			hasInheritanceLoop(reactiveClassDeclaration);
@@ -448,7 +394,71 @@ public abstract class AbstractCompilerFacade {
 				e.printStackTrace();
 			}
 		}
-		interfaceCollisionDetection();
+	}
+
+
+	protected void addingInterfacesToSymbolTableInInitialization() {
+		for (InterfaceDeclaration interfaceDeclaration : rebecaModel.getRebecaCode().getInterfaceDeclaration()) {
+
+			checkForInterfaceInheritanceLoop(interfaceDeclaration);
+
+			try {
+				Type type = TypesUtilities.getInstance().getType(interfaceDeclaration.getName());
+				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getSynchMethods()) {
+					SynchMethodDeclaration smd = (SynchMethodDeclaration) methodDeclaration;
+					try {
+						smd.setReturnType(TypesUtilities.getInstance().getType(smd.getReturnType()));
+					}catch (CodeCompilationException e) {
+						smd.setReturnType(TypesUtilities.UNKNOWN_TYPE);
+						exceptionContainer.addException(e);
+					}
+					if (methodDeclaration.getName().equals(
+							interfaceDeclaration.getName())) {
+						exceptionContainer
+						.addException(new CodeCompilationException(
+								"Interfaces cannot have constructor",
+								methodDeclaration.getLineNumber(),
+								methodDeclaration.getCharacter()));
+					} else
+						addMethod(type, methodDeclaration, AccessModifierUtilities.PROTECTED, CoreRebecaLabelUtility.SYNCH_METHOD);
+				}
+				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getMsgsrvs()) {
+					if (methodDeclaration.getName().equals(
+							interfaceDeclaration.getName())) {
+						exceptionContainer
+						.addException(new CodeCompilationException(
+								"Invalid usage of message-server specifier for the constructor",
+								methodDeclaration.getLineNumber(),
+								methodDeclaration.getCharacter()));
+					} else
+						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.MSGSRV);
+				}
+			} catch (CodeCompilationException e) {
+				e.printStackTrace();
+			}
+			for (Type implementedInterfaceDeclaration : interfaceDeclaration.getExtends()) {
+
+				try {
+					if(!TypesUtilities.getInstance().hasType(implementedInterfaceDeclaration)) {
+						CodeCompilationException rce = new CodeCompilationException(
+								"Unknown interface "
+										+ TypesUtilities.getTypeName(implementedInterfaceDeclaration),
+										implementedInterfaceDeclaration.getLineNumber(),
+										implementedInterfaceDeclaration.getCharacter());
+						exceptionContainer.addException(rce);
+					} else if (!(TypesUtilities.getInstance().getMetaData(implementedInterfaceDeclaration) instanceof InterfaceDeclaration)) {
+						exceptionContainer
+						.addException(new CodeCompilationException(
+								"Interfaces can only extend other interfaces",
+								interfaceDeclaration.getLineNumber(),
+								interfaceDeclaration.getCharacter()));
+					}
+				} catch (CodeCompilationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private void interfaceCollisionDetection() {

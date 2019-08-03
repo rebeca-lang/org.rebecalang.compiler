@@ -9,7 +9,6 @@ import java.util.Stack;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
-import org.hamcrest.core.IsInstanceOf;
 import org.rebecalang.compiler.modelcompiler.AbstractCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.ScopeHandler;
@@ -136,6 +135,10 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				compilerFeatures.contains(CompilerFeature.CORE_2_1) ||
 				compilerFeatures.contains(CompilerFeature.CORE_2_2));
 	}
+	
+	
+	
+	
 	@Override
 	public void semanticCheck(Set<CompilerFeature> features) {
 
@@ -148,7 +151,6 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 				.getReactiveClassDeclaration()) {
 			//Initializing the scope stack
 			scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.REACTIVE_CLASS);
-
 
 			if((rcd.getExtends() != null || rcd.isAbstract()) && !coreVersionIsCompatibleWithInheritanceAndInterfaceDeclaration()) {
 
