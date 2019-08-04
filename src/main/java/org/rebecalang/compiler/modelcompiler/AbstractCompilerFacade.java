@@ -256,7 +256,7 @@ public abstract class AbstractCompilerFacade {
 			GenericTypeInstance genericTypeInstanceListOfActors = new GenericTypeInstance();
 			genericTypeInstanceListOfActors.setBase(genericListType);
 			genericTypeInstanceListOfActors.getParameters().add(TypesUtilities.REACTIVE_CLASS_TYPE);
-			addGlobalMethodToSymbolTable(CoreRebecaLabelUtility.SYNCH_METHOD, null, "getAllActors", genericTypeInstanceListOfActors);
+			addGlobalMethodToSymbolTable(CoreRebecaLabelUtility.BUILT_IN_METHOD, null, "getAllActors", genericTypeInstanceListOfActors);
 
 			addGlobalMethodToSymbolTable(CoreRebecaLabelUtility.BUILT_IN_METHOD, genericListType, "size",  TypesUtilities.INT_TYPE);
 
@@ -274,10 +274,10 @@ public abstract class AbstractCompilerFacade {
 				new Pair<Type,String>(TypesUtilities.DOUBLE_TYPE, "arg0"),
 				new Pair<Type,String>(TypesUtilities.DOUBLE_TYPE, "arg1"));
 
-		addGlobalMethodToSymbolTable(CoreRebecaLabelUtility.ASSERTION, null, "assertion", TypesUtilities.VOID_TYPE,
+		addGlobalMethodToSymbolTable(CoreRebecaLabelUtility.BUILT_IN_METHOD, null, "assertion", TypesUtilities.VOID_TYPE,
 				new Pair<Type,String>(TypesUtilities.BOOLEAN_TYPE, "arg0") );
 
-		addGlobalMethodToSymbolTable(CoreRebecaLabelUtility.ASSERTION, null, "assertion", TypesUtilities.VOID_TYPE,
+		addGlobalMethodToSymbolTable(CoreRebecaLabelUtility.BUILT_IN_METHOD, null, "assertion", TypesUtilities.VOID_TYPE,
 				new Pair<Type,String>(TypesUtilities.BOOLEAN_TYPE, "arg0"),
 				new Pair<Type,String>(TypesUtilities.STRING_TYPE, "arg1"));
 	}

@@ -10,7 +10,7 @@ public class CoreRebecaLabelUtility {
 	public final static Label MSGSRV;
 	public final static Label CONSTRUCTOR;
 	public final static Label MAIN;
-	public final static Label ASSERTION;
+	private final static Label ASSERTION;
 
 	public static final Label LOOP_STATEMENT;
 	public static final Label SWITCH_STATEMENT;
