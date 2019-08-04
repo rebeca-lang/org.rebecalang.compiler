@@ -201,7 +201,7 @@ public abstract class GeneralPropertyCompiler {
 			}
 		}
 		
-		scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.ASSERTION);
+		scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.BUILT_IN_METHOD);
 		for (AssertionDefinition definition : propertyModel.getAssertionDefinitions()) {
 			Pair<Type,Object> checkingResult = expressionSemanticCheckContainer.check(definition.getExpression());
 			try {
