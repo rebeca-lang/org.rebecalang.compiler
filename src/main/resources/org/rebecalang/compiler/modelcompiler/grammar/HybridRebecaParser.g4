@@ -38,21 +38,28 @@ physicalClassDeclaration returns[PhysicalClassDeclaration pcd]
 
 		(	cd = constructorDeclaration {$pcd.getConstructors().add($cd.cd);}
 		|	smd = synchMethodDeclaration {$pcd.getSynchMethods().add($smd.smd);}
-		|   modeDeclaration
+		|   md = modeDeclaration {$pcd.getModeDeclarations().add($md.md);}
 		)*
         RBRACE {$pcd.setEndLineNumber($RBRACE.getLine());$pcd.setEndCharacter($RBRACE.getCharPositionInLine());}
     ;
-modeDeclaration 
+modeDeclaration returns[ModeDeclaration md]
 	:
-	MODE IDENTIFIER LBRACE
-	INV (expression) LBRACE
-		(expression SEMI)*
-	RBRACE
-	GUARD (expression) LBRACE
-		(expression SEMI)*
-	RBRACE
+	{$md = new ModeDeclaration(); 
+	 GuardDeclaration gd = new GuardDeclaration(); $md.setGuardDeclaration(gd);
+	 InvariantDeclaration id = new InvariantDeclaration(); $md.setInvariantDeclaration(id);}
+	MODE modeName = IDENTIFIER 
+	{	$md.setName($modeName.text); 
+		$md.setLineNumber($MODE.getLine()); $md.setCharacter($MODE.getCharPositionInLine());
+	}
+	LBRACE
+	INV LPAREN (e = expression {id.setCondition($e.e);}) RPAREN
+		b = block {id.setBlock($b.bs);id.setCharacter($INV.getCharPositionInLine());id.setLineNumber($INV.getLine());}
+	
+	GUARD LPAREN (expression {gd.setCondition($e.e);}) RPAREN
+		b = block {gd.setBlock($b.bs);gd.setCharacter($GUARD.getCharPositionInLine());gd.setLineNumber($GUARD.getLine());}
 	RBRACE
 	;
+    
     
 primary returns [TermPrimary tp]
     :   

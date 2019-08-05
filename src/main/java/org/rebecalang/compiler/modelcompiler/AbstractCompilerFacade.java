@@ -4,13 +4,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -672,7 +670,7 @@ public abstract class AbstractCompilerFacade {
 
 	}
 
-	private class MethodSignatureBean {
+	public class MethodSignatureBean {
 		String methodName;
 		LinkedList<Type> parametersType;
 		public MethodSignatureBean(String name, LinkedList<Type> parameters) {

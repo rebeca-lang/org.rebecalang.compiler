@@ -10,7 +10,6 @@ public class CoreRebecaLabelUtility {
 	public final static Label MSGSRV;
 	public final static Label CONSTRUCTOR;
 	public final static Label MAIN;
-	private final static Label ASSERTION;
 
 	public static final Label LOOP_STATEMENT;
 	public static final Label SWITCH_STATEMENT;
@@ -40,8 +39,6 @@ public class CoreRebecaLabelUtility {
 		CONSTRUCTOR.setName("constructor");
 		MAIN = new Label();
 		MAIN.setName("main");
-		ASSERTION = new Label();
-		ASSERTION.setName("assertion");
 		
 		LOOP_STATEMENT = new Label();
 		LOOP_STATEMENT.setName("loop");

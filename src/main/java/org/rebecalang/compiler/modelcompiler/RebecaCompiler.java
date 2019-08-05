@@ -2,11 +2,10 @@ package org.rebecalang.compiler.modelcompiler;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Set;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompilerFacade;
@@ -30,7 +29,7 @@ public class RebecaCompiler {
 	private ExceptionContainer exceptionContainer = new ExceptionContainer();
 	
 	private AbstractCompilerFacade getAppropriateCompilerFacade(
-			Set<CompilerFeature> features, ANTLRInputStream input)
+			Set<CompilerFeature> features, CharStream input)
 			throws CodeCompilationException {
 		
 		if (!(features.contains(CompilerFeature.CORE_2_0) ^ 
@@ -39,34 +38,14 @@ public class RebecaCompiler {
 				features.contains(CompilerFeature.CORE_2_3))) {
 			throw createFeaturesIncompatibilityMessage(features);
 		}
-		if (features.contains(CompilerFeature.TIMED_REBECA)
-				&& features.contains(CompilerFeature.SYSTEM_C)) {
-			throw createFeaturesIncompatibilityMessage(features);
-		}
-		if (features.contains(CompilerFeature.PROBABILISTIC_REBECA)
-				&& features.contains(CompilerFeature.SYSTEM_C)) {
-			throw createFeaturesIncompatibilityMessage(features);
-		}
 
 		if (features.contains(CompilerFeature.TIMED_REBECA)
-				|| features.contains(CompilerFeature.PROBABILISTIC_REBECA)) {
-			if (!(features.contains(CompilerFeature.CORE_2_1) || features.contains(CompilerFeature.CORE_2_2) 
-					|| features.contains(CompilerFeature.CORE_2_3)))
+				|| features.contains(CompilerFeature.PROBABILISTIC_REBECA)
+				|| features.contains(CompilerFeature.HYBRID_REBECA)) {
+			if (features.contains(CompilerFeature.CORE_2_0))
 				throw createFeaturesIncompatibilityMessage(features);
 		}
-		if (features.contains(CompilerFeature.HYBRID_REBECA)
-				&& features.contains(CompilerFeature.CORE_2_0)) {
-			throw createFeaturesIncompatibilityMessage(features);
-		}
-		if (features.contains(CompilerFeature.SYSTEM_C)
-				&& !features.contains(CompilerFeature.CORE_2_0)) {
-			throw createFeaturesIncompatibilityMessage(features);
-		}
 
-		if (features.contains(CompilerFeature.SYSTEM_C)) {
-			//Todo implement systemc feature
-			throw createFeaturesIncompatibilityMessage(features);
-		}
 		if (features.contains(CompilerFeature.PROBABILISTIC_REBECA) && features.contains(CompilerFeature.TIMED_REBECA)) {
 			ProbabilisticTimedRebecaCompleteLexer lexer = new ProbabilisticTimedRebecaCompleteLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -113,7 +92,8 @@ public class RebecaCompiler {
 		exceptionContainer.clear();
 
 		try {
-			ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(rebecaFile));
+			CharStream input = CharStreams.fromStream(new FileInputStream(rebecaFile));
+//			ANTLRInputStream input = new ANTLRInputStream();
 			AbstractCompilerFacade compilerFacade = getAppropriateCompilerFacade(compilerFeatures, input);
 			compilerFacade.compile();
 			if (exceptionContainer.exceptionsIsEmpty() && performSemanticCheck) {
@@ -132,32 +112,6 @@ public class RebecaCompiler {
 	public void generateXMLFromRebecaFiles(File rebecaFile,
 			File destinationXMLFile, Set<CompilerFeature> features)
 			throws ExceptionContainer {
-//		Writer output;
-//		ExceptionContainer container = new ExceptionContainer();
-//		try {
-//			ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(
-//					rebecaFile));
-//			CoreRebecaCompleteLexer lexer = new CoreRebecaCompleteLexer(input);
-//			CommonTokenStream tokens = new CommonTokenStream(lexer);
-//			AbstractCompilerFacade parser = new CoreRebecaCompleteCompilerFacade(tokens, features);
-//			RebecaModel rebecaModel = parser.compile(features);
-//			parser.semanticCheck(features);
-//			output = new BufferedWriter(new FileWriter(destinationXMLFile));
-//			JAXBContext Context = JAXBContext.newInstance("rebecaobjectmodel");
-//			Marshaller marshaller = Context.createMarshaller();
-//			marshaller.marshal(rebecaModel, output);
-//
-//		} catch (JAXBException e) {
-//			container.addException(e);
-//		} catch (FileNotFoundException e) {
-//			container.addException(e);
-//		} catch (RecognitionException e) {
-//			container.addException(e);
-//		} catch (IOException e) {
-//			container.addException(e);
-//		}
-//		if (container.getExceptions().size() > 0)
-//			throw container;
 	}
 	
 	public ExceptionContainer getExceptionContainer() {
