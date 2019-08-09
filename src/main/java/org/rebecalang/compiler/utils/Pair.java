@@ -2,6 +2,7 @@ package org.rebecalang.compiler.utils;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class Pair<A, B> implements Serializable {
     private A first;
     private B second;

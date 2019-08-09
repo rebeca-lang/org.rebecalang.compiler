@@ -128,6 +128,7 @@ public abstract class AbstractCompilerFacade {
 	}
 
 	protected void fillTypeSystem() {
+		TypesUtilities.getInstance().clear();
 		for (ReactiveClassDeclaration reactiveClassDeclaration : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
 			if(TypesUtilities.getInstance().hasType(reactiveClassDeclaration.getName())) {
 				CodeCompilationException rce = new CodeCompilationException(

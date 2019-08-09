@@ -19,7 +19,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 
 public class TypesUtilities {
 
-	static TypesUtilities object;
+	static TypesUtilities instance;
 
 	private Map<String, Type> types;
 	private Map<Type, BaseClassDeclaration> reactiveClassesAndInterfacesMetaData;
@@ -106,10 +106,18 @@ public class TypesUtilities {
 		CONSTRUCTOR_TYPE = new OrdinaryPrimitiveType();
 		CONSTRUCTOR_TYPE.setName("constructor");
 
-		object = new TypesUtilities();
+		instance = new TypesUtilities();
 	}
 
 	TypesUtilities() {
+		initializeTypeSystem();
+	}
+	
+	public void clear() {
+		initializeTypeSystem();
+	}
+
+	private void initializeTypeSystem() {
 		//This field is a map; that for a given type it contains a set of Types 
 		// which are its parent types. Note that because of multiple interface
 		// implementation, it may contains more than one direct parent
@@ -149,7 +157,7 @@ public class TypesUtilities {
 	}
 
 	public static TypesUtilities getInstance() {
-		return object;
+		return instance;
 	}
 
 	public boolean hasType(String typeName) {
@@ -294,15 +302,6 @@ public class TypesUtilities {
 		}
 		return false;
 	}
-
-	//	public Type getSuperType(Type lType, Type rType)
-	//			throws CodeCompilationException {
-	//		if (canTypeUpCastTo(lType, rType))
-	//			return rType;
-	//		if (canTypeUpCastTo(rType, lType))
-	//			return lType;
-	//		throw getTypeMismatchException(lType, rType);
-	//	}
 
 	public static boolean areTheSame(List<Type> base, List<Type> target,
 			Comparator<Type> comp) {
