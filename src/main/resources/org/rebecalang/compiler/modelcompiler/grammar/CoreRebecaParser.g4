@@ -339,7 +339,7 @@ statement returns [Statement s]
     |   BREAK SEMI
     	{$s = new BreakStatement(); $s.setLineNumber($BREAK.getLine());$s.setCharacter($BREAK.getCharPositionInLine());}
     |   CONTINUE SEMI
-    	{$s = new BreakStatement(); $s.setLineNumber($CONTINUE.getLine());$s.setCharacter($CONTINUE.getCharPositionInLine());}
+    	{$s = new ContinueStatement(); $s.setLineNumber($CONTINUE.getLine());$s.setCharacter($CONTINUE.getCharPositionInLine());}
     |   SEMI {$s = new Statement();}
     |   se = statementExpression {$s = $se.se;} SEMI
 	;

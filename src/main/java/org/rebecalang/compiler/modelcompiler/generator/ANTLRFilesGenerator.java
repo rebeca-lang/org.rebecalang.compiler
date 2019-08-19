@@ -10,10 +10,10 @@ public class ANTLRFilesGenerator {
 //				base.replaceFirst("loc", "java") + "/corerebeca/compiler",
 //				grammarBase + "/CoreRebecaComplete.g4" };
 
-		antlrArgs = new String[] {
-				"-Xexact-output-dir", "-o", base.replaceFirst("loc", "java") + "/probabilistictimedrebeca/compiler",
-				"-lib", ".",
-				grammarBase + "/ProbabilisticTimedRebecaComplete.g4" };
+//		antlrArgs = new String[] {
+//				"-Xexact-output-dir", "-o", base.replaceFirst("loc", "java") + "/probabilistictimedrebeca/compiler",
+//				"-lib", ".",
+//				grammarBase + "/ProbabilisticTimedRebecaComplete.g4" };
 
 //		antlrArgs = new String[] { "-Xexact-output-dir", "-o",
 //				base.replaceFirst("loc", "java") + "/timedrebeca/compiler",
@@ -24,9 +24,9 @@ public class ANTLRFilesGenerator {
 //				grammarBase + "/ProbabilisticRebecaComplete.g4" 
 //				};
 		
-//		antlrArgs = new String[] { "-Xexact-output-dir", "-o",
-//				base.replaceFirst("loc", "java") + "/hybridrebeca/compiler",
-//				grammarBase + "/HybridRebecaComplete.g4" };
+		antlrArgs = new String[] { "-Xexact-output-dir", "-o",
+				base.replaceFirst("loc", "java") + "/hybridrebeca/compiler",
+				grammarBase + "/HybridRebecaComplete.g4" };
 
 		org.antlr.v4.Tool.main(antlrArgs);
 

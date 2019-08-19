@@ -2515,7 +2515,7 @@ public class TimedRebecaCompleteParser extends Parser {
 				((StatementContext)_localctx).CONTINUE = match(CONTINUE);
 				setState(590);
 				match(SEMI);
-				((StatementContext)_localctx).s =  new BreakStatement(); _localctx.s.setLineNumber(((StatementContext)_localctx).CONTINUE.getLine());_localctx.s.setCharacter(((StatementContext)_localctx).CONTINUE.getCharPositionInLine());
+				((StatementContext)_localctx).s =  new ContinueStatement(); _localctx.s.setLineNumber(((StatementContext)_localctx).CONTINUE.getLine());_localctx.s.setCharacter(((StatementContext)_localctx).CONTINUE.getCharPositionInLine());
 				}
 				break;
 			case 10:
