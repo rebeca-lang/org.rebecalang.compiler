@@ -95,6 +95,7 @@ mainDeclaration returns [MainDeclaration md]
 mainRebecDefinition returns [MainRebecDefinition mrd]
 	:	
 		{$mrd = new MainRebecDefinition();}
+    	(an = annotation {$mrd.getAnnotations().add($an.an);})*
 		t = type rebecName = IDENTIFIER {$mrd.setType($t.t);$mrd.setName($rebecName.text);
 			$mrd.setLineNumber($rebecName.getLine()); $mrd.setCharacter($rebecName.getCharPositionInLine());}
 		LPAREN (el = expressionList {$mrd.getBindings().addAll($el.el);})? RPAREN 

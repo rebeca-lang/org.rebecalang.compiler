@@ -8,6 +8,8 @@
 			<xs:element name="value" type="Expression" />
 		</xs:sequence>
 		<xs:attribute name="identifier" type="xs:string" />
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
 	</xs:complexType>
 
 	<xs:complexType name="Statement">

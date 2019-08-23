@@ -2,7 +2,10 @@ parser grammar CoreRebecaExpressionParser;
 
 annotation returns [Annotation an]
     :   {$an = new Annotation();} 
-    	'@' annotationName = IDENTIFIER {$an.setIdentifier($annotationName.text);}
+    	'@' annotationName = IDENTIFIER 
+    	{$an.setIdentifier($annotationName.text);
+    	 $an.setLineNumber($annotationName.getLine());
+    	 $an.setCharacter($annotationName.getCharPositionInLine());}
     	( LPAREN ( exp = expression {$an.setValue($exp.e);} )? RPAREN )?
     ;
 
