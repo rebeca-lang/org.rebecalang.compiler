@@ -24,21 +24,22 @@ import org.rebecalang.compiler.utils.TypesUtilities;
 
 public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompilerFacade {
 
+	private PriorityType modelPriorityType;
+
 	public TimedRebecaCompleteCompilerFacade(CommonTokenStream tokens,
 			Set<CompilerFeature> features, ExceptionContainer exceptionContainer) {
 		super(TimedRebecaCompleteParser.class, tokens, features, exceptionContainer);
-//		initialize();
 	}
 	
 	public TimedRebecaCompleteCompilerFacade(Class<? extends Parser> parser, CommonTokenStream tokens,
 			Set<CompilerFeature> features, ExceptionContainer exceptionContainer) {
 		super(parser, tokens, features, exceptionContainer);
-//		initialize();
 	}
 	
 	
 	protected void initialize() {
 		super.initialize();
+		modelPriorityType = PriorityType.None;
 		statementSemanticCheckContainer.getExpressionSemanticCheckContainer().
 			registerTranslator(TermPrimary.class, new TimedPrimaryTermSemanticCheck());
 
@@ -71,34 +72,68 @@ public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompilerFacade 
 	
 	protected void checkPriorityAnnotations(List<Annotation> annotations) {
 		for (Annotation annotation : annotations) {
-			if (annotation.getIdentifier().equals("priority")) {
+			if (annotation.getIdentifier().equals("priority") || annotation.getIdentifier().equals("globalPriority")) {
+				if (annotation.getIdentifier().equals("priority"))
+					if(conflictInPriorityType(PriorityType.local, annotation)) 
+						continue;
+				if (annotation.getIdentifier().equals("globalPriority"))
+					if(conflictInPriorityType(PriorityType.global, annotation)) 
+						continue;
+				
 				Pair<Type, Object> valueCheckResult = statementSemanticCheckContainer.check(annotation.getValue());
-				if (!TypesUtilities.getInstance().canTypeUpCastTo(valueCheckResult.getFirst(), TypesUtilities.INT_TYPE)) {
-					CodeCompilationException cce = new CodeCompilationException(
-							"Value of priority must be an integer expression", annotation.getLineNumber(),
-							annotation.getCharacter());
-					exceptionContainer.addException(cce);
+				if (!checkIfTheValueOfPriorityAnnotationIsInteger(valueCheckResult, annotation))
+					continue;
+				if (!checkIfTheValueOfPriorityAnnotationIsConstantExpression(valueCheckResult.getSecond(), annotation)) {
 					continue;
 				}
-				if (valueCheckResult.getSecond() == null) {
-					CodeCompilationException cce = new CodeCompilationException(
-							"Priority value expressions must be constant expressions", annotation.getLineNumber(),
-							annotation.getCharacter());
-					exceptionContainer.addException(cce);
-					continue;
-				}
-				Literal literal = new Literal();
-				literal.setCharacter(annotation.getCharacter());
-				literal.setLineNumber(annotation.getLineNumber());
-				literal.setLiteralValue(valueCheckResult.getSecond().toString());
-				literal.setType(TypesUtilities.INT_TYPE);
-				annotation.setValue(literal);
-			} else {
-				CodeCompilationException cce = new CodeCompilationException(
-						"Unkown annotation " + annotation.getIdentifier(), annotation.getLineNumber(),
-						annotation.getCharacter());
-				exceptionContainer.addException(cce);
+				
+				setAnnotationConstantValue(annotation, valueCheckResult.getSecond());
 			}
 		}
 	}
+
+	private boolean conflictInPriorityType(PriorityType newPriorityType, Annotation annotation) {
+		if((newPriorityType == PriorityType.local && modelPriorityType == PriorityType.global) ||
+				(newPriorityType == PriorityType.global && modelPriorityType == PriorityType.local)) {
+			CodeCompilationException cce = new CodeCompilationException(
+					"Conflict between local and global priority definitions", annotation.getLineNumber(),
+					annotation.getCharacter());
+			exceptionContainer.addException(cce);
+			return true;
+		}
+		modelPriorityType = newPriorityType;
+		return false;
+	}
+
+	private void setAnnotationConstantValue(Annotation annotation, Object valueCheckResult) {
+		Literal literal = new Literal();
+		literal.setCharacter(annotation.getCharacter());
+		literal.setLineNumber(annotation.getLineNumber());
+		literal.setLiteralValue(valueCheckResult.toString());
+		literal.setType(TypesUtilities.INT_TYPE);
+		annotation.setValue(literal);
+	}
+
+	private boolean checkIfTheValueOfPriorityAnnotationIsConstantExpression(Object expressionValue, Annotation annotation) {
+		if(expressionValue == null) {
+			CodeCompilationException cce = new CodeCompilationException(
+					"Priority value expressions must be constant expressions", annotation.getLineNumber(),
+					annotation.getCharacter());
+			exceptionContainer.addException(cce);
+			return false;
+		}
+		return true;
+	}
+
+	private boolean checkIfTheValueOfPriorityAnnotationIsInteger(Pair<Type, Object> valueCheckResult, Annotation annotation) {
+		if(!TypesUtilities.getInstance().canTypeUpCastTo(valueCheckResult.getFirst(), TypesUtilities.INT_TYPE)) {
+			CodeCompilationException cce = new CodeCompilationException(
+					"Value of priority must be an integer expression", annotation.getLineNumber(),
+					annotation.getCharacter());
+			exceptionContainer.addException(cce);
+			return false;
+		}
+		return true;
+	}
+	
 }

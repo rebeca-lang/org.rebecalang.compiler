@@ -34,7 +34,6 @@ public class HybridRebecaCompleteCompilerFacade extends TimedRebecaCompleteCompi
 	public final static Label PHYSICAL_SYSTEM_MODE_LABEL = new Label();
 	static {
 		PHYSICAL_SYSTEM_MODE_TYPE.setName("PhysicalSystemModeType");
-		TypesUtilities.getInstance().addNewType(PHYSICAL_SYSTEM_MODE_TYPE);
 		PHYSICAL_SYSTEM_MODE_LABEL.setName("PhysicalSystemModeLabel");
 	}
 
@@ -146,12 +145,7 @@ public class HybridRebecaCompleteCompilerFacade extends TimedRebecaCompleteCompi
 				fpd.setName("arg0");
 				fpd.setType(PHYSICAL_SYSTEM_MODE_TYPE);
 				method.getFormalParameters().add(fpd);
-				try {
-					symbolTable.addMethod(TypesUtilities.getInstance().getType(physicalClassDeclaration.getName()), method,
-							PHYSICAL_SYSTEM_MODE_LABEL);
-				} catch (ExceptionContainer ec) {
-					exceptionContainer.addAll(ec);
-				}
+				addMethod(type, method, AccessModifierUtilities.PUBLIC, PHYSICAL_SYSTEM_MODE_LABEL);
 
 			} catch (CodeCompilationException e) {
 				e.printStackTrace();
@@ -167,9 +161,9 @@ public class HybridRebecaCompleteCompilerFacade extends TimedRebecaCompleteCompi
 	}
 	
 	protected void fillTypeSystem() {
-		TypesUtilities.getInstance().addNewType(PHYSICAL_SYSTEM_MODE_TYPE);
 		
 		super.fillTypeSystem();
+		TypesUtilities.getInstance().addNewType(PHYSICAL_SYSTEM_MODE_TYPE);
 		
 		for (ReactiveClassDeclaration physicalClassDeclaration : ((HybridRebecaCode)rebecaModel.getRebecaCode()).getPhysicalClassDeclaration()) {
 			if(TypesUtilities.getInstance().hasType(physicalClassDeclaration.getName())) {
