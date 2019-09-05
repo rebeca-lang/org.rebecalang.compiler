@@ -8,6 +8,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
@@ -43,6 +44,8 @@ public class ForStatementSemanticCheck extends AbstractStatementSemanticCheck {
 								.getCharacter());
 				exceptionContainer.addException(rce);
 			}
+			if(!(forStatement.getCondition() instanceof TermPrimary))
+				forStatement.getCondition().setType(TypesUtilities.BOOLEAN_TYPE);
 		}
 		List<Expression> expressions = forStatement.getForIncrement();
 		for (Expression expression : expressions) {

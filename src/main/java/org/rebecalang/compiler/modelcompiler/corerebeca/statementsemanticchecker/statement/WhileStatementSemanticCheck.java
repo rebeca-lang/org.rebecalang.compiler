@@ -4,6 +4,7 @@ import org.rebecalang.compiler.modelcompiler.AbstractStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStatement;
 import org.rebecalang.compiler.utils.CodeCompilationException;
@@ -26,6 +27,8 @@ public class WhileStatementSemanticCheck extends AbstractStatementSemanticCheck 
 							.getCondition().getCharacter());
 			exceptionContainer.addException(rce);
 		}
+		if(!(whileStatement.getCondition() instanceof TermPrimary))
+			whileStatement.getCondition().setType(TypesUtilities.BOOLEAN_TYPE);
 		if (whileStatement.getStatement() != null)
 			((StatementSemanticCheckContainer)defaultContainer).check(whileStatement.getStatement());
 

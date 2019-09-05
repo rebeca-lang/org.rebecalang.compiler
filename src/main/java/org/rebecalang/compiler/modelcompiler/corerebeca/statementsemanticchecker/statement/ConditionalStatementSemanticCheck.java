@@ -4,6 +4,7 @@ import org.rebecalang.compiler.modelcompiler.AbstractStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConditionalStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
@@ -25,7 +26,8 @@ public class ConditionalStatementSemanticCheck extends AbstractStatementSemantic
 					conditionalStatement.getCondition().getCharacter());
 			exceptionContainer.addException(rce);
 		}
-		conditionalStatement.getCondition().setType(TypesUtilities.BOOLEAN_TYPE);
+		if(!(conditionalStatement.getCondition() instanceof TermPrimary))
+			conditionalStatement.getCondition().setType(TypesUtilities.BOOLEAN_TYPE);
 
 		if (conditionalStatement.getStatement() != null) {
 			scopeHandler.pushScopeRecord(null);
