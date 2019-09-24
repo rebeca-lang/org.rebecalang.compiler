@@ -39,8 +39,10 @@ jobs: # a collection of steps
       - attach_workspace:
           at: /home/circleci
       - run: go get github.com/aktau/github-release
-      - run: ls -R
-      - run: github-release upload --replace --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag CircleCIRelease --file "target/compiler-2.8.6.jar" 
+      - run: cd target
+      - run: echo "${project.version}"
+      - run: export ARTIFACT=`ls *.jar`
+      - run: github-release upload --replace --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag CircleCIRelease --file "compiler-${project.version}.jar" --name 
 
 workflows:
   version: 2
