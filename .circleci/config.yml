@@ -39,7 +39,7 @@ jobs: # a collection of steps
       - attach_workspace:
           at: /home/circleci
       - run: go get github.com/aktau/github-release
-      - run: ls -all
+      - run: ls -R
       - run: github-release upload --replace --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag CircleCIRelease --file "target/*.jar" --name 
 
 workflows:
