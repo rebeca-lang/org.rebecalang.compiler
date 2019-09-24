@@ -18,7 +18,6 @@ jobs: # a collection of steps
           key: compiler
 
       - run: mvn clean package -Pexecutable # run the actual tests
-      - run: echo '${project.version}'
 
       - save_cache: # saves the project dependencies
           paths:
@@ -41,9 +40,8 @@ jobs: # a collection of steps
           at: /home/circleci
       - run: go get github.com/aktau/github-release
       - run: cd target
-      - run: echo "${project.version}"
       - run: export ARTIFACT=`ls *.jar`
-      - run: github-release upload --replace --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag CircleCIRelease --file "compiler-${project.version}.jar" --name 
+      - run: github-release upload --replace --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag CircleCIRelease --file "$ARTIFACT" --name $ARTIFACT 
 
 workflows:
   version: 2
