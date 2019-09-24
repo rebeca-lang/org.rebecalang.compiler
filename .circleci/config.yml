@@ -18,6 +18,7 @@ jobs: # a collection of steps
           key: compiler
 
       - run: mvn clean package -Pexecutable # run the actual tests
+      - run: echo '${project.version}'
 
       - save_cache: # saves the project dependencies
           paths:
