@@ -17,7 +17,7 @@ jobs: # a collection of steps
       - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
           key: compiler
 
-      - run: mvn package -Pexecutable # run the actual tests
+      - run: mvn clean package -Pexecutable # run the actual tests
 
       - save_cache: # saves the project dependencies
           paths:
