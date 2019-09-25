@@ -4,7 +4,9 @@ jobs: # a collection of steps
 
     docker: # run the steps with Docker
       - image: circleci/openjdk:10-jdk # ...with this image as the primary container; this is where all `steps` will run
+      - image: circleci/golang:1.8
 
+      - run: go get github.com/aktau/github-release
 
     working_directory: ~/compiler # directory where steps will run
 
