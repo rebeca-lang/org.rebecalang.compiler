@@ -6,12 +6,11 @@ jobs: # a collection of steps
       - image: circleci/openjdk:10-jdk # ...with this image as the primary container; this is where all `steps` will run
       - image: circleci/golang:1.8
 
-      - run: go get github.com/aktau/github-release
-
     working_directory: ~/compiler # directory where steps will run
 
     steps: # a collection of executable commands
 
+      - run: go get github.com/aktau/github-release
       - checkout # check out source code to working directory
       - setup_remote_docker:   # (2)
           docker_layer_caching: true # (3)
