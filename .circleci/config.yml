@@ -15,15 +15,15 @@ jobs: # a collection of steps
       - setup_remote_docker:   # (2)
           docker_layer_caching: true # (3)
 
-      - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
-          key: compiler
+      # - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
+      #     key: compiler
 
       - run: mvn clean package -Pexecutable # run the actual tests
 
-      - save_cache: # saves the project dependencies
-          paths:
-            - ~/.m2
-          key: compiler
+      # - save_cache: # saves the project dependencies
+      #     paths:
+      #       - ~/.m2
+      #     key: compiler
 
       - persist_to_workspace: 
           root: /home/circleci
