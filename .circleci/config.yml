@@ -40,9 +40,8 @@ jobs: # a collection of steps
       - attach_workspace:
           at: /home/circleci
       - run: go get github.com/aktau/github-release
-      - run: cd target; 
-      - run: export ARTIFACT=`ls *.jar`
-      - run: github-release upload --replace --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag CircleCIRelease --file "$ARTIFACT" --name $ARTIFACT 
+      - run: ls; cd target; ls; export ARTIFACT=`ls *.jar`; echo $ARTIFACT
+      - run: ls; github-release upload --replace --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag CircleCIRelease --file "$ARTIFACT" --name $ARTIFACT 
 
 workflows:
   version: 2
