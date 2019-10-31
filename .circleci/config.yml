@@ -10,7 +10,7 @@ jobs: # a collection of steps
 
     steps: # a collection of executable commands
 
-      - run: go get github.com/aktau/github-release
+      #- run: go get github.com/aktau/github-release
       - checkout # check out source code to working directory
       # - setup_remote_docker:   # (2)
       #     docker_layer_caching: true # (3)
