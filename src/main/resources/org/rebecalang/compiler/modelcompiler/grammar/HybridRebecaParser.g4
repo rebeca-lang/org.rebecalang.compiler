@@ -55,7 +55,7 @@ modeDeclaration returns[ModeDeclaration md]
 	INV LPAREN (e = expression {id.setCondition($e.e);}) RPAREN
 		b = block {id.setBlock($b.bs);id.setCharacter($INV.getCharPositionInLine());id.setLineNumber($INV.getLine());}
 	
-	GUARD LPAREN (e = expression {gd.setCondition($e.e);}) RPAREN
+	GUARD LPAREN (e2 = expression {gd.setCondition($e2.e);}) RPAREN
 		b = block {gd.setBlock($b.bs);gd.setCharacter($GUARD.getCharPositionInLine());gd.setLineNumber($GUARD.getLine());}
 	RBRACE
 	;

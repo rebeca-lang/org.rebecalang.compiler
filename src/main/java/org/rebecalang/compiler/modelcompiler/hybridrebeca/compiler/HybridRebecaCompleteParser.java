@@ -509,6 +509,7 @@ public class HybridRebecaCompleteParser extends Parser {
 		public ExpressionContext e;
 		public BlockContext b;
 		public Token GUARD;
+		public ExpressionContext e2;
 		public TerminalNode MODE() { return getToken(HybridRebecaCompleteParser.MODE, 0); }
 		public TerminalNode LBRACE() { return getToken(HybridRebecaCompleteParser.LBRACE, 0); }
 		public TerminalNode INV() { return getToken(HybridRebecaCompleteParser.INV, 0); }
@@ -587,8 +588,8 @@ public class HybridRebecaCompleteParser extends Parser {
 			match(LPAREN);
 			{
 			setState(211);
-			((ModeDeclarationContext)_localctx).e = expression();
-			gd.setCondition(((ModeDeclarationContext)_localctx).e.e);
+			((ModeDeclarationContext)_localctx).e2 = expression();
+			gd.setCondition(((ModeDeclarationContext)_localctx).e2.e);
 			}
 			setState(214);
 			match(RPAREN);
