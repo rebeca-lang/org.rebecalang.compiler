@@ -587,7 +587,7 @@ public class HybridRebecaCompleteParser extends Parser {
 			match(LPAREN);
 			{
 			setState(211);
-			expression();
+			((ModeDeclarationContext)_localctx).e = expression();
 			gd.setCondition(((ModeDeclarationContext)_localctx).e.e);
 			}
 			setState(214);
