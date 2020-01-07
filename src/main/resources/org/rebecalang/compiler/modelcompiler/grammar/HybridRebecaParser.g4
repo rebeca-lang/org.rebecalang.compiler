@@ -24,6 +24,7 @@ physicalClassDeclaration returns[PhysicalClassDeclaration pcd]
         		$pcd.setLineNumber($physicalClassName.getLine()); $pcd.setCharacter($physicalClassName.getCharPositionInLine());
         	}
       
+        LPAREN queueSize = INTLITERAL {if(!$queueSize.getText().equals("<missing INTLITERAL>")) $pcd.setQueueSize(Integer.parseInt($queueSize.text));} RPAREN
         LBRACE
 
         (KNOWNREBECS
@@ -37,6 +38,7 @@ physicalClassDeclaration returns[PhysicalClassDeclaration pcd]
 		RBRACE)?
 
 		(	cd = constructorDeclaration {$pcd.getConstructors().add($cd.cd);}
+		|	mgd = msgsrvDeclaration {$pcd.getMsgsrvs().add($mgd.md);}
 		|	smd = synchMethodDeclaration {$pcd.getSynchMethods().add($smd.smd);}
 		|   md = modeDeclaration {$pcd.getModeDeclarations().add($md.md);}
 		)*
@@ -74,6 +76,9 @@ primary returns [TermPrimary tp]
     	(AFTER LPAREN ef = expression RPAREN {psp.setAfterExpression($ef.e);})?
     	(DEADLINE LPAREN ed = expression RPAREN {psp.setDeadlineExpression($ed.e);})?
     )?
-	(LBRACKET e2 = expression RBRACKET {$tp.getIndices().add($e2.e);})* (PRIME)?
+	(LBRACKET e2 = expression RBRACKET {$tp.getIndices().add($e2.e);})* 
+	(PRIME 
+	  	{if (!($tp instanceof HybridTermPrimary)) $tp = HybridrebecaUtils.transformTermPrimaryToHybridTermPrimary($tp);
+	  	 ((HybridTermPrimary)$tp).setDerivativeOrder(((HybridTermPrimary)$tp).getDerivativeOrder() + 1);})*
     ;    
     

@@ -295,10 +295,8 @@ public abstract class AbstractCompilerFacade {
 		interfaceCollisionDetection();
 	}
 
-
 	protected void addingReactiveclassesToSymbolTableInInitialization() {
 		for (ReactiveClassDeclaration reactiveClassDeclaration : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
-
 			hasInheritanceLoop(reactiveClassDeclaration);
 
 			// check if reactiveclass is defined abstract right ?
@@ -310,87 +308,108 @@ public abstract class AbstractCompilerFacade {
 				exceptionContainer.addException(rce);
 
 			}
+			addingAReactiveclassToSymbolTableInInitialization(reactiveClassDeclaration);
+		}
+	}
 
+	protected void addingAReactiveclassToSymbolTableInInitialization(ReactiveClassDeclaration reactiveClassDeclaration) {
 
-			if (reactiveClassDeclaration.getConstructors().isEmpty()) {
-				if (!compilerFeatures.contains(CompilerFeature.CORE_2_0)) {
-					ConstructorDeclaration defaultConstructor = new ConstructorDeclaration();
-					defaultConstructor.setName(reactiveClassDeclaration.getName());
-					defaultConstructor.setBlock(new BlockStatement());
-					reactiveClassDeclaration.getConstructors().add(defaultConstructor);
-				}
+		if (reactiveClassDeclaration.getConstructors().isEmpty()) {
+			if (!compilerFeatures.contains(CompilerFeature.CORE_2_0)) {
+				ConstructorDeclaration defaultConstructor = new ConstructorDeclaration();
+				defaultConstructor.setName(reactiveClassDeclaration.getName());
+				defaultConstructor.setBlock(new BlockStatement());
+				reactiveClassDeclaration.getConstructors().add(defaultConstructor);
 			}
+		}
 
+		try {
+			Type type = TypesUtilities.getInstance().getType(reactiveClassDeclaration.getName());
+			addFields(type, reactiveClassDeclaration.getKnownRebecs(), AccessModifierUtilities.PRIVATE);
+			addFields(type, reactiveClassDeclaration.getStatevars(), AccessModifierUtilities.PRIVATE);
+			addingConstructorsToSymbolTableInInitialization(reactiveClassDeclaration);
+
+			addingSynchMethodsToSymbolTableInInitialization(reactiveClassDeclaration);
+			addingMsgsrvsToSymbolTableInInitialization(reactiveClassDeclaration);
+		} catch (CodeCompilationException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	private void addingMsgsrvsToSymbolTableInInitialization(ReactiveClassDeclaration reactiveClassDeclaration) throws CodeCompilationException {
+		Type type = TypesUtilities.getInstance().getType(reactiveClassDeclaration.getName());
+		for (MethodDeclaration methodDeclaration : reactiveClassDeclaration.getMsgsrvs()) {
+			if (methodDeclaration.getName().equals(
+					reactiveClassDeclaration.getName())) {
+				exceptionContainer
+				.addException(new CodeCompilationException(
+						"Invalid usage of message-server specifier for the constructor",
+						methodDeclaration.getLineNumber(),
+						methodDeclaration.getCharacter()));
+				addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
+			} else
+				addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.MSGSRV);
+		}
+	}
+
+
+	private void addingSynchMethodsToSymbolTableInInitialization(ReactiveClassDeclaration reactiveClassDeclaration) throws CodeCompilationException {
+		Type type = TypesUtilities.getInstance().getType(reactiveClassDeclaration.getName());
+		for (MethodDeclaration methodDeclaration : reactiveClassDeclaration.getSynchMethods()) {
+			SynchMethodDeclaration smd = (SynchMethodDeclaration) methodDeclaration;
 			try {
-				Type type = TypesUtilities.getInstance().getType(reactiveClassDeclaration.getName());
-				addFields(type, reactiveClassDeclaration.getKnownRebecs(), AccessModifierUtilities.PRIVATE);
-				addFields(type, reactiveClassDeclaration.getStatevars(), AccessModifierUtilities.PRIVATE);
-				for (int cnt = 0; cnt < reactiveClassDeclaration.getConstructors().size(); cnt++) {
-					ConstructorDeclaration constructorDeclaration = reactiveClassDeclaration.getConstructors().get(cnt);
-					if (compilerFeatures.contains(CompilerFeature.CORE_2_0)) {
-						CodeCompilationException rce = new CodeCompilationException(
-								"Rebeca core 2.0 dose not support constructor",
-								constructorDeclaration.getLineNumber(),
-								constructorDeclaration.getCharacter());
-						exceptionContainer.addException(rce);
-					}
-					if (constructorDeclaration.getName().equals(
-							reactiveClassDeclaration.getName())) {
-						addMethod(type, constructorDeclaration, 
-								AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
-					} else {
-						exceptionContainer.addException(new CodeCompilationException(
-								"Return type for the method is missing",
-								constructorDeclaration.getLineNumber(),
-								constructorDeclaration.getCharacter()));
-						SynchMethodDeclaration smd = new SynchMethodDeclaration();
-						smd.setBlock(constructorDeclaration.getBlock());
-						smd.setCharacter(constructorDeclaration.getCharacter());
-						smd.setLineNumber(constructorDeclaration.getLineNumber());
-						smd.setName(constructorDeclaration.getName());
-						smd.setReturnType(TypesUtilities.NO_TYPE);
-						smd.setAccessModifier(constructorDeclaration.getAccessModifier());
-						addMethod(type, smd, 
-								AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.SYNCH_METHOD);
-						reactiveClassDeclaration.getConstructors().remove(cnt);
-						reactiveClassDeclaration.getSynchMethods().add(smd);
-						cnt--;
-					}
-				}
+				smd.setReturnType(TypesUtilities.getInstance().getType(smd.getReturnType()));
+			}catch (CodeCompilationException e) {
+				smd.setReturnType(TypesUtilities.UNKNOWN_TYPE);
+				exceptionContainer.addException(e);
+			}
+			if (methodDeclaration.getName().equals(
+					reactiveClassDeclaration.getName())) {
+				exceptionContainer
+				.addException(new CodeCompilationException(
+						"Invalid return type for the constructor",
+						methodDeclaration.getLineNumber(),
+						methodDeclaration.getCharacter()));
+				addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
+			} else 
+				addMethod(type, methodDeclaration, AccessModifierUtilities.PRIVATE, CoreRebecaLabelUtility.SYNCH_METHOD);
+		}
+	}
 
-				for (MethodDeclaration methodDeclaration : reactiveClassDeclaration.getSynchMethods()) {
-					SynchMethodDeclaration smd = (SynchMethodDeclaration) methodDeclaration;
-					try {
-						smd.setReturnType(TypesUtilities.getInstance().getType(smd.getReturnType()));
-					}catch (CodeCompilationException e) {
-						smd.setReturnType(TypesUtilities.UNKNOWN_TYPE);
-						exceptionContainer.addException(e);
-					}
-					if (methodDeclaration.getName().equals(
-							reactiveClassDeclaration.getName())) {
-						exceptionContainer
-						.addException(new CodeCompilationException(
-								"Invalid return type for the constructor",
-								methodDeclaration.getLineNumber(),
-								methodDeclaration.getCharacter()));
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
-					} else 
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PRIVATE, CoreRebecaLabelUtility.SYNCH_METHOD);
-				}
-				for (MethodDeclaration methodDeclaration : reactiveClassDeclaration.getMsgsrvs()) {
-					if (methodDeclaration.getName().equals(
-							reactiveClassDeclaration.getName())) {
-						exceptionContainer
-						.addException(new CodeCompilationException(
-								"Invalid usage of message-server specifier for the constructor",
-								methodDeclaration.getLineNumber(),
-								methodDeclaration.getCharacter()));
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
-					} else
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.MSGSRV);
-				}
-			} catch (CodeCompilationException e) {
-				e.printStackTrace();
+
+	private void addingConstructorsToSymbolTableInInitialization(ReactiveClassDeclaration reactiveClassDeclaration) throws CodeCompilationException {
+		Type type = TypesUtilities.getInstance().getType(reactiveClassDeclaration.getName());
+		for (int cnt = 0; cnt < reactiveClassDeclaration.getConstructors().size(); cnt++) {
+			ConstructorDeclaration constructorDeclaration = reactiveClassDeclaration.getConstructors().get(cnt);
+			if (compilerFeatures.contains(CompilerFeature.CORE_2_0)) {
+				CodeCompilationException rce = new CodeCompilationException(
+						"Rebeca core 2.0 dose not support constructor",
+						constructorDeclaration.getLineNumber(),
+						constructorDeclaration.getCharacter());
+				exceptionContainer.addException(rce);
+			}
+			if (constructorDeclaration.getName().equals(
+					reactiveClassDeclaration.getName())) {
+				addMethod(type, constructorDeclaration, 
+						AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.CONSTRUCTOR);
+			} else {
+				exceptionContainer.addException(new CodeCompilationException(
+						"Return type for the method is missing",
+						constructorDeclaration.getLineNumber(),
+						constructorDeclaration.getCharacter()));
+				SynchMethodDeclaration smd = new SynchMethodDeclaration();
+				smd.setBlock(constructorDeclaration.getBlock());
+				smd.setCharacter(constructorDeclaration.getCharacter());
+				smd.setLineNumber(constructorDeclaration.getLineNumber());
+				smd.setName(constructorDeclaration.getName());
+				smd.setReturnType(TypesUtilities.NO_TYPE);
+				smd.setAccessModifier(constructorDeclaration.getAccessModifier());
+				addMethod(type, smd, 
+						AccessModifierUtilities.PUBLIC, CoreRebecaLabelUtility.SYNCH_METHOD);
+				reactiveClassDeclaration.getConstructors().remove(cnt);
+				reactiveClassDeclaration.getSynchMethods().add(smd);
+				cnt--;
 			}
 		}
 	}

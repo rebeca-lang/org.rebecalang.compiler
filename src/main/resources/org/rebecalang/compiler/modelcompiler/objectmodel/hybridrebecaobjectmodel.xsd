@@ -56,7 +56,15 @@
         </xs:sequence>
         <xs:attribute name="lineNumber" type="xs:int"/>
         <xs:attribute name="character" type="xs:int"/>
-    </xs:complexType>                                         
+    </xs:complexType>  
+                                           
+	<xs:complexType name="HybridTermPrimary">
+		<xs:complexContent>
+			<xs:extension base="corerebecaexp:TermPrimary">
+            	<xs:attribute name="derivativeOrder" type="xs:int" default="0"/>
+    		</xs:extension>
+    	</xs:complexContent>
+	</xs:complexType>
 	
 
 </xs:schema>
