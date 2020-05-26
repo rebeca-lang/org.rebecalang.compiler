@@ -32,7 +32,7 @@ jobs: # a collection of steps
 
   deploy_release: # runs not using Workflows must have a `build` job as entry point
     docker: # run the steps with Docker
-      - image: circleci/golang:1.8
+      - image: circleci/golang:1.11.1
 
     working_directory: ~/compiler # directory where steps will run
 
