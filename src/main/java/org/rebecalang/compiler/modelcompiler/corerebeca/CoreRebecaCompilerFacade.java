@@ -489,11 +489,14 @@ public class CoreRebecaCompilerFacade extends AbstractCompilerFacade {
 	protected void checkPriorityAnnotations(List<Annotation> annotations) {
 		if(annotations.isEmpty())
 			return;
-		Annotation annotation = annotations.get(0);
-		CodeCompilationException cce = new CodeCompilationException(
-				"Core Rebeca does not support annotations", annotation.getLineNumber(),
-				annotation.getCharacter());
-		exceptionContainer.addException(cce);
+		for (Annotation annotation : annotations) {
+			if (annotation.getIdentifier().equals("priority") || annotation.getIdentifier().equals("globalPriority")) {
+				CodeCompilationException cce = new CodeCompilationException(
+						"Core Rebeca does not support priority", annotation.getLineNumber(),
+						annotation.getCharacter());
+						exceptionContainer.addException(cce);
+			}
+		}
 	}
 
 	protected HashMap<String, ReactiveClassDeclaration> getAllClasses() {
