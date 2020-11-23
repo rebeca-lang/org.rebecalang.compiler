@@ -26,7 +26,7 @@ jobs: # a collection of steps
       #     key: compiler
 
       - persist_to_workspace: 
-          root: /home/circleci
+          root: /home
           paths:
             - compiler/target/
 
@@ -38,7 +38,7 @@ jobs: # a collection of steps
 
     steps: # a collection of executable commands
       - attach_workspace:
-          at: /home/circleci
+          at: /home
       - run: go get github.com/aktau/github-release
       - run: ls; cd target; ls; export ARTIFACT=`ls *.jar`; github-release upload --replace --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag CircleCIRelease --file "$ARTIFACT" --name $ARTIFACT 
 
