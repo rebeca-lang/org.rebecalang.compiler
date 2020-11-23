@@ -19,6 +19,8 @@ jobs: # a collection of steps
       #     key: compiler
 
       - run: mvn clean package -Pexecutable # run the actual tests
+      - run: ls
+      - run: pwd
 
       # - save_cache: # saves the project dependencies
       #     paths:
