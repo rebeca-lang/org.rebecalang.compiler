@@ -4,7 +4,7 @@ jobs: # a collection of steps
 
     docker: # run the steps with Docker
       #- image: circleci/golang:1.8
-      - image: circleci/openjdk:10-jdk # ...with this image as the primary container; this is where all `steps` will run
+      - image: circleci/openjdk:12-jdk # ...with this image as the primary container; this is where all `steps` will run
 
     working_directory: ~/compiler # directory where steps will run
 

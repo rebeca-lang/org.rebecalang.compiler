@@ -9,8 +9,11 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
+
 import edu.emory.mathcs.backport.java.util.Arrays;
 
+@Component
 public class ExceptionContainer extends Exception {
     /**
 	 * 
