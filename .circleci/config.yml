@@ -19,19 +19,19 @@ jobs: # a collection of steps
       #     key: compiler
 
       - run: mvn clean package -Pexecutable # run the actual tests
-      - save_cache:
-          key: built-package
-          paths:
-            - ~/compiler/target
+      # - save_cache:
+      #     key: built-package
+      #     paths:
+      #       - ~/compiler/target
       # - save_cache: # saves the project dependencies
       #     paths:
       #       - ~/.m2
       #     key: compiler
 
-      # - persist_to_workspace: 
-      #     root: /tmp/workspace
-      #     paths:
-      #       - compiler/target/
+      - persist_to_workspace: 
+          root: ~/
+          paths:
+            - compiler
 
   deploy_release: # runs not using Workflows must have a `build` job as entry point
     docker: # run the steps with Docker
@@ -40,11 +40,11 @@ jobs: # a collection of steps
     working_directory: ~/compiler # directory where steps will run
 
     steps: # a collection of executable commands
-      - restore_cache:
-          keys:
-            - built-package
-      # - attach_workspace:
-      #     at: /tmp/workspace
+      # - restore_cache:
+      #     keys:
+      #       - built-package
+      - attach_workspace:
+          at: ~/
       - run: go get github.com/aktau/github-release
       - run: ls; cd target; ls; export ARTIFACT=`ls *.jar`; github-release upload --replace --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag CircleCIRelease --file "$ARTIFACT" --name $ARTIFACT 
 
