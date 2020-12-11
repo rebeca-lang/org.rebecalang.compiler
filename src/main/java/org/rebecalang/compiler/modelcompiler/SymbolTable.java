@@ -30,6 +30,14 @@ public class SymbolTable {
 		this.methodsSymbolTable = new HashMap<Type, Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>>>();
 	}
 	
+	public Hashtable<Type, Hashtable<String, FieldDeclaration>> getVariableSymbolTable() {
+		return variablesSymbolTable;
+	}
+
+	public HashMap<Type, Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>>> getmethodSymbolTable() {
+		return methodsSymbolTable;
+	}
+	
 	public void addVarible(Type container, FieldDeclaration fieldDeclaration) {
 		if (container == null)
 			container = TypesUtilities.NO_TYPE;

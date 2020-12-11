@@ -130,8 +130,6 @@ public class ProbabilisticRebecaCompleteParser extends Parser {
 		return tokenNames;
 	}
 
-	@Override
-
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}
