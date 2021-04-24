@@ -24,6 +24,8 @@ jobs:
 
     - name: Upload Release Assets
       uses: ncipollo/release-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         artifacts: "./target/compiler-2.8.9.jar"
         token: ${{ secrets.GITHUB_TOKEN }}
