@@ -31,6 +31,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: compiler.jar
         tag: GitRelease
+        allowUpdates: true
     # - name: Create Release
     #   id: create_release
     #   uses: actions/create-release@v1
