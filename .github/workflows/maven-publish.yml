@@ -30,6 +30,7 @@ jobs:
         artifacts: "./target/compiler-2.8.9.jar"
         token: ${{ secrets.GITHUB_TOKEN }}
         name: compiler.jar
+        tag: GitRelease
     # - name: Create Release
     #   id: create_release
     #   uses: actions/create-release@v1
