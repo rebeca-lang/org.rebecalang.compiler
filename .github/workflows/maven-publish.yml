@@ -22,15 +22,18 @@ jobs:
     - name: Build with Maven
       run: mvn -B package -Pexecutable --file pom.xml
 
+    - name: Extract Maven project version
+      run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+      id: project
+
     - name: Upload Release Assets
       uses: ncipollo/release-action@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        artifacts: "./target/compiler-2.8.9.jar"
+        artifacts: "./target/compiler-*.jar"
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: compiler.jar
-        tag: GitRelease
+        tag: ${{ steps.project.outputs.version }}
         allowUpdates: true
     # - name: Create Release
     #   id: create_release
