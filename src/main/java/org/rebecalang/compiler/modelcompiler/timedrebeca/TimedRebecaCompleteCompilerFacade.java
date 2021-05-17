@@ -11,6 +11,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
@@ -25,6 +26,11 @@ import org.rebecalang.compiler.utils.TypesUtilities;
 public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompilerFacade {
 
 	private PriorityType modelPriorityType;
+	private final static OrdinaryPrimitiveType TIMER_TYPE;
+	static {
+		TIMER_TYPE = new OrdinaryPrimitiveType();
+		TIMER_TYPE.setName("Timer");
+	}
 
 	public TimedRebecaCompleteCompilerFacade(CommonTokenStream tokens,
 			Set<CompilerFeature> features, ExceptionContainer exceptionContainer) {
@@ -39,21 +45,56 @@ public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompilerFacade 
 	
 	protected void initialize() {
 		super.initialize();
+		TypesUtilities.getInstance().addNewType(TIMER_TYPE);
 		modelPriorityType = PriorityType.None;
 		statementSemanticCheckContainer.getExpressionSemanticCheckContainer().
 			registerTranslator(TermPrimary.class, new TimedPrimaryTermSemanticCheck());
 
-		SynchMethodDeclaration method = new SynchMethodDeclaration();
-		method.setName("delay");
+		SynchMethodDeclaration delayMethod = new SynchMethodDeclaration();
+		delayMethod.setName("delay");
 		FormalParameterDeclaration fpd = new FormalParameterDeclaration();
 		fpd.setName("arg0");
 		fpd.setType(TypesUtilities.INT_TYPE);
-		method.getFormalParameters().add(fpd);
+		delayMethod.getFormalParameters().add(fpd);
+		delayMethod.setReturnType(TypesUtilities.VOID_TYPE);
+
 		try {
-			symbolTable.addMethod(null, method,
+			symbolTable.addMethod(null, delayMethod,
 					TimedRebecaLabelUtility.DELAY);
+			
+			SynchMethodDeclaration startTimerMethod = new SynchMethodDeclaration();
+			startTimerMethod.setName("startTimer");
+			fpd = new FormalParameterDeclaration();
+			fpd.setName("arg0");
+			fpd.setType(TypesUtilities.getInstance().getType("Timer"));
+			startTimerMethod.getFormalParameters().add(fpd);
+			startTimerMethod.setReturnType(TypesUtilities.VOID_TYPE);
+			SynchMethodDeclaration stopTimerMethod = new SynchMethodDeclaration();
+			stopTimerMethod.setName("stopTimer");
+			fpd = new FormalParameterDeclaration();
+			fpd.setName("arg0");
+			fpd.setType(TypesUtilities.getInstance().getType("Timer"));
+			stopTimerMethod.getFormalParameters().add(fpd);
+			stopTimerMethod.setReturnType(TypesUtilities.VOID_TYPE);
+			SynchMethodDeclaration getTimerValueMethod = new SynchMethodDeclaration();
+			getTimerValueMethod.setName("getTimerValue");
+			fpd = new FormalParameterDeclaration();
+			fpd.setName("arg0");
+			fpd.setType(TypesUtilities.getInstance().getType("Timer"));
+			getTimerValueMethod.getFormalParameters().add(fpd);
+			getTimerValueMethod.setReturnType(TypesUtilities.INT_TYPE);
+			
+			symbolTable.addMethod(null, startTimerMethod,
+					CoreRebecaLabelUtility.BUILT_IN_METHOD);
+			symbolTable.addMethod(null, stopTimerMethod,
+					CoreRebecaLabelUtility.BUILT_IN_METHOD);
+			symbolTable.addMethod(null, getTimerValueMethod,
+					CoreRebecaLabelUtility.BUILT_IN_METHOD);
+
 		} catch (ExceptionContainer ec) {
 			exceptionContainer.addAll(ec);
+		} catch (CodeCompilationException e) {
+			exceptionContainer.addException(e);
 		}
 
 		try {
@@ -136,4 +177,10 @@ public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompilerFacade 
 		return true;
 	}
 	
+	protected void fillTypeSystem() {
+		super.fillTypeSystem();
+
+		TypesUtilities.getInstance().addNewType(TIMER_TYPE);
+	}
+
 }

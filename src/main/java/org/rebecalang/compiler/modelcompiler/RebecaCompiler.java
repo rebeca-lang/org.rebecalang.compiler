@@ -96,7 +96,6 @@ public class RebecaCompiler {
 
 		try {
 			CharStream input = CharStreams.fromStream(new FileInputStream(rebecaFile));
-//			ANTLRInputStream input = new ANTLRInputStream();
 			AbstractCompilerFacade compilerFacade = getAppropriateCompilerFacade(compilerFeatures, input);
 			compilerFacade.compile();
 			if (exceptionContainer.exceptionsIsEmpty() && performSemanticCheck) {
