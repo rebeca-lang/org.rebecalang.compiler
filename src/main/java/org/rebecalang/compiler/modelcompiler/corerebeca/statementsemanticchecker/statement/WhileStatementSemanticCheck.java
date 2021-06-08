@@ -1,17 +1,26 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement;
 
-import org.rebecalang.compiler.modelcompiler.AbstractStatementSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStatement;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
-import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WhileStatementSemanticCheck extends AbstractStatementSemanticCheck {
+
+	@Autowired
+	StatementSemanticCheckContainer statementSemanticCheckContainer;
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 
 	public void check(Statement statement) {
 		WhileStatement whileStatement = (WhileStatement) statement; 
@@ -20,7 +29,7 @@ public class WhileStatementSemanticCheck extends AbstractStatementSemanticCheck 
 		Pair<Type, Object> result = expressionSemanticCheckContainer.check(
 				whileStatement.getCondition());
 		Type expressionType = result.getFirst();
-		if (expressionType != TypesUtilities.BOOLEAN_TYPE) {
+		if (expressionType != CoreRebecaTypeSystem.BOOLEAN_TYPE) {
 			CodeCompilationException rce = new CodeCompilationException(
 					"\"While\" loop expression type should be boolean.",
 					whileStatement.getCondition().getLineNumber(), whileStatement
@@ -28,9 +37,9 @@ public class WhileStatementSemanticCheck extends AbstractStatementSemanticCheck 
 			exceptionContainer.addException(rce);
 		}
 		if(!(whileStatement.getCondition() instanceof TermPrimary))
-			whileStatement.getCondition().setType(TypesUtilities.BOOLEAN_TYPE);
+			whileStatement.getCondition().setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		if (whileStatement.getStatement() != null)
-			((StatementSemanticCheckContainer)defaultContainer).check(whileStatement.getStatement());
+			statementSemanticCheckContainer.check(whileStatement.getStatement());
 
 		scopeHandler.popScopeRecord();
 	}

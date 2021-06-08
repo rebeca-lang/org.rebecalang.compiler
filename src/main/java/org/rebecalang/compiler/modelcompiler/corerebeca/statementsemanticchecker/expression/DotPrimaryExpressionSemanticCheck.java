@@ -1,8 +1,9 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression;
 
-import org.rebecalang.compiler.modelcompiler.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimaryExpression;
@@ -10,9 +11,14 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
-import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DotPrimaryExpressionSemanticCheck extends AbstractExpressionSemanticCheck {
+
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
@@ -20,16 +26,14 @@ public class DotPrimaryExpressionSemanticCheck extends AbstractExpressionSemanti
 		DotPrimary dotPrimary = (DotPrimary) expression;
 
 		Expression leftTerm = dotPrimary.getLeft();
-		Type leftTermType = ((ExpressionSemanticCheckContainer)defaultContainer).check(leftTerm, baseType).getFirst();
-		//TODO: make sure why I put such a setter here
-//		leftTerm.setType(leftTermType);
+		Type leftTermType = expressionSemanticCheckContainer.check(leftTerm, baseType).getFirst();
+
 		PrimaryExpression rightTerm = dotPrimary.getRight();
 		
-		Type rightTermType = ((ExpressionSemanticCheckContainer)defaultContainer).check(rightTerm, leftTermType).getFirst();
+		Type rightTermType = expressionSemanticCheckContainer.check(rightTerm, leftTermType).getFirst();
 		expression.setType(rightTermType);
 		
-		if (TypesUtilities.getInstance().canTypeCastTo(leftTermType, 
-				TypesUtilities.REACTIVE_CLASS_TYPE)
+		if (leftTermType.canTypeCastTo(CoreRebecaTypeSystem.REACTIVE_CLASS_TYPE)
 				&& scopeHandler.isInScopeOf(CoreRebecaLabelUtility.CONSTRUCTOR)) {
 			if (!(leftTerm instanceof TermPrimary)) {
 				exceptionContainer.addException(new CodeCompilationException(

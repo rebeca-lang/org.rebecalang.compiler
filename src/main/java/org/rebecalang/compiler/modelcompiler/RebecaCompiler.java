@@ -6,102 +6,102 @@ import java.util.Set;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
-import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompilerFacade;
-import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteLexer;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractCompilerFacade;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompleteCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.HybridRebecaCompleteCompilerFacade;
-import org.rebecalang.compiler.modelcompiler.hybridrebeca.compiler.HybridRebecaCompleteLexer;
-import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.ProbabilisticRebecaCompilerFacade;
-import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler.ProbabilisticRebecaCompleteLexer;
-import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.ProbabilisticTimedRebecaCompilerFacade;
-import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.compiler.ProbabilisticTimedRebecaCompleteLexer;
+import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.ProbabilisticRebecaCompleteCompilerFacade;
+import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.ProbabilisticTimedRebecaCompleteCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.TimedRebecaCompleteCompilerFacade;
-import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaCompleteLexer;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class RebecaCompiler {
 
-	private ExceptionContainer exceptionContainer = new ExceptionContainer();
+	@Autowired
+	private ExceptionContainer exceptionContainer;
+	@Autowired	
+	protected SymbolTable symbolTable;
 	
+	@Autowired
+	@Qualifier("CORE_REBECA")
+	protected CoreRebecaCompleteCompilerFacade coreRebecaCompilerFacade;
+
+	@Autowired
+	@Qualifier("TIMED_REBECA")
+	protected TimedRebecaCompleteCompilerFacade timedRebecaCompilerFacade;
+
+	@Autowired
+	@Qualifier("PROBABILISTIC_REBECA")
+	protected ProbabilisticRebecaCompleteCompilerFacade probabilisticRebecaCompilerFacade;
+
+	@Autowired
+	@Qualifier("PROBABILISTIC_TIMED_REBECA")
+	protected ProbabilisticTimedRebecaCompleteCompilerFacade probabilisticTimedRebecaCompilerFacade;
+
+	@Autowired
+	@Qualifier("HYBRID_REBECA")
+	protected HybridRebecaCompleteCompilerFacade hybridRebecaCompilerFacade;
+
 	private AbstractCompilerFacade getAppropriateCompilerFacade(
-			Set<CompilerFeature> features, CharStream input)
+			Set<CompilerFeature> extension, CompilerFeature coreVersion, CharStream input)
 			throws CodeCompilationException {
 		
-		if (!(features.contains(CompilerFeature.CORE_2_0) ^ 
-				features.contains(CompilerFeature.CORE_2_1) ^ 
-				features.contains(CompilerFeature.CORE_2_2) ^ 
-				features.contains(CompilerFeature.CORE_2_3))) {
-			throw createFeaturesIncompatibilityMessage(features);
+		if (extension.contains(CompilerFeature.TIMED_REBECA)
+				|| extension.contains(CompilerFeature.PROBABILISTIC_REBECA)
+				|| extension.contains(CompilerFeature.HYBRID_REBECA)) {
+			if (coreVersion == CompilerFeature.CORE_2_0)
+				throw createFeaturesIncompatibilityMessage(extension, coreVersion);
 		}
 
-		if (features.contains(CompilerFeature.TIMED_REBECA)
-				|| features.contains(CompilerFeature.PROBABILISTIC_REBECA)
-				|| features.contains(CompilerFeature.HYBRID_REBECA)) {
-			if (features.contains(CompilerFeature.CORE_2_0))
-				throw createFeaturesIncompatibilityMessage(features);
-		}
-
-		if (features.contains(CompilerFeature.PROBABILISTIC_REBECA) && features.contains(CompilerFeature.TIMED_REBECA)) {
-			ProbabilisticTimedRebecaCompleteLexer lexer = new ProbabilisticTimedRebecaCompleteLexer(input);
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			return new ProbabilisticTimedRebecaCompilerFacade(tokens, features, exceptionContainer);
-		}
-		if (features.contains(CompilerFeature.PROBABILISTIC_REBECA)) {
-			ProbabilisticRebecaCompleteLexer lexer = new ProbabilisticRebecaCompleteLexer(input);
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			return new ProbabilisticRebecaCompilerFacade(tokens, features, exceptionContainer);
-		}
-		if (features.contains(CompilerFeature.TIMED_REBECA)) {
-			TimedRebecaCompleteLexer lexer = new TimedRebecaCompleteLexer(input);
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			return new TimedRebecaCompleteCompilerFacade(tokens, features, exceptionContainer);
-		}
-		if (features.contains(CompilerFeature.HYBRID_REBECA)) {
-			HybridRebecaCompleteLexer lexer = new HybridRebecaCompleteLexer(input);
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			return new HybridRebecaCompleteCompilerFacade(tokens, features, exceptionContainer);
-		}
-		CoreRebecaCompleteLexer lexer = new CoreRebecaCompleteLexer(input);
-		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		return new CoreRebecaCompilerFacade(tokens, features, exceptionContainer);
+		if (extension.contains(CompilerFeature.PROBABILISTIC_REBECA) && extension.contains(CompilerFeature.TIMED_REBECA)) {
+			return probabilisticTimedRebecaCompilerFacade;
+		} else if (extension.contains(CompilerFeature.PROBABILISTIC_REBECA)) {
+			return probabilisticRebecaCompilerFacade;
+		} else if (extension.contains(CompilerFeature.TIMED_REBECA)) {
+			return timedRebecaCompilerFacade;
+		} else if (extension.contains(CompilerFeature.HYBRID_REBECA)) {
+			return hybridRebecaCompilerFacade;
+		} else
+			return coreRebecaCompilerFacade; 
 	}
 
 	public static CodeCompilationException createFeaturesIncompatibilityMessage(
-			Set<CompilerFeature> features) {
+			Set<CompilerFeature> features, CompilerFeature coreVersion) {
 		String retValue = "Incompatible feature set [";
 		for (CompilerFeature feature : features) {
 			retValue += feature.name() + ", ";
 		}
-		return new CodeCompilationException(retValue.substring(0,
-				retValue.length() - 2)
-				+ "]", 0, 0);
+		return new CodeCompilationException(retValue + coreVersion + "]", 0, 0);
 	}
 
 	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile,
-			Set<CompilerFeature> compilerFeatures) {
-		return compileRebecaFile (rebecaFile, compilerFeatures, true);
+			Set<CompilerFeature> extention, CompilerFeature coreVersion) {
+		return compileRebecaFile (rebecaFile, extention, coreVersion, true);
 	}
 	
 	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile,
-			Set<CompilerFeature> compilerFeatures, boolean performSemanticCheck) {
+			Set<CompilerFeature> extention, CompilerFeature coreVersion, boolean performSemanticCheck) {
 		exceptionContainer.clear();
 
 		try {
 			CharStream input = CharStreams.fromStream(new FileInputStream(rebecaFile));
-			AbstractCompilerFacade compilerFacade = getAppropriateCompilerFacade(compilerFeatures, input);
-			compilerFacade.compile();
+			AbstractCompilerFacade compilerFacade = getAppropriateCompilerFacade(extention, coreVersion, input);
+			compilerFacade.compile(input, coreVersion);
 			if (exceptionContainer.exceptionsIsEmpty() && performSemanticCheck) {
-				compilerFacade.semanticCheck(compilerFeatures);
+				compilerFacade.semanticCheck();
 			}
-			return new Pair<RebecaModel, SymbolTable>(compilerFacade.getRebecaModel(), compilerFacade.getSymbolTable());
+			return new Pair<RebecaModel, SymbolTable>(compilerFacade.getRebecaModel(), symbolTable);
 		} catch (RecognitionException e) {
 			exceptionContainer.addException(e);
 		} catch (Exception e) {

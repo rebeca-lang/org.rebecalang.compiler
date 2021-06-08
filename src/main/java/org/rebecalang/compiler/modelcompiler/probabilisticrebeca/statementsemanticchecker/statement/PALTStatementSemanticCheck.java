@@ -2,10 +2,11 @@ package org.rebecalang.compiler.modelcompiler.probabilisticrebeca.statementseman
 
 import java.text.DecimalFormat;
 
-import org.rebecalang.compiler.modelcompiler.AbstractStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
@@ -15,10 +16,19 @@ import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PALTStatementSemanticCheck extends AbstractStatementSemanticCheck {
 
 	public static int PROB_ACCURACY = 1000;
+	
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+	
+	@Autowired
+	StatementSemanticCheckContainer statementSemanticCheckContainer;
 	
 	public static boolean probIsOne(double probability) {
 		return ((int)(probability * PROB_ACCURACY) == PROB_ACCURACY);
@@ -33,12 +43,11 @@ public class PALTStatementSemanticCheck extends AbstractStatementSemanticCheck {
 		double probs = 0;
 		for (PAltStatementGroup pasg : pAltStatement.getPAltStatementGroups()) {
 			Expression switchLabel = pasg.getExpression();
-			Pair<Type, Object> evaluate = ((ExpressionSemanticCheckContainer)defaultContainer).check(switchLabel);
+			Pair<Type, Object> evaluate = expressionSemanticCheckContainer.check(switchLabel);
 			if (evaluate.getSecond() != null) {
-				if (!TypesUtilities.getInstance().canTypeUpCastTo(
-						evaluate.getFirst(), TypesUtilities.DOUBLE_TYPE)) {
+				if (!evaluate.getFirst().canTypeUpCastTo(CoreRebecaTypeSystem.DOUBLE_TYPE)) {
 					TypesUtilities.addTypeMismatchException(exceptionContainer, evaluate.getFirst(),
-							TypesUtilities.DOUBLE_TYPE, switchLabel);
+							CoreRebecaTypeSystem.DOUBLE_TYPE, switchLabel);
 				} else {
 					probs += ((Number) evaluate.getSecond()).doubleValue();
 				}
@@ -50,7 +59,7 @@ public class PALTStatementSemanticCheck extends AbstractStatementSemanticCheck {
 			}
 
 			for (Statement stat : pasg.getStatements())
-				((StatementSemanticCheckContainer)defaultContainer).check(stat);
+				statementSemanticCheckContainer.check(stat);
 		}
 		if (!probIsOne(probs)) {
 			String formatter = "0.";

@@ -1,16 +1,22 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression;
 
-import org.rebecalang.compiler.modelcompiler.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.SemanticCheckerUtils;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class NondetExpressionSemanticCheck extends AbstractExpressionSemanticCheck {
+
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
@@ -21,7 +27,7 @@ public class NondetExpressionSemanticCheck extends AbstractExpressionSemanticChe
 		Type type = null;
 		for (Expression ndTermExpression : ndExpression.getChoices()) {
 			Pair<Type, Object> ndTerm = 
-					((ExpressionSemanticCheckContainer)defaultContainer).check(ndTermExpression);
+					expressionSemanticCheckContainer.check(ndTermExpression);
 			try {
 				// The type is set to the biggest type in comparison to the
 				// new choices

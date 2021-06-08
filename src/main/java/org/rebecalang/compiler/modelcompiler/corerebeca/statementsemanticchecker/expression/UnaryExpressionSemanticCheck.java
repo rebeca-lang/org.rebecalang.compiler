@@ -1,8 +1,9 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression;
 
-import org.rebecalang.compiler.modelcompiler.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.SemanticCheckerUtils;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.UnaryExpression;
@@ -10,8 +11,14 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UnaryExpressionSemanticCheck extends AbstractExpressionSemanticCheck {
+
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
@@ -19,13 +26,12 @@ public class UnaryExpressionSemanticCheck extends AbstractExpressionSemanticChec
 		
 		UnaryExpression uExpression = (UnaryExpression) expression;
 		Pair<Type, Object> type = 
-				((ExpressionSemanticCheckContainer)defaultContainer).check(uExpression.getExpression());
+				expressionSemanticCheckContainer.check(uExpression.getExpression());
 		String operator = uExpression.getOperator();
 		if (operator.equals("++") || operator.equals("--")) {
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(
-					type.getFirst(), TypesUtilities.INT_TYPE)) {
+			if (!type.getFirst().canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE)) {
 				TypesUtilities.addTypeMismatchException(exceptionContainer, type.getFirst(),
-						TypesUtilities.INT_TYPE, uExpression);
+						CoreRebecaTypeSystem.INT_TYPE, uExpression);
 			}
 			if (BinaryExpressionSemanticCheck.isInLValueStyle(uExpression.getExpression(), scopeHandler) != LValueState.VARIABLE) {
 				exceptionContainer.getExceptions().add(
@@ -35,20 +41,18 @@ public class UnaryExpressionSemanticCheck extends AbstractExpressionSemanticChec
 										.getCharacter()));
 			}
 		} else if (operator.equals("-")) {
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(
-					type.getFirst(), TypesUtilities.DOUBLE_TYPE)) {
+			if (!type.getFirst().canTypeUpCastTo(CoreRebecaTypeSystem.DOUBLE_TYPE)) {
 				TypesUtilities.addTypeMismatchException(exceptionContainer, type.getFirst(),
-						TypesUtilities.INT_TYPE, uExpression);
+						CoreRebecaTypeSystem.INT_TYPE, uExpression);
 			} else {
 				if (type.getSecond() != null)
 					returnValue.setSecond(SemanticCheckerUtils.evaluateConstantTerm("-", type
 							.getFirst(), 0, type.getSecond()));
 			}
 		} else if (operator.equals("!")) {
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(
-					type.getFirst(), TypesUtilities.BOOLEAN_TYPE)) {
+			if (!type.getFirst().canTypeUpCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE)) {
 				TypesUtilities.addTypeMismatchException(exceptionContainer, type.getFirst(),
-						TypesUtilities.BOOLEAN_TYPE, uExpression);
+						CoreRebecaTypeSystem.BOOLEAN_TYPE, uExpression);
 			} else {
 				if (type.getSecond() != null)
 					returnValue.setSecond(SemanticCheckerUtils.evaluateConstantTerm("!", type

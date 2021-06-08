@@ -1,30 +1,30 @@
 package org.rebecalang.compiler.modelcompiler;
 
 import java.util.HashMap;
-import java.util.Set;
 import java.util.Stack;
 
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
-import org.rebecalang.compiler.utils.CodeCompilationException;
-import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.Pair;
-import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ScopeHandler {
-
+	
 	public final static String RETURN_VALUE_KEY_IN_SCOPE = "$return$";
 
-	protected Set<CompilerFeature> compilerFeature;
+//	@Autowired
+//	AbstractTypeSystem typeSystem;
+	
+	private Stack<Pair<Label, HashMap<String, VariableInScopeSpecifier>>> scopeStack;
 
-	private final Stack<Pair<Label, HashMap<String, VariableInScopeSpecifier>>> scopeStack;
-
-	public ScopeHandler(RebecaModel rebecaModel,
-			Set<CompilerFeature> compilerFeature) {
-		this.scopeStack = new Stack<Pair<Label, HashMap<String, VariableInScopeSpecifier>>>();
-		this.compilerFeature = compilerFeature;
+	public ScopeHandler() {
+		this.clear();
+	}
+	
+	public void clear() {
+		scopeStack = new Stack<Pair<Label, HashMap<String, VariableInScopeSpecifier>>>();
 	}
 	
 	public void pushScopeRecord(Label label){
@@ -49,13 +49,13 @@ public class ScopeHandler {
 			info = retreiveVariableFromScope(variableName);
 		} catch (ScopeException se) {
 			VariableInScopeSpecifier data;
-			try {
-				type = TypesUtilities.getInstance().getType(type);
+//			try {
+//				type = typeSystem.getType(type);
 				data = new VariableInScopeSpecifier(variableName, type, label, precompilationValue,
 						lineNumber, column);
-			} catch (CodeCompilationException e) {
-				throw new ScopeException("Unknown type " + TypesUtilities.getTypeName(type), 0, 0);
-			}
+//			} catch (CodeCompilationException e) {
+//				throw new ScopeException("Unknown type " + type.getTypeName(), 0, 0);
+//			}
 			scopeStack.peek().getSecond().put(variableName, data);
 			return;
 		}
@@ -65,7 +65,7 @@ public class ScopeHandler {
 			exceptionMessage = variableName + " is a reserved word";
 		} else {
 			exceptionMessage = "Redeclaration of \""
-					+ TypesUtilities.getTypeName(type) + " " + variableName
+					+ type.getTypeName() + " " + variableName
 					+ "\", it has already been declared in line "
 					+ info.getLineNumber() + " column "
 					+ info.getColumn();
@@ -92,17 +92,7 @@ public class ScopeHandler {
 		}
 		return false;
 	}
-	
-	public class ScopeException extends CodeCompilationException {
-
-		private static final long serialVersionUID = 1L;
-
-		public ScopeException(String message, int line, int column) {
-			super(message, line, column);
-		}
-
-	}
-	
+		
 	public class VariableInScopeSpecifier {
 		private String name;
 		private Type type;

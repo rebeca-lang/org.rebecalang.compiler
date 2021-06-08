@@ -2,8 +2,11 @@ package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecke
 
 import java.util.ArrayList;
 
-import org.rebecalang.compiler.modelcompiler.AbstractStatementSemanticCheck;
-import org.rebecalang.compiler.modelcompiler.ScopeHandler.ScopeException;
+import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.ScopeException;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractStatementSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
@@ -20,15 +23,38 @@ import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSemanticCheck {
+
+	AbstractTypeSystem typeSystem;
+
+	StatementSemanticCheckContainer statementSemanticCheckContainer;
+
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+
+	@Autowired
+	public FieldDeclarationStatementSemanticCheck(AbstractTypeSystem typeSystem,
+			StatementSemanticCheckContainer statementSemanticCheckContainer,
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		super();
+		this.typeSystem = typeSystem;
+		this.statementSemanticCheckContainer = statementSemanticCheckContainer;
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
+	}
+
 
 	@Override
 	public void check(Statement statement) throws CompilerInternalErrorRuntimeException {
-		Type fieldsType = TypesUtilities.UNKNOWN_TYPE;
+		Type fieldsType = AbstractTypeSystem.UNKNOWN_TYPE;
 		FieldDeclaration fieldDeclaration = (FieldDeclaration) statement;
 		try {
-			fieldDeclaration.setType(TypesUtilities.getInstance().getType(fieldDeclaration.getType()));
+			fieldDeclaration.setType(typeSystem.getType(fieldDeclaration.getType()));
 			fieldsType = fieldDeclaration.getType();
 		} catch (CodeCompilationException e) {
 			e.setColumn(fieldDeclaration.getCharacter());
@@ -78,7 +104,7 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 			ArrayType retType = getArrayVariableInitializerType(original);
 			variableInitializer.setType(retType);
 
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(retType, type)) {
+			if (!retType.canTypeUpCastTo(type)) {
 				TypesUtilities.addTypeMismatchException(exceptionContainer, retType, type, 
 						variableInitializer.getCharacter(), variableInitializer.getLineNumber());
 				return;
@@ -89,7 +115,7 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 							((OrdinaryVariableInitializer) variableInitializer)
 									.getValue()).getFirst();
 			variableInitializer.setType(retType);
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(retType, type)) {
+			if (!retType.canTypeUpCastTo(type)) {
 				TypesUtilities.addTypeMismatchException(exceptionContainer, retType, type, 
 						variableInitializer.getCharacter(), variableInitializer.getLineNumber());
 				return;
@@ -127,8 +153,8 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 		}
 		Type superType = innerTypes.get(0);
 		for (int cnt = 1; cnt < innerTypes.size(); cnt++) {
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(innerTypes.get(cnt), superType)) {
-				if (!TypesUtilities.getInstance().canTypeUpCastTo(superType, innerTypes.get(cnt))) {
+			if (!innerTypes.get(cnt).canTypeUpCastTo(superType)) {
+				if (!superType.canTypeUpCastTo(innerTypes.get(cnt))) {
 					TypesUtilities.addTypeMismatchException(exceptionContainer, 
 							innerTypes.get(cnt), innerTypes.get(0), 
 							avi.getCharacter(), avi.getLineNumber());

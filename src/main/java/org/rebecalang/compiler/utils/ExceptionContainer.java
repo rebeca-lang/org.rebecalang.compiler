@@ -4,6 +4,7 @@
 
 package org.rebecalang.compiler.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -97,5 +98,12 @@ public class ExceptionContainer extends Exception {
 				e.printStackTrace();
 			}
 		}		
+	}
+	
+	public String toString() {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		PrintStream printStream = new PrintStream(output);
+		print(printStream);
+		return output.toString();
 	}
 }

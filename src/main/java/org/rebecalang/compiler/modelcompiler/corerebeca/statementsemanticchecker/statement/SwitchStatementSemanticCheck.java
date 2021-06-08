@@ -3,9 +3,11 @@ package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecke
 import java.util.HashSet;
 import java.util.Set;
 
-import org.rebecalang.compiler.modelcompiler.AbstractStatementSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SwitchStatement;
@@ -15,8 +17,16 @@ import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SwitchStatementSemanticCheck extends AbstractStatementSemanticCheck {
+
+	@Autowired
+	StatementSemanticCheckContainer statementSemanticCheckContainer;
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 
 	@Override
 	public void check(Statement statement) throws CompilerInternalErrorRuntimeException {
@@ -27,12 +37,10 @@ public class SwitchStatementSemanticCheck extends AbstractStatementSemanticCheck
 		Pair<Type, Object> result = expressionSemanticCheckContainer.check(switchStatement.getExpression());
 		Type switchExpressionType = result.getFirst();
 		if (switchExpressionType != null) {
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(
-					switchExpressionType, TypesUtilities.INT_TYPE)) {
+			if (!switchExpressionType.canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE)) {
 				CodeCompilationException rce = new CodeCompilationException(
 						"Cannot switch on a value of type "
-								+ TypesUtilities
-										.getTypeName(switchExpressionType)
+								+ switchExpressionType.getTypeName()
 								+ ". Only convertible int values are permitted",
 						switchStatement.getLineNumber(), switchStatement
 								.getCharacter());
@@ -46,11 +54,9 @@ public class SwitchStatementSemanticCheck extends AbstractStatementSemanticCheck
 						Expression switchLabel = sbsg.getExpression();
 						Pair<Type, Object> evaluate = expressionSemanticCheckContainer.check(switchLabel);
 						if (evaluate.getSecond() != null) {
-							if (!TypesUtilities.getInstance().canTypeUpCastTo(
-									evaluate.getFirst(),
-									TypesUtilities.INT_TYPE)) {
+							if (!evaluate.getFirst().canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE)) {
 								TypesUtilities.addTypeMismatchException(exceptionContainer, evaluate.getFirst(),
-										TypesUtilities.INT_TYPE, 
+										CoreRebecaTypeSystem.INT_TYPE, 
 										switchLabel.getCharacter(), switchLabel.getLineNumber());
 
 							} else {
@@ -85,7 +91,7 @@ public class SwitchStatementSemanticCheck extends AbstractStatementSemanticCheck
 						hasDefault = true;
 					}
 					for (Statement stat : sbsg.getStatements())
-						((StatementSemanticCheckContainer)defaultContainer).check(stat);
+						statementSemanticCheckContainer.check(stat);
 				}
 			}
 		}

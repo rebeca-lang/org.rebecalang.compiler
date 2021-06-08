@@ -8,7 +8,7 @@
 	
 	import java.util.*;
 	import org.antlr.runtime.BitSet;
-	import org.rebecalang.compiler.utils.TypesUtilities;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -135,6 +135,8 @@ public class HybridRebecaCompleteParser extends Parser {
 	public String[] getTokenNames() {
 		return tokenNames;
 	}
+
+	@Override
 
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
@@ -4269,7 +4271,7 @@ public class HybridRebecaCompleteParser extends Parser {
 				((InstanceOfExpressionContext)_localctx).e =  new InstanceofExpression(); 
 				        					((InstanceofExpression)_localctx.e).setValue(((InstanceOfExpressionContext)_localctx).e1.e); 
 				        					((InstanceofExpression)_localctx.e).setEvaluationType(((InstanceOfExpressionContext)_localctx).t.t);
-				        					_localctx.e.setType(TypesUtilities.BOOLEAN_TYPE);
+				        					_localctx.e.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 				        					_localctx.e.setLineNumber(((InstanceOfExpressionContext)_localctx).t.t.getLineNumber()); _localctx.e.setCharacter(((InstanceOfExpressionContext)_localctx).t.t.getCharacter());
 				        					
 				}
@@ -5389,7 +5391,7 @@ public class HybridRebecaCompleteParser extends Parser {
 				setState(1114);
 				((LiteralContext)_localctx).INTLITERAL = match(INTLITERAL);
 				((LiteralContext)_localctx).l =  new Literal();_localctx.l.setLiteralValue((((LiteralContext)_localctx).INTLITERAL!=null?((LiteralContext)_localctx).INTLITERAL.getText():null));
-				    		_localctx.l.setType(TypesUtilities.INT_TYPE);
+				    		_localctx.l.setType(CoreRebecaTypeSystem.INT_TYPE);
 				    		_localctx.l.setLineNumber(((LiteralContext)_localctx).INTLITERAL.getLine());_localctx.l.setCharacter(((LiteralContext)_localctx).INTLITERAL.getCharPositionInLine());
 				}
 				break;
@@ -5399,7 +5401,7 @@ public class HybridRebecaCompleteParser extends Parser {
 				setState(1116);
 				((LiteralContext)_localctx).FLOATLITERAL = match(FLOATLITERAL);
 				((LiteralContext)_localctx).l =  new Literal();_localctx.l.setLiteralValue((((LiteralContext)_localctx).FLOATLITERAL!=null?((LiteralContext)_localctx).FLOATLITERAL.getText():null));
-				    	_localctx.l.setType(TypesUtilities.FLOAT_TYPE);
+				    	_localctx.l.setType(CoreRebecaTypeSystem.FLOAT_TYPE);
 				    	_localctx.l.setLineNumber(((LiteralContext)_localctx).FLOATLITERAL.getLine());_localctx.l.setCharacter(((LiteralContext)_localctx).FLOATLITERAL.getCharPositionInLine());
 				}
 				break;
@@ -5409,7 +5411,7 @@ public class HybridRebecaCompleteParser extends Parser {
 				setState(1118);
 				((LiteralContext)_localctx).DOUBLELITERAL = match(DOUBLELITERAL);
 				((LiteralContext)_localctx).l =  new Literal();_localctx.l.setLiteralValue((((LiteralContext)_localctx).DOUBLELITERAL!=null?((LiteralContext)_localctx).DOUBLELITERAL.getText():null));
-				    	_localctx.l.setType(TypesUtilities.DOUBLE_TYPE);
+				    	_localctx.l.setType(CoreRebecaTypeSystem.DOUBLE_TYPE);
 				    	_localctx.l.setLineNumber(((LiteralContext)_localctx).DOUBLELITERAL.getLine());_localctx.l.setCharacter(((LiteralContext)_localctx).DOUBLELITERAL.getCharPositionInLine());
 				}
 				break;
@@ -5419,7 +5421,7 @@ public class HybridRebecaCompleteParser extends Parser {
 				setState(1120);
 				((LiteralContext)_localctx).CHARLITERAL = match(CHARLITERAL);
 				((LiteralContext)_localctx).l =  new Literal();_localctx.l.setLiteralValue((((LiteralContext)_localctx).CHARLITERAL!=null?((LiteralContext)_localctx).CHARLITERAL.getText():null));
-				    	_localctx.l.setType(TypesUtilities.CHAR_TYPE);
+				    	_localctx.l.setType(CoreRebecaTypeSystem.CHAR_TYPE);
 				    	_localctx.l.setLineNumber(((LiteralContext)_localctx).CHARLITERAL.getLine());_localctx.l.setCharacter(((LiteralContext)_localctx).CHARLITERAL.getCharPositionInLine());
 				}
 				break;
@@ -5429,7 +5431,7 @@ public class HybridRebecaCompleteParser extends Parser {
 				setState(1122);
 				((LiteralContext)_localctx).STRINGLITERAL = match(STRINGLITERAL);
 				((LiteralContext)_localctx).l =  new Literal();_localctx.l.setLiteralValue((((LiteralContext)_localctx).STRINGLITERAL!=null?((LiteralContext)_localctx).STRINGLITERAL.getText():null));
-				    	_localctx.l.setType(TypesUtilities.STRING_TYPE);
+				    	_localctx.l.setType(CoreRebecaTypeSystem.STRING_TYPE);
 				    	_localctx.l.setLineNumber(((LiteralContext)_localctx).STRINGLITERAL.getLine());_localctx.l.setCharacter(((LiteralContext)_localctx).STRINGLITERAL.getCharPositionInLine());
 				}
 				break;
@@ -5439,7 +5441,7 @@ public class HybridRebecaCompleteParser extends Parser {
 				setState(1124);
 				((LiteralContext)_localctx).TRUE = match(TRUE);
 				((LiteralContext)_localctx).l =  new Literal();_localctx.l.setLiteralValue("true");
-				    	_localctx.l.setType(TypesUtilities.BOOLEAN_TYPE);
+				    	_localctx.l.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 				    	_localctx.l.setLineNumber(((LiteralContext)_localctx).TRUE.getLine());_localctx.l.setCharacter(((LiteralContext)_localctx).TRUE.getCharPositionInLine());
 				}
 				break;
@@ -5449,7 +5451,7 @@ public class HybridRebecaCompleteParser extends Parser {
 				setState(1126);
 				((LiteralContext)_localctx).FALSE = match(FALSE);
 				((LiteralContext)_localctx).l =  new Literal();_localctx.l.setLiteralValue("false");
-				    	_localctx.l.setType(TypesUtilities.BOOLEAN_TYPE);
+				    	_localctx.l.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 				    	_localctx.l.setLineNumber(((LiteralContext)_localctx).FALSE.getLine());_localctx.l.setCharacter(((LiteralContext)_localctx).FALSE.getCharPositionInLine());
 				}
 				break;
@@ -5459,7 +5461,7 @@ public class HybridRebecaCompleteParser extends Parser {
 				setState(1128);
 				((LiteralContext)_localctx).NULL = match(NULL);
 				((LiteralContext)_localctx).l =  new Literal();_localctx.l.setLiteralValue("null");
-				    	_localctx.l.setType(TypesUtilities.NULL_TYPE);
+				    	_localctx.l.setType(CoreRebecaTypeSystem.NULL_TYPE);
 				    	_localctx.l.setLineNumber(((LiteralContext)_localctx).NULL.getLine());_localctx.l.setCharacter(((LiteralContext)_localctx).NULL.getCharPositionInLine());
 				}
 				break;

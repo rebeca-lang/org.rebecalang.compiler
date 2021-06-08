@@ -117,6 +117,8 @@ public class HybridRebecaCompleteLexer extends Lexer {
 		return tokenNames;
 	}
 
+	@Override
+
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
 	}
@@ -136,6 +138,7 @@ public class HybridRebecaCompleteLexer extends Lexer {
 	@Override
 	public String getSerializedATN() { return _serializedATN; }
 
+	@Override
 	public String[] getChannelNames() { return channelNames; }
 
 	@Override

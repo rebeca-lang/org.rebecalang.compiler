@@ -1,0 +1,26 @@
+reactiveclass A (3) {
+	knownrebecs {
+		B bb;
+	}
+	
+	statevars {
+		int c, d;
+	}
+	msgsrv initial() {
+	}
+}
+
+reactiveclass B (3) {
+	statevars {
+		A a;
+		boolean bl;
+		int[2] c, d;
+	}
+	msgsrv m(A param1, int param2) {
+	}
+}
+
+main {
+	A a(b):();
+	B b():();
+}

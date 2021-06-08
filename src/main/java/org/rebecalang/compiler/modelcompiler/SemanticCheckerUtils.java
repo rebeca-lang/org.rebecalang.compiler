@@ -8,20 +8,23 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.TypesUtilities;
 
+
 public class SemanticCheckerUtils {
 
 	public static Type getCommonSuperType(Type lType, Type rType) throws CodeCompilationException {
-		if (TypesUtilities.getInstance().canTypeUpCastTo(lType, rType)) {
-			if (rType == TypesUtilities.NULL_TYPE)
+		if (lType.canTypeUpCastTo(rType)) {
+			if (rType == CoreRebecaTypeSystem.NULL_TYPE)
 				return lType;
 			return rType;
 		}
-		if (TypesUtilities.getInstance().canTypeUpCastTo(rType, lType)) {
-			if (lType == TypesUtilities.NULL_TYPE)
+		if (rType.canTypeUpCastTo(lType)) {
+			if (lType == CoreRebecaTypeSystem.NULL_TYPE)
 				return rType;
 			return lType;
 		}
@@ -30,12 +33,12 @@ public class SemanticCheckerUtils {
 
 	public static Type getResultType(String operator, Type lType, Type rType)
 			throws CodeCompilationException {
-		Type retValue = TypesUtilities.UNKNOWN_TYPE;
+		Type retValue = AbstractTypeSystem.UNKNOWN_TYPE;
 
 		// Assignment operators which are applicable for all values
 		if (operator.equals("=")) {
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(rType, lType)) {
-				CodeCompilationException cce = createEvaluateExceptionMessage2(
+			if (!rType.canTypeUpCastTo(lType)) {
+				CodeCompilationException cce = createEvaluateExceptionMessage(
 						0, 0, operator, rType, lType);
 				if (cce == null)
 					return retValue;
@@ -49,25 +52,23 @@ public class SemanticCheckerUtils {
 		Set<String> arithmeticFreeOperators = new HashSet<String>();
 		arithmeticFreeOperators.addAll(Arrays.asList("+", "-", "*", "/"));
 		if (arithmeticFreeOperators.contains(operator)) {
-			if (lType == TypesUtilities.STRING_TYPE) {
+			if (lType == CoreRebecaTypeSystem.STRING_TYPE) {
 				if (operator.equals("+")) {
-					return TypesUtilities.STRING_TYPE;
+					return CoreRebecaTypeSystem.STRING_TYPE;
 				} else {
 					throw new CodeCompilationException("Incompatible operator for String type", 0, 0);					
 				}
 			} else {
 				Type biggerType = getCommonSuperType(lType, rType);
-				if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
-						TypesUtilities.DOUBLE_TYPE)) {
-					CodeCompilationException cce = createEvaluateExceptionMessage2(
+				if (!biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.DOUBLE_TYPE)) {
+					CodeCompilationException cce = createEvaluateExceptionMessage(
 							0, 0, operator, rType, lType);
 					if (cce == null)
 						return retValue;
 					throw cce;
 				} else {
-					if (TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
-							TypesUtilities.INT_TYPE)) {
-						retValue = TypesUtilities.INT_TYPE;
+					if (biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE)) {
+						retValue = CoreRebecaTypeSystem.INT_TYPE;
 					} else {
 						retValue = biggerType;
 					}
@@ -79,10 +80,9 @@ public class SemanticCheckerUtils {
 		arithmeticFreeAssignmentOperators.addAll(Arrays.asList("+=", "-=",
 				"*=", "/="));
 		if (arithmeticFreeAssignmentOperators.contains(operator)) {
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(rType, lType)
-					|| !TypesUtilities.getInstance().canTypeUpCastTo(lType,
-							TypesUtilities.DOUBLE_TYPE)) {
-				CodeCompilationException cce = createEvaluateExceptionMessage2(
+			if (!rType.canTypeUpCastTo(lType)
+					|| !lType.canTypeUpCastTo(CoreRebecaTypeSystem.DOUBLE_TYPE)) {
+				CodeCompilationException cce = createEvaluateExceptionMessage(
 						0, 0, operator, rType, lType);
 				if (cce == null)
 					return retValue;
@@ -96,9 +96,8 @@ public class SemanticCheckerUtils {
 		arithmeticIntegerOperators.addAll(Arrays.asList("%", ">>", "<<"));
 		if (arithmeticIntegerOperators.contains(operator)) {
 			Type biggerType = getCommonSuperType(lType, rType);
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
-					TypesUtilities.INT_TYPE)) {
-				CodeCompilationException cce = createEvaluateExceptionMessage2(
+			if (!biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE)) {
+				CodeCompilationException cce = createEvaluateExceptionMessage(
 						0, 0, operator, rType, lType);
 				if (cce == null)
 					return retValue;
@@ -111,10 +110,9 @@ public class SemanticCheckerUtils {
 		arithmeticIntegerAssignmentOperators.addAll(Arrays.asList(">>=", "<<=",
 				"%="));
 		if (arithmeticIntegerAssignmentOperators.contains(operator)) {
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(rType, lType)
-					|| !TypesUtilities.getInstance().canTypeUpCastTo(lType,
-							TypesUtilities.INT_TYPE)) {
-				CodeCompilationException cce = createEvaluateExceptionMessage2(
+			if (!rType.canTypeUpCastTo(lType)
+					|| !lType.canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE)) {
+				CodeCompilationException cce = createEvaluateExceptionMessage(
 						0, 0, operator, rType, lType);
 				if (cce == null)
 					return retValue;
@@ -129,11 +127,9 @@ public class SemanticCheckerUtils {
 		bitwiseOperators.addAll(Arrays.asList("|", "&", "^", "~"));
 		if (bitwiseOperators.contains(operator)) {
 			Type biggerType = getCommonSuperType(lType, rType);
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
-					TypesUtilities.INT_TYPE)
-					&& !TypesUtilities.getInstance().canTypeUpCastTo(
-							biggerType, TypesUtilities.BOOLEAN_TYPE)) {
-				CodeCompilationException cce = createEvaluateExceptionMessage2(
+			if (!biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE)
+					&& !biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE)) {
+				CodeCompilationException cce = createEvaluateExceptionMessage(
 						0, 0, operator, rType, lType);
 				if (cce == null)
 					return retValue;
@@ -146,12 +142,10 @@ public class SemanticCheckerUtils {
 		bitwiseAssignmentOperators
 				.addAll(Arrays.asList("|=", "&=", "^=", "~="));
 		if (bitwiseAssignmentOperators.contains(operator)) {
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(rType, lType)
-					|| (!TypesUtilities.getInstance().canTypeUpCastTo(lType,
-							TypesUtilities.INT_TYPE) && !TypesUtilities
-							.getInstance().canTypeUpCastTo(lType,
-									TypesUtilities.BOOLEAN_TYPE))) {
-				CodeCompilationException cce = createEvaluateExceptionMessage2(
+			if (!rType.canTypeUpCastTo(lType)
+					|| (!lType.canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE) && 
+							!lType.canTypeUpCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE))) {
+				CodeCompilationException cce = createEvaluateExceptionMessage(
 						0, 0, operator, rType, lType);
 				if (cce == null)
 					return retValue;
@@ -166,15 +160,14 @@ public class SemanticCheckerUtils {
 		relationalOperators.addAll(Arrays.asList("<", ">", "<=", ">="));
 		if (relationalOperators.contains(operator)) {
 			Type biggerType = getCommonSuperType(lType, rType);
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
-					TypesUtilities.DOUBLE_TYPE)) {
-				CodeCompilationException cce = createEvaluateExceptionMessage2(
+			if (!biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.DOUBLE_TYPE)) {
+				CodeCompilationException cce = createEvaluateExceptionMessage(
 						0, 0, operator, rType, lType);
 				if (cce == null)
 					return retValue;
 				throw cce;
 			}
-			retValue = TypesUtilities.BOOLEAN_TYPE;
+			retValue = CoreRebecaTypeSystem.BOOLEAN_TYPE;
 		}
 
 		// relational operators which are applicable for integer, real, boolean,
@@ -183,19 +176,16 @@ public class SemanticCheckerUtils {
 		relationalEQOperators.addAll(Arrays.asList("==", "!="));
 		if (relationalEQOperators.contains(operator)) {
 			Type biggerType = getCommonSuperType(lType, rType);
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(biggerType,
-					TypesUtilities.DOUBLE_TYPE)
-					&& !TypesUtilities.getInstance().canTypeUpCastTo(
-							biggerType, TypesUtilities.BOOLEAN_TYPE)
-					&& !TypesUtilities.getInstance().canTypeUpCastTo(
-							biggerType, TypesUtilities.REACTIVE_CLASS_TYPE)) {
-				CodeCompilationException cce = createEvaluateExceptionMessage2(
+			if (!biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.DOUBLE_TYPE)
+					&& !biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE)
+					&& !biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.REACTIVE_CLASS_TYPE)) {
+				CodeCompilationException cce = createEvaluateExceptionMessage(
 						0, 0, operator, rType, lType);
 				if (cce == null)
 					return retValue;
 				throw cce;
 			}
-			retValue = TypesUtilities.BOOLEAN_TYPE;
+			retValue = CoreRebecaTypeSystem.BOOLEAN_TYPE;
 		}
 
 		// logical operators which are applicable for integer, real, boolean,
@@ -203,17 +193,15 @@ public class SemanticCheckerUtils {
 		Set<String> logicalOperators = new HashSet<String>();
 		logicalOperators.addAll(Arrays.asList("&&", "||", "->"));
 		if (logicalOperators.contains(operator)) {
-			if (!TypesUtilities.getInstance().canTypeUpCastTo(lType,
-					TypesUtilities.BOOLEAN_TYPE)
-					|| !TypesUtilities.getInstance().canTypeUpCastTo(rType,
-							TypesUtilities.BOOLEAN_TYPE)) {
-				CodeCompilationException cce = createEvaluateExceptionMessage2(
+			if (!lType.canTypeUpCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE)
+					|| !rType.canTypeUpCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE)) {
+				CodeCompilationException cce = createEvaluateExceptionMessage(
 						0, 0, operator, rType, lType);
 				if (cce == null)
 					return retValue;
 				throw cce;
 			}
-			retValue = TypesUtilities.BOOLEAN_TYPE;
+			retValue = CoreRebecaTypeSystem.BOOLEAN_TYPE;
 		}
 		return retValue;
 	}
@@ -221,19 +209,19 @@ public class SemanticCheckerUtils {
 	public static CodeCompilationException getOutofRangeException(
 			String value, Type type, int line, int column) {
 		return new CodeCompilationException("The literal " + value
-				+ " of type " + TypesUtilities.getTypeName(type)
+				+ " of type " + type.getTypeName()
 				+ " is out of range ", line, column);
 	}
 
-	public static CodeCompilationException createEvaluateExceptionMessage2(
+	public static CodeCompilationException createEvaluateExceptionMessage(
 			int lineNumber, int column, String operator, Type... types) {
 		String typesString = "";
 		for (Type type : types) {
-			if (type == null || type == TypesUtilities.UNKNOWN_TYPE)
+			if (type == null || type == AbstractTypeSystem.UNKNOWN_TYPE)
 				return null;
 			typesString += ", "
-					+ (type == null ? "unknown" : TypesUtilities
-							.getTypeName(type));
+					+ (type == null ? "unknown" : type
+							.getTypeName());
 		}
 		if (types.length > 0)
 			typesString = typesString.substring(2);
@@ -243,23 +231,41 @@ public class SemanticCheckerUtils {
 				lineNumber, column);
 	}
 
+//	public static Object evaluateConstantTerm(String operator, Type type,
+//			Object left, Object right) {
+//
+//    	String expression = "";
+//		if (right != null && left != null) {
+//			expression = "(" + left + ")" + operator + "(" + right + ");";
+//		} else if (left != null) {
+//			expression = operator + "(" + left.toString() + ");";
+//		}
+//		System.out.println(expression);
+//        return context.eval("js", expression);
+////		return null;
+//	}
+
+	
 	public static Object evaluateConstantTerm(String operator, Type type,
 			Object left, Object right) {
 
 		ScriptEngineManager mgr = new ScriptEngineManager();
-		ScriptEngine engine = mgr.getEngineByName("JavaScript");
+		ScriptEngine engine = mgr.getEngineByName("javascript");
+		String expression = "";
 		try {
 			Object value = null;
 			if (right != null && left != null) {
-				value = engine.eval("(" + left + ")" + operator + "(" + right + ")");
+				expression = "(" + left + ")" + operator + "(" + right + ")";
 			} else if (left != null) {
-				value = engine.eval(operator + "(" + left.toString() + ")");
+				expression = operator + "(" + left.toString() + ")";
 			}
+//			System.out.println(expression);
+			value = engine.eval(expression);
 			return value;
 			
 		} catch (ScriptException e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+//			e.printStackTrace();
 		}
 		return null;
 	}

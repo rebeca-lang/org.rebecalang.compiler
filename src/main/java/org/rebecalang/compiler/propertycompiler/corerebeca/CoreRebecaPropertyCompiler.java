@@ -1,16 +1,14 @@
 package org.rebecalang.compiler.propertycompiler.corerebeca;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Set;
-
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.rebecalang.compiler.modelcompiler.SymbolTable;
+import org.antlr.v4.runtime.Parser;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
@@ -20,88 +18,93 @@ import org.rebecalang.compiler.propertycompiler.corerebeca.compiler.CoreRebecaPr
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.LTLDefinition;
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.PropertyModel;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.GeneralPropertyCompiler;
-import org.rebecalang.compiler.utils.CompilerFeature;
+import org.rebecalang.compiler.propertycompiler.generalrebeca.expressionsemanticchecker.InvalidExpressionsSemanticCheck;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
-import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 
+@Component
+@Qualifier("CORE_REBECA")
 public class CoreRebecaPropertyCompiler extends GeneralPropertyCompiler {
 
-	public PropertyModel compilePropertyModel(RebecaModel rebecaModel, SymbolTable symbolTable,
-			File propertyFile,
-			Set<CompilerFeature> compilerFeatures) {
-		
-		prepareForCompilation(rebecaModel, symbolTable, propertyFile, compilerFeatures);
-		
-		try {
-			ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(propertyFile));
-			CoreRebecaPropertyCompleteLexer lexer = new CoreRebecaPropertyCompleteLexer(input);
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			CoreRebecaPropertyCompleteParser parser = new CoreRebecaPropertyCompleteParser(tokens);
+	@Autowired
+	private ConfigurableApplicationContext appContext;
 
-			return (PropertyModel) performCompilation(parser);
-
-		} catch (FileNotFoundException e) {
-			exceptionContainer.addException(new PropertyCodeCompilationException("Property file \"" + 
-					propertyFile.getName() + "\" not found.", 0, 0));
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+	@Autowired
+	@Override
+	public void setTypeSystem(@Qualifier("CORE_REBECA") AbstractTypeSystem typeSystem) {
+		super.setTypeSystem(typeSystem);
 	}
 
-	public void semanticCheck(org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.PropertyModel propertyModel) {
+	@Override
+	public void semanticCheck() {
 		
-		super.basicSemanticCheck(propertyModel);
+		super.semanticCheck();
+		
+		for (LTLDefinition ltlDefinition : ((PropertyModel)propertyModel).getLTLDefinitions()) {
+			Pair<Type, Object> checkingResult = expressionSemanticCheckContainer.check(ltlDefinition.getExpression());
+			if (!checkingResult.getFirst().canTypeCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE)) {
+				if (checkingResult.getFirst() != AbstractTypeSystem.UNKNOWN_TYPE)
+				exceptionContainer.addException(new PropertyCodeCompilationException(
+						"The result of an LTL formula must be evaluatable to boolean.", 
+						ltlDefinition.getExpression().getLineNumber(), ltlDefinition.getExpression().getCharacter()));
+			}
+		}
+	}
+
+	protected void updateSymbolTable(RebecaModel rebecaModel) {
+		super.updateSymbolTable(rebecaModel);
 		
 		SynchMethodDeclaration globallyMethod = new SynchMethodDeclaration();
 		globallyMethod.setName("G");
 		FormalParameterDeclaration fpd = new FormalParameterDeclaration();
 		fpd.setName("arg0");
-		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		fpd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		globallyMethod.getFormalParameters().add(fpd);
-		globallyMethod.setReturnType(TypesUtilities.BOOLEAN_TYPE);
+		globallyMethod.setReturnType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		
 		SynchMethodDeclaration finallyMethod = new SynchMethodDeclaration();
 		finallyMethod.setName("F");
 		fpd = new FormalParameterDeclaration();
 		fpd.setName("arg0");
-		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		fpd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		finallyMethod.getFormalParameters().add(fpd);
-		finallyMethod.setReturnType(TypesUtilities.BOOLEAN_TYPE);
+		finallyMethod.setReturnType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		
 		SynchMethodDeclaration nextMethod = new SynchMethodDeclaration();
 		nextMethod.setName("X");
 		fpd = new FormalParameterDeclaration();
 		fpd.setName("arg0");
-		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		fpd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		nextMethod.getFormalParameters().add(fpd);
-		nextMethod.setReturnType(TypesUtilities.BOOLEAN_TYPE);
+		nextMethod.setReturnType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		
 		SynchMethodDeclaration untilMethod = new SynchMethodDeclaration();
 		untilMethod.setName("U");
 		fpd = new FormalParameterDeclaration();
 		fpd.setName("arg0");
-		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		fpd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		untilMethod.getFormalParameters().add(fpd);
 		fpd = new FormalParameterDeclaration();
 		fpd.setName("arg1");
-		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		fpd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		untilMethod.getFormalParameters().add(fpd);
-		untilMethod.setReturnType(TypesUtilities.BOOLEAN_TYPE);
+		untilMethod.setReturnType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		
 		SynchMethodDeclaration weakUntilMethod = new SynchMethodDeclaration();
 		weakUntilMethod.setName("W");
 		fpd = new FormalParameterDeclaration();
 		fpd.setName("arg0");
-		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		fpd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		weakUntilMethod.getFormalParameters().add(fpd);
 		fpd = new FormalParameterDeclaration();
 		fpd.setName("arg1");
-		fpd.setType(TypesUtilities.BOOLEAN_TYPE);
+		fpd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		weakUntilMethod.getFormalParameters().add(fpd);
-		weakUntilMethod.setReturnType(TypesUtilities.BOOLEAN_TYPE);
+		weakUntilMethod.setReturnType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 
 		try {
 			modelSymbolTable.addMethod(null, globallyMethod,
@@ -117,16 +120,22 @@ public class CoreRebecaPropertyCompiler extends GeneralPropertyCompiler {
 		} catch (ExceptionContainer ec) {
 			exceptionContainer.addAll(ec);
 		}
-		
-		for (LTLDefinition ltlDefinition : ((PropertyModel)propertyModel).getLTLDefinitions()) {
-			Pair<Type, Object> checkingResult = expressionSemanticCheckContainer.check(ltlDefinition.getExpression());
-			if (!TypesUtilities.getInstance().canTypeCastTo(checkingResult.getFirst(), TypesUtilities.BOOLEAN_TYPE)) {
-				if (checkingResult.getFirst() != TypesUtilities.UNKNOWN_TYPE)
-				exceptionContainer.addException(new PropertyCodeCompilationException(
-						"The result of an LTL formula must be evaluatable to boolean.", 
-						ltlDefinition.getExpression().getLineNumber(), ltlDefinition.getExpression().getCharacter()));
-			}
-		}
+	}
+
+	@Override
+	protected void initializeExpressionSemanticCheckContainer() {
+		expressionSemanticCheckContainer.registerSemanticsChecker(RebecInstantiationPrimary.class,
+				appContext.getBean(InvalidExpressionsSemanticCheck.class));
+
+		expressionSemanticCheckContainer.registerSemanticsChecker(NonDetExpression.class,
+				appContext.getBean(InvalidExpressionsSemanticCheck.class));
+	}
+
+	@Override
+	protected Parser getParser(CharStream input) {
+		CoreRebecaPropertyCompleteLexer lexer = new CoreRebecaPropertyCompleteLexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		return new CoreRebecaPropertyCompleteParser(tokens);
 	}
 
 }

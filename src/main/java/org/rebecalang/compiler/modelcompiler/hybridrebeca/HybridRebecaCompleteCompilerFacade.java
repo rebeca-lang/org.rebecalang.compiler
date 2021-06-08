@@ -1,100 +1,60 @@
 package org.rebecalang.compiler.modelcompiler.hybridrebeca;
 
 import java.util.HashMap;
-import java.util.Set;
 
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
-import org.rebecalang.compiler.modelcompiler.ScopeHandler.ScopeException;
+import org.rebecalang.compiler.modelcompiler.ScopeException;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.SymbolTableInitializer;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.TypeSystemInitializer;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompleteCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.compiler.HybridRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.compiler.HybridRebecaCompleteParser;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.HybridRebecaCode;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.HybridTermPrimary;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.ModeDeclaration;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.PhysicalClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.statementsemanticchecker.expression.HybridPrimaryTermSemanticCheck;
-import org.rebecalang.compiler.modelcompiler.timedrebeca.TimedRebecaCompleteCompilerFacade;
-import org.rebecalang.compiler.utils.AccessModifierUtilities;
 import org.rebecalang.compiler.utils.CodeCompilationException;
-import org.rebecalang.compiler.utils.CompilerFeature;
-import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
-import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-public class HybridRebecaCompleteCompilerFacade extends TimedRebecaCompleteCompilerFacade {
+@Component
+@Qualifier("HYBRID_REBECA")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class HybridRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompilerFacade {
 
-	public final static OrdinaryPrimitiveType PHYSICAL_SYSTEM_MODE_TYPE = new OrdinaryPrimitiveType();
+	public HybridRebecaCompleteCompilerFacade(@Qualifier("HYBRID_REBECA") TypeSystemInitializer typeSystemInitializer,
+			@Qualifier("HYBRID_REBECA") SymbolTableInitializer symbolTableInitializer) {
+		super(typeSystemInitializer, symbolTableInitializer);
+	}
+
+
+	@Autowired
+	private ApplicationContext appContext;
+
 	public final static Label PHYSICAL_SYSTEM_MODE_LABEL = new Label();
 	static {
-		PHYSICAL_SYSTEM_MODE_TYPE.setName("PhysicalSystemModeType");
 		PHYSICAL_SYSTEM_MODE_LABEL.setName("PhysicalSystemModeLabel");
 	}
 
-	public HybridRebecaCompleteCompilerFacade(CommonTokenStream tokens,
-			Set<CompilerFeature> features, ExceptionContainer exceptionContainer) {
-		super(HybridRebecaCompleteParser.class, tokens, features, exceptionContainer);
+	protected void initializeExpressionSemanticCheckContainer() {
+		super.initializeExpressionSemanticCheckContainer();
+		expressionSemanticCheckContainer.registerSemanticsChecker(HybridTermPrimary.class, 
+				appContext.getBean(HybridPrimaryTermSemanticCheck.class));
 	}
 	
-	public HybridRebecaCompleteCompilerFacade(Class<? extends Parser> parser, CommonTokenStream tokens,
-			Set<CompilerFeature> features, ExceptionContainer exceptionContainer) {
-		super(parser, tokens, features, exceptionContainer);
-	}
-	
-	protected void initialize() {
-		super.initialize();
-		statementSemanticCheckContainer.getExpressionSemanticCheckContainer().
-		registerTranslator(HybridTermPrimary.class, new HybridPrimaryTermSemanticCheck());
-	}
-	
-	protected void initalizeSymbolTable() {
-		super.initalizeSymbolTable();
-		addingPhysicalclassesToSymbolTableInInitialization();
-	}
-	
-	protected void addingPhysicalclassesToSymbolTableInInitialization() {
-		for (PhysicalClassDeclaration physicalClassDeclaration : ((HybridRebecaCode)rebecaModel.getRebecaCode()).getPhysicalClassDeclaration()) {
-
-			if (physicalClassDeclaration.getExtends() != null) {
-				CodeCompilationException rce = new CodeCompilationException(
-						"Physical classes does not support inheritence",
-						physicalClassDeclaration.getLineNumber(),
-						physicalClassDeclaration.getCharacter());
-				exceptionContainer.addException(rce);
-			}
-
-			if (physicalClassDeclaration.isAbstract()) {
-				CodeCompilationException rce = new CodeCompilationException(
-						"Physical classes can not be abstract",
-						physicalClassDeclaration.getLineNumber(),
-						physicalClassDeclaration.getCharacter());
-				exceptionContainer.addException(rce);
-			}
-
-			addingAReactiveclassToSymbolTableInInitialization(physicalClassDeclaration);
-			
-			try {
-				
-				SynchMethodDeclaration method = new SynchMethodDeclaration();
-				method.setName("setMode");
-				FormalParameterDeclaration fpd = new FormalParameterDeclaration();
-				fpd.setName("arg0");
-				fpd.setType(PHYSICAL_SYSTEM_MODE_TYPE);
-				method.getFormalParameters().add(fpd);
-				Type type = TypesUtilities.getInstance().getType(physicalClassDeclaration.getName());
-				addMethod(type, method, AccessModifierUtilities.PUBLIC, PHYSICAL_SYSTEM_MODE_LABEL);
-
-			} catch (CodeCompilationException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	protected HashMap<String, ReactiveClassDeclaration> getAllClasses() {
 		HashMap<String,ReactiveClassDeclaration> allClasses = super.getAllClasses();
 		for(PhysicalClassDeclaration physicalClassDeclaration : ((HybridRebecaCode)rebecaModel.getRebecaCode()).getPhysicalClassDeclaration())
@@ -102,36 +62,11 @@ public class HybridRebecaCompleteCompilerFacade extends TimedRebecaCompleteCompi
 		return allClasses;
 	}
 	
-	protected void fillTypeSystem() {
-		
-		super.fillTypeSystem();
-		TypesUtilities.getInstance().addNewType(PHYSICAL_SYSTEM_MODE_TYPE);
-		
-		for (ReactiveClassDeclaration physicalClassDeclaration : ((HybridRebecaCode)rebecaModel.getRebecaCode()).getPhysicalClassDeclaration()) {
-			if(TypesUtilities.getInstance().hasType(physicalClassDeclaration.getName())) {
-				CodeCompilationException rce = new CodeCompilationException(
-						"Multiple definition of "
-								+ physicalClassDeclaration.getName(),
-								physicalClassDeclaration.getLineNumber(),
-								physicalClassDeclaration.getCharacter());
-				exceptionContainer.addException(rce);
-			} else {
-				TypesUtilities.getInstance().addReactiveClassType(physicalClassDeclaration);			
-				try {
-					Type rcdType = TypesUtilities.getInstance().getType(physicalClassDeclaration.getName());
-					TypesUtilities.getInstance().addTypeCompatibility(rcdType, TypesUtilities.REACTIVE_CLASS_TYPE);
-				} catch (CodeCompilationException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	protected void addEnvironmentVariablesToScope() {
+	protected void addMethodsAndVariablesOfRebecaExtensionToSymbolTableAndScope() {
 		super.addEnvironmentVariablesToScope();
 		try {
 			scopeHandler.addVariableToCurrentScope("none",
-					PHYSICAL_SYSTEM_MODE_TYPE, PHYSICAL_SYSTEM_MODE_LABEL, 
+					HybridRebecaTypeSystem.PHYSICAL_SYSTEM_MODE_TYPE, PHYSICAL_SYSTEM_MODE_LABEL, 
 					0, 0);
 		} catch (ScopeException e1) {
 			e1.printStackTrace();
@@ -141,12 +76,11 @@ public class HybridRebecaCompleteCompilerFacade extends TimedRebecaCompleteCompi
 			for(ModeDeclaration modeDeclarations : physicalClassDeclaration.getModeDeclarations()) {
 				try {
 					scopeHandler.addVariableToCurrentScope(modeDeclarations.getName(),
-							PHYSICAL_SYSTEM_MODE_TYPE, PHYSICAL_SYSTEM_MODE_LABEL, 
+							HybridRebecaTypeSystem.PHYSICAL_SYSTEM_MODE_TYPE, PHYSICAL_SYSTEM_MODE_LABEL, 
 							modeDeclarations.getLineNumber(), modeDeclarations.getCharacter());
 				} catch (ScopeException e) {
 					exceptionContainer.addException(e);
 				}
-
 			}
 		}
 	}
@@ -177,7 +111,7 @@ public class HybridRebecaCompleteCompilerFacade extends TimedRebecaCompleteCompi
 		for (ModeDeclaration md : fcd.getModeDeclarations()) {
 			scopeHandler.pushScopeRecord(null);
 			Pair<Type,Object> check = statementSemanticCheckContainer.getExpressionSemanticCheckContainer().check(md.getGuardDeclaration().getCondition());
-			if(check.getFirst() != TypesUtilities.BOOLEAN_TYPE) {
+			if(check.getFirst() != CoreRebecaTypeSystem.BOOLEAN_TYPE) {
 				CodeCompilationException rce = new CodeCompilationException(
 						"Conditional expression of guards should be boolean",
 						md.getGuardDeclaration().getCondition().getLineNumber(), 
@@ -189,7 +123,7 @@ public class HybridRebecaCompleteCompilerFacade extends TimedRebecaCompleteCompi
 
 			scopeHandler.pushScopeRecord(HybridRebecaLabelUtility.INVARIANT_BLOCK);
 			check = statementSemanticCheckContainer.getExpressionSemanticCheckContainer().check(md.getInvariantDeclaration().getCondition());
-			if(check.getFirst() != TypesUtilities.BOOLEAN_TYPE) {
+			if(check.getFirst() != CoreRebecaTypeSystem.BOOLEAN_TYPE) {
 				CodeCompilationException rce = new CodeCompilationException(
 						"Conditional expression of invariants should be boolean",
 						md.getInvariantDeclaration().getCondition().getLineNumber(), 
@@ -201,5 +135,13 @@ public class HybridRebecaCompleteCompilerFacade extends TimedRebecaCompleteCompi
 			scopeHandler.popScopeRecord();
 		}
 		
+	}
+
+
+	@Override
+	public Parser getParser(CharStream input) {
+		HybridRebecaCompleteLexer lexer = new HybridRebecaCompleteLexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		return new HybridRebecaCompleteParser(tokens);
 	}
 }

@@ -50,9 +50,6 @@
 		<jxb:bindings node="//xs:complexType[@name='ParentSuffixPrimary']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ParentSuffixPrimary" />
 		</jxb:bindings>
-		<jxb:bindings node="//xs:complexType[@name='PrimitiveType']">
-			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimitiveType" />
-		</jxb:bindings>
 		<jxb:bindings node="//xs:complexType[@name='InstanceofExpression']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression" />
 		</jxb:bindings>
@@ -76,6 +73,12 @@
 		</jxb:bindings>
 		<jxb:bindings node="//xs:complexType[@name='Label']">
 			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='GenericType']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericType" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='GenericTypeInstance']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance" />
 		</jxb:bindings>
 	</jxb:bindings>
 </jxb:bindings>

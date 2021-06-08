@@ -14,5 +14,5 @@ import ProbabilisticRebecaLexer, ProbabilisticRebecaParser, TimedRebecaParser, T
 	
 	import java.util.*;
 	import org.antlr.runtime.BitSet;
-	import org.rebecalang.compiler.utils.TypesUtilities;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 }

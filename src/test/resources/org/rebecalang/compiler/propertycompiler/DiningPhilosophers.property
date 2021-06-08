@@ -12,7 +12,7 @@ property {
        	p1fL = phil1.fL;
        	p2fL = phil2.fL;
  
-       	p0s = !(phil1.fL -> phil0.fL);
+       	p0s = !(phil1.fL && phil0.fL);
        	p1s = !(phil1.fR && phil2.fL);
        	p2s = !(phil0.fR && phil2.fR);
     }

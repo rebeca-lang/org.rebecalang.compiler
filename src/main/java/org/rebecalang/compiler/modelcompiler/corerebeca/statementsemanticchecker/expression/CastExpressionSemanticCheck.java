@@ -1,28 +1,44 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression;
 
-import org.rebecalang.compiler.modelcompiler.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.SemanticCheckerUtils;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CastExpressionSemanticCheck extends AbstractExpressionSemanticCheck {
+
+	AbstractTypeSystem typeSystem;
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+	
+	@Autowired
+	public CastExpressionSemanticCheck(AbstractTypeSystem typeSystem) {
+		super();
+		this.typeSystem = typeSystem;
+	}
 
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
 		CastExpression cExpression = (CastExpression) expression;
 		Pair<Type, Object> expressionType = 
-				((ExpressionSemanticCheckContainer)defaultContainer).check(cExpression.getExpression());
+				expressionSemanticCheckContainer.check(cExpression.getExpression());
 		try {
-			Type castType = TypesUtilities.getInstance().getType(
+			Type castType = typeSystem.getType(
 					cExpression.getType());
-			if (!TypesUtilities.getInstance().canTypeCastTo(
-					expressionType.getFirst(), castType)) {
+			if (!expressionType.getFirst().canTypeCastTo(castType)) {
 				
 				TypesUtilities.addTypeMismatchException(exceptionContainer, 
 						expressionType.getFirst(), castType,
@@ -31,12 +47,11 @@ public class CastExpressionSemanticCheck extends AbstractExpressionSemanticCheck
 			cExpression.setType(castType);
 			returnValue.setFirst(cExpression.getType());
 			returnValue.setSecond(SemanticCheckerUtils.evaluateConstantTerm(
-					"(" + TypesUtilities.getTypeName(returnValue
-									.getFirst()) + ")",
+					"(" + returnValue.getFirst().getTypeName() + ")",
 					returnValue.getFirst(), expressionType.getSecond(),
 					null));
 		} catch (CodeCompilationException cce) {
-			cExpression.setType(TypesUtilities.UNKNOWN_TYPE);
+			cExpression.setType(AbstractTypeSystem.UNKNOWN_TYPE);
 			returnValue.setFirst(cExpression.getType());
 			cce.setColumn(cExpression.getCharacter());
 			cce.setLine(cExpression.getLineNumber());
