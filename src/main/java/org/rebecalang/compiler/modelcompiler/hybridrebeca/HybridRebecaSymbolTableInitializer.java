@@ -10,7 +10,7 @@ import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.HybridRebe
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.PhysicalClassDeclaration;
 import org.rebecalang.compiler.utils.AccessModifierUtilities;
 import org.rebecalang.compiler.utils.CodeCompilationException;
-import org.rebecalang.compiler.utils.CompilerFeature;
+import org.rebecalang.compiler.utils.CoreVersion;
 
 public class HybridRebecaSymbolTableInitializer extends SymbolTableInitializer {
 
@@ -18,7 +18,7 @@ public class HybridRebecaSymbolTableInitializer extends SymbolTableInitializer {
 		super(typeSystem);
 	}
 
-	public void fillSymbolTable(RebecaModel rebecaModel, CompilerFeature coreVersion) {
+	public void fillSymbolTable(RebecaModel rebecaModel, CoreVersion coreVersion) {
 		for (PhysicalClassDeclaration physicalClassDeclaration : ((HybridRebecaCode)rebecaModel.getRebecaCode()).getPhysicalClassDeclaration()) {
 
 			if (physicalClassDeclaration.getExtends() != null) {

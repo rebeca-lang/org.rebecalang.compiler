@@ -15,7 +15,8 @@ import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.ProbabilisticRe
 import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.ProbabilisticTimedRebecaCompleteCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.TimedRebecaCompleteCompilerFacade;
 import org.rebecalang.compiler.utils.CodeCompilationException;
-import org.rebecalang.compiler.utils.CompilerFeature;
+import org.rebecalang.compiler.utils.CompilerExtension;
+import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RebecaCompiler {
+public class RebecaModelCompiler {
 
 	@Autowired
 	private ExceptionContainer exceptionContainer;
-	@Autowired	
+	@Autowired
 	protected SymbolTable symbolTable;
-	
+
 	@Autowired
 	@Qualifier("CORE_REBECA")
 	protected CoreRebecaCompleteCompilerFacade coreRebecaCompilerFacade;
@@ -53,45 +54,44 @@ public class RebecaCompiler {
 	@Qualifier("HYBRID_REBECA")
 	protected HybridRebecaCompleteCompilerFacade hybridRebecaCompilerFacade;
 
-	private AbstractCompilerFacade getAppropriateCompilerFacade(
-			Set<CompilerFeature> extension, CompilerFeature coreVersion, CharStream input)
-			throws CodeCompilationException {
-		
-		if (extension.contains(CompilerFeature.TIMED_REBECA)
-				|| extension.contains(CompilerFeature.PROBABILISTIC_REBECA)
-				|| extension.contains(CompilerFeature.HYBRID_REBECA)) {
-			if (coreVersion == CompilerFeature.CORE_2_0)
+	private AbstractCompilerFacade getAppropriateCompilerFacade(Set<CompilerExtension> extension,
+			CoreVersion coreVersion, CharStream input) throws CodeCompilationException {
+
+		if (extension.contains(CompilerExtension.TIMED_REBECA) || extension.contains(CompilerExtension.PROBABILISTIC_REBECA)
+				|| extension.contains(CompilerExtension.HYBRID_REBECA)) {
+			if (coreVersion == CoreVersion.CORE_2_0)
 				throw createFeaturesIncompatibilityMessage(extension, coreVersion);
 		}
 
-		if (extension.contains(CompilerFeature.PROBABILISTIC_REBECA) && extension.contains(CompilerFeature.TIMED_REBECA)) {
+		if (extension.contains(CompilerExtension.PROBABILISTIC_REBECA)
+				&& extension.contains(CompilerExtension.TIMED_REBECA)) {
 			return probabilisticTimedRebecaCompilerFacade;
-		} else if (extension.contains(CompilerFeature.PROBABILISTIC_REBECA)) {
+		} else if (extension.contains(CompilerExtension.PROBABILISTIC_REBECA)) {
 			return probabilisticRebecaCompilerFacade;
-		} else if (extension.contains(CompilerFeature.TIMED_REBECA)) {
+		} else if (extension.contains(CompilerExtension.TIMED_REBECA)) {
 			return timedRebecaCompilerFacade;
-		} else if (extension.contains(CompilerFeature.HYBRID_REBECA)) {
+		} else if (extension.contains(CompilerExtension.HYBRID_REBECA)) {
 			return hybridRebecaCompilerFacade;
 		} else
-			return coreRebecaCompilerFacade; 
+			return coreRebecaCompilerFacade;
 	}
 
-	public static CodeCompilationException createFeaturesIncompatibilityMessage(
-			Set<CompilerFeature> features, CompilerFeature coreVersion) {
+	public static CodeCompilationException createFeaturesIncompatibilityMessage(Set<CompilerExtension> features,
+			CoreVersion coreVersion) {
 		String retValue = "Incompatible feature set [";
-		for (CompilerFeature feature : features) {
+		for (CompilerExtension feature : features) {
 			retValue += feature.name() + ", ";
 		}
 		return new CodeCompilationException(retValue + coreVersion + "]", 0, 0);
 	}
 
-	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile,
-			Set<CompilerFeature> extention, CompilerFeature coreVersion) {
-		return compileRebecaFile (rebecaFile, extention, coreVersion, true);
+	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile, Set<CompilerExtension> extention,
+			CoreVersion coreVersion) {
+		return compileRebecaFile(rebecaFile, extention, coreVersion, true);
 	}
-	
-	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile,
-			Set<CompilerFeature> extention, CompilerFeature coreVersion, boolean performSemanticCheck) {
+
+	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile, Set<CompilerExtension> extention,
+			CoreVersion coreVersion, boolean performSemanticCheck) {
 		exceptionContainer.clear();
 
 		try {
@@ -111,11 +111,10 @@ public class RebecaCompiler {
 		return null;
 	}
 
-	public void generateXMLFromRebecaFiles(File rebecaFile,
-			File destinationXMLFile, Set<CompilerFeature> features)
+	public void generateXMLFromRebecaFiles(File rebecaFile, File destinationXMLFile, Set<CompilerExtension> features)
 			throws ExceptionContainer {
 	}
-	
+
 	public ExceptionContainer getExceptionContainer() {
 		return exceptionContainer;
 	}

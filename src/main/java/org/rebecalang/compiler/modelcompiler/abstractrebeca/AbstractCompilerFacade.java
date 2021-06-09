@@ -14,7 +14,7 @@ import org.rebecalang.compiler.modelcompiler.SymbolTable;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.utils.CodeCompilationException;
-import org.rebecalang.compiler.utils.CompilerFeature;
+import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,7 +35,7 @@ public abstract class AbstractCompilerFacade {
 	
 	protected RebecaModel rebecaModel;
 	
-	protected CompilerFeature coreVersion;
+	protected CoreVersion coreVersion;
 
 	public abstract Parser getParser(CharStream input);
 	
@@ -70,7 +70,7 @@ public abstract class AbstractCompilerFacade {
 	 * @return The generated RebecaModel
 	 */
 	
-	public final void compile(CharStream input, CompilerFeature coreVersion) {
+	public final void compile(CharStream input, CoreVersion coreVersion) {
 		this.coreVersion = coreVersion;
 		
 		try {

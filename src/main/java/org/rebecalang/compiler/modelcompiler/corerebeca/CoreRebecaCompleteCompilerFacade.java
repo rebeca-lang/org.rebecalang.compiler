@@ -81,7 +81,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement.WhileStatementSemanticCheck;
 import org.rebecalang.compiler.utils.AccessModifierUtilities;
 import org.rebecalang.compiler.utils.CodeCompilationException;
-import org.rebecalang.compiler.utils.CompilerFeature;
+import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
@@ -210,7 +210,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		expressionSemanticCheckContainer.registerSemanticsChecker(RebecInstantiationPrimary.class,
 				appContext.getBean(RebecInstantiationExpressionSemanticCheck.class, typeSystem));
 
-		if (coreVersion == CompilerFeature.CORE_2_2) {
+		if (coreVersion == CoreVersion.CORE_2_2) {
 			expressionSemanticCheckContainer.registerSemanticsChecker(RebecInstantiationPrimary.class,
 					appContext.getBean(RebecInstantiationExpressionSemanticCheck.class));
 		} else {
@@ -233,8 +233,8 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 
 	private boolean coreVersionIsCompatibleWithInheritanceAndInterfaceDeclaration() {
 
-		return !(coreVersion == CompilerFeature.CORE_2_0 || coreVersion == CompilerFeature.CORE_2_1
-				|| coreVersion == CompilerFeature.CORE_2_2);
+		return !(coreVersion == CoreVersion.CORE_2_0 || coreVersion == CoreVersion.CORE_2_1
+				|| coreVersion == CoreVersion.CORE_2_2);
 	}
 
 	@Override
@@ -438,7 +438,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 
 	protected void addEnvironmentVariablesToScope() {
 		for (FieldDeclaration fd : rebecaModel.getRebecaCode().getEnvironmentVariables()) {
-			if (coreVersion == CompilerFeature.CORE_2_0) {
+			if (coreVersion == CoreVersion.CORE_2_0) {
 				CodeCompilationException rce = new CodeCompilationException(
 						"Rebeca core 2.0 dose not support environment variables", fd.getLineNumber(),
 						fd.getCharacter());
@@ -506,7 +506,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		HashMap<String, ReactiveClassDeclaration> reactiveClasses = getAllClasses();
 
 		for (MainRebecDefinition mrd : rebecaModel.getRebecaCode().getMainDeclaration().getMainRebecDefinition()) {
-			String methodName = ((coreVersion == CompilerFeature.CORE_2_0) ? "initial" : mrd.getType().getTypeName());
+			String methodName = ((coreVersion == CoreVersion.CORE_2_0) ? "initial" : mrd.getType().getTypeName());
 
 			LinkedList<Type> constructorArgumentsTypes = new LinkedList<Type>();
 			for (Expression expression : mrd.getArguments()) {

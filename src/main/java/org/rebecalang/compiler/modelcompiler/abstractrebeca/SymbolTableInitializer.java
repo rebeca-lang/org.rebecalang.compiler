@@ -25,7 +25,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodD
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.AccessModifierUtilities;
 import org.rebecalang.compiler.utils.CodeCompilationException;
-import org.rebecalang.compiler.utils.CompilerFeature;
+import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +89,7 @@ public class SymbolTableInitializer {
 	}
 
 
-	public void fillSymbolTable(RebecaModel rebecaModel, CompilerFeature coreVersion) {
+	public void fillSymbolTable(RebecaModel rebecaModel, CoreVersion coreVersion) {
 		
 		symbolTable.clear();
 		
@@ -104,7 +104,7 @@ public class SymbolTableInitializer {
 		interfaceCollisionDetection(rebecaModel);
 	}
 	
-	private void addingReactiveclassesToSymbolTableInInitialization(RebecaModel rebecaModel, CompilerFeature coreVersion) {
+	private void addingReactiveclassesToSymbolTableInInitialization(RebecaModel rebecaModel, CoreVersion coreVersion) {
 		for (ReactiveClassDeclaration reactiveClassDeclaration : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
 
 			// check if reactive class is defined abstract right ?
@@ -120,10 +120,10 @@ public class SymbolTableInitializer {
 		}
 	}
 
-	protected void addingAReactiveclassToSymbolTableInInitialization(ReactiveClassDeclaration reactiveClassDeclaration, CompilerFeature coreVersion) {
+	protected void addingAReactiveclassToSymbolTableInInitialization(ReactiveClassDeclaration reactiveClassDeclaration, CoreVersion coreVersion) {
 
 		if (reactiveClassDeclaration.getConstructors().isEmpty()) {
-			if (coreVersion != CompilerFeature.CORE_2_0) {
+			if (coreVersion != CoreVersion.CORE_2_0) {
 				ConstructorDeclaration defaultConstructor = new ConstructorDeclaration();
 				defaultConstructor.setName(reactiveClassDeclaration.getName());
 				defaultConstructor.setBlock(new BlockStatement());
@@ -186,11 +186,11 @@ public class SymbolTableInitializer {
 	}
 
 
-	private void addingConstructorsToSymbolTableInInitialization(ReactiveClassDeclaration reactiveClassDeclaration, CompilerFeature coreVersion) throws CodeCompilationException {
+	private void addingConstructorsToSymbolTableInInitialization(ReactiveClassDeclaration reactiveClassDeclaration, CoreVersion coreVersion) throws CodeCompilationException {
 		Type type = typeSystem.getType(reactiveClassDeclaration.getName());
 		for (int cnt = 0; cnt < reactiveClassDeclaration.getConstructors().size(); cnt++) {
 			ConstructorDeclaration constructorDeclaration = reactiveClassDeclaration.getConstructors().get(cnt);
-			if (coreVersion == CompilerFeature.CORE_2_0) {
+			if (coreVersion == CoreVersion.CORE_2_0) {
 				CodeCompilationException rce = new CodeCompilationException(
 						"Rebeca core 2.0 dose not support constructor",
 						constructorDeclaration.getLineNumber(),

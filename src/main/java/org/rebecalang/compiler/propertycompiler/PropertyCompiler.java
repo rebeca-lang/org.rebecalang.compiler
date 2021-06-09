@@ -14,7 +14,7 @@ import org.rebecalang.compiler.propertycompiler.generalrebeca.GeneralPropertyCom
 import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.PropertyModel;
 import org.rebecalang.compiler.propertycompiler.timedrebeca.TimedRebecaPropertyCompiler;
 import org.rebecalang.compiler.utils.CodeCompilationException;
-import org.rebecalang.compiler.utils.CompilerFeature;
+import org.rebecalang.compiler.utils.CompilerExtension;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,22 +40,22 @@ public class PropertyCompiler {
 	protected TimedRebecaPropertyCompiler timedRebecaPropertyCompiler;
 
 	private GeneralPropertyCompiler getAppropriatePropertyCompilerFacade(
-			Set<CompilerFeature> extension, CharStream input)
+			Set<CompilerExtension> extension, CharStream input)
 			throws CodeCompilationException {
 		
-		if (extension.contains(CompilerFeature.TIMED_REBECA)) {
+		if (extension.contains(CompilerExtension.TIMED_REBECA)) {
 			return timedRebecaPropertyCompiler;
 		} else
 			return coreRebecaPropertyCompiler; 
 	}
 
 	public PropertyModel compilePropertyFile(File propertyFile, RebecaModel rebecaModel,
-			Set<CompilerFeature> extention) {
+			Set<CompilerExtension> extention) {
 		return compilePropertyFile (propertyFile, rebecaModel, extention, true);
 	}
 	
 	public PropertyModel compilePropertyFile(File propertyFile, RebecaModel rebecaModel,
-			Set<CompilerFeature> extention, boolean performSemanticCheck) {
+			Set<CompilerExtension> extention, boolean performSemanticCheck) {
 		exceptionContainer.clear();
 
 		try {
