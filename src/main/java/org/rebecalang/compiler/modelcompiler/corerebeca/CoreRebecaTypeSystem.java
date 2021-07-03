@@ -12,18 +12,29 @@ import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import lombok.Getter;
+
 @Component
 @Qualifier("CORE_REBECA")
 public class CoreRebecaTypeSystem extends AbstractTypeSystem {
 
+	@Getter
 	public static final OrdinaryPrimitiveType INT_TYPE;
+	@Getter
 	public static final OrdinaryPrimitiveType SHORT_TYPE;
+	@Getter
 	public static final OrdinaryPrimitiveType BYTE_TYPE;
+	@Getter
 	public static final OrdinaryPrimitiveType FLOAT_TYPE;
+	@Getter
 	public static final OrdinaryPrimitiveType DOUBLE_TYPE;
+	@Getter
 	public static final OrdinaryPrimitiveType BOOLEAN_TYPE;
+	@Getter
 	public static final OrdinaryPrimitiveType CHAR_TYPE;
+	@Getter
 	public static final OrdinaryPrimitiveType STRING_TYPE;
+	@Getter
 	public static final OrdinaryPrimitiveType VOID_TYPE;
 	
 	static {

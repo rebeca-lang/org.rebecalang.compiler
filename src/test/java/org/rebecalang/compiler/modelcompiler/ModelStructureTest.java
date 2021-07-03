@@ -22,8 +22,7 @@ public class ModelStructureTest {
 	public static final String MODEL_FILES_BASE = "src/test/resources/org/rebecalang/compiler/modelcompiler/"; 
 
 	@Autowired
-	RebecaModelCompiler compiler;
-
+	public RebecaModelCompiler compiler;
 	@Autowired
 	public ExceptionContainer exceptionContainer;
 

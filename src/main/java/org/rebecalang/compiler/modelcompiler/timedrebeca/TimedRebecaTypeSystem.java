@@ -5,11 +5,15 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrim
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import lombok.Getter;
+
 @Component
 @Qualifier("TIMED_REBECA")
 public class TimedRebecaTypeSystem extends CoreRebecaTypeSystem {
 
+	@Getter
 	public final static OrdinaryPrimitiveType TIMER_TYPE;
+	
 	static {
 		TIMER_TYPE = new OrdinaryPrimitiveType();
 		TIMER_TYPE.setName("Timer");
