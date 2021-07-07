@@ -49,15 +49,13 @@ public class BinaryExpressionSemanticCheck extends
 			if (assignmentOperators.contains(bExpression.getOperator())) {
 				if (lValueState == LValueState.NONE_VARIABLE)
 					exceptionContainer
-							.getExceptions()
-							.add(new CodeCompilationException(
+							.addException(new CodeCompilationException(
 									"The left-hand side of an assignment must be a variable",
 									bExpression.getLineNumber(), bExpression
 											.getCharacter()));
 				if (lValueState == LValueState.CONSTANT)
 					exceptionContainer
-							.getExceptions()
-							.add(new CodeCompilationException(
+							.addException(new CodeCompilationException(
 									"A constant variable cannot be in the left-hand side of an assignment",
 									bExpression.getLineNumber(), bExpression
 											.getCharacter()));
@@ -74,7 +72,7 @@ public class BinaryExpressionSemanticCheck extends
 					bExpression.getOperator(), lType.getFirst(),
 					rType.getFirst());
 			if (cce2 != null)
-				exceptionContainer.getExceptions().add(cce2);
+				exceptionContainer.addException(cce2);
 			bExpression.setType(lType.getFirst());
 			returnValue.setFirst(bExpression.getType());
 		}

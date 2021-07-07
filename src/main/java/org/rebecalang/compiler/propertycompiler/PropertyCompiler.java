@@ -28,6 +28,7 @@ public class PropertyCompiler {
 
 	@Autowired
 	private ExceptionContainer exceptionContainer;
+	
 	@Autowired	
 	protected SymbolTable symbolTable;
 	
@@ -57,6 +58,7 @@ public class PropertyCompiler {
 	public PropertyModel compilePropertyFile(File propertyFile, RebecaModel rebecaModel,
 			Set<CompilerExtension> extention, boolean performSemanticCheck) {
 		exceptionContainer.clear();
+		exceptionContainer.setCorrespondingResource(propertyFile);
 
 		try {
 			CharStream input = CharStreams.fromStream(new FileInputStream(propertyFile));

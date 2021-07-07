@@ -31,6 +31,7 @@ public class RebecaModelCompiler {
 
 	@Autowired
 	private ExceptionContainer exceptionContainer;
+	
 	@Autowired
 	protected SymbolTable symbolTable;
 
@@ -93,7 +94,7 @@ public class RebecaModelCompiler {
 	public Pair<RebecaModel, SymbolTable> compileRebecaFile(File rebecaFile, Set<CompilerExtension> extention,
 			CoreVersion coreVersion, boolean performSemanticCheck) {
 		exceptionContainer.clear();
-
+		exceptionContainer.setCorrespondingResource(rebecaFile);
 		try {
 			CharStream input = CharStreams.fromStream(new FileInputStream(rebecaFile));
 			AbstractCompilerFacade compilerFacade = getAppropriateCompilerFacade(extention, coreVersion, input);
@@ -109,13 +110,5 @@ public class RebecaModelCompiler {
 				exceptionContainer.addException(e);
 		}
 		return null;
-	}
-
-	public void generateXMLFromRebecaFiles(File rebecaFile, File destinationXMLFile, Set<CompilerExtension> features)
-			throws ExceptionContainer {
-	}
-
-	public ExceptionContainer getExceptionContainer() {
-		return exceptionContainer;
 	}
 }

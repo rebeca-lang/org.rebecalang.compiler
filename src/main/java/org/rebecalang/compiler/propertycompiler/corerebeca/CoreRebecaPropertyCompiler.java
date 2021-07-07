@@ -19,7 +19,6 @@ import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.LTLDefini
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.PropertyModel;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.GeneralPropertyCompiler;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.expressionsemanticchecker.InvalidExpressionsSemanticCheck;
-import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -106,20 +105,16 @@ public class CoreRebecaPropertyCompiler extends GeneralPropertyCompiler {
 		weakUntilMethod.getFormalParameters().add(fpd);
 		weakUntilMethod.setReturnType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 
-		try {
-			modelSymbolTable.addMethod(null, globallyMethod,
-					CoreRebecaLabelUtility.SYNCH_METHOD);
-			modelSymbolTable.addMethod(null, finallyMethod,
-					CoreRebecaLabelUtility.SYNCH_METHOD);
-			modelSymbolTable.addMethod(null, nextMethod,
-					CoreRebecaLabelUtility.SYNCH_METHOD);
-			modelSymbolTable.addMethod(null, untilMethod,
-					CoreRebecaLabelUtility.SYNCH_METHOD);
-			modelSymbolTable.addMethod(null, weakUntilMethod,
-					CoreRebecaLabelUtility.SYNCH_METHOD);
-		} catch (ExceptionContainer ec) {
-			exceptionContainer.addAll(ec);
-		}
+		modelSymbolTable.addMethod(null, globallyMethod,
+				CoreRebecaLabelUtility.SYNCH_METHOD);
+		modelSymbolTable.addMethod(null, finallyMethod,
+				CoreRebecaLabelUtility.SYNCH_METHOD);
+		modelSymbolTable.addMethod(null, nextMethod,
+				CoreRebecaLabelUtility.SYNCH_METHOD);
+		modelSymbolTable.addMethod(null, untilMethod,
+				CoreRebecaLabelUtility.SYNCH_METHOD);
+		modelSymbolTable.addMethod(null, weakUntilMethod,
+				CoreRebecaLabelUtility.SYNCH_METHOD);
 	}
 
 	@Override

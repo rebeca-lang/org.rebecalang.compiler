@@ -82,7 +82,6 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker
 import org.rebecalang.compiler.utils.AccessModifierUtilities;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CoreVersion;
-import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -626,11 +625,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 			methodDeclaration.getFormalParameters().add(fpd);
 		}
 		methodDeclaration.setReturnType(returnType);
-		try {
-			symbolTable.addMethod(base, methodDeclaration, methodLabel);
-		} catch (ExceptionContainer ec) {
-			exceptionContainer.addAll(ec);
-		}
+		symbolTable.addMethod(base, methodDeclaration, methodLabel);
 	}
 
 	@Override

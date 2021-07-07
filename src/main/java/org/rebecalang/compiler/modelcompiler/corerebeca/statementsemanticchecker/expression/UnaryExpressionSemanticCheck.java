@@ -34,7 +34,7 @@ public class UnaryExpressionSemanticCheck extends AbstractExpressionSemanticChec
 						CoreRebecaTypeSystem.INT_TYPE, uExpression);
 			}
 			if (BinaryExpressionSemanticCheck.isInLValueStyle(uExpression.getExpression(), scopeHandler) != LValueState.VARIABLE) {
-				exceptionContainer.getExceptions().add(
+				exceptionContainer.addException(
 						new CodeCompilationException(
 								"Invalid argument to operation ++/--",
 								uExpression.getLineNumber(), uExpression

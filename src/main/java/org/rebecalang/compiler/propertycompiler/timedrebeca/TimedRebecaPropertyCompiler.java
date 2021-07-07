@@ -22,7 +22,6 @@ import org.rebecalang.compiler.propertycompiler.timedrebeca.compiler.TimedRebeca
 import org.rebecalang.compiler.propertycompiler.timedrebeca.expressionsemanticchecker.PropertyPrimaryTermExpressionSemanticCheck;
 import org.rebecalang.compiler.propertycompiler.timedrebeca.objectmodel.PropertyModel;
 import org.rebecalang.compiler.propertycompiler.timedrebeca.objectmodel.TCTLDefinition;
-import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -119,18 +118,14 @@ public class TimedRebecaPropertyCompiler extends GeneralPropertyCompiler {
 		AFMethod.getFormalParameters().add(fpd);
 		AFMethod.setReturnType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 
-		try {
-			modelSymbolTable.addMethod(null, EUMethod,
-					CoreRebecaLabelUtility.SYNCH_METHOD);
-			modelSymbolTable.addMethod(null, AUMethod,
-					CoreRebecaLabelUtility.SYNCH_METHOD);
-			modelSymbolTable.addMethod(null, AGMethod,
-					CoreRebecaLabelUtility.SYNCH_METHOD);
-			modelSymbolTable.addMethod(null, AFMethod,
-					CoreRebecaLabelUtility.SYNCH_METHOD);
-		} catch (ExceptionContainer ec) {
-			exceptionContainer.addAll(ec);
-		}
+		modelSymbolTable.addMethod(null, EUMethod,
+				CoreRebecaLabelUtility.SYNCH_METHOD);
+		modelSymbolTable.addMethod(null, AUMethod,
+				CoreRebecaLabelUtility.SYNCH_METHOD);
+		modelSymbolTable.addMethod(null, AGMethod,
+				CoreRebecaLabelUtility.SYNCH_METHOD);
+		modelSymbolTable.addMethod(null, AFMethod,
+				CoreRebecaLabelUtility.SYNCH_METHOD);
 	}
 
 	@Override

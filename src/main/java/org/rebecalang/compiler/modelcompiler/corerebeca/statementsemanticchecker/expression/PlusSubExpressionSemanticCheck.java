@@ -30,7 +30,7 @@ public class PlusSubExpressionSemanticCheck extends AbstractExpressionSemanticCh
 			TypesUtilities.addTypeMismatchException(exceptionContainer, type, CoreRebecaTypeSystem.INT_TYPE, pspExpression);
 		}
 		if (BinaryExpressionSemanticCheck.isInLValueStyle(pspExpression.getValue(), scopeHandler) != LValueState.VARIABLE) {
-			exceptionContainer.getExceptions().add(
+			exceptionContainer.addException(
 					new CodeCompilationException(
 							"Invalid argument to operation ++/--",
 							pspExpression.getLineNumber(), pspExpression

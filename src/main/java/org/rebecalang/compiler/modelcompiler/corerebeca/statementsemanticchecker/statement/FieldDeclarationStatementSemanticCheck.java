@@ -20,7 +20,6 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDecl
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableInitializer;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
-import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,14 +79,12 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 				se.setColumn(vd.getCharacter());
 				se.setLine(vd.getLineNumber());
 				exceptionContainer.addException(se);
-			} catch (ExceptionContainer ec) {
-				exceptionContainer.addAll(ec);
 			}
 		}
 	}
 	
 	public void checkVariableInitializationType(Type type,
-			VariableInitializer variableInitializer) throws ExceptionContainer {
+			VariableInitializer variableInitializer) {
 		if (variableInitializer == null)
 			return;
 		if (variableInitializer instanceof ArrayVariableInitializer) {

@@ -32,10 +32,11 @@ public class ModelStructureTest {
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_0);
 
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
-		expected.add(new SymbolTableException("The method initial() is undefined for the type B", 25, 3));
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+		expectedExceptionContainer.addException(new SymbolTableException("The method initial() is undefined for the type B", 25, 3));
 
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
 	
 	@Test
@@ -44,15 +45,16 @@ public class ModelStructureTest {
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
 
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
-		expected.add(new ScopeException("\"c\" undeclared", 19, 2));
-		expected.add(new CodeCompilationException("Direct sending to \"self\" is allowed in constructors", 21, 2));
-		expected.add(new CodeCompilationException("Only message servers are allowed to have non-deterministic expression", 23, 10));
-		expected.add(new CodeCompilationException("Non-deterministic terms must be constant expressions", 23, 12));
-		expected.add(new ScopeException("\"c\" undeclared", 23, 17));
-		expected.add(new CodeCompilationException("Rebeca core 2.2 and upper support dynamic actor creation", 27, 17));
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+		expectedExceptionContainer.addException(new ScopeException("\"c\" undeclared", 19, 2));
+		expectedExceptionContainer.addException(new CodeCompilationException("Direct sending to \"self\" is allowed in constructors", 21, 2));
+		expectedExceptionContainer.addException(new CodeCompilationException("Only message servers are allowed to have non-deterministic expression", 23, 10));
+		expectedExceptionContainer.addException(new CodeCompilationException("Non-deterministic terms must be constant expressions", 23, 12));
+		expectedExceptionContainer.addException(new ScopeException("\"c\" undeclared", 23, 17));
+		expectedExceptionContainer.addException(new CodeCompilationException("Rebeca core 2.2 and upper support dynamic actor creation", 27, 17));
 
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
 	
 	@Test
@@ -62,13 +64,14 @@ public class ModelStructureTest {
 		extension.add(CompilerExtension.TIMED_REBECA);
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
 		
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
-		expected.add(new CodeCompilationException("Unknown type turn", 268, 28));
-		expected.add(new CodeCompilationException("Unknown type turn", 350, 39));
-		expected.add(new CodeCompilationException("Type mismatch: cannot convert from int to boolean", 49, 14));
-		expected.add(new CodeCompilationException("The operator + is undefined for the argument type(s) Timer, byte", 47, 13));
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+		expectedExceptionContainer.addException(new CodeCompilationException("Unknown type turn", 268, 28));
+		expectedExceptionContainer.addException(new CodeCompilationException("Unknown type turn", 350, 39));
+		expectedExceptionContainer.addException(new CodeCompilationException("Type mismatch: cannot convert from int to boolean", 49, 14));
+		expectedExceptionContainer.addException(new CodeCompilationException("The operator + is undefined for the argument type(s) Timer, byte", 47, 13));
 		
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
 	
 	@Test
@@ -78,7 +81,7 @@ public class ModelStructureTest {
 		extension.add(CompilerExtension.TIMED_REBECA);
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
 		
-		Assertions.assertTrue(exceptionContainer.getExceptions().isEmpty());
+		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
 	}	
 	
 	@Test
@@ -89,11 +92,12 @@ public class ModelStructureTest {
 
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
 		
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
-		expected.add(new CodeCompilationException("Conflict between local and global priority definitions", 22, 2));
-		expected.add(new CodeCompilationException("Value of priority must be an integer expression", 30, 2));
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+		expectedExceptionContainer.addException(new CodeCompilationException("Conflict between local and global priority definitions", 22, 2));
+		expectedExceptionContainer.addException(new CodeCompilationException("Value of priority must be an integer expression", 30, 2));
 		
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
 
 	@Test
@@ -104,9 +108,7 @@ public class ModelStructureTest {
 
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
 		
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
-		
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
 	}
 	
 	@Test
@@ -117,10 +119,11 @@ public class ModelStructureTest {
 
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
 		
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
-		expected.add(new CodeCompilationException("The summations of probabilities in probabilistic expression must be 1.000 instead of 0.750", 11, 11));
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+		expectedExceptionContainer.addException(new CodeCompilationException("The summations of probabilities in probabilistic expression must be 1.000 instead of 0.750", 11, 11));
 
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
 	
 	@Test

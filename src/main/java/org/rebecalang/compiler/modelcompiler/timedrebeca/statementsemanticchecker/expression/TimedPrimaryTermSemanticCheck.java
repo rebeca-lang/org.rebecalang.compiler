@@ -36,8 +36,7 @@ public class TimedPrimaryTermSemanticCheck extends
 			if (afterExpression != null) {
 				if (retValue.getFirst() != CoreRebecaTypeSystem.MSGSRV_TYPE) {
 					exceptionContainer
-							.getExceptions()
-							.add(new CodeCompilationException(
+							.addException(new CodeCompilationException(
 									"Only message server can be followed by \"after\" specifier",
 									afterExpression.getLineNumber(),
 									afterExpression.getCharacter()));
@@ -51,8 +50,7 @@ public class TimedPrimaryTermSemanticCheck extends
 			if (deadlineExpression != null) {
 				if (retValue.getFirst() != CoreRebecaTypeSystem.MSGSRV_TYPE) {
 					exceptionContainer
-							.getExceptions()
-							.add(new CodeCompilationException(
+							.addException(new CodeCompilationException(
 									"Only message server can be followed by \"deadline\" specifier",
 									deadlineExpression.getLineNumber(),
 									deadlineExpression.getCharacter()));
@@ -79,7 +77,7 @@ public class TimedPrimaryTermSemanticCheck extends
 //		}
 		if (!expressionSemanticCheckContainer.check(expression)
 				.getFirst().canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE)) {
-			exceptionContainer.getExceptions().add(
+			exceptionContainer.addException(
 					new CodeCompilationException(
 							"Only convertible int values are permitted here",
 							expression.getLineNumber(), expression

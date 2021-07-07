@@ -55,21 +55,21 @@ public class PropertyPrimaryTermExpressionSemanticCheck extends PrimaryTermExpre
 			if (tctlModalities.contains(termName)) {
 				Expression timeConstraint = termPrimary.getParentSuffixPrimary().getArguments().get(0);
 				if (!(timeConstraint instanceof BinaryExpression)) {
-					exceptionContainer.getExceptions().add(codeCompilationException);
+					exceptionContainer.addException(codeCompilationException);
 				} else if (!(((BinaryExpression)timeConstraint).getLeft() instanceof TermPrimary)) {
-					exceptionContainer.getExceptions().add(codeCompilationException);
+					exceptionContainer.addException(codeCompilationException);
 				} else if (!((TermPrimary)((BinaryExpression)timeConstraint).getLeft()).getName().equals("time")) {
-					exceptionContainer.getExceptions().add(codeCompilationException);
+					exceptionContainer.addException(codeCompilationException);
 				} else if (!((BinaryExpression)timeConstraint).getRight().getType().
 						canTypeCastTo(CoreRebecaTypeSystem.INT_TYPE)) {
-					exceptionContainer.getExceptions().add(codeCompilationException);
+					exceptionContainer.addException(codeCompilationException);
 				} else {
 					Expression right = ((BinaryExpression)termPrimary.getParentSuffixPrimary().getArguments().get(0)).getRight();
 					Pair<Type, Object> timeConstraintValue = expressionSemanticCheckContainer.check(right, null);
 					Set<String> operators = new HashSet<String>(Arrays.asList("<", "<=", ">", ">=", "=="));
 					if (!operators.contains(((BinaryExpression)timeConstraint).getOperator()) ||
 							timeConstraintValue.getSecond() == null) {
-						exceptionContainer.getExceptions().add(codeCompilationException);
+						exceptionContainer.addException(codeCompilationException);
 					}
 					Literal timeConstraintLiteral = new Literal();
 					timeConstraintLiteral.setType(CoreRebecaTypeSystem.INT_TYPE);

@@ -22,7 +22,7 @@ public class LiteralSemanticCheck extends AbstractExpressionSemanticCheck {
 						.getLiteralValue());
 				returnValue.setSecond(value);
 			} catch (NumberFormatException nfe) {
-				exceptionContainer.getExceptions().add(
+				exceptionContainer.addException(
 						SemanticCheckerUtils.getOutofRangeException(
 								lExpression.getLiteralValue(),
 								CoreRebecaTypeSystem.DOUBLE_TYPE,
@@ -35,7 +35,7 @@ public class LiteralSemanticCheck extends AbstractExpressionSemanticCheck {
 						.getLiteralValue());
 				returnValue.setSecond(value);
 			} catch (NumberFormatException nfe) {
-				exceptionContainer.getExceptions().add(
+				exceptionContainer.addException(
 						SemanticCheckerUtils.getOutofRangeException(
 								lExpression.getLiteralValue(),
 								CoreRebecaTypeSystem.FLOAT_TYPE,
@@ -48,7 +48,7 @@ public class LiteralSemanticCheck extends AbstractExpressionSemanticCheck {
 						.getLiteralValue());
 				returnValue.setSecond(value);
 			} catch (NumberFormatException nfe) {
-				exceptionContainer.getExceptions().add(
+				exceptionContainer.addException(
 						SemanticCheckerUtils.getOutofRangeException(
 								lExpression.getLiteralValue(),
 								CoreRebecaTypeSystem.BOOLEAN_TYPE,
@@ -71,7 +71,7 @@ public class LiteralSemanticCheck extends AbstractExpressionSemanticCheck {
 						returnValue.setSecond(value);
 					}
 				} catch (NumberFormatException nfe) {
-					exceptionContainer.getExceptions().add(
+					exceptionContainer.addException(
 							SemanticCheckerUtils.getOutofRangeException(
 									lExpression.getLiteralValue(),
 									CoreRebecaTypeSystem.INT_TYPE,

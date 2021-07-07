@@ -48,31 +48,27 @@ public class SymbolTableInitializer {
 	public void addMethod(Type container, MethodDeclaration methodDecleration, AccessModifier defaultAccessModifier, Label label) {
 		if (methodDecleration.getAccessModifier() == null)
 			methodDecleration.setAccessModifier(defaultAccessModifier);
-		try {
-			for (FormalParameterDeclaration fpd : methodDecleration
-					.getFormalParameters()) {
-				try {
-					Type fpType = fpd.getType();
-					if (fpType instanceof ArrayType) {
-						((ArrayType) fpType)
-								.setOrdinaryPrimitiveType((OrdinaryPrimitiveType) typeSystem.getType(
-												((ArrayType) fpType)
-														.getOrdinaryPrimitiveType()));
-					} else {
-						fpd.setType(typeSystem.getType(fpType));
-					}
-				} catch (CodeCompilationException cce) {
-					cce.setColumn(fpd.getCharacter());
-					cce.setLine(fpd.getLineNumber());
-					exceptionContainer.addException(cce);
-					fpd.setType(AbstractTypeSystem.UNKNOWN_TYPE);
-					continue;
+		for (FormalParameterDeclaration fpd : methodDecleration
+				.getFormalParameters()) {
+			try {
+				Type fpType = fpd.getType();
+				if (fpType instanceof ArrayType) {
+					((ArrayType) fpType)
+							.setOrdinaryPrimitiveType((OrdinaryPrimitiveType) typeSystem.getType(
+											((ArrayType) fpType)
+													.getOrdinaryPrimitiveType()));
+				} else {
+					fpd.setType(typeSystem.getType(fpType));
 				}
+			} catch (CodeCompilationException cce) {
+				cce.setColumn(fpd.getCharacter());
+				cce.setLine(fpd.getLineNumber());
+				exceptionContainer.addException(cce);
+				fpd.setType(AbstractTypeSystem.UNKNOWN_TYPE);
+				continue;
 			}
-			symbolTable.addMethod(container, methodDecleration, label);
-		} catch (ExceptionContainer ec) {
-			exceptionContainer.addAll(ec);
 		}
+		symbolTable.addMethod(container, methodDecleration, label);
 	}
 
 	public void addFields(Type container, List<FieldDeclaration> fieldDeclarations, AccessModifier defaultModifier) {

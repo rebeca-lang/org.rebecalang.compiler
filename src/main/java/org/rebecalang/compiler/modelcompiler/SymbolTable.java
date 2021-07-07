@@ -18,12 +18,14 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SymbolTable {
 	
-//	@Autowired
+	@Autowired
+	ExceptionContainer exceptionContainer;
 //	AbstractTypeSystem typeSystem;
 	
 	private Hashtable<Type, Hashtable<String, FieldDeclaration>> variablesSymbolTable;
@@ -85,8 +87,7 @@ public class SymbolTable {
 	}
 	
 	public void addMethod(Type container,
-			MethodDeclaration methodDecleration, Label label) throws ExceptionContainer {
-		ExceptionContainer exceptionContainer = new ExceptionContainer();
+			MethodDeclaration methodDecleration, Label label) {
 		if (container == null)
 			container = AbstractTypeSystem.NO_TYPE;
 		Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>> methods = methodsSymbolTable.get(container);
@@ -122,8 +123,6 @@ public class SymbolTable {
 //				continue;
 //			}
 		}
-		if (!exceptionContainer.getExceptions().isEmpty())
-			throw exceptionContainer;
 		try {
 			MethodInSymbolTableSpecifier foundExactMatch = findExactMatch(signatures, newMethodArguments);
 			if (foundExactMatch == null) {
@@ -157,8 +156,6 @@ public class SymbolTable {
 					methodDecleration.getLineNumber(), methodDecleration
 							.getCharacter()));
 		}
-		if (!exceptionContainer.getExceptions().isEmpty())
-			throw exceptionContainer;
 	}	
 	
 	

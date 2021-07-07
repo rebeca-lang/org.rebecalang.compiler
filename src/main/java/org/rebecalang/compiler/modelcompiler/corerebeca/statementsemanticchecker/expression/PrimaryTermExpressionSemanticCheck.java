@@ -67,8 +67,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 					Type symbolType = symbolTable.getSymbolType(baseType, termName);
 					if (symbolType == null) {
 						if (baseType != AbstractTypeSystem.UNKNOWN_TYPE)
-							exceptionContainer.getExceptions()
-							.add(new CodeCompilationException(
+							exceptionContainer.addException(new CodeCompilationException(
 									"Undefiend variable " + termName + " in the type "
 											+ baseType.getTypeName(),
 											termPrimary.getLineNumber(), termPrimary.getCharacter()));
@@ -80,8 +79,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 						termPrimary.setType(symbolType);
 						if (accessModifier != AccessModifierUtilities.PUBLIC) {
 							if (baseType != owner.getType())
-								exceptionContainer.getExceptions()
-								.add(new AccessControlException(
+								exceptionContainer.addException(new AccessControlException(
 										"Invalid access to the variable " + termName + " of the type "
 												+ baseType.getTypeName(),
 												termPrimary.getLineNumber(), termPrimary.getCharacter()));
@@ -119,8 +117,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 
 				}
 				if (methodInSymbolTableSpecifier.getLabel() == CoreRebecaLabelUtility.CONSTRUCTOR) {
-					exceptionContainer.getExceptions()
-					.add(new CodeCompilationException(
+					exceptionContainer.addException(new CodeCompilationException(
 							"The method " + termName + SymbolTable.convertMethodArgumentsToString(argumentTypes)
 							+ " is undefined"
 							+ (baseType == null || baseType == AbstractTypeSystem.NO_TYPE ? ""

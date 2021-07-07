@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.rebecalang</groupId>
 	<artifactId>compiler</artifactId>
-	<version>2.10</version>
+	<version>2.11</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
