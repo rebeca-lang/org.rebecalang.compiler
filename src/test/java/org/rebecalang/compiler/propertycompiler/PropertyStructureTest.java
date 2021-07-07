@@ -10,7 +10,6 @@ import org.rebecalang.compiler.CompilerConfig;
 import org.rebecalang.compiler.modelcompiler.RebecaModelCompiler;
 import org.rebecalang.compiler.modelcompiler.SymbolTable;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
-import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerExtension;
 import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
@@ -43,9 +42,7 @@ public class PropertyStructureTest {
 		File property = new File(PROPERTY_FILES_BASE + "CoreRebecaModelWithInitialMethod.property");
 		propertyCompiler.compilePropertyFile(property, modelCompilatioResult.getFirst(), extension);
 		
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
-		
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
 	}
 	
 	@Test
@@ -57,9 +54,7 @@ public class PropertyStructureTest {
 		File property = new File(PROPERTY_FILES_BASE + "GeneralCoreRebecaModelWithInitialMethod.property");
 		propertyCompiler.compilePropertyFile(property, modelCompilatioResult.getFirst(), extension);
 		
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
-		
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
 	}
 	
 	@Test
@@ -71,9 +66,7 @@ public class PropertyStructureTest {
 		File property = new File(PROPERTY_FILES_BASE + "DiningPhilosophers.property");
 		propertyCompiler.compilePropertyFile(property, modelCompilatioResult.getFirst(), extension);
 		
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
-		
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
 	}
 	
 	@Test
@@ -87,9 +80,7 @@ public class PropertyStructureTest {
 		File property = new File(PROPERTY_FILES_BASE + "TinyOSPV6.property");
 		propertyCompiler.compilePropertyFile(property, modelCompilatioResult.getFirst(), extension);
 		
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
-		
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
 	}
 	
  }
