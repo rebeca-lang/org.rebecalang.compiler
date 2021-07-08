@@ -12,13 +12,13 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstant
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
-import org.rebecalang.compiler.propertycompiler.PropertyCodeCompilationException;
 import org.rebecalang.compiler.propertycompiler.corerebeca.compiler.CoreRebecaPropertyCompleteLexer;
 import org.rebecalang.compiler.propertycompiler.corerebeca.compiler.CoreRebecaPropertyCompleteParser;
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.LTLDefinition;
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.PropertyModel;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.GeneralPropertyCompiler;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.expressionsemanticchecker.InvalidExpressionsSemanticCheck;
+import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -47,7 +47,7 @@ public class CoreRebecaPropertyCompiler extends GeneralPropertyCompiler {
 			Pair<Type, Object> checkingResult = expressionSemanticCheckContainer.check(ltlDefinition.getExpression());
 			if (!checkingResult.getFirst().canTypeCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE)) {
 				if (checkingResult.getFirst() != AbstractTypeSystem.UNKNOWN_TYPE)
-				exceptionContainer.addException(new PropertyCodeCompilationException(
+				exceptionContainer.addException(new CodeCompilationException(
 						"The result of an LTL formula must be evaluatable to boolean.", 
 						ltlDefinition.getExpression().getLineNumber(), ltlDefinition.getExpression().getCharacter()));
 			}

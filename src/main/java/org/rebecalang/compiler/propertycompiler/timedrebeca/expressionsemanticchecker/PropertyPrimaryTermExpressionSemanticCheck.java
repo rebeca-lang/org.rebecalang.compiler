@@ -13,7 +13,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.PrimaryTermExpressionSemanticCheck;
-import org.rebecalang.compiler.propertycompiler.PropertyCodeCompilationException;
+import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -45,8 +45,8 @@ public class PropertyPrimaryTermExpressionSemanticCheck extends PrimaryTermExpre
 		String termName = termPrimary.getName();
 
 		if (termPrimary.getParentSuffixPrimary() != null) {
-			PropertyCodeCompilationException codeCompilationException = 
-					new PropertyCodeCompilationException(
+			CodeCompilationException codeCompilationException = 
+					new CodeCompilationException(
 					"The first parameter of " + termName + " must be in form of "
 							+ "'time ~ c' where 'c' is a compile time evaluatable integer expression and "
 							+ "'~' is one of '<', '<=', '>', '>=', and '=='.", 

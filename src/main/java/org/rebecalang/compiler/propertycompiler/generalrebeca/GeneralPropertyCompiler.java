@@ -21,7 +21,6 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClas
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
-import org.rebecalang.compiler.propertycompiler.PropertyCodeCompilationException;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.AssertionDefinition;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.Definition;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.PropertyModel;
@@ -67,7 +66,7 @@ public abstract class GeneralPropertyCompiler {
 			public void syntaxError(Recognizer<?, ?> recognizer,
 					Object offendingSymbol, int line, int charPositionInLine,
 					String msg, RecognitionException e) {
-				exceptionContainer.addException(new PropertyCodeCompilationException(msg, line,
+				exceptionContainer.addException(new CodeCompilationException(msg, line,
 						charPositionInLine));
 			}
 		});

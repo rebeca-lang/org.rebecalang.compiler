@@ -14,7 +14,6 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
-import org.rebecalang.compiler.propertycompiler.PropertyCodeCompilationException;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.GeneralPropertyCompiler;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.expressionsemanticchecker.InvalidExpressionsSemanticCheck;
 import org.rebecalang.compiler.propertycompiler.timedrebeca.compiler.TimedRebecaPropertyCompleteLexer;
@@ -22,6 +21,7 @@ import org.rebecalang.compiler.propertycompiler.timedrebeca.compiler.TimedRebeca
 import org.rebecalang.compiler.propertycompiler.timedrebeca.expressionsemanticchecker.PropertyPrimaryTermExpressionSemanticCheck;
 import org.rebecalang.compiler.propertycompiler.timedrebeca.objectmodel.PropertyModel;
 import org.rebecalang.compiler.propertycompiler.timedrebeca.objectmodel.TCTLDefinition;
+import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -49,7 +49,7 @@ public class TimedRebecaPropertyCompiler extends GeneralPropertyCompiler {
 		for (TCTLDefinition tctlDefinition : ((PropertyModel)propertyModel).getTCTLDefinitions()) {
 			Pair<Type, Object> checkingResult = expressionSemanticCheckContainer.check(tctlDefinition.getExpression());
 			if (!checkingResult.getFirst().canTypeCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE)) {
-				exceptionContainer.addException(new PropertyCodeCompilationException(
+				exceptionContainer.addException(new CodeCompilationException(
 						"The result of a TCTL formula must be evaluatable to boolean.", 
 						tctlDefinition.getExpression().getLineNumber(), tctlDefinition.getExpression().getCharacter()));
 			}
