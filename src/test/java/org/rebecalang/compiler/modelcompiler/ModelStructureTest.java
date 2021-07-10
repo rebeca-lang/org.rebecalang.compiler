@@ -58,6 +58,19 @@ public class ModelStructureTest {
 	}
 	
 	@Test
+	public void GIVEN_CoreRebecaModelWithCompilerError_WHEN_CoreIs2_1_THEN_1Error() {
+		File model = new File(MODEL_FILES_BASE + "CoreRebecaModelWithCompilerError.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
+
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+		expectedExceptionContainer.addException(new CodeCompilationException("Unknown type Type2", 4, 2));
+
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
+	}
+	
+	@Test
 	public void GIVEN_SchedularTimedRebecaModel_WHEN_CoreIs2_1_THEN_4Errors() {
 		File model = new File(MODEL_FILES_BASE + "SchedularV3.rebeca");
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
@@ -135,5 +148,6 @@ public class ModelStructureTest {
 		GIVEN_TimedRebecaModelWithPriority_WHEN_CoreIs2_1_THEN_2Errors();
 		GIVEN_TimedRebecaModelWithTypesAndMethods_WHEN_CoreIs2_1_THEN_NoErrors();
 		GIVEN_WSANTimedRebecaModel_WEHN_CoreIs2_1_THEN_NoError();
+		GIVEN_CoreRebecaModelWithCompilerError_WHEN_CoreIs2_1_THEN_1Error();
 	}
 }

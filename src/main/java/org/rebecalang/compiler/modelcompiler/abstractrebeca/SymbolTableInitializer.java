@@ -79,6 +79,8 @@ public class SymbolTableInitializer {
 					fieldDeclaration.setAccessModifier(defaultModifier);
 				symbolTable.addVarible(container, fieldDeclaration);
 			} catch (CodeCompilationException e) {
+				e.setLine(fieldDeclaration.getLineNumber());
+				e.setColumn(fieldDeclaration.getCharacter());
 				exceptionContainer.addException(e);
 			}
 		}
@@ -166,6 +168,8 @@ public class SymbolTableInitializer {
 				smd.setReturnType(typeSystem.getType(smd.getReturnType()));
 			}catch (CodeCompilationException e) {
 				smd.setReturnType(AbstractTypeSystem.UNKNOWN_TYPE);
+				e.setLine(smd.getLineNumber());
+				e.setColumn(smd.getCharacter());
 				exceptionContainer.addException(e);
 			}
 			if (methodDeclaration.getName().equals(
@@ -230,6 +234,8 @@ public class SymbolTableInitializer {
 						smd.setReturnType(typeSystem.getType(smd.getReturnType()));
 					}catch (CodeCompilationException e) {
 						smd.setReturnType(AbstractTypeSystem.UNKNOWN_TYPE);
+						e.setLine(smd.getLineNumber());
+						e.setColumn(smd.getCharacter());
 						exceptionContainer.addException(e);
 					}
 					if (methodDeclaration.getName().equals(
@@ -326,7 +332,7 @@ public class SymbolTableInitializer {
 					try {
 						params.add(typeSystem.getType(fpd.getType()));
 					} catch (CodeCompilationException e) {
-						//This case will be handled later
+						//TODO This case will be handled later
 					}
 				}
 				MethodSignatureBean msb = new MethodSignatureBean(md.getName(), params);
