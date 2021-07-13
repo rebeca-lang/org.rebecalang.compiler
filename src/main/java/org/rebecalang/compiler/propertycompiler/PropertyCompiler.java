@@ -57,7 +57,6 @@ public class PropertyCompiler {
 	
 	public PropertyModel compilePropertyFile(File propertyFile, RebecaModel rebecaModel,
 			Set<CompilerExtension> extention, boolean performSemanticCheck) {
-		exceptionContainer.clear();
 		exceptionContainer.setCorrespondingResource(propertyFile);
 
 		try {
