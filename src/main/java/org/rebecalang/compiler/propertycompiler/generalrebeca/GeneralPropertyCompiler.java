@@ -15,6 +15,7 @@ import org.rebecalang.compiler.modelcompiler.SymbolTable;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompleteCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MainRebecDefinition;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
@@ -96,6 +97,7 @@ public abstract class GeneralPropertyCompiler {
 							variableDeclarator.getVariableName(), AccessModifierUtilities.PUBLIC);
 			}
 		} catch (CodeCompilationException cce) {
+			exceptionContainer.addException(cce);
 			cce.printStackTrace();
 		}
 
@@ -115,16 +117,21 @@ public abstract class GeneralPropertyCompiler {
 					scopeHandler.addVariableToCurrentScope(
 							variableDeclarator.getVariableName(),
 							fieldDeclaration.getType(),
-							CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE, 0, 0);
+							CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE,
+							variableDeclarator.getLineNumber(),
+							variableDeclarator.getCharacter());
 			}
 			for (MainRebecDefinition mainRebecDefinition : rebecaModel
 					.getRebecaCode().getMainDeclaration().getMainRebecDefinition()) {
 					scopeHandler.addVariableToCurrentScope(
 							mainRebecDefinition.getName(),
 							mainRebecDefinition.getType(),
-							CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE, 0, 0);
+							CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE,
+							mainRebecDefinition.getLineNumber(),
+							mainRebecDefinition.getCharacter());
 			}
 		} catch (ScopeException se) {
+			exceptionContainer.addException(se);
 			se.printStackTrace();
 		}	
 	}
@@ -139,6 +146,7 @@ public abstract class GeneralPropertyCompiler {
 							variableDeclarator.getVariableName(), AccessModifierUtilities.PUBLIC);
 			}
 		} catch (CodeCompilationException cce) {
+			exceptionContainer.addException(cce);
 			cce.printStackTrace();
 		}
 	}
@@ -157,8 +165,16 @@ public abstract class GeneralPropertyCompiler {
 			try {
 				scopeHandler.addVariableToCurrentScope(definition.getName(), checkingResult.getFirst(), 
 						CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE, 0, 0);
+				if (!checkingResult.getFirst().canTypeCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE)) {
+					if (checkingResult.getFirst() != AbstractTypeSystem.UNKNOWN_TYPE)
+					exceptionContainer.addException(new CodeCompilationException(
+							"Variable definitions must be evaluatable to boolean.", 
+							definition.getExpression().getLineNumber(), definition.getExpression().getCharacter()));
+				}
 			} catch (ScopeException e) {
-				e.printStackTrace();
+				e.setLine(definition.getExpression().getLineNumber());
+				e.setColumn(definition.getExpression().getCharacter());
+				exceptionContainer.addException(e);
 			}
 		}
 		
@@ -167,9 +183,19 @@ public abstract class GeneralPropertyCompiler {
 			Pair<Type,Object> checkingResult = expressionSemanticCheckContainer.check(definition.getExpression());
 			try {
 				scopeHandler.addVariableToCurrentScope(definition.getName(), checkingResult.getFirst(), 
-						CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE, 0, 0);
+						CoreRebecaLabelUtility.ENVIRONMENT_VARIABLE,
+						definition.getExpression().getLineNumber(),
+						definition.getExpression().getCharacter());
+				if (!checkingResult.getFirst().canTypeCastTo(CoreRebecaTypeSystem.BOOLEAN_TYPE)) {
+					if (checkingResult.getFirst() != AbstractTypeSystem.UNKNOWN_TYPE)
+					exceptionContainer.addException(new CodeCompilationException(
+							"Assertion definitions must be evaluatable to boolean.", 
+							definition.getExpression().getLineNumber(), definition.getExpression().getCharacter()));
+				}
 			} catch (ScopeException e) {
-				e.printStackTrace();
+				e.setLine(definition.getExpression().getLineNumber());
+				e.setColumn(definition.getExpression().getCharacter());
+				exceptionContainer.addException(e);
 			}
 		}
 		scopeHandler.popScopeRecord();

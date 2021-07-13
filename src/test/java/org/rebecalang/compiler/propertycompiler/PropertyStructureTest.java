@@ -8,8 +8,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.rebecalang.compiler.CompilerConfig;
 import org.rebecalang.compiler.modelcompiler.RebecaModelCompiler;
+import org.rebecalang.compiler.modelcompiler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.SymbolTable;
+import org.rebecalang.compiler.modelcompiler.SymbolTableException;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
+import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerExtension;
 import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
@@ -54,7 +57,14 @@ public class PropertyStructureTest {
 		File property = new File(PROPERTY_FILES_BASE + "GeneralCoreRebecaModelWithInitialMethod.property");
 		propertyCompiler.compilePropertyFile(property, modelCompilatioResult.getFirst(), extension);
 		
-		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(property);
+		expectedExceptionContainer.addException(new ScopeException("Redeclaration of \"int l1\", it has already been declared in line 10 column 7", 11, 7));
+		expectedExceptionContainer.addException(new CodeCompilationException("Variable definitions must be evaluatable to boolean.", 6, 9));
+		expectedExceptionContainer.addException(new CodeCompilationException("Assertion definitions must be evaluatable to boolean.", 12, 7));
+		
+//		System.out.println(exceptionContainer);
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
 	
 	@Test

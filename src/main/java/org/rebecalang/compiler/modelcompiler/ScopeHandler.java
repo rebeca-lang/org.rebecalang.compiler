@@ -44,18 +44,12 @@ public class ScopeHandler {
 	public void addVaribaleToCurrentScope(String variableName, Type type, Label label, Object precompilationValue, 
 			int lineNumber, int column) throws ScopeException {
 		VariableInScopeSpecifier info = null;
-//		System.out.println(variableName + ":" + lineNumber + ":" + column);
 		try {
 			info = retreiveVariableFromScope(variableName);
 		} catch (ScopeException se) {
 			VariableInScopeSpecifier data;
-//			try {
-//				type = typeSystem.getType(type);
 				data = new VariableInScopeSpecifier(variableName, type, label, precompilationValue,
 						lineNumber, column);
-//			} catch (CodeCompilationException e) {
-//				throw new ScopeException("Unknown type " + type.getTypeName(), 0, 0);
-//			}
 			scopeStack.peek().getSecond().put(variableName, data);
 			return;
 		}

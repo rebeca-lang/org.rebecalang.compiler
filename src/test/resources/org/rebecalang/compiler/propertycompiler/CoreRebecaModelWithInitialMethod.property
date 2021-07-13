@@ -5,7 +5,7 @@ property {
 		pl3 = b.bl && b.bl;
 	}
 	
-	Assertion {
-		l1 : pl1 && !pl2 || pl3;
+	LTL {
+		l1 : G(pl1 && F (pl2 && U (true, pl1))) || false;
 	}
 }
