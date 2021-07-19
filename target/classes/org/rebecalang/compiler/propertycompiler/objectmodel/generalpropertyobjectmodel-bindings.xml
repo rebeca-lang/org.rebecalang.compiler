@@ -1,0 +1,63 @@
+<jxb:bindings xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" version="2.1">
+
+	<jxb:bindings schemaLocation="../../modelcompiler/objectmodel/corerebecaexpressionobjectmodel.xsd">
+		<jxb:bindings node="//xs:complexType[@name='RebecInstantiationPrimary']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='NonDetExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='DotPrimary']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Expression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ArrayType']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='BinaryExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='CastExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Literal']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='OrdinaryPrimitiveType']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='PlusSubExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PlusSubExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='PrimaryExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimaryExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ParentSuffixPrimary']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ParentSuffixPrimary" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='PrimitiveType']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimitiveType" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='InstanceofExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Statement']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='TermPrimary']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='TernaryExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TernaryExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='UnaryExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.UnaryExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Type']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type" />
+		</jxb:bindings>
+	</jxb:bindings>
+</jxb:bindings>

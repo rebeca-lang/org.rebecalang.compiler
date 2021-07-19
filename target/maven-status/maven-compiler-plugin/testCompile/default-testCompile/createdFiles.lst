@@ -1,0 +1,3 @@
+org\rebecalang\compiler\modelcompiler\RebecaCompilerTestCase.class
+org\rebecalang\compiler\propertycompiler\CoreRebecaPropertyCompilerTestCase.class
+org\rebecalang\compiler\modelcompiler\AppTest.class

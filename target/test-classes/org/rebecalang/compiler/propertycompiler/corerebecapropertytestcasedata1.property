@@ -1,0 +1,10 @@
+property {
+	define {
+		pl1 = ajh && blk.m[3];
+	//	pl2 = c -> d;
+	}
+	
+	LTL {
+		l1 : G(pl1 -> F (pl2.d.e[4] && U (true, pl1))) || false;
+	}
+}
