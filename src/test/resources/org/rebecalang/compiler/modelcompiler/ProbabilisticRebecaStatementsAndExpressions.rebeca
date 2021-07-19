@@ -1,0 +1,25 @@
+reactiveclass Test1 (3) {
+	knownrebecs {
+	}
+	statevars {
+	}
+		
+	Test1(Test1 rt, int f, int j) {
+	}
+
+	msgsrv initial(int[3] ac, byte bc) {
+		int pa = ?(0.25: 1, 0.5: 2);
+		pAlt {
+			prob (0.012 + (0.002 * 0.556)): {
+				int b4;
+			}
+			prob (0.987): {
+				int a4 = 10;
+			}
+		}
+		int pa2 = ?(0.25: 1, 0.5: 2, 0.25: 3);
+	}
+}
+
+main {
+}

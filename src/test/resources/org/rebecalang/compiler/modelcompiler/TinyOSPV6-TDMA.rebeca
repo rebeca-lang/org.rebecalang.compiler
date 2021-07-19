@@ -1,0 +1,253 @@
+/***********
+TinyOS Sensing App (worst case task lengths, distributed)
+V5
+Reactive classes: CPU, Sensor, Radio, Misc, ...
+CPU handles the interrupts (events) coming from Sensor, Radio, and Misc
+The interrupts come in periodically, modeled by \"after\" in Rebeca.
+Each takes a while to handle, modeled by \"delay\" in Rebeca.
+************/
+
+env int samplingRate = 25;
+env int numberOfNodes = 6;
+env int bufferSize = 1;         // number of sensor samples per packet (1 to 9)
+env int sensorTaskDelay = 2;    // worst-case length of sensor task
+
+env int tmdaSlotSize = 10;
+
+env int miscPeriod = 120;
+env int OnePacketTransmissionTime = 7;     // worst-case length of radio task
+env int miscTaskDelay = 10;     // worst-case length of misc task
+env int packetMaximumSize = 112;
+
+//TinyOS 2006: 133 bytes packets (112 bytes of data)
+//the 8-bit node ID, 4 channels of 16-bit data, and a 32-bit timestamp for accurate reconstruction of the data. Thus, the total packet payload is limited to a minimum of 14 bytes
+//which is comprised of 4 channels of 16-bit sensor data, an associated 32-bit time stamp, and an 8-bit node ID. Thus, the payload when buffering three and nine samples is 38 and 110 bytes respectively. A maximum of nine buffered samples is considered, since the maxi- mum data payload of one radio packet dictated by the IEEE 802.15.4 protocol and TinyOS 1.x standard MAC protocol is 112 bytes (see Figure 7). The three sample buffer offers an increase in network size over the previous approach with a relatively small increase in payload size, which will slightly decrease the maximum sampling rate as discussed later.
+
+//Default TOSH_DATA_LENGTH value is 24 bytes
+
+reactiveclass CPU(10) {
+    knownrebecs {
+        CommunicationDevice senderDevice;
+        CommunicationDevice receiverDevice;
+        Sensor sensor;
+    }
+
+    statevars {
+        int collectedSamplesCounter;
+    }
+
+    CPU() {
+        collectedSamplesCounter = 0;
+    }
+
+    msgsrv sensorEvent(int period) {
+        self.sensorTask(period, currentMessageWaitingTime);
+    }
+
+    msgsrv sensorTask(int period, int lag) {
+
+        // check sensor deadline
+        //int tmp = period - lag - currentMessageWaitingTime;
+        //assertion(tmp >= 0);
+        assertion((period - lag - currentMessageWaitingTime) >= 0);
+
+        // process sensor sample
+        delay(sensorTaskDelay);
+
+        // send a radio message every 'bufferSize' samples
+        collectedSamplesCounter += 1;
+
+        if (collectedSamplesCounter == bufferSize) {
+            // The collected data is packet into one packet
+            senderDevice.send(receiverDevice, 0, 1);
+            collectedSamplesCounter = 0;
+        }
+    }
+
+    msgsrv miscEvent() {
+        // perform misc task
+        delay(miscTaskDelay);
+    }
+}
+
+reactiveclass Sensor(10) {
+    knownrebecs {
+        CPU cpu;
+    }
+
+    Sensor() {
+        self.sensorFirst();
+    }
+
+    msgsrv sensorFirst() {
+        self.sensorLoop() after(?(10, 20, 30));
+    }
+
+    msgsrv sensorLoop() {
+        int period = 1000 / samplingRate;
+        cpu.sensorEvent(period);
+        self.sensorLoop() after(period);
+    }
+}
+
+reactiveclass Misc(10) {
+    knownrebecs {
+        CPU cpu;
+    }
+
+    Misc() {
+        self.miscFirst();
+    }
+
+    msgsrv miscFirst() {
+        self.miscLoop() after(?(10,20,30));
+    }
+
+    msgsrv miscLoop() {
+        cpu.miscEvent();
+        self.miscLoop() after(miscPeriod);
+    }
+}
+
+reactiveclass WirelessMedium(5) {
+    statevars {
+		CommunicationDevice senderDevice;
+		CommunicationDevice receiverDevice;
+        int maxTraffic;
+    }
+
+    WirelessMedium() {
+    	senderDevice = null;
+    	receiverDevice = null;
+
+        //The radio offers a theoretical maximum transfer speed of 250 Kbits/sec. When considering only the maximum possible data payload, the maximum data throughput further reduces to about 125 Kbps.
+
+        maxTraffic = (125 * 1024) / 8;
+    }
+    
+    msgsrv getStatus() {
+    	((CommunicationDevice)sender).receiveStatus(senderDevice != null);
+    }
+
+    msgsrv broadcast(CommunicationDevice receiver, int data, int packetsNumber) {
+    	if(senderDevice == null) {
+	    	senderDevice = (CommunicationDevice)sender;
+	    	receiverDevice = receiver;
+	    	self.broadcastingIsCompleted() after(packetsNumber * OnePacketTransmissionTime);
+	    	((CommunicationDevice)sender).receiveResult(true) after(packetsNumber * OnePacketTransmissionTime);
+            receiverDevice.receiveData(receiver, data, packetsNumber);
+	    } else {
+            //Collision is detected
+            ((CommunicationDevice)sender).receiveResult(false);
+        }
+    }
+
+    msgsrv broadcastingIsCompleted() {
+    	senderDevice = null;
+    	receiverDevice = null;
+    }
+}
+
+reactiveclass CommunicationDevice (10) {
+    
+    knownrebecs {
+		WirelessMedium medium;
+    }
+
+    statevars {
+    	byte id;
+        int slotSize;
+        boolean inActivePeriod;
+        int sendingData;
+
+        int sendingPacketsNumber;
+        CommunicationDevice receiverDevice;
+        boolean busyWithSending;
+    }
+
+    CommunicationDevice(byte myId) {
+		id = myId;
+        inActivePeriod = false;
+        sendingData = 0;
+        busyWithSending = false;
+
+        //This communication device is installed on sensor nodes
+        if (id != 0) {
+            handleTDMASlot();
+        }
+
+        sendingPacketsNumber = 0;
+        receiverDevice = null;
+	}
+
+	msgsrv send(CommunicationDevice receiver, int data, int packetsNumber) {
+        //Communication device must be free prior to sending data
+        assertion(receiverDevice == null);
+
+        sendingPacketsNumber = packetsNumber;
+        receiverDevice = receiver;
+        sendingData = data;
+
+        self.checkPendingData();
+	}
+
+    msgsrv handleTDMASlot() {
+        inActivePeriod = !inActivePeriod;
+
+        if(inActivePeriod) {
+            assertion(tmdaSlotSize - currentMessageWaitingTime > 0);
+            self.handleTDMASlot() after(tmdaSlotSize - currentMessageWaitingTime);
+            self.checkPendingData();
+        } else {
+            self.handleTDMASlot() after((tmdaSlotSize * (numberOfNodes - 1))- currentMessageWaitingTime);
+        }
+    }
+
+    msgsrv checkPendingData() {
+        if (inActivePeriod && receiverDevice != null && !busyWithSending) {
+            //to avoid multiple packet sending
+            busyWithSending = true;
+            medium.getStatus();
+        }
+    }
+
+	msgsrv receiveStatus(boolean result) {
+		if (!result) {
+			medium.broadcast(receiverDevice, sendingData, sendingPacketsNumber);
+            delay(OnePacketTransmissionTime * sendingPacketsNumber);
+		} else {
+			medium.getStatus() after(1);
+		}
+	}
+
+	msgsrv receiveResult(boolean result) {
+		if (!result) {
+			medium.getStatus() after(1);
+		} else {
+            sendingPacketsNumber = 0;
+            receiverDevice = null;
+            sendingData = 0;
+            busyWithSending = false;
+        }
+	}
+
+    msgsrv receiveData(CommunicationDevice receiver, int data, int receivingPacketsNumber) {
+    	if (receiver == self) {
+            delay(receivingPacketsNumber * OnePacketTransmissionTime);
+    	}
+    }
+}
+
+
+main {
+	WirelessMedium medium():();
+
+    CPU cpu (sensorNodeSenderDevice, receiver, sensor):();
+    Sensor sensor(cpu):();
+    Misc misc(cpu):();
+    CommunicationDevice sensorNodeSenderDevice(medium):((byte)1);
+	CommunicationDevice receiver(medium):((byte)0);
+}
+
+
+

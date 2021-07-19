@@ -1,0 +1,9 @@
+property{
+	define {
+		freeChannel = medium.senderDevice == null;
+	}
+
+	TCTL {
+		prop1 : AG(time <= 20,  AU(time <= 20, freeChannel, !freeChannel));
+	}
+}

@@ -140,7 +140,7 @@ instanceOfExpression returns [Expression e]
         (INSTANCEOF t=type {$e = new InstanceofExpression(); 
         					((InstanceofExpression)$e).setValue($e1.e); 
         					((InstanceofExpression)$e).setEvaluationType($t.t);
-        					$e.setType(TypesUtilities.BOOLEAN_TYPE);
+        					$e.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
         					$e.setLineNumber($t.t.getLineNumber()); $e.setCharacter($t.t.getCharacter());
         					}
         )?
@@ -291,35 +291,35 @@ expressionList returns [List<Expression> el]
 	
 literal returns [Literal l]
     :   INTLITERAL {$l = new Literal();$l.setLiteralValue($INTLITERAL.text);
-    		$l.setType(TypesUtilities.INT_TYPE);
+    		$l.setType(CoreRebecaTypeSystem.INT_TYPE);
     		$l.setLineNumber($INTLITERAL.getLine());$l.setCharacter($INTLITERAL.getCharPositionInLine());}
     |   FLOATLITERAL 
     	{$l = new Literal();$l.setLiteralValue($FLOATLITERAL.text);
-    	$l.setType(TypesUtilities.FLOAT_TYPE);
+    	$l.setType(CoreRebecaTypeSystem.FLOAT_TYPE);
     	$l.setLineNumber($FLOATLITERAL.getLine());$l.setCharacter($FLOATLITERAL.getCharPositionInLine());}
     |   DOUBLELITERAL 
     	{$l = new Literal();$l.setLiteralValue($DOUBLELITERAL.text);
-    	$l.setType(TypesUtilities.DOUBLE_TYPE);
+    	$l.setType(CoreRebecaTypeSystem.DOUBLE_TYPE);
     	$l.setLineNumber($DOUBLELITERAL.getLine());$l.setCharacter($DOUBLELITERAL.getCharPositionInLine());}
     |   CHARLITERAL 
     	{$l = new Literal();$l.setLiteralValue($CHARLITERAL.text);
-    	$l.setType(TypesUtilities.CHAR_TYPE);
+    	$l.setType(CoreRebecaTypeSystem.CHAR_TYPE);
     	$l.setLineNumber($CHARLITERAL.getLine());$l.setCharacter($CHARLITERAL.getCharPositionInLine());}
     |   STRINGLITERAL 
     	{$l = new Literal();$l.setLiteralValue($STRINGLITERAL.text);
-    	$l.setType(TypesUtilities.STRING_TYPE);
+    	$l.setType(CoreRebecaTypeSystem.STRING_TYPE);
     	$l.setLineNumber($STRINGLITERAL.getLine());$l.setCharacter($STRINGLITERAL.getCharPositionInLine());}
     |   TRUE 
     	{$l = new Literal();$l.setLiteralValue("true");
-    	$l.setType(TypesUtilities.BOOLEAN_TYPE);
+    	$l.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
     	$l.setLineNumber($TRUE.getLine());$l.setCharacter($TRUE.getCharPositionInLine());}
     |   FALSE 
     	{$l = new Literal();$l.setLiteralValue("false");
-    	$l.setType(TypesUtilities.BOOLEAN_TYPE);
+    	$l.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
     	$l.setLineNumber($FALSE.getLine());$l.setCharacter($FALSE.getCharPositionInLine());}
     |   NULL 
     	{$l = new Literal();$l.setLiteralValue("null");
-    	$l.setType(TypesUtilities.NULL_TYPE);
+    	$l.setType(CoreRebecaTypeSystem.NULL_TYPE);
     	$l.setLineNumber($NULL.getLine());$l.setCharacter($NULL.getCharPositionInLine());}
     ;
 

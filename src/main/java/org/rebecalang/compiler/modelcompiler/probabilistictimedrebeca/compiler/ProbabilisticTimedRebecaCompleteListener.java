@@ -1,15 +1,7 @@
 // Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/ProbabilisticTimedRebecaComplete.g4 by ANTLR 4.7.1
 
 	package org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.compiler;
-	import org.rebecalang.compiler.modelcompiler.timedrebeca.objectmodel.*;
-	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
-	import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.objectmodel.*;
-	
-	import java.util.*;
-	import org.antlr.runtime.BitSet;
-	import org.rebecalang.compiler.utils.TypesUtilities;
-
-import org.antlr.v4.runtime.tree.ParseTreeListener;
+	import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
  * This interface defines a complete listener for a parse tree produced by

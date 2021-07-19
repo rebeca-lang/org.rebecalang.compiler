@@ -39,9 +39,14 @@ reactiveclass Manager(10){
 	}
 	
 	statevars{
+		Timer timer;
 	}
 	
 	Manager(){
+		
+		startTimer(timer + 2);
+		stopTimer(timer);
+		boolean a = getTimerValue(timer);
 	}
 	
 	msgsrv reset(){

@@ -1,0 +1,29 @@
+property {
+    define {
+        p0eat = phil0.eating;
+        p1eat = phil1.eating;
+       	p2eat = phil2.eating;
+ 
+       	p0fR = phil0.fR;
+       	p1fR = phil1.fR;
+       	p2fR = phil2.fR;
+       	
+       	p0fL = phil0.fL;
+       	p1fL = phil1.fL;
+       	p2fL = phil2.fL;
+ 
+       	p0s = !(phil1.fL && phil0.fL);
+       	p1s = !(phil1.fR && phil2.fL);
+       	p2s = !(phil0.fR && phil2.fR);
+    }
+
+
+
+    LTL {
+
+		Safety: (G(p0s) && G(p1s) && G(p2s)) ;
+		Deadlock: G (F (p0eat || p1eat));
+		Starvation: F (p0eat) && F (p1eat) && F (p2eat);
+    }
+
+}

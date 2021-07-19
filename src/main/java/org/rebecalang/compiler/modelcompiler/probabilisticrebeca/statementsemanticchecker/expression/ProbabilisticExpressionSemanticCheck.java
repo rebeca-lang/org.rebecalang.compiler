@@ -2,8 +2,9 @@ package org.rebecalang.compiler.modelcompiler.probabilisticrebeca.statementseman
 
 import java.text.DecimalFormat;
 
-import org.rebecalang.compiler.modelcompiler.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
@@ -13,10 +14,16 @@ import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.statementsemant
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProbabilisticExpressionSemanticCheck extends
 		AbstractExpressionSemanticCheck {
 
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+	
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
@@ -32,14 +39,12 @@ public class ProbabilisticExpressionSemanticCheck extends
 		for (ProbabilisticAlternativeValue value : probabilisticExpression
 				.getChoices()) {
 			nonDetExpression.getChoices().add(value.getValue());
-			Pair<Type, Object> evaluate = ((ExpressionSemanticCheckContainer)defaultContainer).check(
+			Pair<Type, Object> evaluate = expressionSemanticCheckContainer.check(
 					value.getProbability());
 			if (evaluate.getSecond() != null) {
-				if (!TypesUtilities.getInstance().canTypeUpCastTo(
-						evaluate.getFirst(),
-						TypesUtilities.DOUBLE_TYPE)) {
+				if (!evaluate.getFirst().canTypeUpCastTo(CoreRebecaTypeSystem.DOUBLE_TYPE)) {
 					TypesUtilities.addTypeMismatchException(exceptionContainer, evaluate.getFirst(),
-							TypesUtilities.DOUBLE_TYPE, probabilisticExpression);
+							CoreRebecaTypeSystem.DOUBLE_TYPE, probabilisticExpression);
 				} else {
 					probs += ((Number) evaluate.getSecond()).doubleValue();
 				}
@@ -64,7 +69,7 @@ public class ProbabilisticExpressionSemanticCheck extends
 			exceptionContainer.addException(cce);
 		}
 
-		returnValue = ((ExpressionSemanticCheckContainer)defaultContainer).check(nonDetExpression);
+		returnValue = expressionSemanticCheckContainer.check(nonDetExpression);
 		probabilisticExpression.setType(returnValue.getFirst());
 
 		return returnValue;

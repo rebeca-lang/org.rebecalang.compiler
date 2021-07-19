@@ -1,0 +1,32 @@
+
+reactiveclass A (3) {
+	knownrebecs {
+	}
+	
+	statevars {
+	}
+	A() {
+	}
+	
+	@Priority(3)
+	msgsrv m2() {
+	}
+}
+
+reactiveclass B (3) {
+	statevars {
+	}
+	B() {
+	}
+	
+	@GlobalPriority(2)
+	msgsrv m(A param1, int param2) {
+	}
+}
+
+main {
+	@Priority(1)
+	A a():();
+	@Priority("2")
+	B b():();
+}

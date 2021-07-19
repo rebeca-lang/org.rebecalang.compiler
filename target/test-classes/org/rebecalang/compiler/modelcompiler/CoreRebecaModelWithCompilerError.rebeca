@@ -1,0 +1,13 @@
+reactiveclass A (3) {
+	knownrebecs {
+		B bb;
+		C c;
+	}
+}
+
+reactiveclass B (3) {
+}
+
+main {
+	A a(b):();
+}

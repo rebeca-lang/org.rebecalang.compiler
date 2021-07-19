@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.rebecalang.compiler.modelcompiler.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.ScopeHandler;
-import org.rebecalang.compiler.modelcompiler.ScopeHandler.ScopeException;
+import org.rebecalang.compiler.modelcompiler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.ScopeHandler.VariableInScopeSpecifier;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.SemanticCheckerUtils;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
@@ -19,18 +19,24 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BinaryExpressionSemanticCheck extends
 		AbstractExpressionSemanticCheck {
 
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+	
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
 		BinaryExpression bExpression = (BinaryExpression) expression;
 		Pair<Type, Object> lType = 
-				((ExpressionSemanticCheckContainer)defaultContainer).check(bExpression.getLeft());
+				expressionSemanticCheckContainer.check(bExpression.getLeft());
 		Pair<Type, Object> rType = 
-				((ExpressionSemanticCheckContainer)defaultContainer).check(bExpression.getRight());
+				expressionSemanticCheckContainer.check(bExpression.getRight());
 		try {
 			bExpression.setType(
 					SemanticCheckerUtils.getResultType(bExpression.getOperator(), lType
@@ -43,15 +49,13 @@ public class BinaryExpressionSemanticCheck extends
 			if (assignmentOperators.contains(bExpression.getOperator())) {
 				if (lValueState == LValueState.NONE_VARIABLE)
 					exceptionContainer
-							.getExceptions()
-							.add(new CodeCompilationException(
+							.addException(new CodeCompilationException(
 									"The left-hand side of an assignment must be a variable",
 									bExpression.getLineNumber(), bExpression
 											.getCharacter()));
 				if (lValueState == LValueState.CONSTANT)
 					exceptionContainer
-							.getExceptions()
-							.add(new CodeCompilationException(
+							.addException(new CodeCompilationException(
 									"A constant variable cannot be in the left-hand side of an assignment",
 									bExpression.getLineNumber(), bExpression
 											.getCharacter()));
@@ -63,12 +67,12 @@ public class BinaryExpressionSemanticCheck extends
 			}
 		} catch (CodeCompilationException cce) {
 			// Two types of two sides of binary operation are incompatible
-			CodeCompilationException cce2 = SemanticCheckerUtils.createEvaluateExceptionMessage2(
+			CodeCompilationException cce2 = SemanticCheckerUtils.createEvaluateExceptionMessage(
 					bExpression.getLineNumber(), bExpression.getCharacter(),
 					bExpression.getOperator(), lType.getFirst(),
 					rType.getFirst());
 			if (cce2 != null)
-				exceptionContainer.getExceptions().add(cce2);
+				exceptionContainer.addException(cce2);
 			bExpression.setType(lType.getFirst());
 			returnValue.setFirst(bExpression.getType());
 		}

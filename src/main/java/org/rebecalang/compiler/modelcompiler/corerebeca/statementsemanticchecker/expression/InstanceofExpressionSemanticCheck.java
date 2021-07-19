@@ -1,29 +1,47 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression;
 
-import org.rebecalang.compiler.modelcompiler.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
-import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class InstanceofExpressionSemanticCheck extends AbstractExpressionSemanticCheck {
 
+
+	AbstractTypeSystem typeSystem;
+	
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+
+	@Autowired
+	public InstanceofExpressionSemanticCheck(AbstractTypeSystem typeSystem) {
+		super();
+		this.typeSystem = typeSystem;
+	}
+	
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
-		returnValue.setFirst(TypesUtilities.BOOLEAN_TYPE);
+		returnValue.setFirst(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 		InstanceofExpression ioExpression = (InstanceofExpression) expression;
 		Pair<Type, Object> valueType = 
-				((ExpressionSemanticCheckContainer)defaultContainer).check(ioExpression.getValue());
+				expressionSemanticCheckContainer.check(ioExpression.getValue());
 		Type evaluationType;
 		try {
-			evaluationType = TypesUtilities.getInstance().getType(
+			evaluationType = typeSystem.getType(
 					ioExpression.getEvaluationType());
-			if (!TypesUtilities.getInstance().canTypeCastTo(
-					evaluationType, TypesUtilities.REACTIVE_CLASS_TYPE)) {
+			if (!evaluationType.canTypeCastTo(CoreRebecaTypeSystem.REACTIVE_CLASS_TYPE)) {
 				CodeCompilationException cce = new CodeCompilationException(
 						"The 'instanceof' operator only works for reactive class names as the rvalue",
 						ioExpression.getCharacter(), ioExpression.getLineNumber());
@@ -32,8 +50,7 @@ public class InstanceofExpressionSemanticCheck extends AbstractExpressionSemanti
 		} catch (CodeCompilationException e) {
 			exceptionContainer.addException(e);
 		}
-		if (!TypesUtilities.getInstance().canTypeCastTo(
-				valueType.getFirst(), TypesUtilities.REACTIVE_CLASS_TYPE)) {
+		if (!valueType.getFirst().canTypeCastTo(CoreRebecaTypeSystem.REACTIVE_CLASS_TYPE)) {
 			CodeCompilationException cce = new CodeCompilationException(
 					"The 'instanceof' operator only works for actor instances as the lvalue",
 					ioExpression.getCharacter(), ioExpression.getLineNumber());
@@ -41,5 +58,7 @@ public class InstanceofExpressionSemanticCheck extends AbstractExpressionSemanti
 		}
 		return returnValue;
 	}
+
+
 
 }

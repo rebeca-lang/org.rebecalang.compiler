@@ -1,31 +1,24 @@
 package org.rebecalang.compiler.modelcompiler;
 
-import java.util.Set;
-
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
-import org.rebecalang.compiler.utils.CompilerFeature;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
-import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StatementSemanticCheckContainer extends AbstractSemanticCheckContainer {
-
-	private ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
-
-	public StatementSemanticCheckContainer(ExpressionSemanticCheckContainer expressionSemanticCheckContainer,
-			ScopeHandler scopeHandler, SymbolTable symbolTable, Set<CompilerFeature> compilerFeature, ExceptionContainer exceptionContainer) {
-		super(scopeHandler, symbolTable, compilerFeature, exceptionContainer);
-		semanticsCheckersRepository.put(Statement.class, new EmptyStatementSemanticCheck());
-		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
-	}
 	
-	@Override
-	public void registerSemanticsChecker(Class<? extends Statement> type,
-			AbstractSemanticCheck translator) {
-		super.registerSemanticsChecker(type, translator);
-		((AbstractStatementSemanticCheck)translator).setExpressionSemanticCheckContainer(expressionSemanticCheckContainer);
+	@Autowired
+	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+	
+	public StatementSemanticCheckContainer() {
+		super();
+		semanticsCheckersRepository.put(Statement.class, new EmptyStatementSemanticCheck());
 	}
 	
 	public void check(Statement statement) {
@@ -45,7 +38,6 @@ public class StatementSemanticCheckContainer extends AbstractSemanticCheckContai
 	
 	public Pair<Type, Object> check(Expression expression) {
 		Pair<Type, Object> retValue = expressionSemanticCheckContainer.check(expression);
-		exceptionContainer.addAll(expressionSemanticCheckContainer.getExceptionContainer());
 		return retValue;
 	}
 	
@@ -54,7 +46,6 @@ public class StatementSemanticCheckContainer extends AbstractSemanticCheckContai
 		@Override
 		public void check(Statement statement)
 				throws CompilerInternalErrorRuntimeException {
-			
 		}
 		
 	}

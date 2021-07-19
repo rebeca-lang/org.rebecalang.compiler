@@ -12,7 +12,7 @@ import TimedRebecaLexer, TimedRebecaParser, CoreRebecaLexer, CoreRebecaParser;
 	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
 	import java.util.*;
 	import org.antlr.runtime.BitSet;
-	import org.rebecalang.compiler.utils.TypesUtilities;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 }
     
     

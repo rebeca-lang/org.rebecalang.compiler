@@ -6,28 +6,38 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.AccessModifier;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MethodDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
-import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.ExceptionContainer;
 import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SymbolTable {
+	
+	@Autowired
+	ExceptionContainer exceptionContainer;
+//	AbstractTypeSystem typeSystem;
+	
 	private Hashtable<Type, Hashtable<String, FieldDeclaration>> variablesSymbolTable;
 	private HashMap<Type, Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>>> methodsSymbolTable;
 
 	public SymbolTable() {
+		this.clear();
+	}
+	
+	public void clear() {
 		this.variablesSymbolTable = new Hashtable<Type, Hashtable<String, FieldDeclaration>>();
-		this.methodsSymbolTable = new HashMap<Type, Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>>>();
+		this.methodsSymbolTable = new HashMap<Type, Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>>>();		
 	}
 	
 	public Hashtable<Type, Hashtable<String, FieldDeclaration>> getVariableSymbolTable() {
@@ -40,7 +50,7 @@ public class SymbolTable {
 	
 	public void addVarible(Type container, FieldDeclaration fieldDeclaration) {
 		if (container == null)
-			container = TypesUtilities.NO_TYPE;
+			container = AbstractTypeSystem.NO_TYPE;
 		Hashtable<String, FieldDeclaration> fieldDeclarations = variablesSymbolTable.get(container);
 		if (fieldDeclarations == null) {
 			fieldDeclarations = new Hashtable<String, FieldDeclaration>();
@@ -67,7 +77,7 @@ public class SymbolTable {
 	
 	private FieldDeclaration getSymbolMetadata(Type container, String symbolName) {
 		if (container == null)
-			container = TypesUtilities.NO_TYPE;
+			container = AbstractTypeSystem.NO_TYPE;
 		Hashtable<String, FieldDeclaration> fieldDeclarations = variablesSymbolTable.get(container);
 		FieldDeclaration retValue = null;
 		if (fieldDeclarations != null) {
@@ -77,10 +87,9 @@ public class SymbolTable {
 	}
 	
 	public void addMethod(Type container,
-			MethodDeclaration methodDecleration, Label label) throws ExceptionContainer {
-		ExceptionContainer exceptionContainer = new ExceptionContainer();
+			MethodDeclaration methodDecleration, Label label) {
 		if (container == null)
-			container = TypesUtilities.NO_TYPE;
+			container = AbstractTypeSystem.NO_TYPE;
 		Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>> methods = methodsSymbolTable.get(container);
 		if (methods == null) {
 			methods = new Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>>();
@@ -95,34 +104,31 @@ public class SymbolTable {
 		LinkedList<Type> newMethodArguments = new LinkedList<Type>();
 		for (FormalParameterDeclaration fpd : methodDecleration
 				.getFormalParameters()) {
-			try {
+//			try {
 				Type fpType = fpd.getType();
-				if (fpType instanceof ArrayType) {
-					((ArrayType) fpType)
-							.setOrdinaryPrimitiveType((OrdinaryPrimitiveType) TypesUtilities
-									.getInstance().getType(
-											((ArrayType) fpType)
-													.getOrdinaryPrimitiveType()));
-				} else {
-					fpType = TypesUtilities.getInstance().getType(fpType);
-				}
+//				if (fpType instanceof ArrayType) {
+//					((ArrayType) fpType)
+//							.setOrdinaryPrimitiveType((OrdinaryPrimitiveType) typeSystem.getType(
+//											((ArrayType) fpType)
+//													.getOrdinaryPrimitiveType()));
+//				} else {
+//					fpType = typeSystem.getType(fpType);
+//				}
 				newMethodArguments.add(fpType);
-			} catch (CodeCompilationException cce) {
-				cce.setColumn(fpd.getCharacter());
-				cce.setLine(fpd.getLineNumber());
-				exceptionContainer.addException(cce);
-				newMethodArguments.add(TypesUtilities.UNKNOWN_TYPE);
-				continue;
-			}
+//			} catch (CodeCompilationException cce) {
+//				cce.setColumn(fpd.getCharacter());
+//				cce.setLine(fpd.getLineNumber());
+//				exceptionContainer.addException(cce);
+//				newMethodArguments.add(AbstractTypeSystem.UNKNOWN_TYPE);
+//				continue;
+//			}
 		}
-		if (!exceptionContainer.getExceptions().isEmpty())
-			throw exceptionContainer;
 		try {
 			MethodInSymbolTableSpecifier foundExactMatch = findExactMatch(signatures, newMethodArguments);
 			if (foundExactMatch == null) {
-				Type type = TypesUtilities.NO_TYPE;
+				Type type = AbstractTypeSystem.NO_TYPE;
 				if ( label == CoreRebecaLabelUtility.MSGSRV ) 
-					type = TypesUtilities.MSGSRV_TYPE;
+					type = AbstractTypeSystem.MSGSRV_TYPE;
 				else if ( label == CoreRebecaLabelUtility.SYNCH_METHOD || 
 						label == CoreRebecaLabelUtility.BUILT_IN_METHOD )
 					type = ((SynchMethodDeclaration)methodDecleration).getReturnType();
@@ -137,7 +143,7 @@ public class SymbolTable {
 			} else {
 				String exceptionMessage = "Duplicate method " + methodDecleration.getName()
 						+ convertMethodArgumentsToString(newMethodArguments);
-				exceptionMessage += " in reactive class " + TypesUtilities.getTypeName(container);
+				exceptionMessage += " in reactive class " + container.getTypeName();
 				exceptionContainer.addException(new SymbolTableException(exceptionMessage,
 						methodDecleration.getLineNumber(), methodDecleration
 								.getCharacter()));
@@ -145,13 +151,11 @@ public class SymbolTable {
 		} catch (SymbolTableException e) {
 			String exceptionMessage = "Duplicate method " + methodDecleration.getName()
 					+ convertMethodArgumentsToString(newMethodArguments);
-			exceptionMessage += " in reactive class " + TypesUtilities.getTypeName(container);
+			exceptionMessage += " in reactive class " + container.getTypeName();
 			exceptionContainer.addException(new SymbolTableException(exceptionMessage,
 					methodDecleration.getLineNumber(), methodDecleration
 							.getCharacter()));
 		}
-		if (!exceptionContainer.getExceptions().isEmpty())
-			throw exceptionContainer;
 	}	
 	
 	
@@ -159,8 +163,7 @@ public class SymbolTable {
 	// and their parameters are exactly the same
 	private MethodInSymbolTableSpecifier findExactMatch(
 			List<MethodInSymbolTableSpecifier> candidates, List<Type> lookFor) throws SymbolTableException {
-		return matchFinder(candidates, lookFor, TypesUtilities
-				.getInstance().getExactComparator());
+		return matchFinder(candidates, lookFor, Type.getExactComparator());
 	}
 
 	/* Returns the specification of method in case of the names of the methods
@@ -169,8 +172,7 @@ public class SymbolTable {
 	*/
 	public MethodInSymbolTableSpecifier findCastableMatch(
 			List<MethodInSymbolTableSpecifier> candidates, List<Type> lookFor) throws SymbolTableException {
-		return matchFinder(candidates, lookFor, TypesUtilities
-				.getInstance().getCastableComparator());
+		return matchFinder(candidates, lookFor, Type.getCastableComparator());
 	}
 
 	private MethodInSymbolTableSpecifier matchFinder(
@@ -196,7 +198,7 @@ public class SymbolTable {
 	public static String convertMethodArgumentsToString(List<Type> arguments) {
 		String retValue = "(";
 		for (Type type : arguments) {
-			retValue += TypesUtilities.getTypeName(type) + ", ";
+			retValue += type.getTypeName() + ", ";
 		}
 		if (retValue.length() != 1)
 			retValue = retValue.substring(0, retValue.length() - 2);
@@ -258,22 +260,22 @@ public class SymbolTable {
 		Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>> methods = methodsSymbolTable.get(type);
 		
 		if (methods == null)
-			throw new SymbolTableException("The type " + TypesUtilities.getTypeName(type) +
+			throw new SymbolTableException("The type " + type.getTypeName() +
 					" is not registered in the symbol table", 0, 0);
 		List<MethodInSymbolTableSpecifier> methodInSymbolTableSpecifiers = methods.get(methodName);
 		if (methodInSymbolTableSpecifiers == null)
 			throw new SymbolTableException("The method " + methodName +
 					convertMethodArgumentsToString(argumentsTypes) +
 					" is undefined" +
-					(type == null || type == TypesUtilities.NO_TYPE ? "" :
-					" for the type " + TypesUtilities.getTypeName(type)), 0, 0);
+					(type == null || type == AbstractTypeSystem.NO_TYPE ? "" :
+					" for the type " + type.getTypeName()), 0, 0);
 		MethodInSymbolTableSpecifier foundMatch = findCastableMatch(methodInSymbolTableSpecifiers, argumentsTypes);
 		if (foundMatch == null)
 			throw new SymbolTableException("The method " + methodName +
 					convertMethodArgumentsToString(argumentsTypes) +
 					" is undefined" +
-					(type == null || type == TypesUtilities.NO_TYPE ? "" :
-					" for the type " + TypesUtilities.getTypeName(type)), 0, 0);
+					(type == null || type == AbstractTypeSystem.NO_TYPE ? "" :
+					" for the type " + type.getTypeName()), 0, 0);
 		return foundMatch;
 	}
 	
@@ -282,22 +284,22 @@ public class SymbolTable {
 		Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>> methods = methodsSymbolTable.get(type);
 		
 		if (methods == null)
-			throw new SymbolTableException("The type " + TypesUtilities.getTypeName(type) +
+			throw new SymbolTableException("The type " + type.getTypeName() +
 					" is not registered in the symbol table", 0, 0);
 		List<MethodInSymbolTableSpecifier> methodInSymbolTableSpecifiers = methods.get(methodName);
 		if (methodInSymbolTableSpecifiers == null)
 			throw new SymbolTableException("The method " + methodName +
 					convertMethodArgumentsToString(argumentsTypes) +
 					" is undefined" +
-					(type == null || type == TypesUtilities.NO_TYPE ? "" :
-					" for the type " + TypesUtilities.getTypeName(type)), 0, 0);
+					(type == null || type == AbstractTypeSystem.NO_TYPE ? "" :
+					" for the type " + type.getTypeName()), 0, 0);
 		MethodInSymbolTableSpecifier foundMatch = findExactMatch(methodInSymbolTableSpecifiers, argumentsTypes);
 		if (foundMatch == null)
 			throw new SymbolTableException("The method " + methodName +
 					convertMethodArgumentsToString(argumentsTypes) +
 					" is undefined" +
-					(type == null || type == TypesUtilities.NO_TYPE ? "" :
-					" for the type " + TypesUtilities.getTypeName(type)), 0, 0);
+					(type == null || type == AbstractTypeSystem.NO_TYPE ? "" :
+					" for the type " + type.getTypeName()), 0, 0);
 		return foundMatch;
 	}
 }

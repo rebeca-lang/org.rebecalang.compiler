@@ -1,4 +1,4 @@
-// Generated from src/main/resources/org/rebecalang/compiler/propertycompiler/grammar/CoreRebecaPropertyComplete.g4 by ANTLR 4.2
+// Generated from src/main/resources/org/rebecalang/compiler/propertycompiler/grammar/CoreRebecaPropertyComplete.g4 by ANTLR 4.7.1
 
 	package org.rebecalang.compiler.propertycompiler.corerebeca.compiler;
 
@@ -13,6 +13,8 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class CoreRebecaPropertyCompleteLexer extends Lexer {
+	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
+
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
@@ -26,21 +28,14 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		PLUSEQ=44, SUBEQ=45, STAREQ=46, SLASHEQ=47, AMPEQ=48, BAREQ=49, CARETEQ=50, 
 		TILDAEQ=51, PERCENTEQ=52, MONKEYS_AT=53, BANGEQ=54, GT=55, LT=56, LTLT=57, 
 		LTLTEQ=58, GTGT=59, GTGTEQ=60, IDENTIFIER=61;
+	public static String[] channelNames = {
+		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
+	};
+
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
 	};
 
-	public static final String[] tokenNames = {
-		"<INVALID>",
-		"'LTL'", "'define'", "'->'", "'property'", "'Assertion'", "INTLITERAL", 
-		"FLOATLITERAL", "DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", "WS", 
-		"COMMENT", "LINE_COMMENT", "'true'", "'false'", "'null'", "'('", "')'", 
-		"'{'", "'}'", "'['", "']'", "';'", "','", "'.'", "'='", "'!'", "'~'", 
-		"'?'", "':'", "'=='", "'&&'", "'||'", "'++'", "'--'", "'+'", "'-'", "'*'", 
-		"'/'", "'&'", "'|'", "'^'", "'%'", "'+='", "'-='", "'*='", "'/='", "'&='", 
-		"'|='", "'^='", "'~='", "'%='", "'@'", "'!='", "'>'", "'<'", "'<<'", "'<<='", 
-		"'>>'", "'>>='", "IDENTIFIER"
-	};
 	public static final String[] ruleNames = {
 		"LTL", "DEFINE", "THEN", "PROPERTY", "ASSERTION", "INTLITERAL", "IntegerNumber", 
 		"HexPrefix", "HexDigit", "LongSuffix", "NonIntegerNumber", "Exponent", 
@@ -55,6 +50,59 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		"JavaIDDigit"
 	};
 
+	private static final String[] _LITERAL_NAMES = {
+		null, "'LTL'", "'define'", "'->'", "'property'", "'Assertion'", null, 
+		null, null, null, null, null, null, null, "'true'", "'false'", "'null'", 
+		"'('", "')'", "'{'", "'}'", "'['", "']'", "';'", "','", "'.'", "'='", 
+		"'!'", "'~'", "'?'", "':'", "'=='", "'&&'", "'||'", "'++'", "'--'", "'+'", 
+		"'-'", "'*'", "'/'", "'&'", "'|'", "'^'", "'%'", "'+='", "'-='", "'*='", 
+		"'/='", "'&='", "'|='", "'^='", "'~='", "'%='", "'@'", "'!='", "'>'", 
+		"'<'", "'<<'", "'<<='", "'>>'", "'>>='"
+	};
+	private static final String[] _SYMBOLIC_NAMES = {
+		null, "LTL", "DEFINE", "THEN", "PROPERTY", "ASSERTION", "INTLITERAL", 
+		"FLOATLITERAL", "DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", "WS", 
+		"COMMENT", "LINE_COMMENT", "TRUE", "FALSE", "NULL", "LPAREN", "RPAREN", 
+		"LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "SEMI", "COMMA", "DOT", "EQ", 
+		"BANG", "TILDA", "QUES", "COLON", "EQEQ", "AMPAMP", "BARBAR", "PLUSPLUS", 
+		"SUBSUB", "PLUS", "SUB", "STAR", "SLASH", "AMP", "BAR", "CARET", "PERCENT", 
+		"PLUSEQ", "SUBEQ", "STAREQ", "SLASHEQ", "AMPEQ", "BAREQ", "CARETEQ", "TILDAEQ", 
+		"PERCENTEQ", "MONKEYS_AT", "BANGEQ", "GT", "LT", "LTLT", "LTLTEQ", "GTGT", 
+		"GTGTEQ", "IDENTIFIER"
+	};
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
+
+	/**
+	 * @deprecated Use {@link #VOCABULARY} instead.
+	 */
+	@Deprecated
+	public static final String[] tokenNames;
+	static {
+		tokenNames = new String[_SYMBOLIC_NAMES.length];
+		for (int i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = VOCABULARY.getLiteralName(i);
+			if (tokenNames[i] == null) {
+				tokenNames[i] = VOCABULARY.getSymbolicName(i);
+			}
+
+			if (tokenNames[i] == null) {
+				tokenNames[i] = "<INVALID>";
+			}
+		}
+	}
+
+	@Override
+	@Deprecated
+	public String[] getTokenNames() {
+		return tokenNames;
+	}
+
+	@Override
+
+	public Vocabulary getVocabulary() {
+		return VOCABULARY;
+	}
+
 
 	public CoreRebecaPropertyCompleteLexer(CharStream input) {
 		super(input);
@@ -65,13 +113,13 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 	public String getGrammarFileName() { return "CoreRebecaPropertyComplete.g4"; }
 
 	@Override
-	public String[] getTokenNames() { return tokenNames; }
-
-	@Override
 	public String[] getRuleNames() { return ruleNames; }
 
 	@Override
 	public String getSerializedATN() { return _serializedATN; }
+
+	@Override
+	public String[] getChannelNames() { return channelNames; }
 
 	@Override
 	public String[] getModeNames() { return modeNames; }
@@ -80,7 +128,7 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 	public ATN getATN() { return _ATN; }
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\2?\u01f4\b\1\4\2\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2?\u01f4\b\1\4\2\t"+
 		"\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -120,20 +168,20 @@ public class CoreRebecaPropertyCompleteLexer extends Lexer {
 		"\'_(a)c*e+g,i-k.m/o\60q\61s\62u\63w\64y\65{\66}\67\1778\u00819\u0083:"+
 		"\u0085;\u0087<\u0089=\u008b>\u008d?\u008f\2\u0091\2\3\2\20\5\2\62;CHc"+
 		"h\4\2NNnn\4\2RRrr\4\2--//\4\2GGgg\4\2HHhh\4\2FFff\6\2\f\f\17\17))^^\6"+
-		"\2\f\f\17\17$$^^\n\2$$))^^ddhhppttvv\5\2\13\f\16\17\"\"\4\2\f\f\17\17"+
-		"\16\2&&C\\aac|\u00c2\u00d8\u00da\u00f8\u00fa\u2001\u3042\u3191\u3302\u3381"+
+		"\2\f\f\17\17$$^^\t\2))^^ddhhppttvv\5\2\13\f\16\17\"\"\4\2\f\f\17\17\16"+
+		"\2&&C\\aac|\u00c2\u00d8\u00da\u00f8\u00fa\u2001\u3042\u3191\u3302\u3381"+
 		"\u3402\u3d2f\u4e02\ua001\uf902\ufb01\21\2\62;\u0662\u066b\u06f2\u06fb"+
 		"\u0968\u0971\u09e8\u09f1\u0a68\u0a71\u0ae8\u0af1\u0b68\u0b71\u0be9\u0bf1"+
 		"\u0c68\u0c71\u0ce8\u0cf1\u0d68\u0d71\u0e52\u0e5b\u0ed2\u0edb\u1042\u104b"+
-		"\u020f\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2"+
-		"\r\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2)\3\2\2\2\2"+
-		"+\3\2\2\2\2-\3\2\2\2\2/\3\2\2\2\2\61\3\2\2\2\2\63\3\2\2\2\2\65\3\2\2\2"+
-		"\2\67\3\2\2\2\29\3\2\2\2\2;\3\2\2\2\2=\3\2\2\2\2?\3\2\2\2\2A\3\2\2\2\2"+
-		"C\3\2\2\2\2E\3\2\2\2\2G\3\2\2\2\2I\3\2\2\2\2K\3\2\2\2\2M\3\2\2\2\2O\3"+
-		"\2\2\2\2Q\3\2\2\2\2S\3\2\2\2\2U\3\2\2\2\2W\3\2\2\2\2Y\3\2\2\2\2[\3\2\2"+
-		"\2\2]\3\2\2\2\2_\3\2\2\2\2a\3\2\2\2\2c\3\2\2\2\2e\3\2\2\2\2g\3\2\2\2\2"+
-		"i\3\2\2\2\2k\3\2\2\2\2m\3\2\2\2\2o\3\2\2\2\2q\3\2\2\2\2s\3\2\2\2\2u\3"+
-		"\2\2\2\2w\3\2\2\2\2y\3\2\2\2\2{\3\2\2\2\2}\3\2\2\2\2\177\3\2\2\2\2\u0081"+
+		"\2\u020f\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2"+
+		"\2\r\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2)\3\2\2\2"+
+		"\2+\3\2\2\2\2-\3\2\2\2\2/\3\2\2\2\2\61\3\2\2\2\2\63\3\2\2\2\2\65\3\2\2"+
+		"\2\2\67\3\2\2\2\29\3\2\2\2\2;\3\2\2\2\2=\3\2\2\2\2?\3\2\2\2\2A\3\2\2\2"+
+		"\2C\3\2\2\2\2E\3\2\2\2\2G\3\2\2\2\2I\3\2\2\2\2K\3\2\2\2\2M\3\2\2\2\2O"+
+		"\3\2\2\2\2Q\3\2\2\2\2S\3\2\2\2\2U\3\2\2\2\2W\3\2\2\2\2Y\3\2\2\2\2[\3\2"+
+		"\2\2\2]\3\2\2\2\2_\3\2\2\2\2a\3\2\2\2\2c\3\2\2\2\2e\3\2\2\2\2g\3\2\2\2"+
+		"\2i\3\2\2\2\2k\3\2\2\2\2m\3\2\2\2\2o\3\2\2\2\2q\3\2\2\2\2s\3\2\2\2\2u"+
+		"\3\2\2\2\2w\3\2\2\2\2y\3\2\2\2\2{\3\2\2\2\2}\3\2\2\2\2\177\3\2\2\2\2\u0081"+
 		"\3\2\2\2\2\u0083\3\2\2\2\2\u0085\3\2\2\2\2\u0087\3\2\2\2\2\u0089\3\2\2"+
 		"\2\2\u008b\3\2\2\2\2\u008d\3\2\2\2\3\u0093\3\2\2\2\5\u0097\3\2\2\2\7\u009e"+
 		"\3\2\2\2\t\u00a1\3\2\2\2\13\u00aa\3\2\2\2\r\u00b4\3\2\2\2\17\u00ca\3\2"+
