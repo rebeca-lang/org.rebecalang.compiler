@@ -10,7 +10,6 @@ import org.rebecalang.compiler.CompilerConfig;
 import org.rebecalang.compiler.modelcompiler.RebecaModelCompiler;
 import org.rebecalang.compiler.modelcompiler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.SymbolTable;
-import org.rebecalang.compiler.modelcompiler.SymbolTableException;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerExtension;

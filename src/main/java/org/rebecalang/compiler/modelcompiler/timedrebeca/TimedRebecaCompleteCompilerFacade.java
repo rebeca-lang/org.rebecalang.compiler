@@ -61,7 +61,9 @@ public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompile
 		super.initializeExpressionSemanticCheckContainer();
 
 		expressionSemanticCheckContainer.registerSemanticsChecker(TermPrimary.class, 
-				appContext.getBean(TimedPrimaryTermSemanticCheck.class));
+				appContext.getBean(TimedPrimaryTermSemanticCheck.class,
+				typeSystem,
+				expressionSemanticCheckContainer));
 	}
 
 	@Override

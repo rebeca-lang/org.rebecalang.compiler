@@ -12,16 +12,25 @@ import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ConditionalStatementSemanticCheck extends AbstractStatementSemanticCheck {
 
-	@Autowired
 	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
-	@Autowired
+
 	StatementSemanticCheckContainer statementSemanticCheckContainer;
-	
+
+	@Autowired
+	public ConditionalStatementSemanticCheck(StatementSemanticCheckContainer statementSemanticCheckContainer,
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
+		this.statementSemanticCheckContainer = statementSemanticCheckContainer;
+	}
+
 	@Override
 	public void check(Statement statement) throws CompilerInternalErrorRuntimeException {
 		ConditionalStatement conditionalStatement = (ConditionalStatement) statement;

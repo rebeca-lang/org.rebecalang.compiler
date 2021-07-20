@@ -12,19 +12,21 @@ import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TimedPrimaryTermSemanticCheck extends 
 		PrimaryTermExpressionSemanticCheck {
 
-	public TimedPrimaryTermSemanticCheck(@Qualifier("TIMED_REBECA") AbstractTypeSystem typeSystem) {
-		super(typeSystem);
-		// TODO Auto-generated constructor stub
-	}
-
+	
 	@Autowired
-	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+	public TimedPrimaryTermSemanticCheck(@Qualifier("TIMED_REBECA") AbstractTypeSystem typeSystem, 
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		super(typeSystem, expressionSemanticCheckContainer);
+	}
 	
 	public Pair<Type, Object> check(Expression expression,
 			Type baseType) {

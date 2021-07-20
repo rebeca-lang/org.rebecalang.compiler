@@ -17,19 +17,27 @@ import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PALTStatementSemanticCheck extends AbstractStatementSemanticCheck {
 
 	public static int PROB_ACCURACY = 1000;
 	
-	@Autowired
 	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 	
-	@Autowired
 	StatementSemanticCheckContainer statementSemanticCheckContainer;
-	
+
+	@Autowired
+	public PALTStatementSemanticCheck(StatementSemanticCheckContainer statementSemanticCheckContainer,
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
+		this.statementSemanticCheckContainer = statementSemanticCheckContainer;
+	}
+
 	public static boolean probIsOne(double probability) {
 		return ((int)(probability * PROB_ACCURACY) == PROB_ACCURACY);
 	}

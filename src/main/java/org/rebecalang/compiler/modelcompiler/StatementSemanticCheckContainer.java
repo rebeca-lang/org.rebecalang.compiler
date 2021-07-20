@@ -7,13 +7,14 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
 import org.rebecalang.compiler.utils.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class StatementSemanticCheckContainer extends AbstractSemanticCheckContainer {
 	
-	@Autowired
 	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 	
 	public StatementSemanticCheckContainer() {
@@ -50,7 +51,8 @@ public class StatementSemanticCheckContainer extends AbstractSemanticCheckContai
 		
 	}
 
-	public ExpressionSemanticCheckContainer getExpressionSemanticCheckContainer() {
-		return expressionSemanticCheckContainer;
+	public void setExpressionSemanticCheckContainer(
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
 	}
 }

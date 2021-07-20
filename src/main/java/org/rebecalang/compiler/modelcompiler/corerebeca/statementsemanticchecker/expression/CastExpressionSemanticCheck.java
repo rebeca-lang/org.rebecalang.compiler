@@ -20,13 +20,14 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 public class CastExpressionSemanticCheck extends AbstractExpressionSemanticCheck {
 
 	AbstractTypeSystem typeSystem;
-	@Autowired
+
 	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 	
 	@Autowired
-	public CastExpressionSemanticCheck(AbstractTypeSystem typeSystem) {
-		super();
+	public CastExpressionSemanticCheck(AbstractTypeSystem typeSystem,
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
 		this.typeSystem = typeSystem;
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
 	}
 
 	@Override
@@ -59,6 +60,4 @@ public class CastExpressionSemanticCheck extends AbstractExpressionSemanticCheck
 		}
 		return returnValue;
 	}
-
-
 }

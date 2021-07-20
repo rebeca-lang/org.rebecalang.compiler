@@ -38,14 +38,17 @@ public class ProbabilisticRebecaCompleteCompilerFacade extends
 		super.initializeExpressionSemanticCheckContainer();
 		expressionSemanticCheckContainer.
 			registerSemanticsChecker(ProbabilisticExpression.class, 
-					appContext.getBean(ProbabilisticExpressionSemanticCheck.class));
+					appContext.getBean(ProbabilisticExpressionSemanticCheck.class,
+							expressionSemanticCheckContainer));
 	}
 
 	@Override
 	protected void initializeStatementSemanticCheckContainer() {
 		super.initializeStatementSemanticCheckContainer();
 		statementSemanticCheckContainer.registerSemanticsChecker(PAltStatement.class, 
-				appContext.getBean(PALTStatementSemanticCheck.class));
+				appContext.getBean(PALTStatementSemanticCheck.class,
+						statementSemanticCheckContainer,
+						expressionSemanticCheckContainer));
 	}
 
 	@Override

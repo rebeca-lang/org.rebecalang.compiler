@@ -10,20 +10,26 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ReturnStatementSemanticCheck extends AbstractStatementSemanticCheck {
 
+	StatementSemanticCheckContainer statementSemanticCheckContainer;
 
 	@Autowired
-	StatementSemanticCheckContainer statementSemanticCheckContainer;
+	public ReturnStatementSemanticCheck(StatementSemanticCheckContainer statementSemanticCheckContainer) {
+		this.statementSemanticCheckContainer = statementSemanticCheckContainer;
+	}
 
 	@Override
 	public void check(Statement statement)
 			throws CompilerInternalErrorRuntimeException {
 		ReturnStatement returnStatement = (ReturnStatement) statement;
-		Type returnValueType = ((StatementSemanticCheckContainer)statementSemanticCheckContainer).check(
+		Type returnValueType = statementSemanticCheckContainer.check(
 				returnStatement.getExpression()).getFirst();
 		Type expectedType;
 		try {

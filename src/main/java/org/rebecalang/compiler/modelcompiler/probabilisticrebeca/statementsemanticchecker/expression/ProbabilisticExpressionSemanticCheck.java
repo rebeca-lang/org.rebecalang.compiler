@@ -15,15 +15,22 @@ import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ProbabilisticExpressionSemanticCheck extends
 		AbstractExpressionSemanticCheck {
 
-	@Autowired
 	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
-	
+
+	@Autowired
+	public ProbabilisticExpressionSemanticCheck(ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
+	}
+
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();

@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
 import org.rebecalang.compiler.modelcompiler.ScopeException;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.SymbolTableInitializer;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.TypeSystemInitializer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompleteCompilerFacade;
@@ -35,7 +36,8 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class HybridRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompilerFacade {
 
-	public HybridRebecaCompleteCompilerFacade(@Qualifier("HYBRID_REBECA") TypeSystemInitializer typeSystemInitializer,
+	public HybridRebecaCompleteCompilerFacade(
+			@Qualifier("HYBRID_REBECA") TypeSystemInitializer typeSystemInitializer,
 			@Qualifier("HYBRID_REBECA") SymbolTableInitializer symbolTableInitializer) {
 		super(typeSystemInitializer, symbolTableInitializer);
 	}
@@ -52,7 +54,9 @@ public class HybridRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompil
 	protected void initializeExpressionSemanticCheckContainer() {
 		super.initializeExpressionSemanticCheckContainer();
 		expressionSemanticCheckContainer.registerSemanticsChecker(HybridTermPrimary.class, 
-				appContext.getBean(HybridPrimaryTermSemanticCheck.class));
+				appContext.getBean(HybridPrimaryTermSemanticCheck.class,
+						typeSystem,
+						expressionSemanticCheckContainer));
 	}
 	
 	protected HashMap<String, ReactiveClassDeclaration> getAllClasses() {
@@ -110,7 +114,7 @@ public class HybridRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompil
 	private void semanticCheckForModesOfPhysicalClassDeclaration(PhysicalClassDeclaration fcd) {
 		for (ModeDeclaration md : fcd.getModeDeclarations()) {
 			scopeHandler.pushScopeRecord(null);
-			Pair<Type,Object> check = statementSemanticCheckContainer.getExpressionSemanticCheckContainer().check(md.getGuardDeclaration().getCondition());
+			Pair<Type,Object> check = expressionSemanticCheckContainer.check(md.getGuardDeclaration().getCondition());
 			if(check.getFirst() != CoreRebecaTypeSystem.BOOLEAN_TYPE) {
 				CodeCompilationException rce = new CodeCompilationException(
 						"Conditional expression of guards should be boolean",
@@ -122,7 +126,7 @@ public class HybridRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompil
 			scopeHandler.popScopeRecord();
 
 			scopeHandler.pushScopeRecord(HybridRebecaLabelUtility.INVARIANT_BLOCK);
-			check = statementSemanticCheckContainer.getExpressionSemanticCheckContainer().check(md.getInvariantDeclaration().getCondition());
+			check = expressionSemanticCheckContainer.check(md.getInvariantDeclaration().getCondition());
 			if(check.getFirst() != CoreRebecaTypeSystem.BOOLEAN_TYPE) {
 				CodeCompilationException rce = new CodeCompilationException(
 						"Conditional expression of invariants should be boolean",
@@ -137,6 +141,10 @@ public class HybridRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompil
 		
 	}
 
+	@Autowired
+	public void setTypeSystem(@Qualifier("HYBRID_REBECA") AbstractTypeSystem typeSystem) {
+		this.typeSystem = typeSystem;
+	}
 
 	@Override
 	public Parser getParser(CharStream input) {

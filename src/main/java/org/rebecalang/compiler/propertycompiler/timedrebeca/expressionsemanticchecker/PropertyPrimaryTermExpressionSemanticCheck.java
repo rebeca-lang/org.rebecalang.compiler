@@ -25,11 +25,9 @@ import org.springframework.stereotype.Component;
 public class PropertyPrimaryTermExpressionSemanticCheck extends PrimaryTermExpressionSemanticCheck  {
 
 	@Autowired
-	protected ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
-
-	@Autowired
-	public PropertyPrimaryTermExpressionSemanticCheck(AbstractTypeSystem typeSystem) {
-		super(typeSystem);
+	public PropertyPrimaryTermExpressionSemanticCheck(AbstractTypeSystem typeSystem, 
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		super(typeSystem, expressionSemanticCheckContainer);
 	}
 
 	@Override

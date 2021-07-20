@@ -100,9 +100,9 @@ public abstract class AbstractCompilerFacade {
 			
 			addMethodsOfRebecaExtensionToSymbolTable();
 			
-			initializeExpressionSemanticCheckContainer();
+			initializeStatementSemanticCheckContainer();
 
-			initializeStatementSemanticCheckContainer();			
+			initializeExpressionSemanticCheckContainer();
 			
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException 
 				| IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
@@ -110,7 +110,6 @@ public abstract class AbstractCompilerFacade {
 			throw new RuntimeException("Illegal Rebeca parser class ");
 		}
 	}
-
 
 	protected abstract void initializeStatementSemanticCheckContainer();
 

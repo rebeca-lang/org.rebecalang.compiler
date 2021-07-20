@@ -105,45 +105,4 @@ public class CompilerConfig {
 		return typeSystemInitializer;
 	}
 	
-	
-	
-//	@Bean
-//	@Qualifier("TIMED_REBECA")
-//	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//	public TimedRebecaCompleteCompilerFacade getTimedRebecaCompleteCompilerFacade() {
-//		TimedRebecaCompleteCompilerFacade timedRebecaCompleteCompilerFacade = new TimedRebecaCompleteCompilerFacade();
-//		return timedRebecaCompleteCompilerFacade;
-//	}
-//	
-//	@Bean
-//	@Qualifier("CORE_REBECA")
-//	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//	public CoreRebecaCompleteCompilerFacade getCoreRebecaCompleteCompilerFacade() {
-//		CoreRebecaCompleteCompilerFacade coreRebecaCompleteCompilerFacade = new CoreRebecaCompleteCompilerFacade();
-//		return coreRebecaCompleteCompilerFacade;
-//	}
-//	
-//	@Bean
-//	@Qualifier("PROBABILISTIC_TIMED_REBECA")
-//	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//	public ProbabilisticTimedRebecaCompleteCompilerFacade getProbabilisticTimedRebecaCompleteCompilerFacade() {
-//		ProbabilisticTimedRebecaCompleteCompilerFacade probabilisticTimedRebecaCompleteCompilerFacade = new ProbabilisticTimedRebecaCompleteCompilerFacade();
-//		return probabilisticTimedRebecaCompleteCompilerFacade;
-//	}
-//	
-//	@Bean
-//	@Qualifier("PROBABILISTIC_REBECA")
-//	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//	public ProbabilisticRebecaCompleteCompilerFacade getProbabilisticRebecaCompleteCompilerFacade() {
-//		ProbabilisticRebecaCompleteCompilerFacade probabilisticRebecaCompleteCompilerFacade = new ProbabilisticRebecaCompleteCompilerFacade();
-//		return probabilisticRebecaCompleteCompilerFacade;
-//	}
-	
-//	@Bean
-//	@Qualifier("HYBRID_REBECA")
-//	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-//	public HybridRebecaCompleteCompilerFacade getHybridRebecaCompleteCompilerFacade() {
-//		HybridRebecaCompleteCompilerFacade hybridRebecaCompleteCompilerFacade = new HybridRebecaCompleteCompilerFacade();
-//		return hybridRebecaCompleteCompilerFacade;
-//	}
 }
