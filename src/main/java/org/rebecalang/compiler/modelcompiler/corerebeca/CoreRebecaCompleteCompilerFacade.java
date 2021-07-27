@@ -162,56 +162,80 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 
 	protected void initializeStatementSemanticCheckContainer() {
 		statementSemanticCheckContainer.clear();
+		statementSemanticCheckContainer.setExpressionSemanticCheckContainer(expressionSemanticCheckContainer);
 		statementSemanticCheckContainer.registerSemanticsChecker(BlockStatement.class,
-				appContext.getBean(BlockStatementSemanticCheck.class));
+				appContext.getBean(BlockStatementSemanticCheck.class ,
+						statementSemanticCheckContainer));
 		statementSemanticCheckContainer.registerSemanticsChecker(BreakStatement.class,
 				appContext.getBean(BreakStatementSemanticCheck.class));
 		statementSemanticCheckContainer.registerSemanticsChecker(ConditionalStatement.class,
-				appContext.getBean(ConditionalStatementSemanticCheck.class));
+				appContext.getBean(ConditionalStatementSemanticCheck.class,
+						statementSemanticCheckContainer,
+						expressionSemanticCheckContainer));
 		statementSemanticCheckContainer.registerSemanticsChecker(ContinueStatement.class,
 				appContext.getBean(ContinueStatementSemanticCheck.class));
 		statementSemanticCheckContainer.registerSemanticsChecker(FieldDeclaration.class,
-				appContext.getBean(FieldDeclarationStatementSemanticCheck.class, typeSystem, 
-						statementSemanticCheckContainer, expressionSemanticCheckContainer));
+				appContext.getBean(FieldDeclarationStatementSemanticCheck.class, 
+						typeSystem, 
+						statementSemanticCheckContainer, 
+						expressionSemanticCheckContainer));
 		statementSemanticCheckContainer.registerSemanticsChecker(ForStatement.class, 
-				appContext.getBean(ForStatementSemanticCheck.class));
+				appContext.getBean(ForStatementSemanticCheck.class,
+						statementSemanticCheckContainer,
+						expressionSemanticCheckContainer));
 		statementSemanticCheckContainer.registerSemanticsChecker(WhileStatement.class,
-				appContext.getBean(WhileStatementSemanticCheck.class));
+				appContext.getBean(WhileStatementSemanticCheck.class,
+						statementSemanticCheckContainer,
+						expressionSemanticCheckContainer));
 		statementSemanticCheckContainer.registerSemanticsChecker(ReturnStatement.class,
-				appContext.getBean(ReturnStatementSemanticCheck.class));
+				appContext.getBean(ReturnStatementSemanticCheck.class,
+						statementSemanticCheckContainer));
 		statementSemanticCheckContainer.registerSemanticsChecker(SwitchStatement.class,
-				appContext.getBean(SwitchStatementSemanticCheck.class));
+				appContext.getBean(SwitchStatementSemanticCheck.class,
+						statementSemanticCheckContainer,
+						expressionSemanticCheckContainer));
 	}
 
 	protected void initializeExpressionSemanticCheckContainer() {
 		expressionSemanticCheckContainer.clear();
 
 		expressionSemanticCheckContainer.registerSemanticsChecker(CastExpression.class,
-				appContext.getBean(CastExpressionSemanticCheck.class, typeSystem));
+				appContext.getBean(CastExpressionSemanticCheck.class, 
+						typeSystem,
+						expressionSemanticCheckContainer));
 		expressionSemanticCheckContainer.registerSemanticsChecker(DotPrimary.class,
-				appContext.getBean(DotPrimaryExpressionSemanticCheck.class));
+				appContext.getBean(DotPrimaryExpressionSemanticCheck.class,
+						expressionSemanticCheckContainer));
 		expressionSemanticCheckContainer.registerSemanticsChecker(Literal.class, 
 				appContext.getBean(LiteralSemanticCheck.class));
 		expressionSemanticCheckContainer.registerSemanticsChecker(PlusSubExpression.class,
-				appContext.getBean(PlusSubExpressionSemanticCheck.class));
+				appContext.getBean(PlusSubExpressionSemanticCheck.class,
+						expressionSemanticCheckContainer));
 		expressionSemanticCheckContainer.registerSemanticsChecker(NonDetExpression.class,
-				appContext.getBean(NondetExpressionSemanticCheck.class));
+				appContext.getBean(NondetExpressionSemanticCheck.class,
+						expressionSemanticCheckContainer));
 		expressionSemanticCheckContainer.registerSemanticsChecker(TermPrimary.class,
-				(PrimaryTermExpressionSemanticCheck)appContext.getBean("CORE_PRIMARY", typeSystem));
+				(PrimaryTermExpressionSemanticCheck)appContext.getBean("CORE_PRIMARY", 
+						typeSystem,
+						expressionSemanticCheckContainer));
 		expressionSemanticCheckContainer.registerSemanticsChecker(TernaryExpression.class,
-				appContext.getBean(TernaryExpressionSemanticCheck.class));
+				appContext.getBean(TernaryExpressionSemanticCheck.class,
+					expressionSemanticCheckContainer));
 		expressionSemanticCheckContainer.registerSemanticsChecker(UnaryExpression.class,
-				appContext.getBean(UnaryExpressionSemanticCheck.class));
+				appContext.getBean(UnaryExpressionSemanticCheck.class,
+						expressionSemanticCheckContainer));
 		expressionSemanticCheckContainer.registerSemanticsChecker(BinaryExpression.class,
-				appContext.getBean(BinaryExpressionSemanticCheck.class));
+				appContext.getBean(BinaryExpressionSemanticCheck.class,
+						expressionSemanticCheckContainer));
 		expressionSemanticCheckContainer.registerSemanticsChecker(InstanceofExpression.class,
-				appContext.getBean(InstanceofExpressionSemanticCheck.class, typeSystem));
-		expressionSemanticCheckContainer.registerSemanticsChecker(RebecInstantiationPrimary.class,
-				appContext.getBean(RebecInstantiationExpressionSemanticCheck.class, typeSystem));
+				appContext.getBean(InstanceofExpressionSemanticCheck.class, 
+						typeSystem,
+						expressionSemanticCheckContainer));
 
 		if (coreVersion == CoreVersion.CORE_2_2) {
 			expressionSemanticCheckContainer.registerSemanticsChecker(RebecInstantiationPrimary.class,
-					appContext.getBean(RebecInstantiationExpressionSemanticCheck.class));
+					appContext.getBean(RebecInstantiationExpressionSemanticCheck.class, 
+							typeSystem));
 		} else {
 			expressionSemanticCheckContainer.registerSemanticsChecker(RebecInstantiationPrimary.class,
 					new AbstractExpressionSemanticCheck() {

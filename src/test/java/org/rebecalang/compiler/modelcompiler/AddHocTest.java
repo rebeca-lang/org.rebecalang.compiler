@@ -25,18 +25,22 @@ public class AddHocTest {
 	@Autowired
 	public ExceptionContainer exceptionContainer;
 
+	public static final String MODEL_FILES_BASE = "src/test/resources/org/rebecalang/compiler/adhoc/"; 
+
 	@Test
 	@Disabled
 	public void test() {
-		File model = new File(ModelStructureTest.MODEL_FILES_BASE + "LBE.rebeca");
+		File model = new File(MODEL_FILES_BASE + "LBE.rebeca");
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
 		
-		Set<CodeCompilationException> expected = new HashSet<CodeCompilationException>();
+		ExceptionContainer expected = new ExceptionContainer();
+		expected.setCorrespondingResource(model);
+		
 //		expected.add(new CodeCompilationException("The summations of probabilities in probabilistic expression must be 1.000 instead of 0.750", 11, 11));
 
-		Assertions.assertEquals(expected, exceptionContainer.getExceptions());
+		Assertions.assertEquals(expected, exceptionContainer);
 	}
 
 }

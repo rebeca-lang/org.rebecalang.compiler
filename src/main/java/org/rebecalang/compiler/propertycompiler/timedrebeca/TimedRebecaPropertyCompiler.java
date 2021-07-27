@@ -7,13 +7,30 @@ import org.rebecalang.compiler.modelcompiler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PlusSubExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TernaryExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.UnaryExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.BinaryExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.CastExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.DotPrimaryExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.InstanceofExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.LiteralSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.PlusSubExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.TernaryExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.UnaryExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.timedrebeca.statementsemanticchecker.expression.TimedPrimaryTermSemanticCheck;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.GeneralPropertyCompiler;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.expressionsemanticchecker.InvalidExpressionsSemanticCheck;
 import org.rebecalang.compiler.propertycompiler.timedrebeca.compiler.TimedRebecaPropertyCompleteLexer;
@@ -130,6 +147,35 @@ public class TimedRebecaPropertyCompiler extends GeneralPropertyCompiler {
 
 	@Override
 	protected void initializeExpressionSemanticCheckContainer() {
+		expressionSemanticCheckContainer.registerSemanticsChecker(CastExpression.class,
+				appContext.getBean(CastExpressionSemanticCheck.class, 
+						typeSystem,
+						expressionSemanticCheckContainer));
+		expressionSemanticCheckContainer.registerSemanticsChecker(DotPrimary.class,
+				appContext.getBean(DotPrimaryExpressionSemanticCheck.class,
+						expressionSemanticCheckContainer));
+		expressionSemanticCheckContainer.registerSemanticsChecker(Literal.class, 
+				appContext.getBean(LiteralSemanticCheck.class));
+		expressionSemanticCheckContainer.registerSemanticsChecker(PlusSubExpression.class,
+				appContext.getBean(PlusSubExpressionSemanticCheck.class,
+						expressionSemanticCheckContainer));
+		expressionSemanticCheckContainer.registerSemanticsChecker(TermPrimary.class,
+				appContext.getBean(TimedPrimaryTermSemanticCheck.class, 
+						typeSystem,
+						expressionSemanticCheckContainer));
+		expressionSemanticCheckContainer.registerSemanticsChecker(TernaryExpression.class,
+				appContext.getBean(TernaryExpressionSemanticCheck.class,
+					expressionSemanticCheckContainer));
+		expressionSemanticCheckContainer.registerSemanticsChecker(UnaryExpression.class,
+				appContext.getBean(UnaryExpressionSemanticCheck.class,
+						expressionSemanticCheckContainer));
+		expressionSemanticCheckContainer.registerSemanticsChecker(BinaryExpression.class,
+				appContext.getBean(BinaryExpressionSemanticCheck.class,
+						expressionSemanticCheckContainer));
+		expressionSemanticCheckContainer.registerSemanticsChecker(InstanceofExpression.class,
+				appContext.getBean(InstanceofExpressionSemanticCheck.class, 
+						typeSystem,
+						expressionSemanticCheckContainer));
 		expressionSemanticCheckContainer.registerSemanticsChecker(RebecInstantiationPrimary.class,
 				appContext.getBean(InvalidExpressionsSemanticCheck.class));
 
@@ -137,7 +183,9 @@ public class TimedRebecaPropertyCompiler extends GeneralPropertyCompiler {
 				appContext.getBean(InvalidExpressionsSemanticCheck.class));
 		
 		expressionSemanticCheckContainer.registerSemanticsChecker(TermPrimary.class,
-				(PropertyPrimaryTermExpressionSemanticCheck)appContext.getBean("TCTL_PROPERTY_PRIMARY", typeSystem));
+				(PropertyPrimaryTermExpressionSemanticCheck)appContext.getBean("TCTL_PROPERTY_PRIMARY", 
+						typeSystem,
+						expressionSemanticCheckContainer));
 
 	}
 	

@@ -5,9 +5,12 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ContinueStatementSemanticCheck extends AbstractStatementSemanticCheck {
 
 	@Override

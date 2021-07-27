@@ -12,15 +12,24 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStateme
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class WhileStatementSemanticCheck extends AbstractStatementSemanticCheck {
 
-	@Autowired
 	StatementSemanticCheckContainer statementSemanticCheckContainer;
-	@Autowired
+	
 	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+	
+	@Autowired
+	public WhileStatementSemanticCheck(StatementSemanticCheckContainer statementSemanticCheckContainer,
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		this.statementSemanticCheckContainer = statementSemanticCheckContainer;
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
+	}
 
 	public void check(Statement statement) {
 		WhileStatement whileStatement = (WhileStatement) statement; 

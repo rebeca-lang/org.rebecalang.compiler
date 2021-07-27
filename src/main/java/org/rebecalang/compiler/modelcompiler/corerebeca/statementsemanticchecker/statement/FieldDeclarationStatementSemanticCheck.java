@@ -41,7 +41,6 @@ public class FieldDeclarationStatementSemanticCheck extends AbstractStatementSem
 	public FieldDeclarationStatementSemanticCheck(AbstractTypeSystem typeSystem,
 			StatementSemanticCheckContainer statementSemanticCheckContainer,
 			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
-		super();
 		this.typeSystem = typeSystem;
 		this.statementSemanticCheckContainer = statementSemanticCheckContainer;
 		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;

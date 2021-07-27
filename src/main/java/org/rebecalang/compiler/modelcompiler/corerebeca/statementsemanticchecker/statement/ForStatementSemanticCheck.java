@@ -16,15 +16,24 @@ import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ForStatementSemanticCheck extends AbstractStatementSemanticCheck {
 
-	@Autowired
 	StatementSemanticCheckContainer statementSemanticCheckContainer;
-	@Autowired
+
 	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+
+	@Autowired
+	public ForStatementSemanticCheck(StatementSemanticCheckContainer statementSemanticCheckContainer,
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		this.statementSemanticCheckContainer = statementSemanticCheckContainer;
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
+	}
 
 	@Override
 	public void check(Statement statement)

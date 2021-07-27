@@ -21,15 +21,17 @@ public class InstanceofExpressionSemanticCheck extends AbstractExpressionSemanti
 
 	AbstractTypeSystem typeSystem;
 	
-	@Autowired
 	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 
-	@Autowired
-	public InstanceofExpressionSemanticCheck(AbstractTypeSystem typeSystem) {
-		super();
-		this.typeSystem = typeSystem;
-	}
 	
+	@Autowired
+	public InstanceofExpressionSemanticCheck(AbstractTypeSystem typeSystem,
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		this.typeSystem = typeSystem;
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
+	}
+
+
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();

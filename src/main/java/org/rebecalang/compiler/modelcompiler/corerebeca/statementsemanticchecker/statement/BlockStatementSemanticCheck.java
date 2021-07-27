@@ -6,13 +6,20 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BlockStateme
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
 import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BlockStatementSemanticCheck extends AbstractStatementSemanticCheck {
 
-	@Autowired
 	StatementSemanticCheckContainer statementSemanticCheckContainer;
+	
+	@Autowired
+	public BlockStatementSemanticCheck(StatementSemanticCheckContainer statementSemanticCheckContainer) {
+		this.statementSemanticCheckContainer = statementSemanticCheckContainer;
+	}
 
 	@Override
 	public void check(Statement statement)

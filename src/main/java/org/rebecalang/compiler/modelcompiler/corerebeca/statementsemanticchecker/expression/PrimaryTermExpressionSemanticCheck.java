@@ -37,13 +37,13 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 
 	AbstractTypeSystem typeSystem;
 
-	@Autowired
 	protected ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 
 	@Autowired
-	public PrimaryTermExpressionSemanticCheck(AbstractTypeSystem typeSystem) {
-		super();
+	public PrimaryTermExpressionSemanticCheck(AbstractTypeSystem typeSystem,
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
 		this.typeSystem = typeSystem;
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
 	}
 
 	@Override

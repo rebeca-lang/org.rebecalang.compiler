@@ -70,7 +70,7 @@ public class PropertyCompiler {
 		} catch (RecognitionException e) {
 			exceptionContainer.addException(e);
 		} catch (Exception e) {
-			if (exceptionContainer.getExceptions().size() == 0)
+			if (exceptionContainer.exceptionsIsEmpty())
 				exceptionContainer.addException(e);
 		}
 		return null;

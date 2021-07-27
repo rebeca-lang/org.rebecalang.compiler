@@ -18,15 +18,24 @@ import org.rebecalang.compiler.utils.CompilerInternalErrorRuntimeException;
 import org.rebecalang.compiler.utils.Pair;
 import org.rebecalang.compiler.utils.TypesUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SwitchStatementSemanticCheck extends AbstractStatementSemanticCheck {
 
-	@Autowired
 	StatementSemanticCheckContainer statementSemanticCheckContainer;
-	@Autowired
+	
 	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
+
+	@Autowired
+	public SwitchStatementSemanticCheck(StatementSemanticCheckContainer statementSemanticCheckContainer,
+			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
+		this.statementSemanticCheckContainer = statementSemanticCheckContainer;
+		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
+	}
 
 	@Override
 	public void check(Statement statement) throws CompilerInternalErrorRuntimeException {
