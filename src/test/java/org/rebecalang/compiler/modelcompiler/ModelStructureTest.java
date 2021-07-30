@@ -140,6 +140,33 @@ public class ModelStructureTest {
 	}
 	
 	@Test
+	public void GIVEN_CoreRebecaModelWithInheritance_WHEN_CoreIs2_3_THEN_NoError() {
+		File model = new File(MODEL_FILES_BASE + "CoreRebecaWithInheritance.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+
+		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_3);
+		
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
+	}
+	
+	@Test
+	public void GIVEN_CoreRebecaModelWithInheritanceAndAbstractClass_WHEN_CoreIs2_3_THEN_1Error() {
+		File model = new File(MODEL_FILES_BASE + "CoreRebecaWithInheritanceError.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+
+		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_3);
+		
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+		expectedExceptionContainer.addException(new CodeCompilationException("Reactiveclass A2 should be defined as abstract", 8, 14));
+
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
+	}
+
+	@Test
 	public void GIVEN_ManyTests_WHEN_AllAreCorrect_THEN_NoError() {
 		GIVEN_CoreRebecaModelWithDifferentExpressions_WHEN_CoreIs2_1_THEN_1Error();
 		GIVEN_CorrectCoreRebecaModelWithInitialMethod_WHEN_CoreIs2_0_THEN_1Error();
@@ -149,5 +176,7 @@ public class ModelStructureTest {
 		GIVEN_TimedRebecaModelWithTypesAndMethods_WHEN_CoreIs2_1_THEN_NoErrors();
 		GIVEN_WSANTimedRebecaModel_WEHN_CoreIs2_1_THEN_NoError();
 		GIVEN_CoreRebecaModelWithCompilerError_WHEN_CoreIs2_1_THEN_1Error();
+		GIVEN_CoreRebecaModelWithInheritance_WHEN_CoreIs2_3_THEN_NoError();
+		GIVEN_CoreRebecaModelWithInheritanceAndAbstractClass_WHEN_CoreIs2_3_THEN_1Error();
 	}
 }

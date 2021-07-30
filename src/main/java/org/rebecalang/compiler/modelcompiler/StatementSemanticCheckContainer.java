@@ -19,7 +19,7 @@ public class StatementSemanticCheckContainer extends AbstractSemanticCheckContai
 	
 	public StatementSemanticCheckContainer() {
 		super();
-		semanticsCheckersRepository.put(Statement.class, new EmptyStatementSemanticCheck());
+		clear();
 	}
 	
 	public void check(Statement statement) {
@@ -27,6 +27,8 @@ public class StatementSemanticCheckContainer extends AbstractSemanticCheckContai
 			if (statement instanceof Expression) {
 				check((Expression)statement);
 			} else {
+				if(statement.getClass() == Statement.class) 
+					return;
 				AbstractStatementSemanticCheck statementSemanticCheck = 
 						(AbstractStatementSemanticCheck) semanticsCheckersRepository.get(statement.getClass());
 				statementSemanticCheck.check(statement);
@@ -43,7 +45,6 @@ public class StatementSemanticCheckContainer extends AbstractSemanticCheckContai
 	}
 	
 	private static class EmptyStatementSemanticCheck extends AbstractStatementSemanticCheck {
-
 		@Override
 		public void check(Statement statement)
 				throws CompilerInternalErrorRuntimeException {
@@ -55,4 +56,12 @@ public class StatementSemanticCheckContainer extends AbstractSemanticCheckContai
 			ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
 		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
 	}
+
+	@Override
+	public void clear() {
+		super.clear();
+		semanticsCheckersRepository.put(Statement.class, new EmptyStatementSemanticCheck());
+	}
+	
+	
 }

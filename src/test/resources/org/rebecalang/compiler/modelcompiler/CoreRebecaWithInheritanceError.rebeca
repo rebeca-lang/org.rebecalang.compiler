@@ -1,0 +1,25 @@
+abstract reactiveclass A (2) {
+
+	msgsrv m() {}
+	
+	abstract msgsrv m2();
+}
+
+reactiveclass A2 extends A (3) {
+	msgsrv m() {}
+}
+
+reactiveclass B (3) {
+	knownrebecs {
+		A a;
+	}
+	msgsrv m2() {
+		a.m();
+	}
+}
+
+main {
+	A a():();
+	A2 a2():();
+	B b(a2):();
+}

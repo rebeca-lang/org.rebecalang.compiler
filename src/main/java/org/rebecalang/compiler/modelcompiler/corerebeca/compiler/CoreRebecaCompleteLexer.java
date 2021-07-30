@@ -1,4 +1,4 @@
-// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/CoreRebecaComplete.g4 by ANTLR 4.7.1
+// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/CoreRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.corerebeca.compiler;
 
@@ -13,7 +13,7 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class CoreRebecaCompleteLexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -40,50 +40,61 @@ public class CoreRebecaCompleteLexer extends Lexer {
 		"DEFAULT_MODE"
 	};
 
-	public static final String[] ruleNames = {
-		"INTLITERAL", "IntegerNumber", "HexPrefix", "HexDigit", "LongSuffix", 
-		"NonIntegerNumber", "Exponent", "FloatSuffix", "DoubleSuffix", "FLOATLITERAL", 
-		"DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", "EscapeSequence", "WS", 
-		"COMMENT", "LINE_COMMENT", "BREAK", "CASE", "CLASS", "CONTINUE", "DEFAULT", 
-		"ELSE", "FOR", "GOTO", "IF", "IMPORT", "NEW", "PACKAGE", "PRIVATE", "PROTECTED", 
-		"PUBLIC", "RECORD", "RETURN", "SWITCH", "WHILE", "ENV", "INSTANCEOF", 
-		"REACTIVECLASS", "INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", "MSGSRV", 
-		"MAIN", "STATEVARS", "KNOWNREBECS", "THIS", "TRUE", "FALSE", "NULL", "LPAREN", 
-		"RPAREN", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "SEMI", "COMMA", 
-		"DOT", "EQ", "BANG", "TILDA", "QUES", "COLON", "EQEQ", "AMPAMP", "BARBAR", 
-		"PLUSPLUS", "SUBSUB", "SUPER", "PLUS", "SUB", "STAR", "SLASH", "AMP", 
-		"BAR", "CARET", "PERCENT", "PLUSEQ", "SUBEQ", "STAREQ", "SLASHEQ", "AMPEQ", 
-		"BAREQ", "CARETEQ", "TILDAEQ", "PERCENTEQ", "MONKEYS_AT", "BANGEQ", "GT", 
-		"LT", "LTLT", "LTLTEQ", "GTGT", "GTGTEQ", "IDENTIFIER", "Letter", "JavaIDDigit"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"INTLITERAL", "IntegerNumber", "HexPrefix", "HexDigit", "LongSuffix", 
+			"NonIntegerNumber", "Exponent", "FloatSuffix", "DoubleSuffix", "FLOATLITERAL", 
+			"DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", "EscapeSequence", "WS", 
+			"COMMENT", "LINE_COMMENT", "BREAK", "CASE", "CLASS", "CONTINUE", "DEFAULT", 
+			"ELSE", "FOR", "GOTO", "IF", "IMPORT", "NEW", "PACKAGE", "PRIVATE", "PROTECTED", 
+			"PUBLIC", "RECORD", "RETURN", "SWITCH", "WHILE", "ENV", "INSTANCEOF", 
+			"REACTIVECLASS", "INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", "MSGSRV", 
+			"MAIN", "STATEVARS", "KNOWNREBECS", "THIS", "TRUE", "FALSE", "NULL", 
+			"LPAREN", "RPAREN", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "SEMI", 
+			"COMMA", "DOT", "EQ", "BANG", "TILDA", "QUES", "COLON", "EQEQ", "AMPAMP", 
+			"BARBAR", "PLUSPLUS", "SUBSUB", "SUPER", "PLUS", "SUB", "STAR", "SLASH", 
+			"AMP", "BAR", "CARET", "PERCENT", "PLUSEQ", "SUBEQ", "STAREQ", "SLASHEQ", 
+			"AMPEQ", "BAREQ", "CARETEQ", "TILDAEQ", "PERCENTEQ", "MONKEYS_AT", "BANGEQ", 
+			"GT", "LT", "LTLT", "LTLTEQ", "GTGT", "GTGTEQ", "IDENTIFIER", "Letter", 
+			"JavaIDDigit"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, null, null, null, null, null, null, null, null, "'break'", "'case'", 
-		"'class'", "'continue'", "'default'", "'else'", "'for'", "'goto'", "'if'", 
-		"'import'", "'new'", "'package'", "'private'", "'protected'", "'public'", 
-		"'record'", "'return'", "'switch'", "'while'", "'env'", "'instanceof'", 
-		"'reactiveclass'", "'interface'", "'abstract'", "'extends'", "'implements'", 
-		"'msgsrv'", "'main'", "'statevars'", "'knownrebecs'", "'this'", "'true'", 
-		"'false'", "'null'", "'('", "')'", "'{'", "'}'", "'['", "']'", "';'", 
-		"','", "'.'", "'='", "'!'", "'~'", "'?'", "':'", "'=='", "'&&'", "'||'", 
-		"'++'", "'--'", "'super'", "'+'", "'-'", "'*'", "'/'", "'&'", "'|'", "'^'", 
-		"'%'", "'+='", "'-='", "'*='", "'/='", "'&='", "'|='", "'^='", "'~='", 
-		"'%='", "'@'", "'!='", "'>'", "'<'", "'<<'", "'<<='", "'>>'", "'>>='"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, "INTLITERAL", "FLOATLITERAL", "DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", 
-		"WS", "COMMENT", "LINE_COMMENT", "BREAK", "CASE", "CLASS", "CONTINUE", 
-		"DEFAULT", "ELSE", "FOR", "GOTO", "IF", "IMPORT", "NEW", "PACKAGE", "PRIVATE", 
-		"PROTECTED", "PUBLIC", "RECORD", "RETURN", "SWITCH", "WHILE", "ENV", "INSTANCEOF", 
-		"REACTIVECLASS", "INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", "MSGSRV", 
-		"MAIN", "STATEVARS", "KNOWNREBECS", "THIS", "TRUE", "FALSE", "NULL", "LPAREN", 
-		"RPAREN", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "SEMI", "COMMA", 
-		"DOT", "EQ", "BANG", "TILDA", "QUES", "COLON", "EQEQ", "AMPAMP", "BARBAR", 
-		"PLUSPLUS", "SUBSUB", "SUPER", "PLUS", "SUB", "STAR", "SLASH", "AMP", 
-		"BAR", "CARET", "PERCENT", "PLUSEQ", "SUBEQ", "STAREQ", "SLASHEQ", "AMPEQ", 
-		"BAREQ", "CARETEQ", "TILDAEQ", "PERCENTEQ", "MONKEYS_AT", "BANGEQ", "GT", 
-		"LT", "LTLT", "LTLTEQ", "GTGT", "GTGTEQ", "IDENTIFIER"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, null, null, null, null, null, null, null, null, "'break'", "'case'", 
+			"'class'", "'continue'", "'default'", "'else'", "'for'", "'goto'", "'if'", 
+			"'import'", "'new'", "'package'", "'private'", "'protected'", "'public'", 
+			"'record'", "'return'", "'switch'", "'while'", "'env'", "'instanceof'", 
+			"'reactiveclass'", "'interface'", "'abstract'", "'extends'", "'implements'", 
+			"'msgsrv'", "'main'", "'statevars'", "'knownrebecs'", "'this'", "'true'", 
+			"'false'", "'null'", "'('", "')'", "'{'", "'}'", "'['", "']'", "';'", 
+			"','", "'.'", "'='", "'!'", "'~'", "'?'", "':'", "'=='", "'&&'", "'||'", 
+			"'++'", "'--'", "'super'", "'+'", "'-'", "'*'", "'/'", "'&'", "'|'", 
+			"'^'", "'%'", "'+='", "'-='", "'*='", "'/='", "'&='", "'|='", "'^='", 
+			"'~='", "'%='", "'@'", "'!='", "'>'", "'<'", "'<<'", "'<<='", "'>>'", 
+			"'>>='"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, "INTLITERAL", "FLOATLITERAL", "DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", 
+			"WS", "COMMENT", "LINE_COMMENT", "BREAK", "CASE", "CLASS", "CONTINUE", 
+			"DEFAULT", "ELSE", "FOR", "GOTO", "IF", "IMPORT", "NEW", "PACKAGE", "PRIVATE", 
+			"PROTECTED", "PUBLIC", "RECORD", "RETURN", "SWITCH", "WHILE", "ENV", 
+			"INSTANCEOF", "REACTIVECLASS", "INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", 
+			"MSGSRV", "MAIN", "STATEVARS", "KNOWNREBECS", "THIS", "TRUE", "FALSE", 
+			"NULL", "LPAREN", "RPAREN", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", 
+			"SEMI", "COMMA", "DOT", "EQ", "BANG", "TILDA", "QUES", "COLON", "EQEQ", 
+			"AMPAMP", "BARBAR", "PLUSPLUS", "SUBSUB", "SUPER", "PLUS", "SUB", "STAR", 
+			"SLASH", "AMP", "BAR", "CARET", "PERCENT", "PLUSEQ", "SUBEQ", "STAREQ", 
+			"SLASHEQ", "AMPEQ", "BAREQ", "CARETEQ", "TILDAEQ", "PERCENTEQ", "MONKEYS_AT", 
+			"BANGEQ", "GT", "LT", "LTLT", "LTLTEQ", "GTGT", "GTGTEQ", "IDENTIFIER"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**

@@ -1,4 +1,4 @@
-// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/CoreRebecaComplete.g4 by ANTLR 4.7.1
+// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/CoreRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.corerebeca.compiler;
 	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class CoreRebecaCompleteParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -55,50 +55,60 @@ public class CoreRebecaCompleteParser extends Parser {
 		RULE_additiveExpression = 45, RULE_multiplicativeExpression = 46, RULE_unaryExpression = 47, 
 		RULE_unaryExpressionNotPlusMinus = 48, RULE_castExpression = 49, RULE_primary = 50, 
 		RULE_expressionList = 51, RULE_literal = 52;
-	public static final String[] ruleNames = {
-		"rebecaModel", "packageDeclaration", "importDeclaration", "rebecaCode", 
-		"recordDeclaration", "mainDeclaration", "mainRebecDefinition", "environmentVariables", 
-		"fieldDeclaration", "variableDeclarators", "variableDeclarator", "variableInitializer", 
-		"arrayInitializer", "interfaceDeclaration", "reactiveClassDeclaration", 
-		"methodDeclaration", "constructorDeclaration", "msgsrvDeclaration", "synchMethodDeclaration", 
-		"formalParameters", "formalParametersDeclaration", "formalParameterDeclaration", 
-		"block", "statement", "forInit", "switchBlock", "statementExpression", 
-		"annotation", "type", "genericTypeParams", "dimensions", "expression", 
-		"assignmentOperator", "conditionalExpression", "conditionalOrExpression", 
-		"conditionalAndExpression", "inclusiveOrExpression", "exclusiveOrExpression", 
-		"andExpression", "equalityExpression", "instanceOfExpression", "relationalExpression", 
-		"relationalOp", "shiftExpression", "shiftOp", "additiveExpression", "multiplicativeExpression", 
-		"unaryExpression", "unaryExpressionNotPlusMinus", "castExpression", "primary", 
-		"expressionList", "literal"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"rebecaModel", "packageDeclaration", "importDeclaration", "rebecaCode", 
+			"recordDeclaration", "mainDeclaration", "mainRebecDefinition", "environmentVariables", 
+			"fieldDeclaration", "variableDeclarators", "variableDeclarator", "variableInitializer", 
+			"arrayInitializer", "interfaceDeclaration", "reactiveClassDeclaration", 
+			"methodDeclaration", "constructorDeclaration", "msgsrvDeclaration", "synchMethodDeclaration", 
+			"formalParameters", "formalParametersDeclaration", "formalParameterDeclaration", 
+			"block", "statement", "forInit", "switchBlock", "statementExpression", 
+			"annotation", "type", "genericTypeParams", "dimensions", "expression", 
+			"assignmentOperator", "conditionalExpression", "conditionalOrExpression", 
+			"conditionalAndExpression", "inclusiveOrExpression", "exclusiveOrExpression", 
+			"andExpression", "equalityExpression", "instanceOfExpression", "relationalExpression", 
+			"relationalOp", "shiftExpression", "shiftOp", "additiveExpression", "multiplicativeExpression", 
+			"unaryExpression", "unaryExpressionNotPlusMinus", "castExpression", "primary", 
+			"expressionList", "literal"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, null, null, null, null, null, null, null, null, "'break'", "'case'", 
-		"'class'", "'continue'", "'default'", "'else'", "'for'", "'goto'", "'if'", 
-		"'import'", "'new'", "'package'", "'private'", "'protected'", "'public'", 
-		"'record'", "'return'", "'switch'", "'while'", "'env'", "'instanceof'", 
-		"'reactiveclass'", "'interface'", "'abstract'", "'extends'", "'implements'", 
-		"'msgsrv'", "'main'", "'statevars'", "'knownrebecs'", "'this'", "'true'", 
-		"'false'", "'null'", "'('", "')'", "'{'", "'}'", "'['", "']'", "';'", 
-		"','", "'.'", "'='", "'!'", "'~'", "'?'", "':'", "'=='", "'&&'", "'||'", 
-		"'++'", "'--'", "'super'", "'+'", "'-'", "'*'", "'/'", "'&'", "'|'", "'^'", 
-		"'%'", "'+='", "'-='", "'*='", "'/='", "'&='", "'|='", "'^='", "'~='", 
-		"'%='", "'@'", "'!='", "'>'", "'<'", "'<<'", "'<<='", "'>>'", "'>>='"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, "INTLITERAL", "FLOATLITERAL", "DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", 
-		"WS", "COMMENT", "LINE_COMMENT", "BREAK", "CASE", "CLASS", "CONTINUE", 
-		"DEFAULT", "ELSE", "FOR", "GOTO", "IF", "IMPORT", "NEW", "PACKAGE", "PRIVATE", 
-		"PROTECTED", "PUBLIC", "RECORD", "RETURN", "SWITCH", "WHILE", "ENV", "INSTANCEOF", 
-		"REACTIVECLASS", "INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", "MSGSRV", 
-		"MAIN", "STATEVARS", "KNOWNREBECS", "THIS", "TRUE", "FALSE", "NULL", "LPAREN", 
-		"RPAREN", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "SEMI", "COMMA", 
-		"DOT", "EQ", "BANG", "TILDA", "QUES", "COLON", "EQEQ", "AMPAMP", "BARBAR", 
-		"PLUSPLUS", "SUBSUB", "SUPER", "PLUS", "SUB", "STAR", "SLASH", "AMP", 
-		"BAR", "CARET", "PERCENT", "PLUSEQ", "SUBEQ", "STAREQ", "SLASHEQ", "AMPEQ", 
-		"BAREQ", "CARETEQ", "TILDAEQ", "PERCENTEQ", "MONKEYS_AT", "BANGEQ", "GT", 
-		"LT", "LTLT", "LTLTEQ", "GTGT", "GTGTEQ", "IDENTIFIER"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, null, null, null, null, null, null, null, null, "'break'", "'case'", 
+			"'class'", "'continue'", "'default'", "'else'", "'for'", "'goto'", "'if'", 
+			"'import'", "'new'", "'package'", "'private'", "'protected'", "'public'", 
+			"'record'", "'return'", "'switch'", "'while'", "'env'", "'instanceof'", 
+			"'reactiveclass'", "'interface'", "'abstract'", "'extends'", "'implements'", 
+			"'msgsrv'", "'main'", "'statevars'", "'knownrebecs'", "'this'", "'true'", 
+			"'false'", "'null'", "'('", "')'", "'{'", "'}'", "'['", "']'", "';'", 
+			"','", "'.'", "'='", "'!'", "'~'", "'?'", "':'", "'=='", "'&&'", "'||'", 
+			"'++'", "'--'", "'super'", "'+'", "'-'", "'*'", "'/'", "'&'", "'|'", 
+			"'^'", "'%'", "'+='", "'-='", "'*='", "'/='", "'&='", "'|='", "'^='", 
+			"'~='", "'%='", "'@'", "'!='", "'>'", "'<'", "'<<'", "'<<='", "'>>'", 
+			"'>>='"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, "INTLITERAL", "FLOATLITERAL", "DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", 
+			"WS", "COMMENT", "LINE_COMMENT", "BREAK", "CASE", "CLASS", "CONTINUE", 
+			"DEFAULT", "ELSE", "FOR", "GOTO", "IF", "IMPORT", "NEW", "PACKAGE", "PRIVATE", 
+			"PROTECTED", "PUBLIC", "RECORD", "RETURN", "SWITCH", "WHILE", "ENV", 
+			"INSTANCEOF", "REACTIVECLASS", "INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", 
+			"MSGSRV", "MAIN", "STATEVARS", "KNOWNREBECS", "THIS", "TRUE", "FALSE", 
+			"NULL", "LPAREN", "RPAREN", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", 
+			"SEMI", "COMMA", "DOT", "EQ", "BANG", "TILDA", "QUES", "COLON", "EQEQ", 
+			"AMPAMP", "BARBAR", "PLUSPLUS", "SUBSUB", "SUPER", "PLUS", "SUB", "STAR", 
+			"SLASH", "AMP", "BAR", "CARET", "PERCENT", "PLUSEQ", "SUBEQ", "STAREQ", 
+			"SLASHEQ", "AMPEQ", "BAREQ", "CARETEQ", "TILDAEQ", "PERCENTEQ", "MONKEYS_AT", 
+			"BANGEQ", "GT", "LT", "LTLT", "LTLTEQ", "GTGT", "GTGTEQ", "IDENTIFIER"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -148,6 +158,7 @@ public class CoreRebecaCompleteParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
 	public static class RebecaModelContext extends ParserRuleContext {
 		public RebecaModel r;
 		public PackageDeclarationContext p;
@@ -2643,6 +2654,7 @@ public class CoreRebecaCompleteParser extends Parser {
 		public Annotation an;
 		public Token annotationName;
 		public ExpressionContext exp;
+		public TerminalNode MONKEYS_AT() { return getToken(CoreRebecaCompleteParser.MONKEYS_AT, 0); }
 		public TerminalNode IDENTIFIER() { return getToken(CoreRebecaCompleteParser.IDENTIFIER, 0); }
 		public TerminalNode LPAREN() { return getToken(CoreRebecaCompleteParser.LPAREN, 0); }
 		public TerminalNode RPAREN() { return getToken(CoreRebecaCompleteParser.RPAREN, 0); }
