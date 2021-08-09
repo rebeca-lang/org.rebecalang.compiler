@@ -1,11 +1,6 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -389,7 +384,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		}
 		while (!extendStack.isEmpty()) {
 			addIntraReactiveClassVariablesToScope(extendStack.pop());
-		}
+	}
 	}
 
 	private void semanticCheckOfMethod(String reactiveClassName, MethodDeclaration md, Label label) {
@@ -541,7 +536,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 			}
 
 			ReactiveClassDeclaration rcd = reactiveClasses.get(mrd.getType().getTypeName());
-			List<FieldDeclaration> knownRebecs = rcd.getKnownRebecs();
+			List<FieldDeclaration> knownRebecs = getKnownRebecs(rcd);
 			List<Type> exprectedTypes = new LinkedList<Type>();
 			for (FieldDeclaration fd : knownRebecs) {
 				for (int variableCounter = 0; variableCounter < fd.getVariableDeclarators().size(); variableCounter++) {
@@ -592,6 +587,25 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 			}
 		}
 		scopeHandler.popScopeRecord();
+	}
+
+	private ArrayList<FieldDeclaration> getKnownRebecs(ReactiveClassDeclaration lastRebec){
+		ReactiveClassDeclaration curRebec = lastRebec;
+		ArrayList<FieldDeclaration> knownRebecs = new ArrayList<>();
+		while (curRebec.getExtends() != null) {
+			for (FieldDeclaration curRebecKnownRebec: curRebec.getKnownRebecs()) {
+				knownRebecs.add(curRebecKnownRebec);
+			}
+			try {
+				curRebec = (ReactiveClassDeclaration) curRebec.getExtends().getTypeSystem().getMetaData(curRebec.getExtends());
+			} catch (CodeCompilationException e) {
+				e.printStackTrace();
+			}
+		}
+		for (FieldDeclaration curRebecKnownRebec: curRebec.getKnownRebecs()) {
+			knownRebecs.add(curRebecKnownRebec);
+		}
+		return knownRebecs;
 	}
 
 	protected void checkPriorityAnnotations(List<Annotation> annotations) {
