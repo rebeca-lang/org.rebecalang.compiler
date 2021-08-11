@@ -1,0 +1,49 @@
+reactiveclass X (4) {
+    statevars {
+		int var_0;
+	}
+
+    msgsrv xx(int a) {
+        var_0 = 0;
+    }
+}
+
+reactiveclass A extends X (2) {
+
+    statevars {
+		int var_1;
+	}
+
+    msgsrv m() {
+        var_1=0;
+    }
+
+    msgsrv t() {
+        var_1=0;
+    }
+}
+
+reactiveclass B extends A (3) {
+    statevars {
+		int var_2;
+	}
+	B() {
+	    self.n();
+	    self.t();
+	}
+
+    msgsrv n() {
+        self.q();
+    }
+
+    msgsrv q() {
+        var_2 = 11;
+        self.n();
+    }
+}
+
+main {
+    A a():();
+    B b():();
+    X x():();
+}
