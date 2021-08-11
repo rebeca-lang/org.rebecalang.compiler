@@ -17,43 +17,7 @@ import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.SymbolTableException;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteParser;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BlockStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BreakStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConditionalStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ContinueStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InterfaceDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MainRebecDefinition;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MethodDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PlusSubExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReturnStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SwitchStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TernaryExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.UnaryExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStatement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.BinaryExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.CastExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.DotPrimaryExpressionSemanticCheck;
@@ -94,7 +58,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 	
 	public static final String PRIORITY_LABEL = "Priority";
 	public static final String GLOBAL_PRIORITY_LABEL = "GlobalPriority";
-	
+
 	public CoreRebecaCompleteCompilerFacade(@Qualifier("CORE_REBECA") TypeSystemInitializer typeSystemInitializer,
 			@Qualifier("CORE_REBECA") SymbolTableInitializer symbolTableInitializer) {
 		super(typeSystemInitializer, symbolTableInitializer);
@@ -269,6 +233,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		semanticCheckMainBindings(rebecaModel);
 
 		scopeHandler.popScopeRecord();
+
 	}
 
 	protected void semanticCheckReactiveClassDeclarations() {
