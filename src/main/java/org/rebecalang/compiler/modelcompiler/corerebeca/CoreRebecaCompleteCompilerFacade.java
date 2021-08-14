@@ -555,20 +555,24 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 	}
 
 	private ArrayList<FieldDeclaration> getKnownRebecs(ReactiveClassDeclaration lastRebec){
-		ReactiveClassDeclaration curRebec = lastRebec;
+		ArrayList<ReactiveClassDeclaration> rebecsSeries = new ArrayList<>();
 		ArrayList<FieldDeclaration> knownRebecs = new ArrayList<>();
+		ReactiveClassDeclaration curRebec = lastRebec;
+
 		while (curRebec.getExtends() != null) {
-			for (FieldDeclaration curRebecKnownRebec: curRebec.getKnownRebecs()) {
-				knownRebecs.add(curRebecKnownRebec);
-			}
+			rebecsSeries.add(curRebec);
 			try {
 				curRebec = (ReactiveClassDeclaration) curRebec.getExtends().getTypeSystem().getMetaData(curRebec.getExtends());
 			} catch (CodeCompilationException e) {
 				e.printStackTrace();
 			}
 		}
-		for (FieldDeclaration curRebecKnownRebec: curRebec.getKnownRebecs()) {
-			knownRebecs.add(curRebecKnownRebec);
+		rebecsSeries.add(curRebec);
+		Collections.reverse(rebecsSeries);
+		for (ReactiveClassDeclaration rebec: rebecsSeries) {
+			for (FieldDeclaration curRebecKnownRebec: rebec.getKnownRebecs()) {
+				knownRebecs.add(curRebecKnownRebec);
+			}
 		}
 		return knownRebecs;
 	}
