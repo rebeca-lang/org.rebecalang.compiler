@@ -189,6 +189,7 @@ interfaceDeclaration returns[InterfaceDeclaration intd]
 			name = IDENTIFIER {md.setName($name.text); md.setLineNumber($name.getLine());md.setCharacter($name.getCharPositionInLine());}
 			fps = formalParameters {md.getFormalParameters().addAll($fps.fps);} SEMI
 		)*
+
         RBRACE {$intd.setEndLineNumber($RBRACE.getLine());$intd.setEndCharacter($RBRACE.getCharPositionInLine());}
     ;
     

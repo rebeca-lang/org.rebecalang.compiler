@@ -86,14 +86,16 @@ public abstract class AbstractCompilerFacade {
 				}
 			});
 
+
 			//Method "parser.rebecaModel()" is called
 			Method method = parser.getClass().getDeclaredMethod("rebecaModel", new Class[0]);
+
 			Object rebecaModelObj = method.invoke(parser);
 
 			//The result of calling the above method contains the Rebeca model which is stored in variable "r"
 			Field field = rebecaModelObj.getClass().getDeclaredField("r");
 			this.rebecaModel = (RebecaModel)field.get(rebecaModelObj);
-			
+
 			typeSystemInitializer.fillTypeSystem(rebecaModel);
 			
 			symbolTableInitializer.fillSymbolTable(rebecaModel, coreVersion);
