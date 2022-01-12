@@ -9,7 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<springframework.version>5.3.7</springframework.version>
+		<springframework.version>5.3.14</springframework.version>
 		<compilerversion>14</compilerversion>
 	</properties>
 
