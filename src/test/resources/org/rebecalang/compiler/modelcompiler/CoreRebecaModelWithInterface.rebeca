@@ -1,0 +1,13 @@
+interface Network {
+	msgsrv send();
+}
+
+reactiveclass TDMANetwork implements Network (3) {
+	msgsrv send() {
+		//Send data according to the TDMA protocol
+	}
+}
+
+main {
+		TDMANetwork network():();
+}

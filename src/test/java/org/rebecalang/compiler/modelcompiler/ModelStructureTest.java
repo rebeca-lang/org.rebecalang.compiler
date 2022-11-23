@@ -167,6 +167,20 @@ public class ModelStructureTest {
 	}
 
 	@Test
+	public void GIVEN_CoreRebecaModelWithInterface_WHEN_CoreIs2_3_THEN_NoError() {
+		File model = new File(MODEL_FILES_BASE + "CoreRebecaModelWithInterface.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+
+		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_3);
+		
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+//		expectedExceptionContainer.addException(new CodeCompilationException("Reactiveclass A2 should be defined as abstract", 8, 14));
+
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
+	}
+
+	@Test
 	public void GIVEN_ManyTests_WHEN_AllAreCorrect_THEN_NoError() {
 		GIVEN_CoreRebecaModelWithDifferentExpressions_WHEN_CoreIs2_1_THEN_1Error();
 		GIVEN_CorrectCoreRebecaModelWithInitialMethod_WHEN_CoreIs2_0_THEN_1Error();
