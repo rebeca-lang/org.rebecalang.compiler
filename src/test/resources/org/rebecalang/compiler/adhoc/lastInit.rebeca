@@ -1,0 +1,184 @@
+env int N_INI = 5;
+env int L_INI = 18;
+env int N_EXE = 10;
+env int L_EXE = 5;
+reactiveclass Client(20) {
+	knownrebecs {
+		InitiateRequester IR;
+	}
+	statevars {
+		int TotalLatency;
+	}
+	 Client() {
+	    TotalLatency = 0;
+	    self.initiate() after(3);
+	}
+	msgsrv initiate(){
+	    int clientDelay;
+		clientDelay = ?(1,2,3);
+		delay(clientDelay);
+		IR.initiate(clientDelay + 3);
+	}
+
+	msgsrv ack(int Lm) {
+		TotalLatency = Lm;
+		self.busy();
+	} // Consume request response
+	 msgsrv busy(){ //busy waiting to avoid deadlock
+		self.busy();
+	}
+	msgsrv fastSendFailure() {self.busy();} // Handle sending requests in short intervals (based on nReq)
+	msgsrv timeOutFailure() {self.busy();} // Response was not provided in the required time frame (based on lReq, lRes)
+	msgsrv excessLoadFailure() {self.busy();} // Responder is recieving requests too fast (based on nRes)
+	}
+
+reactiveclass InitiateRequester(20) {  //check QOS properties
+	knownrebecs {
+		CommunicationSubstrate cs;
+		Client c;
+	}
+	statevars {
+		//int lastIni; // Last request time, used for nReq comparison.
+		Timer lastIni;
+		}
+	 InitiateRequester() {
+		//lastIni = 0;
+		startTimer(lastIni);
+	}
+	msgsrv initiate(int Lm) { // request data from responder through communication substrate
+		int IR1Delay; 
+		IR1Delay = ?(1, 2);
+		//delay(RR1Delay);
+		int passedTime = getTimerValue(lastIni);
+		stopTimer(lastIni);
+		//int time = now;
+		if(passedTime < N_INI){
+			c.fastSendFailure();
+		}
+		else {
+			startTimer(lastIni);
+			//lastIni = now;
+			cs.initiate(Lm + IR1Delay) after(IR1Delay);
+		}
+	}
+	msgsrv ack(int Lm) { // send back response to the client
+		int IR2Delay;
+		IR2Delay = ?(1, 2);
+			Lm = Lm + IR2Delay;
+			int passedTime = getTimerValue(lastIni);
+			stopTimer(lastIni);
+			//int time = now;
+			if(passedTime >= L_INI) { // lReq has been violated
+				c.timeOutFailure();
+			}
+			else if(IR2Delay < L_INI) { // rReq has been met, it has not timed out, and lReq has also been met
+				c.ack(Lm) after(IR2Delay);	
+			}
+	}
+	msgsrv excessLoadFailure() {
+		c.excessLoadFailure();
+	}
+	msgsrv timeOutFailure() {
+		c.timeOutFailure();
+	}
+}
+
+reactiveclass CommunicationSubstrate(20) {  // Latency
+	knownrebecs {
+		InitiateRequester IR; 
+		ExecuteInvoker EI;
+	}
+	statevars {
+	
+	}
+	 CommunicationSubstrate() {
+	
+	}
+	msgsrv initiate(int Lm) { // Transfer data request from client to the server
+			int cs1Delay = ?(2,3); 
+				EI.initiate(Lm + cs1Delay) after(cs1Delay);
+		}
+	msgsrv ack(int Lm) { // Transfer data reponse from server to the client
+			int cs2Delay = ?(2, 3,4); // Network delay between server and commnunication substrate
+				IR.ack((Lm + cs2Delay)) after(cs2Delay);
+	}
+	msgsrv excessLoadFailure() {
+			IR.excessLoadFailure();
+	}
+	msgsrv timeOutFailure() {
+			IR.timeOutFailure();
+	}
+}
+
+reactiveclass ExecuteInvoker(20) {  //check QOS
+	knownrebecs {
+		CommunicationSubstrate cs;
+		Service s;
+	}
+	statevars {
+		//int lastIni; // Time that last data request was recieved, used for nRes comparison
+		Timer lastIni;
+	}
+	 ExecuteInvoker() {
+		//lastIni = 0;
+		startTimer(lastIni);
+	}
+	//responder to requester
+	msgsrv initiate(int Lm) { // Send request response through communication substrate
+		//boolean canRespond = true; // Is it feasible to provide the request response?
+		int EI1Delay;
+		EI1Delay = ?(1, 2); 
+		//delay(RI1Delay);
+		int passedTime = getTimerValue(lastIni);
+		stopTimer(lastIni);
+		//int time = now;
+		Lm = Lm + EI1Delay;
+		if (passedTime < N_EXE) { // Request has arrived too fast too be handled
+			cs.excessLoadFailure();
+		} 
+		else {
+			startTimer(lastIni);
+			//lastIni = now;
+			s.initiate(Lm) after(EI1Delay); // Ask service for data response
+		}
+	}
+	//requester to responder
+	msgsrv ack(int Lm) { // Receive provided response and deliver it to the requester throught communication substrate
+		int passedTime = getTimerValue(lastIni);
+		stopTimer(lastIni);
+		//int time = now;
+		int EI2Delay;
+		EI2Delay = ?(2, 3); 
+		if (passedTime > L_EXE) { //  Response was not provided in lRes time units
+			cs.timeOutFailure();
+		}
+		else { // Recieved response is still valid
+			cs.ack(Lm + EI2Delay) after(EI2Delay);
+			
+		}
+		
+	}
+}
+
+reactiveclass Service(20) {
+	knownrebecs{
+		ExecuteInvoker EI;
+	}
+	statevars {}
+	 Service() {
+	}
+	msgsrv initiate(int Lm) {
+		int computeDelay = ?(3, 4); // Random reponse prepration delay
+		delay(computeDelay);
+		EI.ack(Lm + computeDelay); // Add computation delay to network delay and send response through communication substrate
+	}
+	
+}
+
+main {
+	Client c(ir):();
+	InitiateRequester ir(cs, c):();
+	CommunicationSubstrate cs(ir, ei):();
+	ExecuteInvoker ei(cs, s):();
+	Service s(ei):();
+}

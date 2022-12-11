@@ -1,0 +1,182 @@
+reactiveclass LocalMarket(50){
+
+  knownrebecs {
+			Producer alice;
+			Consumer bob;
+			Consumer tom;
+		      }
+  
+  statevars{
+		
+		boolean status;
+		int[2] requiredToken;
+		int tokenForSale;
+		boolean paid;
+		boolean modified;
+		int bBuy;
+		int tBuy;
+		}
+	
+	LocalMarket(int generatedToken)
+		{
+		status = false;;
+		paid = false;
+		
+		requiredToken[0] = 0;
+		requiredToken[1] = 0;
+		tokenForSale = generatedToken;
+		}
+	
+   msgsrv energyMarket(int token){
+		if(sender == bob)
+		    {
+		    requiredToken[0] = token;
+		    if(requiredToken[1] > 0)
+		    status = true;
+		    else
+		    status = false;
+		    }	
+		else if(sender == tom)
+			{
+			requiredToken[1] = token;
+			if(requiredToken[0] > 0)
+		    status = true;
+		    else
+		    status = false;
+			}
+		else if(sender == alice){
+		////////////
+			if(!status) {tokenForSale += token;}
+			else {tokenForSale = tokenForSale+0;}
+		}	
+	if(status)	
+	self.endMarket();	
+	}
+
+
+
+   msgsrv endMarket(){
+  
+		if (tokenForSale > (requiredToken[0] + requiredToken[1])) {
+			alice.updateAccount((requiredToken[0] + requiredToken[1])*100,requiredToken[0] + requiredToken[1]);
+			paid = true;
+			bob.receiveToken(requiredToken[0]);
+			bBuy = requiredToken[0];
+			tom.receiveToken(requiredToken[1]);
+			tBuy = requiredToken[1];
+			modified =true;
+			status= false;
+		}
+		else {
+			int fairsell1 = (tokenForSale * requiredToken[0]) / (requiredToken[0] + requiredToken[1]);
+			int fairsell2 = (tokenForSale * requiredToken[1]) / (requiredToken[0] + requiredToken[1]);
+			alice.updateAccount((fairsell1 + fairsell2)*100, fairsell1+fairsell2);
+			paid = true;
+			bBuy = fairsell1;
+			bob.receiveToken(fairsell1);
+			tBuy = fairsell2;
+			tom.receiveToken(fairsell2);
+			modified =true;
+			status= false;
+		}
+		
+	}
+}
+
+reactiveclass Producer(25){
+
+	knownrebecs {
+		LocalMarket market;
+	}
+	statevars{
+		int token;
+		int coin;
+	}
+	
+	Producer(int generatedToken){
+		token = generatedToken;
+		self.doSomething();
+	}
+	
+	msgsrv updateAccount(int addedPrice,int reducedToken){
+		coin += addedPrice;
+		token -= reducedToken;
+		self.doSomething();
+	}
+	
+	msgsrv do(){
+		self.doSomething();
+	}
+	
+	msgsrv doSomething(){
+		boolean newToken = ?(true,false);
+		int generatedToken;
+		generatedToken = ?(50,100,200);
+			if(newToken){
+			market.energyMarket(generatedToken);
+			token = generatedToken;
+			}else{
+				self.do();
+		 		}
+	}
+	
+}
+
+reactiveclass Consumer(25){
+
+	knownrebecs {
+		LocalMarket market;
+	}
+	statevars{
+		int token;
+		int coin;
+		int requiredToken;
+	}
+	Consumer(int tokens){
+	    coin = 500;
+		requiredToken = tokens;
+		self.checkBalance(requiredToken);
+	}
+	
+	msgsrv checkBalance(int rt){
+		if(coin > rt*100){
+		market.energyMarket(rt);
+		}
+		else{
+		self.doSomething();
+		}
+	}
+	
+	msgsrv receiveToken(int receiveToken){
+	if(coin > receiveToken*100){
+		token += receiveToken;
+		coin -= receiveToken*100;
+		}
+		self.doSomething();
+	}
+	
+	msgsrv do(){
+	self.doSomething();
+	}
+	
+	msgsrv doSomething(){
+		boolean newRequest = ?(true,false);
+		int requiredTokens;
+		requiredTokens = ?(20,30,40);
+			if(newRequest && (coin > requiredTokens*100) ){
+			market.energyMarket(requiredTokens);
+			}else{
+			coin += ?(1000,2000);
+				self.do();
+				}
+	}
+}
+
+main {
+LocalMarket market(alice,bob,tom):(50);
+Consumer bob(market):(40);
+Consumer tom(market):(20);
+Producer alice(market):(50);
+
+}
+

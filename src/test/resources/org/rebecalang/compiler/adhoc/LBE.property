@@ -1,0 +1,23 @@
+property {
+    define {
+      consumerPaid = market.paid;
+      marketStatus = market.status;
+      modifiedAccount = market.modified;
+      bobRt = market.requiredToken[0];
+      tomRt = market.requiredToken[1];
+      aliceT = market.tokenForSale;
+      tomBuy = market.tBuy;
+      bobBuy = market.bBuy;
+      }
+    
+
+
+     LTL {
+    
+	     Safetly: G(!(consumerPaid) || U(marketStatus, modifiedAccount));
+	     Safety2 : G(!( (bobRt > (aliceT/2)) && (tomRt > (aliceT/2)) ) || (tomBuy == bobBuy) );
+	     Progress: G(!marketStatus || marketStatus);
+	     NoStarvation: F(modifiedAccount);
+  		
+    }
+}
