@@ -28,7 +28,7 @@ public class AddHocTest {
 	public static final String MODEL_FILES_BASE = "src/test/resources/org/rebecalang/compiler/adhoc/"; 
 
 	@Test
-	@Disabled
+//	@Disabled
 	public void test() {
 		File model = new File(MODEL_FILES_BASE + "LBE.rebeca");
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
