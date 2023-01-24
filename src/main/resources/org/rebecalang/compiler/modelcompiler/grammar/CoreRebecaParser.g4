@@ -47,7 +47,24 @@ rebecaCode returns [RebecaCode rc]
     :   
     	{$rc = new RebecaCode();}
 		(rd = recordDeclaration {$rc.getRecordDeclaration().add($rd.rd);})*
-		(e = environmentVariables {$rc.getEnvironmentVariables().addAll($e.fds);})
+		(		
+			(ENV fd = fieldDeclaration SEMI {$rc.getEnvironmentVariables().add($fd.fd);})
+			|
+			(FEATURE featureName = IDENTIFIER SEMI 
+				{
+				VariableDeclarator vd = new VariableDeclarator();
+				vd.setVariableName($featureName.text);
+				vd.setLineNumber($featureName.getLine());
+				vd.setCharacter($featureName.getCharPositionInLine());
+				FieldDeclaration fd = new FieldDeclaration();
+				fd.getVariableDeclarators().add(vd);
+				fd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);				
+    			fd.setCharacter($featureName.getCharPositionInLine());
+				fd.setLineNumber($featureName.getLine());
+				$rc.getFeatureVariables().add(fd);				
+				}
+			)
+		)*
         (
         	rcd = reactiveClassDeclaration {$rc.getReactiveClassDeclaration().add($rcd.rcd);}
         	|
@@ -105,19 +122,15 @@ mainRebecDefinition returns [MainRebecDefinition mrd]
 	;
 
 ////////////////////////////// 
-environmentVariables returns [List<FieldDeclaration> fds]
-	: 	
-		{$fds = new ArrayList<FieldDeclaration>();}
-		(ENV fd = fieldDeclaration {$fds.add($fd.fd);} SEMI)*
-	;
-
-////////////////////////////// 
 fieldDeclaration returns [FieldDeclaration fd]
     :   
     	{$fd = new FieldDeclaration();}
     	(an = annotation {$fd.getAnnotations().add($an.an);})*
-    	t = type vds = variableDeclarators {$fd.setType($t.t); $fd.getVariableDeclarators().addAll($vds.vds);
-    		$fd.setCharacter($t.t.getCharacter()); $fd.setLineNumber($t.t.getLineNumber());}
+    	t = type vds = variableDeclarators 
+    	{$fd.setType($t.t);
+		 $fd.getVariableDeclarators().addAll($vds.vds);
+    	 $fd.setCharacter($t.t.getCharacter());
+		 $fd.setLineNumber($t.t.getLineNumber());}
     ;
 variableDeclarators returns [List<VariableDeclarator> vds]
     :   
@@ -320,7 +333,8 @@ block returns [BlockStatement bs]
 
 statement returns [Statement s]
 	:
-		fd = fieldDeclaration {$s = $fd.fd;} SEMI
+        se = statementExpression {$s = $se.se;} SEMI
+	|	fd = fieldDeclaration {$s = $fd.fd;} SEMI
     |	b = block {$s = $b.bs;}
     |   IF {$s = new ConditionalStatement(); $s.setLineNumber($IF.getLine());$s.setCharacter($IF.getCharPositionInLine());}
     	LPAREN e = expression RPAREN st = statement
@@ -342,7 +356,6 @@ statement returns [Statement s]
     |   CONTINUE SEMI
     	{$s = new ContinueStatement(); $s.setLineNumber($CONTINUE.getLine());$s.setCharacter($CONTINUE.getCharPositionInLine());}
     |   SEMI {$s = new Statement();}
-    |   se = statementExpression {$s = $se.se;} SEMI
 	;
 
 forInit returns [ForInitializer fi]

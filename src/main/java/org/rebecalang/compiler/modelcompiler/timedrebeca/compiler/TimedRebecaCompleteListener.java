@@ -1,4 +1,4 @@
-// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/TimedRebecaComplete.g4 by ANTLR 4.7.1
+// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/TimedRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.timedrebeca.compiler;
 	import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -88,16 +88,6 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMainRebecDefinition(TimedRebecaCompleteParser.MainRebecDefinitionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#environmentVariables}.
-	 * @param ctx the parse tree
-	 */
-	void enterEnvironmentVariables(TimedRebecaCompleteParser.EnvironmentVariablesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#environmentVariables}.
-	 * @param ctx the parse tree
-	 */
-	void exitEnvironmentVariables(TimedRebecaCompleteParser.EnvironmentVariablesContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#fieldDeclaration}.
 	 * @param ctx the parse tree

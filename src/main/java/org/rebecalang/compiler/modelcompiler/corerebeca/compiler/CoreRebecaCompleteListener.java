@@ -1,7 +1,12 @@
 // Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/CoreRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.corerebeca.compiler;
-	import org.antlr.v4.runtime.tree.ParseTreeListener;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
+	import java.util.*;
+	import org.antlr.runtime.BitSet;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
+
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -78,16 +83,6 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMainRebecDefinition(CoreRebecaCompleteParser.MainRebecDefinitionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#environmentVariables}.
-	 * @param ctx the parse tree
-	 */
-	void enterEnvironmentVariables(CoreRebecaCompleteParser.EnvironmentVariablesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#environmentVariables}.
-	 * @param ctx the parse tree
-	 */
-	void exitEnvironmentVariables(CoreRebecaCompleteParser.EnvironmentVariablesContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#fieldDeclaration}.
 	 * @param ctx the parse tree

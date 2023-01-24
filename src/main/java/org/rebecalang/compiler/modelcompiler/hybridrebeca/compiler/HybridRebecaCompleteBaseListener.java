@@ -1,4 +1,4 @@
-// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/HybridRebecaComplete.g4 by ANTLR 4.7.1
+// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/HybridRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.hybridrebeca.compiler;
 	import org.antlr.v4.runtime.ParserRuleContext;
@@ -131,18 +131,6 @@ public class HybridRebecaCompleteBaseListener implements HybridRebecaCompleteLis
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMainRebecDefinition(HybridRebecaCompleteParser.MainRebecDefinitionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEnvironmentVariables(HybridRebecaCompleteParser.EnvironmentVariablesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEnvironmentVariables(HybridRebecaCompleteParser.EnvironmentVariablesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

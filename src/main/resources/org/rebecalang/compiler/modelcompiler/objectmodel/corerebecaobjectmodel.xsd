@@ -45,6 +45,8 @@
 				maxOccurs="unbounded" minOccurs="0" />
 			<xs:element name="environmentVariables"
 				type="FieldDeclaration" maxOccurs="unbounded" minOccurs="0" />
+			<xs:element name="featureVariables"
+				type="FieldDeclaration" maxOccurs="unbounded" minOccurs="0" />
 			<xs:element name="reactiveClassDeclaration"
 				type="ReactiveClassDeclaration" maxOccurs="unbounded" minOccurs="0" />
 			<xs:element name="interfaceDeclaration"

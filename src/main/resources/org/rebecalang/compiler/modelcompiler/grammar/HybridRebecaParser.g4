@@ -4,7 +4,11 @@ rebecaCode returns [HybridRebecaCode rc]
     :   
     	{$rc = new HybridRebecaCode();}
 		(rd = recordDeclaration {$rc.getRecordDeclaration().add($rd.rd);})*
-		(e = environmentVariables {$rc.getEnvironmentVariables().addAll($e.fds);})
+		(		
+			ENV fd = fieldDeclaration SEMI {$rc.getEnvironmentVariables().add($fd.fd);}
+			|
+			FEATURE fd = fieldDeclaration SEMI {$rc.getFeatureVariables().add($fd.fd);}
+		)*
         (
         	rcd = reactiveClassDeclaration {$rc.getReactiveClassDeclaration().add($rcd.rcd);}
         	|

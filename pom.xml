@@ -88,8 +88,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>${compilerversion}</source>
-					<target>${compilerversion}</target>
+					<release>${compilerversion}</release>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
@@ -133,8 +132,7 @@
 						<artifactId>maven-compiler-plugin</artifactId>
 						<version>3.8.1</version>
 						<configuration>
-							<source>${compilerversion}</source>
-							<target>${compilerversion}</target>
+							<release>${compilerversion}</release>
 							<annotationProcessorPaths>
 								<path>
 									<groupId>org.projectlombok</groupId>
@@ -168,8 +166,7 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
 						<configuration>
-							<source>${compilerversion}</source>
-							<target>${compilerversion}</target>
+							<release>${compilerversion}</release>
 							<annotationProcessorPaths>
 								<path>
 									<groupId>org.projectlombok</groupId>

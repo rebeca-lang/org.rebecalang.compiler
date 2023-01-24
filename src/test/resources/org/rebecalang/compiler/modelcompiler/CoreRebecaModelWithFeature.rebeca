@@ -1,0 +1,99 @@
+feature FT_PERIODIC_SENSOR;
+feature FT_IMMEDIATE_PUSH;
+feature FT_DELAYED_PUSH;
+
+feature FT_TDMA_NETWORK;
+
+
+env int PACKET_SIZE = 4;
+
+reactiveclass Sensor(3) {
+	statevars{
+		ComputationUnit cu;
+	}
+	
+	Sensor(ComputationUnit cu1) {
+		cu = cu1;
+		self.gatherData();
+	}
+	
+	msgsrv gatherData() {
+		cu.receiveData();
+		if(FT_PERIODIC_SENSOR)
+			self.gatherData(1) after(2);
+		else
+			self.gatherData(1) after(?(1,2,3));
+	}
+}
+
+reactiveclass ComputationUnit(3) {
+	statevars {
+		int receivedDataItems;
+		Network network;
+		@feature("FT_DELAYED_PUSH")
+		int[4] buffer;
+		@feature("FT_DELAYED_PUSH")
+		int index;
+	}
+	
+	ComputationUnit(Network network1) {
+		receivedDataItems = 0;
+		network = network1;
+		@feature("FT_IMMEDIATE_PUSH")
+		for(int cnt = 0; cnt < 4; cnt++)
+			buffer[cnt] = 0;
+		@feature("FT_DELAYED_PUSH")
+		self.process;
+	}
+
+	boolean packAndSend(int data) {
+		receivedDataItems++;
+		if(receivedDataItems == PACKET_SIZE) {
+			receivedDataItems = 0;
+			network.send();
+		}
+	}
+
+	@feature("FT_IMMEDIATE_PUSH")
+	msgsrv receiveData(byte data) {
+		packAndSend(data);
+	}
+	
+	@feature("FT_DELAYED_PUSH")
+	msgsrv receiveData(byte data) {
+		buffer[index++] = data;
+	}
+	
+	@feature("FT_DELAYED_PUSH")
+	msgsrv process() {
+		if(index > 0) {
+			packAndSend(buffer[index--]);
+		}
+		self.process() after(1);
+	}
+}
+
+interface Network {
+	msgsrv send();
+}
+
+reactiveclass MACBNetwork implements Network (3) {
+	msgsrv send() {
+		//Send data according to the MACB protocol
+	}
+}
+
+reactiveclass TDMANetwork implements Network (3) {
+	msgsrv send() {
+		//Send data according to the TDMA protocol
+	}
+}
+
+main {
+	Sensor sensor():(cu);
+	ComputationUnit cu():(network);
+	@feature("FT_SIMPLE_NETWORK")
+	MACBNetwork network():();
+	@feature("FT_TDMA_NETWORK")
+	TDMANetwork network():();
+}

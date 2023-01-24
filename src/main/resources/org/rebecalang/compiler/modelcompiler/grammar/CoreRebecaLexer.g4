@@ -199,6 +199,10 @@ ENV
     :   'env'
     ;
 
+FEATURE
+    :   'feature'
+    ;
+
     
 INSTANCEOF
 	:	'instanceof'

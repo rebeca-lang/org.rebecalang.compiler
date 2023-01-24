@@ -1,7 +1,13 @@
 // Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/CoreRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.corerebeca.compiler;
-	import org.antlr.v4.runtime.ParserRuleContext;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
+	import java.util.*;
+	import org.antlr.runtime.BitSet;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
+
+
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -95,18 +101,6 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMainRebecDefinition(CoreRebecaCompleteParser.MainRebecDefinitionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEnvironmentVariables(CoreRebecaCompleteParser.EnvironmentVariablesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEnvironmentVariables(CoreRebecaCompleteParser.EnvironmentVariablesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -1,4 +1,4 @@
-// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/ProbabilisticTimedRebecaComplete.g4 by ANTLR 4.7.1
+// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/ProbabilisticTimedRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.compiler;
 	import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -128,16 +128,6 @@ public interface ProbabilisticTimedRebecaCompleteListener extends ParseTreeListe
 	 * @param ctx the parse tree
 	 */
 	void exitMainRebecDefinition(ProbabilisticTimedRebecaCompleteParser.MainRebecDefinitionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#environmentVariables}.
-	 * @param ctx the parse tree
-	 */
-	void enterEnvironmentVariables(ProbabilisticTimedRebecaCompleteParser.EnvironmentVariablesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#environmentVariables}.
-	 * @param ctx the parse tree
-	 */
-	void exitEnvironmentVariables(ProbabilisticTimedRebecaCompleteParser.EnvironmentVariablesContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#fieldDeclaration}.
 	 * @param ctx the parse tree

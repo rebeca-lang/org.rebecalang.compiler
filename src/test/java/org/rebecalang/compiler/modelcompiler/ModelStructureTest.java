@@ -179,6 +179,18 @@ public class ModelStructureTest {
 
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
+	
+	
+//	@Test
+	public void GIVEN_CoreRebecaModelWithFeatures_WHEN_CoreIs2_1_THEN_NoErrors() {
+		File model = new File(MODEL_FILES_BASE + "CoreRebecaModelWithFeature.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+
+		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
+		
+		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
+	}
+
 
 	@Test
 	public void GIVEN_ManyTests_WHEN_AllAreCorrect_THEN_NoError() {

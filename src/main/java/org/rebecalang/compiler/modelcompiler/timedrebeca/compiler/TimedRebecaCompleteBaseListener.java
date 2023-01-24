@@ -1,4 +1,4 @@
-// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/TimedRebecaComplete.g4 by ANTLR 4.7.1
+// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/TimedRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.timedrebeca.compiler;
 	import org.antlr.v4.runtime.ParserRuleContext;
@@ -107,18 +107,6 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMainRebecDefinition(TimedRebecaCompleteParser.MainRebecDefinitionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEnvironmentVariables(TimedRebecaCompleteParser.EnvironmentVariablesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEnvironmentVariables(TimedRebecaCompleteParser.EnvironmentVariablesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

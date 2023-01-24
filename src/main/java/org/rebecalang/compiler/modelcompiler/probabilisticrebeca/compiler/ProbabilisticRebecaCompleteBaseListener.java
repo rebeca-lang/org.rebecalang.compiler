@@ -1,4 +1,4 @@
-// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/ProbabilisticRebecaComplete.g4 by ANTLR 4.7.1
+// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/ProbabilisticRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler;
 	import org.antlr.v4.runtime.ParserRuleContext;
@@ -143,18 +143,6 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMainRebecDefinition(ProbabilisticRebecaCompleteParser.MainRebecDefinitionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEnvironmentVariables(ProbabilisticRebecaCompleteParser.EnvironmentVariablesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEnvironmentVariables(ProbabilisticRebecaCompleteParser.EnvironmentVariablesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

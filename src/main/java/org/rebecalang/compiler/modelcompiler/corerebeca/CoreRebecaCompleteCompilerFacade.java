@@ -268,6 +268,8 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.REBECA_MODEL);
 
 		addEnvironmentVariablesToScope();
+		
+		addFeatureVariablesToScope();
 
 		semanticCheckReactiveClassDeclarations();
 
@@ -474,7 +476,30 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 			for (VariableDeclarator vd : fd.getVariableDeclarators()) {
 				if (vd.getVariableInitializer() == null) {
 					CodeCompilationException rce = new CodeCompilationException(
-							"Environment variables " + vd.getVariableName() + " have to be initialized",
+							"Environment variable " + vd.getVariableName() + " has to be initialized",
+							vd.getLineNumber(), vd.getCharacter());
+					exceptionContainer.addException(rce);
+				}
+			}
+		}
+	}
+
+	protected void addFeatureVariablesToScope() {
+		for (FieldDeclaration fd : rebecaModel.getRebecaCode().getFeatureVariables()) {
+			if (coreVersion == CoreVersion.CORE_2_0) {
+				CodeCompilationException rce = new CodeCompilationException(
+						"Rebeca core 2.0 dose not support feature variables", fd.getLineNumber(),
+						fd.getCharacter());
+				exceptionContainer.addException(rce);
+				return;
+			}
+
+			statementSemanticCheckContainer.check(fd);
+
+			for (VariableDeclarator vd : fd.getVariableDeclarators()) {
+				if (vd.getVariableInitializer() == null) {
+					CodeCompilationException rce = new CodeCompilationException(
+							"Feature variable " + vd.getVariableName() + " has to be initialized",
 							vd.getLineNumber(), vd.getCharacter());
 					exceptionContainer.addException(rce);
 				}

@@ -1,4 +1,4 @@
-// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/ProbabilisticTimedRebecaComplete.g4 by ANTLR 4.7.1
+// Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/ProbabilisticTimedRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.compiler;
 	import org.antlr.v4.runtime.ParserRuleContext;
@@ -155,18 +155,6 @@ public class ProbabilisticTimedRebecaCompleteBaseListener implements Probabilist
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMainRebecDefinition(ProbabilisticTimedRebecaCompleteParser.MainRebecDefinitionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEnvironmentVariables(ProbabilisticTimedRebecaCompleteParser.EnvironmentVariablesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEnvironmentVariables(ProbabilisticTimedRebecaCompleteParser.EnvironmentVariablesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
