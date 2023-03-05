@@ -28,6 +28,8 @@ public class RebecInstantiationExpressionSemanticCheck extends AbstractExpressio
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		PrimaryExpression pExpression = (PrimaryExpression) expression;
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);
+		
 		try {
 			pExpression.setType(typeSystem.getType(pExpression.getType()));
 		} catch (CodeCompilationException cce) {
@@ -39,6 +41,7 @@ public class RebecInstantiationExpressionSemanticCheck extends AbstractExpressio
 				"No semantic check rule is applied on the instatiation of actor(s)", 
 				pExpression.getLineNumber(), pExpression.getCharacter());
 		exceptionContainer.addWarning(cee);
+		
 		//TODO check semantic check
 
 		returnValue.setFirst(pExpression.getType());

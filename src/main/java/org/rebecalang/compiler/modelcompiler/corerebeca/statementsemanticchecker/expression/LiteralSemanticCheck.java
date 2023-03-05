@@ -18,6 +18,8 @@ public class LiteralSemanticCheck extends AbstractExpressionSemanticCheck {
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);
+		
 		Literal lExpression = (Literal) expression;
 		if (lExpression.getType() == CoreRebecaTypeSystem.DOUBLE_TYPE) {
 			try {
@@ -81,7 +83,18 @@ public class LiteralSemanticCheck extends AbstractExpressionSemanticCheck {
 									lExpression.getLineNumber(),
 									lExpression.getCharacter()));
 				}
+		} else if (lExpression.getType() == CoreRebecaTypeSystem.STRING_TYPE) {
+			try {
+				returnValue.setSecond(lExpression.getLiteralValue());
+			} catch (NumberFormatException nfe) {
+				exceptionContainer.addException(
+						SemanticCheckerUtils.getOutofRangeException(
+								lExpression.getLiteralValue(),
+								CoreRebecaTypeSystem.BOOLEAN_TYPE,
+								lExpression.getLineNumber(),
+								lExpression.getCharacter()));
 			}
+		}
 		returnValue.setFirst(lExpression.getType());
 		return returnValue;
 	}

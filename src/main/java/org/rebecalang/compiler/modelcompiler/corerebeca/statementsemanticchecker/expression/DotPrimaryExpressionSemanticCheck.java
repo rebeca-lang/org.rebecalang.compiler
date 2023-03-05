@@ -31,6 +31,8 @@ public class DotPrimaryExpressionSemanticCheck extends AbstractExpressionSemanti
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);
+		
 		DotPrimary dotPrimary = (DotPrimary) expression;
 
 		Expression leftTerm = dotPrimary.getLeft();

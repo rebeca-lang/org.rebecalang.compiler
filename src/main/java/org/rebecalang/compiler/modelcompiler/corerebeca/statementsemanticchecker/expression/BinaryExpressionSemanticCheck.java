@@ -39,6 +39,8 @@ public class BinaryExpressionSemanticCheck extends
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);
+		
 		BinaryExpression bExpression = (BinaryExpression) expression;
 		Pair<Type, Object> lType = 
 				expressionSemanticCheckContainer.check(bExpression.getLeft());

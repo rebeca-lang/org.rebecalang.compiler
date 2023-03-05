@@ -33,6 +33,8 @@ public class CastExpressionSemanticCheck extends AbstractExpressionSemanticCheck
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);
+		
 		CastExpression cExpression = (CastExpression) expression;
 		Pair<Type, Object> expressionType = 
 				expressionSemanticCheckContainer.check(cExpression.getExpression());
@@ -48,9 +50,7 @@ public class CastExpressionSemanticCheck extends AbstractExpressionSemanticCheck
 			cExpression.setType(castType);
 			returnValue.setFirst(cExpression.getType());
 			returnValue.setSecond(SemanticCheckerUtils.evaluateConstantTerm(
-					"(" + returnValue.getFirst().getTypeName() + ")",
-					returnValue.getFirst(), expressionType.getSecond(),
-					null));
+					null, null, expressionType.getSecond(), null));
 		} catch (CodeCompilationException cce) {
 			cExpression.setType(AbstractTypeSystem.UNKNOWN_TYPE);
 			returnValue.setFirst(cExpression.getType());

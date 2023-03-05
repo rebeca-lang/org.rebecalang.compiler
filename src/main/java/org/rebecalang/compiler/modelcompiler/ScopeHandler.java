@@ -38,17 +38,17 @@ public class ScopeHandler {
 
 	public void addVariableToCurrentScope(String variableName, Type type, Label label, 
 			int lineNumber, int column) throws ScopeException {
-		addVaribaleToCurrentScope(variableName, type, label, null, lineNumber, column);
+		addVaribaleToCurrentScope(variableName, type, label, lineNumber, column);
 	}
 		
-	public void addVaribaleToCurrentScope(String variableName, Type type, Label label, Object precompilationValue, 
+	public void addVaribaleToCurrentScope(String variableName, Type type, Label label, 
 			int lineNumber, int column) throws ScopeException {
 		VariableInScopeSpecifier info = null;
 		try {
 			info = retreiveVariableFromScope(variableName);
 		} catch (ScopeException se) {
 			VariableInScopeSpecifier data;
-				data = new VariableInScopeSpecifier(variableName, type, label, precompilationValue,
+				data = new VariableInScopeSpecifier(variableName, type, label,
 						lineNumber, column);
 			scopeStack.peek().getSecond().put(variableName, data);
 			return;
@@ -91,18 +91,16 @@ public class ScopeHandler {
 		private String name;
 		private Type type;
 		private Label label;
-		private Object precompilationValue;
 		private int lineNumber;
 		private int column;
 		
 		
-		public VariableInScopeSpecifier(String name, Type type, Label label,
-				Object precompilationValue, int lineNumber, int column) {
+		public VariableInScopeSpecifier(String name, Type type, Label label, 
+				int lineNumber, int column) {
 			super();
 			this.name = name;
 			this.type = type;
 			this.label = label;
-			this.precompilationValue = precompilationValue;
 			this.lineNumber = lineNumber;
 			this.column = column;
 		}
@@ -117,12 +115,6 @@ public class ScopeHandler {
 		}
 		public void setLabel(Label label) {
 			this.label = label;
-		}
-		public Object getPrecompilationValue() {
-			return precompilationValue;
-		}
-		public void setPrecompilationValue(Object precompilationValue) {
-			this.precompilationValue = precompilationValue;
 		}
 		public int getLineNumber() {
 			return lineNumber;

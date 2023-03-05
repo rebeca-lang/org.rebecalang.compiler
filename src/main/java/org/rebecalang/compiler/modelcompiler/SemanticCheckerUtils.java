@@ -4,15 +4,16 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.TypesUtilities;
+import org.springframework.expression.EvaluationException;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 
 public class SemanticCheckerUtils {
@@ -231,44 +232,31 @@ public class SemanticCheckerUtils {
 				lineNumber, column);
 	}
 
-//	public static Object evaluateConstantTerm(String operator, Type type,
-//			Object left, Object right) {
-//
-//    	String expression = "";
-//		if (right != null && left != null) {
-//			expression = "(" + left + ")" + operator + "(" + right + ");";
-//		} else if (left != null) {
-//			expression = operator + "(" + left.toString() + ");";
-//		}
-//		System.out.println(expression);
-//        return context.eval("js", expression);
-////		return null;
-//	}
-
 	
 	public static Object evaluateConstantTerm(String operator, Type type,
 			Object left, Object right) {
 
-		ScriptEngineManager mgr = new ScriptEngineManager();
-		ScriptEngine engine = mgr.getEngineByName("javascript");
-		String expression = "";
-		try {
-			Object value = null;
-			if (right != null && left != null) {
-				expression = "(" + left + ")" + operator + "(" + right + ")";
-			} else if (left != null) {
-				expression = operator + "(" + left.toString() + ")";
-			}
-//			System.out.println(expression);
-			value = engine.eval(expression);
-			return value;
-			
-		} catch (ScriptException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
-		}
-		return null;
+		if(left == AbstractExpressionSemanticCheck.NO_VALUE ||
+				right == AbstractExpressionSemanticCheck.NO_VALUE)
+			return AbstractExpressionSemanticCheck.NO_VALUE;
+		String expressionInString = "(" + left + ")";
+		if (operator != null)
+			expressionInString += operator + "(" + right + ")";
+		
+		ExpressionParser parser = new SpelExpressionParser();        
+        Expression exp = parser.parseExpression(expressionInString);
+        try {
+	        if(type == CoreRebecaTypeSystem.INT_TYPE)
+	        	return exp.getValue(Integer.class);
+	        if(type == CoreRebecaTypeSystem.SHORT_TYPE)
+	        	return exp.getValue(Short.class);
+	        if(type == CoreRebecaTypeSystem.BYTE_TYPE)
+	        	return exp.getValue(Byte.class);
+	        if(type == CoreRebecaTypeSystem.BOOLEAN_TYPE)
+	        	return exp.getValue(Boolean.class);
+        	return AbstractExpressionSemanticCheck.NO_VALUE; 	        
+        } catch (EvaluationException evaluationException) {
+        	return AbstractExpressionSemanticCheck.NO_VALUE; 
+        }			
 	}
-
-
 }

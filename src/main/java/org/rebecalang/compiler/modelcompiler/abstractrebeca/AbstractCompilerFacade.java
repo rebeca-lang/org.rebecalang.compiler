@@ -3,6 +3,7 @@ package org.rebecalang.compiler.modelcompiler.abstractrebeca;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStream;
@@ -12,6 +13,7 @@ import org.antlr.v4.runtime.Recognizer;
 import org.rebecalang.compiler.modelcompiler.ScopeHandler;
 import org.rebecalang.compiler.modelcompiler.SymbolTable;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CoreVersion;
@@ -118,6 +120,14 @@ public abstract class AbstractCompilerFacade {
 	protected abstract void addMethodsOfRebecaExtensionToSymbolTable();
 
 	protected abstract void addVariablesOfRebecaExtensionToScope();
+	
+	protected boolean annotationIsSatisfied(List<Annotation> annotations) {
+		if(annotations == null)
+			return true;
+		if(annotations.isEmpty())
+			return true;
+		return true;
+	}
 
 	public RebecaModel getRebecaModel() {
 		return rebecaModel;
