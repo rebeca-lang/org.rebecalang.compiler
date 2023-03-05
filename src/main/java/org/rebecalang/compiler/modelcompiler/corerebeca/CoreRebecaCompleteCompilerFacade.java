@@ -11,15 +11,14 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
-import org.rebecalang.compiler.modelcompiler.ScopeHandler;
 import org.rebecalang.compiler.modelcompiler.ScopeException;
+import org.rebecalang.compiler.modelcompiler.ScopeHandler;
+import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
+import org.rebecalang.compiler.modelcompiler.SymbolTableException;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractCompilerFacade;
-import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.SymbolTableInitializer;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.TypeSystemInitializer;
-import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
-import org.rebecalang.compiler.modelcompiler.SymbolTableException;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteParser;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation;
@@ -67,6 +66,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.NondetExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.PlusSubExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.PrimaryTermExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.RebecInstantiationExpressionDummySemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.RebecInstantiationExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.TernaryExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.UnaryExpressionSemanticCheck;
@@ -238,19 +238,8 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 							typeSystem));
 		} else {
 			expressionSemanticCheckContainer.registerSemanticsChecker(RebecInstantiationPrimary.class,
-					new AbstractExpressionSemanticCheck() {
-
-						@Override
-						public Pair<Type, Object> check(Expression expression, Type baseType) {
-							CodeCompilationException cee = new CodeCompilationException(
-									"Rebeca core 2.2 and upper support dynamic actor creation",
-									expression.getLineNumber(), expression.getCharacter());
-							CoreRebecaCompleteCompilerFacade.this.exceptionContainer.addException(cee);
-							Pair<Type, Object> returnValue = new Pair<Type, Object>();
-							returnValue.setFirst(expression.getType());
-							return returnValue;
-						}
-					});
+					appContext.getBean(RebecInstantiationExpressionDummySemanticCheck.class, 
+							typeSystem));
 		}
 	}
 
@@ -639,7 +628,8 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		return reactiveClasses;
 	}
 
-	private String createCheckMainBindingsExceptionMessage(List<FieldDeclaration> knownRebecs, List<Type> bindings,
+	private String createCheckMainBindingsExceptionMessage(
+			List<FieldDeclaration> knownRebecs, List<Type> bindings,
 			String reactiveClassName) {
 		String expected = "", actual = "";
 

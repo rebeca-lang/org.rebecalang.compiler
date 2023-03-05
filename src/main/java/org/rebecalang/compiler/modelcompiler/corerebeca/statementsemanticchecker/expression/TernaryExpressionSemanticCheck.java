@@ -27,6 +27,8 @@ public class TernaryExpressionSemanticCheck extends AbstractExpressionSemanticCh
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);
+		
 		TernaryExpression tExpression = (TernaryExpression) expression;
 		Pair<Type, Object> lType = 
 				expressionSemanticCheckContainer.check(tExpression.getLeft());

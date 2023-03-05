@@ -29,6 +29,8 @@ public class PlusSubExpressionSemanticCheck extends AbstractExpressionSemanticCh
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);
+		
 		PlusSubExpression pspExpression = (PlusSubExpression) expression;
 		Pair<Type, Object> result = expressionSemanticCheckContainer.check(pspExpression.getValue());
 		Type type = result.getFirst();

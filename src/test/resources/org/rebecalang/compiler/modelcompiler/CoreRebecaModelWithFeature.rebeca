@@ -30,19 +30,19 @@ reactiveclass ComputationUnit(3) {
 	statevars {
 		int receivedDataItems;
 		Network network;
-		@feature("FT_DELAYED_PUSH")
+		@features("FT_DELAYED_PUSH")
 		int[4] buffer;
-		@feature("FT_DELAYED_PUSH")
+		@features("FT_DELAYED_PUSH")
 		int index;
 	}
 	
 	ComputationUnit(Network network1) {
 		receivedDataItems = 0;
 		network = network1;
-		@feature("FT_IMMEDIATE_PUSH")
+		@features("FT_IMMEDIATE_PUSH")
 		for(int cnt = 0; cnt < 4; cnt++)
 			buffer[cnt] = 0;
-		@feature("FT_DELAYED_PUSH")
+		@features("FT_DELAYED_PUSH")
 		self.process;
 	}
 
@@ -54,17 +54,17 @@ reactiveclass ComputationUnit(3) {
 		}
 	}
 
-	@feature("FT_IMMEDIATE_PUSH")
+	@features(FT_IMMEDIATE_PUSH)
 	msgsrv receiveData(byte data) {
 		packAndSend(data);
 	}
 	
-	@feature("FT_DELAYED_PUSH")
+	@features(FT_DELAYED_PUSH)
 	msgsrv receiveData(byte data) {
 		buffer[index++] = data;
 	}
 	
-	@feature("FT_DELAYED_PUSH")
+	@features(FT_DELAYED_PUSH)
 	msgsrv process() {
 		if(index > 0) {
 			packAndSend(buffer[index--]);
@@ -92,8 +92,8 @@ reactiveclass TDMANetwork implements Network (3) {
 main {
 	Sensor sensor():(cu);
 	ComputationUnit cu():(network);
-	@feature("FT_SIMPLE_NETWORK")
+	@features("FT_SIMPLE_NETWORK")
 	MACBNetwork network():();
-	@feature("FT_TDMA_NETWORK")
+	@features("FT_TDMA_NETWORK")
 	TDMANetwork network():();
 }

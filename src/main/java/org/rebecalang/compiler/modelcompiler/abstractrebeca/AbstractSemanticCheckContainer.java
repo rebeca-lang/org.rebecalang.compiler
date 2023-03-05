@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public abstract class AbstractSemanticCheckContainer {
 	
 	protected Hashtable<Class<? extends Statement>, AbstractSemanticCheck> semanticsCheckersRepository;
-	
+		
 	public AbstractSemanticCheckContainer() {
 		semanticsCheckersRepository = new Hashtable<Class<? extends Statement>, AbstractSemanticCheck>();
 	}

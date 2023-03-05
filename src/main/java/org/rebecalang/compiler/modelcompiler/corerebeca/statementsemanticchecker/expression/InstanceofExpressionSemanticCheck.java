@@ -35,7 +35,9 @@ public class InstanceofExpressionSemanticCheck extends AbstractExpressionSemanti
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);		
 		returnValue.setFirst(CoreRebecaTypeSystem.BOOLEAN_TYPE);
+		
 		InstanceofExpression ioExpression = (InstanceofExpression) expression;
 		Pair<Type, Object> valueType = 
 				expressionSemanticCheckContainer.check(ioExpression.getValue());

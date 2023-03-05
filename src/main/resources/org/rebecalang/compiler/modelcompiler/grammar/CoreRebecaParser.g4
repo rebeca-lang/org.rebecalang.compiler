@@ -327,7 +327,11 @@ formalParameterDeclaration returns [FormalParameterDeclaration fpd]
 block returns [BlockStatement bs]
     :   {$bs = new BlockStatement();}
         LBRACE {$bs.setLineNumber($LBRACE.getLine());$bs.setCharacter($LBRACE.getCharPositionInLine());}
-        (s = statement {$bs.getStatements().add ($s.s);})*
+    	(
+    		{ArrayList<Annotation> anns = new ArrayList<Annotation>();}
+    		(an = annotation {anns.add($an.an);})*
+        	s = statement {$bs.getStatements().add ($s.s); $s.s.getAnnotations().addAll(anns);}
+        )*
         RBRACE {$bs.setEndLineNumber($RBRACE.getLine());$bs.setEndCharacter($RBRACE.getCharPositionInLine());}
     ;
 

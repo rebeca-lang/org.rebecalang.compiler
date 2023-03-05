@@ -29,6 +29,6 @@ public class BlockStatementSemanticCheck extends AbstractStatementSemanticCheck 
 		for (Statement stat : blockStatement.getStatements()) {
 			statementSemanticCheckContainer.check(stat);
 		}
-		scopeHandler.popScopeRecord();;
+		scopeHandler.popScopeRecord();
 	}
 }

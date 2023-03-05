@@ -30,6 +30,7 @@ public class UnaryExpressionSemanticCheck extends AbstractExpressionSemanticChec
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);
 		
 		UnaryExpression uExpression = (UnaryExpression) expression;
 		Pair<Type, Object> type = 

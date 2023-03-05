@@ -3,6 +3,7 @@ package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecke
 import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.SemanticCheckerUtils;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression;
@@ -28,6 +29,8 @@ public class NondetExpressionSemanticCheck extends AbstractExpressionSemanticChe
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
 		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);
+		
 		NonDetExpression ndExpression = (NonDetExpression) expression;
 		// The type of the first element of the non-det expression is set as
 		// the first candidate for the result type
@@ -41,7 +44,7 @@ public class NondetExpressionSemanticCheck extends AbstractExpressionSemanticChe
 				type = (type == null ? ndTerm.getFirst() : 
 					SemanticCheckerUtils.getCommonSuperType(type,
 								ndTerm.getFirst()));
-				if (ndTerm.getSecond() == null) {
+				if (ndTerm.getSecond() == AbstractSemanticCheck.NO_VALUE) {
 					CodeCompilationException cce = new CodeCompilationException(
 							"Non-deterministic terms must be constant expressions",
 							0, 0);

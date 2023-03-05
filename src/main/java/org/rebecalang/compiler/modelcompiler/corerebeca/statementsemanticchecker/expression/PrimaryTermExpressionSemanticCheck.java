@@ -48,11 +48,13 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
-		Pair<Type, Object> returnValue = new Pair<Type, Object>(AbstractTypeSystem.UNKNOWN_TYPE, null);
+		Pair<Type, Object> returnValue = new Pair<Type, Object>(
+				AbstractTypeSystem.UNKNOWN_TYPE, AbstractExpressionSemanticCheck.NO_VALUE);
+		
 		TermPrimary termPrimary = (TermPrimary) expression;
 		String termName = termPrimary.getName();
 		try {
-			if (termPrimary.getParentSuffixPrimary() == null) {
+			if (!isFunctionCall(termPrimary)) {
 				// The term specifies access to a variable
 				if (baseType == AbstractTypeSystem.NO_TYPE) {
 
@@ -61,8 +63,6 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 					termPrimary.setLabel(variableInScopeSpecifier.getLabel());
 					returnValue.setFirst(variableInScopeSpecifier.getType());
 					termPrimary.setType(variableInScopeSpecifier.getType());
-					Object value = variableInScopeSpecifier.getPrecompilationValue();
-					returnValue.setSecond(value);
 				} else {
 					Type symbolType = symbolTable.getSymbolType(baseType, termName);
 					if (symbolType == null) {
@@ -175,6 +175,10 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 		}
 
 		return returnValue;
+	}
+
+	protected boolean isFunctionCall(TermPrimary termPrimary) {
+		return termPrimary.getParentSuffixPrimary() != null;
 	}
 
 

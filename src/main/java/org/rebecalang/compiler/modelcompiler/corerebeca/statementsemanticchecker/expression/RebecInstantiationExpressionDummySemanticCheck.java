@@ -1,9 +1,9 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression;
 
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimaryExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
@@ -14,37 +14,30 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RebecInstantiationExpressionSemanticCheck extends AbstractExpressionSemanticCheck {
+public class RebecInstantiationExpressionDummySemanticCheck extends AbstractExpressionSemanticCheck {
 
 	AbstractTypeSystem typeSystem;
 
 	@Autowired
-	public RebecInstantiationExpressionSemanticCheck(AbstractTypeSystem typeSystem) {
+	public RebecInstantiationExpressionDummySemanticCheck(AbstractTypeSystem typeSystem) {
 		super();
 		this.typeSystem = typeSystem;
 	}
 	
 	@Override
 	public Pair<Type, Object> check(Expression expression, Type baseType) {
-		PrimaryExpression pExpression = (PrimaryExpression) expression;
-		Pair<Type, Object> returnValue = new Pair<Type, Object>();
-		returnValue.setSecond(AbstractExpressionSemanticCheck.NO_VALUE);
-		
-		try {
-			pExpression.setType(typeSystem.getType(pExpression.getType()));
-		} catch (CodeCompilationException cce) {
-			cce.setColumn(pExpression.getCharacter());
-			cce.setLine(pExpression.getLineNumber());
-			exceptionContainer.addException(cce);
-		}
 		CodeCompilationException cee = new CodeCompilationException(
-				"No semantic check rule is applied on the instatiation of actor(s)", 
-				pExpression.getLineNumber(), pExpression.getCharacter());
-		exceptionContainer.addWarning(cee);
+				"Rebeca core 2.2 and upper support dynamic actor creation",
+				expression.getLineNumber(), expression.getCharacter());
+		exceptionContainer.addException(cee);
+		Pair<Type, Object> returnValue = new Pair<Type, Object>();
+		try {
+			returnValue.setFirst(typeSystem.getType(expression.getType().getTypeName()));
+		} catch (CodeCompilationException e) {
+			returnValue.setFirst(AbstractTypeSystem.NO_TYPE);
+		}
+		returnValue.setSecond(AbstractSemanticCheck.NO_VALUE);
 		
-		//TODO check semantic check
-
-		returnValue.setFirst(pExpression.getType());
 		return returnValue;
 	}
 }

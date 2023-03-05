@@ -17,4 +17,6 @@ public abstract class AbstractSemanticCheck {
 	@Autowired
 	protected SymbolTable symbolTable;
 
+	public final static Object NO_VALUE = new Object();
+
 }
