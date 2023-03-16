@@ -1,0 +1,29 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:corerebecaexp="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression" >
+
+	<xs:import namespace="http://rebecalang.org/compiler/modelcompiler/probabilisticrebecaexpression"
+		schemaLocation="probabilisticrebecaexpressionobjectmodel.xsd"/>
+	<xs:import namespace="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression"
+		schemaLocation="corerebecaexpressionobjectmodel.xsd"/>
+
+	<xs:complexType name="PAltStatement">
+		<xs:complexContent>
+			<xs:extension base="corerebecaexp:Statement">
+                <xs:sequence>
+                    <xs:element name="pAltStatementGroups" type="PAltStatementGroup" maxOccurs="unbounded" minOccurs="1"/>
+                </xs:sequence>
+    		</xs:extension>
+    	</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="PAltStatementGroup">
+		<xs:sequence>
+			<xs:element name="expression" type="corerebecaexp:Expression"/>
+			<xs:element name="statements" type="corerebecaexp:Statement" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="lineNumber" type="xs:int"/>
+		<xs:attribute name="character" type="xs:int"/>
+	</xs:complexType>
+
+</xs:schema>

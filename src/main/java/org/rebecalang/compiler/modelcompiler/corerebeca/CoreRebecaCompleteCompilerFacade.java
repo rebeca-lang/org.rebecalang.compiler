@@ -1,11 +1,6 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -21,43 +16,7 @@ import org.rebecalang.compiler.modelcompiler.abstractrebeca.SymbolTableInitializ
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.TypeSystemInitializer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteParser;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BlockStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BreakStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConditionalStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ContinueStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InterfaceDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MainRebecDefinition;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MethodDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PlusSubExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReturnStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SwitchStatement;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TernaryExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.UnaryExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStatement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.BinaryExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.CastExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.DotPrimaryExpressionSemanticCheck;
@@ -99,7 +58,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 	
 	public static final String PRIORITY_LABEL = "Priority";
 	public static final String GLOBAL_PRIORITY_LABEL = "GlobalPriority";
-	
+
 	public CoreRebecaCompleteCompilerFacade(@Qualifier("CORE_REBECA") TypeSystemInitializer typeSystemInitializer,
 			@Qualifier("CORE_REBECA") SymbolTableInitializer symbolTableInitializer) {
 		super(typeSystemInitializer, symbolTableInitializer);
@@ -265,6 +224,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		semanticCheckMainBindings(rebecaModel);
 
 		scopeHandler.popScopeRecord();
+
 	}
 
 	protected void semanticCheckReactiveClassDeclarations() {
@@ -380,7 +340,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		}
 		while (!extendStack.isEmpty()) {
 			addIntraReactiveClassVariablesToScope(extendStack.pop());
-		}
+	}
 	}
 
 	private void semanticCheckOfMethod(String reactiveClassName, MethodDeclaration md, Label label) {
@@ -555,7 +515,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 			}
 
 			ReactiveClassDeclaration rcd = reactiveClasses.get(mrd.getType().getTypeName());
-			List<FieldDeclaration> knownRebecs = rcd.getKnownRebecs();
+			List<FieldDeclaration> knownRebecs = getKnownRebecs(rcd);
 			List<Type> exprectedTypes = new LinkedList<Type>();
 			for (FieldDeclaration fd : knownRebecs) {
 				for (int variableCounter = 0; variableCounter < fd.getVariableDeclarators().size(); variableCounter++) {
@@ -606,6 +566,29 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 			}
 		}
 		scopeHandler.popScopeRecord();
+	}
+
+	private ArrayList<FieldDeclaration> getKnownRebecs(ReactiveClassDeclaration lastRebec){
+		ArrayList<ReactiveClassDeclaration> rebecsSeries = new ArrayList<>();
+		ArrayList<FieldDeclaration> knownRebecs = new ArrayList<>();
+		ReactiveClassDeclaration curRebec = lastRebec;
+
+		while (curRebec.getExtends() != null) {
+			rebecsSeries.add(curRebec);
+			try {
+				curRebec = (ReactiveClassDeclaration) curRebec.getExtends().getTypeSystem().getMetaData(curRebec.getExtends());
+			} catch (CodeCompilationException e) {
+				e.printStackTrace();
+			}
+		}
+		rebecsSeries.add(curRebec);
+		Collections.reverse(rebecsSeries);
+		for (ReactiveClassDeclaration rebec: rebecsSeries) {
+			for (FieldDeclaration curRebecKnownRebec: rebec.getKnownRebecs()) {
+				knownRebecs.add(curRebecKnownRebec);
+			}
+		}
+		return knownRebecs;
 	}
 
 	protected void checkPriorityAnnotations(List<Annotation> annotations) {

@@ -1,0 +1,137 @@
+
+reactiveclass Philosopher(3)
+{
+	knownrebecs
+	{
+		Fork forkL;
+		Fork forkR;
+	}
+	statevars
+	{
+		boolean eating;
+		boolean fL;
+		boolean fR;
+	}
+	msgsrv initial()
+	{
+		fL = false;
+		fR = false;
+		eating = false;
+		self.arrive();
+	}
+
+	msgsrv arrive()
+	{
+		forkL.request();
+	}
+
+	msgsrv permit()
+	{
+		if (sender == forkL) {
+			if (!fL) {
+				fL = true;
+				forkR.request();
+			}
+		}
+		else {
+			if (fL && !(fR)) {
+				fR = true;
+				self.eat();
+			}
+			/* else discard the message */
+		}
+	}
+
+	msgsrv eat()
+	{
+		eating = true;
+		self.leave();
+	}
+
+	msgsrv leave()
+	{
+		fL = false;
+		fR = false;
+		eating = false;
+		forkL.release();
+		forkR.release();
+		self.arrive();
+	}
+}
+
+reactiveclass Fork(3)
+{
+	knownrebecs
+	{
+		Philosopher philL;
+		Philosopher philR;
+	}
+	statevars
+	{
+		boolean lAssign;	
+		boolean rAssign;	
+		boolean leftReq;
+		boolean rightReq;
+	}
+	msgsrv initial()
+	{ 
+		lAssign = false;
+		rAssign = false;
+		leftReq = false;
+		rightReq = false;
+	}
+
+	msgsrv request()
+	{
+		if (sender == philL) {
+			if (!leftReq) {
+				leftReq = true;
+				if (!rAssign) {
+					lAssign = true;
+					philL.permit();
+				}
+			} 
+			/* else discard message */
+		}
+		else {
+			if (!rightReq) {
+				rightReq = true;
+				if (!lAssign) {
+					rAssign = true;
+					philR.permit();
+				}
+			}
+			/* else discard message */
+		}
+	}
+	msgsrv release()
+	{
+		if (sender == philL && lAssign){
+			leftReq = false;
+			lAssign = false;
+			if (rightReq) {
+				rAssign=true;
+				philR.permit();
+			}
+		}
+		if (sender == philR && rAssign){
+			rAssign = false;
+			rightReq = false;
+			if (leftReq) {
+				lAssign=true;
+				philL.permit();
+			}
+		}
+	}
+}
+
+main
+{
+       Philosopher phil0(fork0, fork2):();
+       Philosopher phil1(fork0, fork1):();
+       Philosopher phil2(fork1, fork2):();
+
+       Fork fork0(phil0, phil1):();
+       Fork fork1(phil1, phil2):();
+       Fork fork2(phil2, phil0):();
+}

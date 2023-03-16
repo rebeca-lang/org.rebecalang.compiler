@@ -1,0 +1,14 @@
+property {
+	define {
+		pl1 = b.bl && (a.c + a.d < b.c[2]);
+		pl2 = a.c < a.d || b.d[1] >= b.c[0];
+		pl3 = b.bl && b.bl;
+		pl4 = a.c;
+	}
+	
+	Assertion {
+		l1 : pl1 && !pl2 || pl3;
+		l1 : pl4;
+		l2 : pl4;
+	}
+}

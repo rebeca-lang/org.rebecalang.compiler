@@ -1,0 +1,172 @@
+<jxb:bindings xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:jxb="http://java.sun.com/xml/ns/jaxb" version="2.1">
+
+	<jxb:bindings schemaLocation="corerebecaexpressionobjectmodel.xsd">
+		<jxb:bindings node="//xs:complexType[@name='DotPrimary']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Expression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ArrayType']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='BinaryExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='CastExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Literal']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='NonDetExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='OrdinaryPrimitiveType']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='PlusSubExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PlusSubExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='PrimaryExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimaryExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ParentSuffixPrimary']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ParentSuffixPrimary" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Statement']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='TermPrimary']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='TernaryExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TernaryExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='UnaryExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.UnaryExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Type']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Annotation']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='GenericType']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericType" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='GenericTypeInstance']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='InstanceofExpression']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='Label']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Label" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='RebecInstantiationPrimary']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary" />
+		</jxb:bindings>
+	</jxb:bindings>
+	<jxb:bindings schemaLocation="corerebecaobjectmodel.xsd">
+		<jxb:bindings node="//xs:complexType[@name='AccessModifier']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.AccessModifier" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ArrayVariableInitializer']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayVariableInitializer" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='BaseClassDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='BlockStatement']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BlockStatement" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='BreakStatement']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BreakStatement" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ConditionalStatement']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConditionalStatement" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ConstructorDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConstructorDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ContinueStatement']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ContinueStatement" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='FieldDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:element[@name='ForInitializer']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForInitializer" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ForStatement']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForStatement" />
+		</jxb:bindings>
+
+		<jxb:bindings node="//xs:complexType[@name='FormalParameterDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:element[@name='ImportDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ImportDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='InterfaceDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InterfaceDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:element[@name='MainDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MainDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:element[@name='MainRebecDefinition']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MainRebecDefinition" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='MethodDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MethodDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='MsgsrvDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MsgsrvDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='OrdinaryVariableInitializer']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryVariableInitializer" />
+		</jxb:bindings>
+
+		<jxb:bindings node="//xs:element[@name='PackageDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PackageDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ReactiveClassDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='RebecaCode']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaCode" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:element[@name='RebecaModel']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:element[@name='RecordContent']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RecordContent" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:element[@name='RecordDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RecordDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='ReturnStatement']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReturnStatement" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='SwitchStatement']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SwitchStatement" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='SwitchStatementGroup']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SwitchStatementGroup" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='SynchMethodDeclaration']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='VariableDeclarator']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='VariableInitializer']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableInitializer" />
+		</jxb:bindings>
+		<jxb:bindings node="//xs:complexType[@name='WhileStatement']">
+			<jxb:class ref="org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStatement" />
+		</jxb:bindings>
+	</jxb:bindings>
+</jxb:bindings>

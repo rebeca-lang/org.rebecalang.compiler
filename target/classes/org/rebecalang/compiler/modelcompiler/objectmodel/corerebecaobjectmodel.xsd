@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified"
+	targetNamespace="http://rebecalang.org/compiler/modelcompiler/corerebeca"
+	xmlns="http://rebecalang.org/compiler/modelcompiler/corerebeca"
+	xmlns:exp="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression">
+	<xs:import
+		namespace="http://rebecalang.org/compiler/modelcompiler/corerebecaexpression"
+		schemaLocation="corerebecaexpressionobjectmodel.xsd" />
+
+	<xs:element name="RebecaModel">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="PackageDeclaration" maxOccurs="1"
+					minOccurs="0" />
+				<xs:element ref="ImportDeclaration" maxOccurs="unbounded"
+					minOccurs="0" />
+				<xs:element type="RebecaCode" name="RebecaCode" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="PackageDeclaration">
+		<xs:complexType>
+			<xs:attribute name="path" type="xs:string" />
+			<xs:attribute name="lineNumber" type="xs:int" />
+			<xs:attribute name="character" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="ImportDeclaration">
+		<xs:complexType>
+			<xs:attribute name="path" type="xs:string" />
+			<xs:attribute name="lineNumber" type="xs:int" />
+			<xs:attribute name="character" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:complexType name="RebecaCode">
+		<xs:sequence>
+			<xs:element ref="RecordDeclaration" maxOccurs="unbounded"
+				minOccurs="0" />
+			<xs:element name="globalVariables" type="FieldDeclaration"
+				maxOccurs="unbounded" minOccurs="0" />
+			<xs:element name="environmentVariables"
+				type="FieldDeclaration" maxOccurs="unbounded" minOccurs="0" />
+			<xs:element name="reactiveClassDeclaration"
+				type="ReactiveClassDeclaration" maxOccurs="unbounded" minOccurs="0" />
+			<xs:element name="interfaceDeclaration"
+				type="InterfaceDeclaration" maxOccurs="unbounded" minOccurs="0" />
+			<xs:element ref="MainDeclaration" />
+		</xs:sequence>
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
+	</xs:complexType>
+
+	<xs:element name="RecordDeclaration">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="RecordContent" maxOccurs="unbounded"
+					minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="lineNumber" type="xs:int" />
+			<xs:attribute name="character" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="RecordContent">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="type" type="exp:Type" />
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="lineNumber" type="xs:int" />
+			<xs:attribute name="character" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="MainDeclaration">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="MainRebecDefinition"
+					maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="lineNumber" type="xs:int" />
+			<xs:attribute name="character" type="xs:int" />
+			<xs:attribute name="endLineNumber" type="xs:int" />
+			<xs:attribute name="endCharacter" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="MainRebecDefinition">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="annotations" type="exp:Annotation"
+					maxOccurs="unbounded" minOccurs="0" />
+				<xs:element name="bindings" type="exp:Expression"
+					maxOccurs="unbounded" minOccurs="0" />
+				<xs:element name="arguments" type="exp:Expression"
+					maxOccurs="unbounded" minOccurs="0" />
+				<xs:element name="type" type="exp:Type" />
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="lineNumber" type="xs:int" />
+			<xs:attribute name="character" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="BaseClassDeclaration">
+		<xs:sequence>
+			<xs:element name="msgsrvs" type="MsgsrvDeclaration"
+				maxOccurs="unbounded" minOccurs="0" />
+			<xs:element name="synchMethods"
+				type="SynchMethodDeclaration" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="annotations" type="exp:Annotation"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
+		<xs:attribute name="endLineNumber" type="xs:int" />
+		<xs:attribute name="endCharacter" type="xs:int" />
+	</xs:complexType>
+
+	<xs:complexType name="InterfaceDeclaration">
+		<xs:complexContent>
+			<xs:extension base="BaseClassDeclaration">
+				<xs:sequence>
+					<xs:element name="extends" type="exp:Type" minOccurs="0"
+						maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ReactiveClassDeclaration">
+		<xs:complexContent>
+			<xs:extension base="BaseClassDeclaration">
+				<xs:sequence>
+					<xs:element name="knownRebecs" type="FieldDeclaration"
+						maxOccurs="unbounded" minOccurs="0" />
+					<xs:element name="statevars" type="FieldDeclaration"
+						maxOccurs="unbounded" minOccurs="0" />
+					<xs:element name="constructors"
+						type="ConstructorDeclaration" maxOccurs="unbounded" minOccurs="0" />
+					<xs:element name="extends" type="exp:Type" minOccurs="0"
+						maxOccurs="1" />
+					<xs:element name="implements" type="exp:Type"
+						minOccurs="0" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="queueSize" type="xs:int" />
+				<xs:attribute name="abstract" type="xs:boolean"
+					default="false" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="FormalParameterDeclaration">
+		<xs:sequence>
+			<xs:element name="type" type="exp:Type" />
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
+	</xs:complexType>
+
+	<xs:complexType name="MethodDeclaration">
+		<xs:sequence>
+			<xs:element name="formalParameters"
+				type="FormalParameterDeclaration" maxOccurs="unbounded"
+				minOccurs="0" />
+			<xs:element name="block" type="BlockStatement" />
+			<xs:element name="accessModifier" type="AccessModifier" />
+			<xs:element name="annotations" type="exp:Annotation"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="abstract" type="xs:boolean"
+			default="false" />
+		<xs:attribute name="name" type="xs:string" />
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
+		<xs:attribute name="endLineNumber" type="xs:int" />
+		<xs:attribute name="endCharacter" type="xs:int" />
+	</xs:complexType>
+
+	<xs:complexType name="ConstructorDeclaration">
+		<xs:complexContent>
+			<xs:extension base="MethodDeclaration">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="MsgsrvDeclaration">
+		<xs:complexContent>
+			<xs:extension base="MethodDeclaration">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SynchMethodDeclaration">
+		<xs:complexContent>
+			<xs:extension base="MethodDeclaration">
+				<xs:sequence>
+					<xs:element name="returnType" type="exp:Type" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<!--Statements -->
+
+
+	<xs:complexType name="BlockStatement">
+		<xs:complexContent>
+			<xs:extension base="exp:Statement">
+				<xs:sequence>
+					<xs:element name="statements" type="exp:Statement"
+						maxOccurs="unbounded" minOccurs="0" />
+				</xs:sequence>
+				<xs:attribute name="endLineNumber" type="xs:int" />
+				<xs:attribute name="endCharacter" type="xs:int" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ConditionalStatement">
+		<xs:complexContent>
+			<xs:extension base="exp:Statement">
+				<xs:sequence>
+					<xs:element name="condition" type="exp:Expression" />
+					<xs:element name="statement" type="exp:Statement" />
+					<xs:element name="elseStatement" type="exp:Statement" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="WhileStatement">
+		<xs:complexContent>
+			<xs:extension base="exp:Statement">
+				<xs:sequence>
+					<xs:element name="condition" type="exp:Expression" />
+					<xs:element name="statement" type="exp:Statement" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ForStatement">
+		<xs:complexContent>
+			<xs:extension base="exp:Statement">
+				<xs:sequence>
+					<xs:element ref="ForInitializer" />
+					<xs:element name="condition" type="exp:Expression" />
+					<xs:element name="forIncrement" type="exp:Expression"
+						maxOccurs="unbounded" minOccurs="0" />
+					<xs:element name="statement" type="exp:Statement" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="ForInitializer">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element name="fieldDeclaration"
+					type="FieldDeclaration" />
+				<xs:element name="expressions" type="exp:Expression"
+					maxOccurs="unbounded" minOccurs="0" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="ReturnStatement">
+		<xs:complexContent>
+			<xs:extension base="exp:Statement">
+				<xs:sequence>
+					<xs:element name="expression" type="exp:Expression" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ContinueStatement">
+		<xs:complexContent>
+			<xs:extension base="exp:Statement">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="BreakStatement">
+		<xs:complexContent>
+			<xs:extension base="exp:Statement">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SwitchStatement">
+		<xs:complexContent>
+			<xs:extension base="exp:Statement">
+				<xs:sequence>
+					<xs:element name="expression" type="exp:Expression" />
+					<xs:element name="switchStatementGroups"
+						type="SwitchStatementGroup" maxOccurs="unbounded" minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="SwitchStatementGroup">
+		<xs:sequence>
+			<xs:element name="expression" type="exp:Expression" />
+			<xs:element name="statements" type="exp:Statement"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
+	</xs:complexType>
+
+	<xs:complexType name="FieldDeclaration">
+		<xs:complexContent>
+			<xs:extension base="exp:Statement">
+				<xs:sequence>
+					<xs:element name="variableDeclarators"
+						type="VariableDeclarator" maxOccurs="unbounded" minOccurs="0" />
+					<xs:element name="type" type="exp:Type" />
+					<xs:element name="accessModifier" type="AccessModifier" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="VariableDeclarator">
+		<xs:sequence>
+			<xs:element name="variableName" type="xs:string" />
+			<xs:element name="variableInitializer"
+				type="VariableInitializer" />
+		</xs:sequence>
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
+	</xs:complexType>
+
+	<xs:complexType name="VariableInitializer">
+		<xs:sequence>
+			<xs:element name="type" type="exp:Type" />
+		</xs:sequence>
+		<xs:attribute name="lineNumber" type="xs:int" />
+		<xs:attribute name="character" type="xs:int" />
+	</xs:complexType>
+
+	<xs:complexType name="OrdinaryVariableInitializer">
+		<xs:complexContent>
+			<xs:extension base="VariableInitializer">
+				<xs:sequence>
+					<xs:element name="value" type="exp:Expression" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ArrayVariableInitializer">
+		<xs:complexContent>
+			<xs:extension base="VariableInitializer">
+				<xs:sequence>
+					<xs:element name="values" type="VariableInitializer"
+						maxOccurs="unbounded" minOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="AccessModifier">
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+
+
+</xs:schema>

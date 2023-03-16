@@ -1,0 +1,35 @@
+
+reactiveclass A (3) {
+	knownrebecs {
+		B bb;
+	}
+	
+	statevars {
+		Timer t;
+	}
+	A() {
+	}
+	
+	msgsrv m2() {
+		startTimer(t);
+		stopTimer(t);
+		int v = getTimerValue(t);
+		bb.m(self, 2) after(v = 4) deadline (3 + 9);
+	}
+}
+
+reactiveclass B (3) {
+	statevars {
+	}
+	B() {
+	}
+	
+	msgsrv m(A param1, int param2) {
+		int value = now + currentMessageArrival + currentMessageDeadline + currentMessageWaitingTime;
+	}
+}
+
+main {
+	A a(b):();
+	B b():();
+}

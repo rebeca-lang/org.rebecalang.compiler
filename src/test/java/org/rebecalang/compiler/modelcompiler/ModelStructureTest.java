@@ -144,6 +144,18 @@ public class ModelStructureTest {
 
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
+
+	@Test
+	public void SimpleTest() {
+		File model = new File(MODEL_FILES_BASE + "simpleTest.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_3);
+
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
+	}
 	
 	@Test
 	public void GIVEN_CoreRebecaModelWithInheritance_WHEN_CoreIs2_3_THEN_NoError() {
