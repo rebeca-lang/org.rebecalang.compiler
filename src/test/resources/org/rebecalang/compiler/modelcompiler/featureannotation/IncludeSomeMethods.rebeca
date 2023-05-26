@@ -1,0 +1,40 @@
+feature INCLUDED;
+
+
+
+reactiveclass A(2) {
+
+	@features(false)
+	A(int a) {
+		self.m4();
+	}
+
+	msgsrv m1() {
+		self.m2();
+		m3();
+	}
+
+	@features(!INCLUDED)
+	msgsrv m1() {
+		int a = false;
+	}
+
+	@features(INCLUDED)
+	msgsrv m2() {
+
+	}
+
+	@features(!INCLUDED || true)
+	int m3() {
+		return 10;
+	}
+	@features(!INCLUDED && false)
+	int m3() {
+		return 10;
+	}
+	
+}
+
+main {
+	
+}

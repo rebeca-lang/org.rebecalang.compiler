@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
     "knownRebecs",
     "statevars",
     "constructors",
+    "synchMethods",
     "_extends",
     "_implements"
 })
@@ -57,6 +58,7 @@ public class ReactiveClassDeclaration
     protected List<FieldDeclaration> knownRebecs;
     protected List<FieldDeclaration> statevars;
     protected List<ConstructorDeclaration> constructors;
+    protected List<SynchMethodDeclaration> synchMethods;
     @XmlElement(name = "extends")
     protected Type _extends;
     @XmlElement(name = "implements")
@@ -153,6 +155,34 @@ public class ReactiveClassDeclaration
         return this.constructors;
     }
 
+    /**
+     * Gets the value of the synchMethods property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the synchMethods property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getSynchMethods().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link SynchMethodDeclaration }
+     * 
+     * 
+     */
+    public List<SynchMethodDeclaration> getSynchMethods() {
+        if (synchMethods == null) {
+            synchMethods = new ArrayList<SynchMethodDeclaration>();
+        }
+        return this.synchMethods;
+    }
     /**
      * Gets the value of the extends property.
      * 

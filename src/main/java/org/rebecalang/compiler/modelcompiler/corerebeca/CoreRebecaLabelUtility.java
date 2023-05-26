@@ -16,6 +16,7 @@ public class CoreRebecaLabelUtility {
 
 	
 	public final static Label ENVIRONMENT_VARIABLE;
+	public final static Label FEATURE_VARIABLE;
 	public final static Label STATE_VARIABLE;
 	public final static Label METHOD_PARAMETER_VARIABLE;
 	public final static Label LOCAL_VARIABLE;
@@ -47,6 +48,8 @@ public class CoreRebecaLabelUtility {
 
 		ENVIRONMENT_VARIABLE = new Label();
 		ENVIRONMENT_VARIABLE.setName("environment-variable");
+		FEATURE_VARIABLE = new Label();
+		FEATURE_VARIABLE.setName("feature-variable");
 		STATE_VARIABLE = new Label();
 		STATE_VARIABLE.setName("state-variable");
 		METHOD_PARAMETER_VARIABLE = new Label();

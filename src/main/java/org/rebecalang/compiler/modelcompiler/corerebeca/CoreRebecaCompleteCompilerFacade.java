@@ -102,7 +102,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 	
 	public CoreRebecaCompleteCompilerFacade(@Qualifier("CORE_REBECA") TypeSystemInitializer typeSystemInitializer,
 			@Qualifier("CORE_REBECA") SymbolTableInitializer symbolTableInitializer) {
-		super(typeSystemInitializer, symbolTableInitializer);
+		super(typeSystemInitializer, symbolTableInitializer);		
 	}
 
 	public final static String OWNER_REACTIVE_CLASS_KEY = "$owner$";
@@ -156,6 +156,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 				CoreRebecaTypeSystem.VOID_TYPE, new Pair<Type, String>(CoreRebecaTypeSystem.BOOLEAN_TYPE, "arg0"),
 				new Pair<Type, String>(CoreRebecaTypeSystem.STRING_TYPE, "arg1"));
 	}
+
 	@Override
 	protected void addVariablesOfRebecaExtensionToScope() {		
 	}
@@ -258,8 +259,6 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 
 		addEnvironmentVariablesToScope();
 		
-		addFeatureVariablesToScope();
-
 		semanticCheckReactiveClassDeclarations();
 
 		semanticCheckMainBindings(rebecaModel);
@@ -268,6 +267,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 	}
 
 	protected void semanticCheckReactiveClassDeclarations() {
+				
 		for (ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
 
 			scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.REACTIVE_CLASS);
@@ -473,28 +473,6 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		}
 	}
 
-	protected void addFeatureVariablesToScope() {
-		for (FieldDeclaration fd : rebecaModel.getRebecaCode().getFeatureVariables()) {
-			if (coreVersion == CoreVersion.CORE_2_0) {
-				CodeCompilationException rce = new CodeCompilationException(
-						"Rebeca core 2.0 dose not support feature variables", fd.getLineNumber(),
-						fd.getCharacter());
-				exceptionContainer.addException(rce);
-				return;
-			}
-
-			statementSemanticCheckContainer.check(fd);
-
-			for (VariableDeclarator vd : fd.getVariableDeclarators()) {
-				if (vd.getVariableInitializer() == null) {
-					CodeCompilationException rce = new CodeCompilationException(
-							"Feature variable " + vd.getVariableName() + " has to be initialized",
-							vd.getLineNumber(), vd.getCharacter());
-					exceptionContainer.addException(rce);
-				}
-			}
-		}
-	}
 
 	private void semanticCheckMainBindings(RebecaModel rebecaModel) {
 
@@ -674,4 +652,8 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		return new CoreRebecaCompleteParser(tokens);
 	}
 
+	@Override
+	protected StatementSemanticCheckContainer getStatementSemanticCheckContainer() {
+		return statementSemanticCheckContainer;
+	}
 }

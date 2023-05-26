@@ -1,0 +1,24 @@
+feature INCLUDED;
+
+reactiveclass A(2) {
+	knownrebecs {
+		@features(!INCLUDED)
+		B a;
+		@features(INCLUDED)
+		A a;
+	}
+	statevars {
+		@features(INCLUDED)
+		int b;
+		@features(!INCLUDED)
+		float b;
+	}
+	msgsrv m() {
+		b = 10;
+		a.m();
+	}
+}
+
+main {
+	
+}

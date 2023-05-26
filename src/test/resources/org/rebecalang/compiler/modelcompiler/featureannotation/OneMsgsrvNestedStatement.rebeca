@@ -1,0 +1,31 @@
+feature INCLUDED;
+
+
+reactiveclass A(3) {
+	
+	msgsrv m() {
+		
+		while(true) {
+			@features(INCLUDED)
+			for(;;) {
+				@features(!INCLUDED)
+				byte a = 1;
+				boolean a;
+				if(a) {
+
+				} else {
+					{
+						@features(!INCLUDED)
+						a = 4;
+					}
+				}
+			}
+			
+		}
+	}
+
+}
+
+main {
+	
+}

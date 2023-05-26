@@ -46,7 +46,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BaseClassDeclaration", propOrder = {
     "msgsrvs",
-    "synchMethods",
     "annotations"
 })
 @XmlSeeAlso({
@@ -56,7 +55,6 @@ import javax.xml.bind.annotation.XmlType;
 public class BaseClassDeclaration {
 
     protected List<MsgsrvDeclaration> msgsrvs;
-    protected List<SynchMethodDeclaration> synchMethods;
     protected List<Annotation> annotations;
     @XmlAttribute(name = "name")
     protected String name;
@@ -98,34 +96,7 @@ public class BaseClassDeclaration {
         return this.msgsrvs;
     }
 
-    /**
-     * Gets the value of the synchMethods property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the synchMethods property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getSynchMethods().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link SynchMethodDeclaration }
-     * 
-     * 
-     */
-    public List<SynchMethodDeclaration> getSynchMethods() {
-        if (synchMethods == null) {
-            synchMethods = new ArrayList<SynchMethodDeclaration>();
-        }
-        return this.synchMethods;
-    }
+
 
     /**
      * Gets the value of the annotations property.

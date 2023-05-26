@@ -195,11 +195,9 @@ interfaceDeclaration returns[InterfaceDeclaration intd]
         	)* )?
         LBRACE
 
-		( {MethodDeclaration md;}
-			(
-				MSGSRV {md = new MsgsrvDeclaration(); md.setAbstract(true); $intd.getMsgsrvs().add((MsgsrvDeclaration)md);} 
-			)
-			name = IDENTIFIER {md.setName($name.text); md.setLineNumber($name.getLine());md.setCharacter($name.getCharPositionInLine());}
+		( {MethodDeclaration md = new MsgsrvDeclaration();md.setAbstract(true); $intd.getMsgsrvs().add((MsgsrvDeclaration)md);}
+			(an = annotation {md.getAnnotations().add($an.an);})*
+			MSGSRV name = IDENTIFIER {md.setName($name.text); md.setLineNumber($name.getLine());md.setCharacter($name.getCharPositionInLine());}
 			fps = formalParameters {md.getFormalParameters().addAll($fps.fps);} SEMI
 		)*
         RBRACE {$intd.setEndLineNumber($RBRACE.getLine());$intd.setEndCharacter($RBRACE.getCharPositionInLine());}

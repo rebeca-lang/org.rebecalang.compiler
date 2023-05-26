@@ -1,3 +1,5 @@
+feature TEST;
+
 feature FT_PERIODIC_SENSOR;
 feature FT_IMMEDIATE_PUSH;
 feature FT_DELAYED_PUSH;
@@ -7,6 +9,7 @@ feature FT_TDMA_NETWORK;
 
 env int PACKET_SIZE = 4;
 
+@features(TEST)
 reactiveclass Sensor(3) {
 	statevars{
 		ComputationUnit cu;
@@ -30,19 +33,19 @@ reactiveclass ComputationUnit(3) {
 	statevars {
 		int receivedDataItems;
 		Network network;
-		@features("FT_DELAYED_PUSH")
+		@features(FT_DELAYED_PUSH)
 		int[4] buffer;
-		@features("FT_DELAYED_PUSH")
+		@features(FT_DELAYED_PUSH)
 		int index;
 	}
 	
 	ComputationUnit(Network network1) {
 		receivedDataItems = 0;
 		network = network1;
-		@features("FT_IMMEDIATE_PUSH")
+		@features(FT_IMMEDIATE_PUSH)
 		for(int cnt = 0; cnt < 4; cnt++)
 			buffer[cnt] = 0;
-		@features("FT_DELAYED_PUSH")
+		@features(FT_DELAYED_PUSH)
 		self.process;
 	}
 
@@ -77,12 +80,14 @@ interface Network {
 	msgsrv send();
 }
 
+@features(!FT_TDMA_NETWORK)
 reactiveclass MACBNetwork implements Network (3) {
 	msgsrv send() {
 		//Send data according to the MACB protocol
 	}
 }
 
+@features(FT_TDMA_NETWORK)
 reactiveclass TDMANetwork implements Network (3) {
 	msgsrv send() {
 		//Send data according to the TDMA protocol
@@ -92,8 +97,8 @@ reactiveclass TDMANetwork implements Network (3) {
 main {
 	Sensor sensor():(cu);
 	ComputationUnit cu():(network);
-	@features("FT_SIMPLE_NETWORK")
+	@features(FT_SIMPLE_NETWORK)
 	MACBNetwork network():();
-	@features("FT_TDMA_NETWORK")
+	@features(FT_TDMA_NETWORK)
 	TDMANetwork network():();
 }

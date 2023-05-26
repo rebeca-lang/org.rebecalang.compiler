@@ -1,0 +1,22 @@
+feature INCLUDED;
+
+interface I {
+	@features(INCLUDED)
+	msgsrv m1();
+	@features(!INCLUDED)
+	msgsrv m1();
+}
+
+@features(!INCLUDED)
+interface I {
+	msgsrv m2();
+}
+
+reactiveclass R implements I (2) {
+	msgsrv m1(){}
+
+}
+
+main {
+	
+}

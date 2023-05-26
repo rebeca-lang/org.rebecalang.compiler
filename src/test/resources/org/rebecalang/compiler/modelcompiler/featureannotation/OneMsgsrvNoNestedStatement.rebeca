@@ -1,0 +1,24 @@
+feature INCLUDED;
+
+
+reactiveclass A(3) {
+	
+	msgsrv m() {
+		@features(INCLUDED)
+		int a = 10;
+		@features(!INCLUDED)
+		boolean a = 10;
+
+		@features(true)
+		if(a == 20);
+
+		@features(!INCLUDED) {
+			byte a = 1;
+		}
+	}
+
+}
+
+main {
+	
+}

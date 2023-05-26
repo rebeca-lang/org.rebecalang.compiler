@@ -71,7 +71,10 @@ public class ModelStructureTest {
 
 		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
 		expectedExceptionContainer.setCorrespondingResource(model);
-		expectedExceptionContainer.addException(new CodeCompilationException("Unknown type Type2", 4, 2));
+		expectedExceptionContainer.addException(new CodeCompilationException("Unknown type C", 4, 2));
+		expectedExceptionContainer.addException(new CodeCompilationException(
+				"The A knownrebecs type binding of (B, C) is not applicable for the arguments (unknown)", 12, 3));
+		expectedExceptionContainer.addException(new ScopeException("\"b\" undeclared", 12, 5));
 
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
@@ -168,6 +171,7 @@ public class ModelStructureTest {
 		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
 		expectedExceptionContainer.setCorrespondingResource(model);
 		expectedExceptionContainer.addException(new CodeCompilationException("Reactiveclass A2 should be defined as abstract", 8, 14));
+		expectedExceptionContainer.addException(new CodeCompilationException("Cannot instantiate from abstract reactiveclass A", 22, 3));
 
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
@@ -186,20 +190,6 @@ public class ModelStructureTest {
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
 	
-	
-	@Test
-	public void GIVEN_CoreRebecaModelWithFeatures_WHEN_CoreIs2_1_THEN_NoErrors() {
-		File model = new File(MODEL_FILES_BASE + "CoreRebecaModelWithFeature.rebeca");
-		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
-		extension.add(CompilerExtension.TIMED_REBECA);
-
-		Pair<RebecaModel,SymbolTable> compileRebecaFile = compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
-		RebecaModel first = compileRebecaFile.getFirst();
-		first.getRebecaCode();
-		
-		
-		//Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
-	}
 
 
 	@Test

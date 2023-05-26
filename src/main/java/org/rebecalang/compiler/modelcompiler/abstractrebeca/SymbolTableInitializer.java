@@ -228,26 +228,6 @@ public class SymbolTableInitializer {
 
 			try {
 				Type type = typeSystem.getType(interfaceDeclaration.getName());
-				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getSynchMethods()) {
-					SynchMethodDeclaration smd = (SynchMethodDeclaration) methodDeclaration;
-					try {
-						smd.setReturnType(typeSystem.getType(smd.getReturnType()));
-					}catch (CodeCompilationException e) {
-						smd.setReturnType(AbstractTypeSystem.UNKNOWN_TYPE);
-						e.setLine(smd.getLineNumber());
-						e.setColumn(smd.getCharacter());
-						exceptionContainer.addException(e);
-					}
-					if (methodDeclaration.getName().equals(
-							interfaceDeclaration.getName())) {
-						exceptionContainer
-						.addException(new CodeCompilationException(
-								"Interfaces cannot have constructor",
-								methodDeclaration.getLineNumber(),
-								methodDeclaration.getCharacter()));
-					} else
-						addMethod(type, methodDeclaration, AccessModifierUtilities.PROTECTED, CoreRebecaLabelUtility.SYNCH_METHOD);
-				}
 				for (MethodDeclaration methodDeclaration : interfaceDeclaration.getMsgsrvs()) {
 					if (methodDeclaration.getName().equals(
 							interfaceDeclaration.getName())) {

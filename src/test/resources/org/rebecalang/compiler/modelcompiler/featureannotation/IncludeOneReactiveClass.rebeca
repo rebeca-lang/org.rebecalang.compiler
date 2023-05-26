@@ -1,0 +1,15 @@
+feature INCLUDED;
+
+
+@features(!INCLUDED && INCLUDED)
+reactiveclass A(2) {
+	
+}
+
+reactiveclass A(2) {
+	
+}
+
+main {
+	
+}

@@ -1,0 +1,20 @@
+feature INCLUDED;
+
+reactiveclass A(2) {
+	
+}
+
+reactiveclass B(2) {
+	
+}
+
+main {
+	@features(INCLUDED)
+	A a() : ();
+	@features(INCLUDED)
+	B b() : ();
+	@features(!INCLUDED)
+	C c() : ();
+	@features(!INCLUDED)
+	D a() : ();
+}
