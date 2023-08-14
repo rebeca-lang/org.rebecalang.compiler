@@ -13,6 +13,7 @@ import org.rebecalang.compiler.utils.TypesUtilities;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.SpelParseException;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 
@@ -240,23 +241,32 @@ public class SemanticCheckerUtils {
 				right == AbstractExpressionSemanticCheck.NO_VALUE)
 			return AbstractExpressionSemanticCheck.NO_VALUE;
 		String expressionInString = "(" + left + ")";
-		if (operator != null)
-			expressionInString += operator + "(" + right + ")";
+		if(right == null) {
+			if (operator != null)
+				expressionInString = operator + expressionInString;
+		} else {
+			if (operator != null)
+				expressionInString += operator + "(" + right + ")";			
+		}
 		
 		ExpressionParser parser = new SpelExpressionParser();        
-        Expression exp = parser.parseExpression(expressionInString);
         try {
-	        if(type == CoreRebecaTypeSystem.INT_TYPE)
-	        	return exp.getValue(Integer.class);
-	        if(type == CoreRebecaTypeSystem.SHORT_TYPE)
-	        	return exp.getValue(Short.class);
-	        if(type == CoreRebecaTypeSystem.BYTE_TYPE)
-	        	return exp.getValue(Byte.class);
-	        if(type == CoreRebecaTypeSystem.BOOLEAN_TYPE)
-	        	return exp.getValue(Boolean.class);
-        	return AbstractExpressionSemanticCheck.NO_VALUE; 	        
+            Expression exp = parser.parseExpression(expressionInString);
+//	        if(type == CoreRebecaTypeSystem.INT_TYPE)
+//	        	return exp.getValue(Integer.class);
+//	        if(type == CoreRebecaTypeSystem.SHORT_TYPE)
+//	        	return exp.getValue(Short.class);
+//	        if(type == CoreRebecaTypeSystem.BYTE_TYPE)
+//	        	return exp.getValue(Byte.class);
+//	        if(type == CoreRebecaTypeSystem.BOOLEAN_TYPE)
+//	        	return exp.getValue(Boolean.class);
+//        	return AbstractExpressionSemanticCheck.NO_VALUE;
+        	return exp.getValue();
+
         } catch (EvaluationException evaluationException) {
         	return AbstractExpressionSemanticCheck.NO_VALUE; 
-        }			
+        } catch (SpelParseException spelParseException) {
+        	return AbstractExpressionSemanticCheck.NO_VALUE;
+        }
 	}
 }

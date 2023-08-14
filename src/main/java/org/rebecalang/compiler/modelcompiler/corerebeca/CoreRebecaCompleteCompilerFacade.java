@@ -1,5 +1,7 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -533,7 +535,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 			}
 
 			ReactiveClassDeclaration rcd = reactiveClasses.get(mrd.getType().getTypeName());
-			List<FieldDeclaration> knownRebecs = rcd.getKnownRebecs();
+			List<FieldDeclaration> knownRebecs = getKnownRebecs(rcd);
 			List<Type> exprectedTypes = new LinkedList<Type>();
 			for (FieldDeclaration fd : knownRebecs) {
 				for (int variableCounter = 0; variableCounter < fd.getVariableDeclarators().size(); variableCounter++) {
@@ -586,6 +588,29 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		scopeHandler.popScopeRecord();
 	}
 
+	private ArrayList<FieldDeclaration> getKnownRebecs(ReactiveClassDeclaration lastRebec){
+		ArrayList<ReactiveClassDeclaration> rebecsSeries = new ArrayList<>();
+		ArrayList<FieldDeclaration> knownRebecs = new ArrayList<>();
+		ReactiveClassDeclaration curRebec = lastRebec;
+
+		while (curRebec.getExtends() != null) {
+			rebecsSeries.add(curRebec);
+			try {
+				curRebec = (ReactiveClassDeclaration) curRebec.getExtends().getTypeSystem().getMetaData(curRebec.getExtends());
+			} catch (CodeCompilationException e) {
+				e.printStackTrace();
+			}
+		}
+		rebecsSeries.add(curRebec);
+		Collections.reverse(rebecsSeries);
+		for (ReactiveClassDeclaration rebec: rebecsSeries) {
+			for (FieldDeclaration curRebecKnownRebec: rebec.getKnownRebecs()) {
+				knownRebecs.add(curRebecKnownRebec);
+			}
+		}
+		return knownRebecs;
+	}
+	
 	protected void checkPriorityAnnotations(List<Annotation> annotations) {
 		if (annotations.isEmpty())
 			return;

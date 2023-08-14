@@ -63,8 +63,17 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 					termPrimary.setLabel(variableInScopeSpecifier.getLabel());
 					returnValue.setFirst(variableInScopeSpecifier.getType());
 					termPrimary.setType(variableInScopeSpecifier.getType());
+					Object value = variableInScopeSpecifier.getPrecompilationValue();
+					returnValue.setSecond(value);
 				} else {
-					Type symbolType = symbolTable.getSymbolType(baseType, termName);
+					Type curType = baseType;
+					Type symbolType = null;
+					while (curType != null) {
+						symbolType = symbolTable.getSymbolType(curType, termName);
+						if (symbolType != null) break;
+						ReactiveClassDeclaration rcd = (ReactiveClassDeclaration)typeSystem.getMetaData(curType);
+						curType = rcd.getExtends();
+					}
 					if (symbolType == null) {
 						if (baseType != AbstractTypeSystem.UNKNOWN_TYPE)
 							exceptionContainer.addException(new CodeCompilationException(

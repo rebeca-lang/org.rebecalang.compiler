@@ -7,12 +7,10 @@ import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.rebecalang.compiler.CompilerConfig;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerExtension;
 import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
-import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -49,16 +47,16 @@ public class ModelStructureTest {
 
 		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
 		expectedExceptionContainer.setCorrespondingResource(model);
-		expectedExceptionContainer.addException(new ScopeException("\"c\" undeclared", 19, 2));
-		expectedExceptionContainer.addException(new CodeCompilationException("Direct sending to \"self\" is allowed in constructors", 21, 2));
-		expectedExceptionContainer.addException(new CodeCompilationException("Only message servers are allowed to have non-deterministic expression", 23, 10));
-		expectedExceptionContainer.addException(new CodeCompilationException("Non-deterministic terms must be constant expressions", 23, 12));
-		expectedExceptionContainer.addException(new ScopeException("\"c\" undeclared", 23, 17));
-		expectedExceptionContainer.addException(new CodeCompilationException("Rebeca core 2.2 and upper support dynamic actor creation", 27, 17));
-		expectedExceptionContainer.addException(new ScopeException("\"currentMessageArrival\" undeclared", 31, 17));
-		expectedExceptionContainer.addException(new SymbolTableException("The method delay(int) is undefined", 36, 2));
-		expectedExceptionContainer.addException(new ScopeException("Redeclaration of \"int a\", it has already been declared in line 31 column 7", 39, 11));
-		expectedExceptionContainer.addException(new ScopeException("Redeclaration of \"int b\", it has already been declared in line 33 column 12", 39, 19));
+		expectedExceptionContainer.addException(new ScopeException("\"c\" undeclared", 20, 2));
+		expectedExceptionContainer.addException(new CodeCompilationException("Direct sending to \"self\" is allowed in constructors", 22, 2));
+		expectedExceptionContainer.addException(new CodeCompilationException("Only message servers are allowed to have non-deterministic expression", 24, 10));
+		expectedExceptionContainer.addException(new CodeCompilationException("Non-deterministic terms must be constant expressions", 24, 12));
+		expectedExceptionContainer.addException(new ScopeException("\"c\" undeclared", 24, 17));
+		expectedExceptionContainer.addException(new CodeCompilationException("Rebeca core 2.2 and upper support dynamic actor creation", 28, 17));
+		expectedExceptionContainer.addException(new ScopeException("\"currentMessageArrival\" undeclared", 32, 17));
+		expectedExceptionContainer.addException(new SymbolTableException("The method delay(int) is undefined", 37, 2));
+		expectedExceptionContainer.addException(new ScopeException("Redeclaration of \"int a\", it has already been declared in line 31 column 7", 40, 11));
+		expectedExceptionContainer.addException(new ScopeException("Redeclaration of \"int b\", it has already been declared in line 33 column 12", 40, 19));
 
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
@@ -102,7 +100,7 @@ public class ModelStructureTest {
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		extension.add(CompilerExtension.TIMED_REBECA);
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
-		
+		exceptionContainer.print(System.out);
 		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
 	}	
 	

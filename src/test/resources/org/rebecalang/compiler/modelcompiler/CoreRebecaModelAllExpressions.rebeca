@@ -9,6 +9,7 @@ reactiveclass Test1 (3) {
 		int g;
 		int st1;
 		int[6] ab;
+		boolean bbb;
 	}
 		
 	Test1(Test1 rt, int f, int j) {
@@ -49,6 +50,7 @@ reactiveclass Test1 (3) {
 		}
 		if(?(true, false)){};
 		t.sib(1, self);
+		if(!bbb);
 	}
 	
 	int u (){}
