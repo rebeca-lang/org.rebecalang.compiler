@@ -1,0 +1,57 @@
+env int BUFFER_SIZE = 4;
+
+reactiveclass Sensor(3) {
+	statevars{
+		CompUnit cu;
+	}
+	
+	Sensor(CompUnit cu1) {
+		cu = cu1;
+		self.gatherData();
+	}
+	
+	msgsrv gatherData() {
+		cu.receiveData(0);
+		self.gatherData() after(?(1,2,3));
+	}
+}
+
+
+reactiveclass CompUnit(3) {
+	statevars {
+		Network network;
+	}
+	
+	CompUnit(Network net) {
+		network = net;
+	}
+
+	msgsrv receiveData(byte data) {
+		network.send(data);
+	}
+	
+}
+
+interface Network {
+	msgsrv send(byte data);
+}
+
+reactiveclass MACBNetwork implements Network(3) {
+	msgsrv send(byte data) {
+		// Send data according 
+		// to the MACB protocol
+	}
+}
+
+reactiveclass TDMANetwork implements Network(3) {
+	msgsrv send(byte data) {
+		// Send data according
+		// to the TDMA protocol
+	}
+}
+
+main {
+	Sensor sensor():(cu);
+	CompUnit cu():(network);
+	TDMANetwork network():();
+}
