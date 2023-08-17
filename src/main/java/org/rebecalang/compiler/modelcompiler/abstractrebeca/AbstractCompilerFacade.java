@@ -104,14 +104,11 @@ public abstract class AbstractCompilerFacade {
 		return true;
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected boolean includeIfItSatisfiesFeature(LinkedList includedItems, Object item, List<Annotation> annotations) {
-		includedItems.addLast(item);
+	protected boolean satisfiesFeatureCondition(List<Annotation> annotations) {
 		for(Annotation annotation : annotations) {
 			if (!annotation.getIdentifier().equals(FEATURES_LABEL))
 				continue;
 			if(!evaluateAnnotationExpression(getStatementSemanticCheckContainer(), annotation.getValue())) {
-				includedItems.removeLast();
 				return false;
 			}
 		}
@@ -125,8 +122,8 @@ public abstract class AbstractCompilerFacade {
 		
 		LinkedList<Statement> remaindStatements = new LinkedList<Statement>();
 		for(Statement statement : blockStatement.getStatements()) {
-			boolean included = includeIfItSatisfiesFeature(remaindStatements, statement, statement.getAnnotations());
-			if(included) {
+			if(satisfiesFeatureCondition(statement.getAnnotations())) {
+				remaindStatements.add(statement);
 				if(statement instanceof ConditionalStatement) {
 					removeStatementsBasedOnTheRequiredFeature(((ConditionalStatement)statement).getStatement());
 					removeStatementsBasedOnTheRequiredFeature(((ConditionalStatement)statement).getElseStatement());
@@ -140,8 +137,8 @@ public abstract class AbstractCompilerFacade {
 					for(SwitchStatementGroup switchStatementGroups : ((SwitchStatement)statement).getSwitchStatementGroups()) {
 						LinkedList<Statement> remaindSelectorStatements = new LinkedList<Statement>();
 						for(Statement selectorStatement : switchStatementGroups.getStatements()) {
-							if(includeIfItSatisfiesFeature(remaindSelectorStatements, 
-									remaindSelectorStatements, selectorStatement.getAnnotations())) {
+							if(satisfiesFeatureCondition(selectorStatement.getAnnotations())) {
+								remaindSelectorStatements.add(selectorStatement);
 								removeStatementsBasedOnTheRequiredFeature(selectorStatement);
 							}
 						}
@@ -157,13 +154,12 @@ public abstract class AbstractCompilerFacade {
 	
 	protected <T extends MethodDeclaration> List<T> removeMethods(List<T> methodDeclarations) {
 		LinkedList<T> included = new LinkedList<T>();
-		for(MethodDeclaration methodDeclaration : methodDeclarations) {
-			boolean methodIsIncluded = includeIfItSatisfiesFeature(included, methodDeclaration, 
-					methodDeclaration.getAnnotations());
-			if(methodIsIncluded)
+		for(T methodDeclaration : methodDeclarations) {				
+			if(satisfiesFeatureCondition(methodDeclaration.getAnnotations())) {
+				included.add(methodDeclaration);
 				removeStatementsBasedOnTheRequiredFeature(methodDeclaration.getBlock());
+			}
 		}
-
 		return included;
 	}
 	
@@ -172,8 +168,8 @@ public abstract class AbstractCompilerFacade {
 				new LinkedList<InterfaceDeclaration>();
 		
 		for (InterfaceDeclaration id : rebecaModel.getRebecaCode().getInterfaceDeclaration()) {
-			boolean included = includeIfItSatisfiesFeature(includedInterfaceDeclarations, id, id.getAnnotations());
-			if(included) {
+			if(satisfiesFeatureCondition(id.getAnnotations())) {
+				includedInterfaceDeclarations.add(id);
 				List<MsgsrvDeclaration> includedMsgsrvs = removeMethods(id.getMsgsrvs());
 				id.getMsgsrvs().clear();
 				id.getMsgsrvs().addAll(includedMsgsrvs);
@@ -188,8 +184,9 @@ public abstract class AbstractCompilerFacade {
 				new LinkedList<ReactiveClassDeclaration>();
 		
 		for (ReactiveClassDeclaration rcd : rebecaModel.getRebecaCode().getReactiveClassDeclaration()) {
-			boolean included = includeIfItSatisfiesFeature(includedReactiveClassDeclarations, rcd, rcd.getAnnotations());
-			if(included) {
+			if(satisfiesFeatureCondition(rcd.getAnnotations())) {
+				includedReactiveClassDeclarations.add(rcd);
+				
 				List<ConstructorDeclaration> includedConstructurs = removeMethods(rcd.getConstructors());
 				rcd.getConstructors().clear();
 				rcd.getConstructors().addAll(includedConstructurs);
@@ -204,14 +201,18 @@ public abstract class AbstractCompilerFacade {
 				
 				LinkedList<FieldDeclaration> includedStatevars = new LinkedList<FieldDeclaration>();
 				for(FieldDeclaration fd : rcd.getStatevars()) {
-					includeIfItSatisfiesFeature(includedStatevars, fd, fd.getAnnotations());
+					if(satisfiesFeatureCondition(fd.getAnnotations())) {
+						includedStatevars.add(fd); 
+					}
 				}
 				rcd.getStatevars().clear();
 				rcd.getStatevars().addAll(includedStatevars);
 
 				LinkedList<FieldDeclaration> includedKnownRebecs = new LinkedList<FieldDeclaration>();
 				for(FieldDeclaration fd : rcd.getKnownRebecs()) {
-					includeIfItSatisfiesFeature(includedKnownRebecs, fd, fd.getAnnotations());
+					if(satisfiesFeatureCondition(fd.getAnnotations())) {
+						includedKnownRebecs.add(fd);
+					}
 				}
 				rcd.getKnownRebecs().clear();
 				rcd.getKnownRebecs().addAll(includedKnownRebecs);
@@ -228,7 +229,9 @@ public abstract class AbstractCompilerFacade {
 		List<MainRebecDefinition> mrds = rebecaModel.getRebecaCode().getMainDeclaration().getMainRebecDefinition();
 
 		for(MainRebecDefinition mrd : mrds) {
-			includeIfItSatisfiesFeature(included, mrd, mrd.getAnnotations());
+			if(satisfiesFeatureCondition(mrd.getAnnotations())) {
+				included.add(mrd);
+			}
 		}
 		mrds.clear();
 		mrds.addAll(included);

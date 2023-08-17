@@ -7,10 +7,13 @@ import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.rebecalang.compiler.CompilerConfig;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BlockStatement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MainDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MsgsrvDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStatement;
 import org.rebecalang.compiler.utils.CompilerExtension;
 import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
@@ -81,9 +84,16 @@ public class FeatureAnnotationTest {
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		extension.add(CompilerExtension.TIMED_REBECA);
 
-		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
-
+		Pair<RebecaModel, SymbolTable> compileRebecaFile = 
+				compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
+		
 		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
+		
+		ReactiveClassDeclaration rcd = compileRebecaFile.getFirst().getRebecaCode().getReactiveClassDeclaration().get(0);
+		MsgsrvDeclaration md = rcd.getMsgsrvs().get(0);
+		WhileStatement whileStatement = (WhileStatement) md.getBlock().getStatements().get(0);
+		ForStatement forStatement = (ForStatement) ((BlockStatement)whileStatement.getStatement()).getStatements().get(0);
+		Assertions.assertEquals(2, ((BlockStatement)forStatement.getStatement()).getStatements().size());
 		
 	}
 	

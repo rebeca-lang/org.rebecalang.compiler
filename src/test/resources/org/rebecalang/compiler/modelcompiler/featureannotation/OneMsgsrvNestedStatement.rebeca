@@ -8,15 +8,27 @@ reactiveclass A(3) {
 		while(true) {
 			@features(INCLUDED)
 			for(;;) {
-				@features(!INCLUDED)
 				byte a = 1;
+				@features(!INCLUDED)
 				boolean a;
-				if(a) {
+				if(a == 3) {
 
 				} else {
 					{
-						@features(!INCLUDED)
 						a = 4;
+						@features(INCLUDED)
+						switch (a) {
+						case 7:
+							int d = 10; 
+						case 1:
+							d = 10; 
+							break;
+						case 2: 
+							byte c = 1;
+							d = 10;
+						default:
+							break;
+						}
 					}
 				}
 			}

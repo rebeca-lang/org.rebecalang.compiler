@@ -370,23 +370,42 @@ switchBlock returns [SwitchStatement ss]
     :   
     	{$ss = new SwitchStatement();}
     	(
-    		{$ss.getSwitchStatementGroups().add(new SwitchStatementGroup());}
-    		(
-    			CASE e = expression {
+    		{
+    			$ss.getSwitchStatementGroups().add(new SwitchStatementGroup());
+    		 	ArrayList<Annotation> anns = new ArrayList<Annotation>();
+    		}
+	    	(an = annotation {anns.add($an.an);})*
+			CASE e = expression COLON  
+			{
     			$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).setExpression($e.e);
     			$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).setLineNumber($e.e.getLineNumber());
     			$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).setCharacter($e.e.getCharacter());
-    			}  
-    		|
-    			DEFAULT
-    			{
+				$ss.getAnnotations().addAll(anns); anns = new ArrayList<Annotation>();
+			}
+			(
+				(an = annotation {anns.add($an.an);})*
+				st = statement 
+				{
+					$st.s.getAnnotations().addAll(anns);
+					$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1)
+						.getStatements().add($st.s);
+				}
+			)*
+		)+
+		(	
+			DEFAULT COLON
+    		{
+    			$ss.getSwitchStatementGroups().add(new SwitchStatementGroup());
+    		 	ArrayList<Annotation> anns = new ArrayList<Annotation>();
     			$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).setLineNumber($DEFAULT.getCharPositionInLine());
     			$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).setCharacter($DEFAULT.getLine());
-    			}
-    		)
-    		COLON
-			(st = statement {$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).getStatements().add($st.s);})*
-		)*
+				$ss.getAnnotations().addAll(anns); anns = new ArrayList<Annotation>();
+			}
+			(
+				(an = annotation {anns.add($an.an);})*
+				st = statement {$st.s.getAnnotations().addAll(anns); $ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).getStatements().add($st.s);}
+			)*
+		)?
     ;
 
 statementExpression returns [Statement se]
