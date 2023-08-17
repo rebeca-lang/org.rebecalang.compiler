@@ -55,8 +55,22 @@ public class ModelStructureTest {
 		expectedExceptionContainer.addException(new CodeCompilationException("Rebeca core 2.2 and upper support dynamic actor creation", 28, 17));
 		expectedExceptionContainer.addException(new ScopeException("\"currentMessageArrival\" undeclared", 32, 17));
 		expectedExceptionContainer.addException(new SymbolTableException("The method delay(int) is undefined", 37, 2));
-		expectedExceptionContainer.addException(new ScopeException("Redeclaration of \"int a\", it has already been declared in line 31 column 7", 40, 11));
-		expectedExceptionContainer.addException(new ScopeException("Redeclaration of \"int b\", it has already been declared in line 33 column 12", 40, 19));
+		expectedExceptionContainer.addException(new ScopeException("Redeclaration of \"int a\", it has already been declared in line 32 column 7", 40, 11));
+		expectedExceptionContainer.addException(new ScopeException("Redeclaration of \"int b\", it has already been declared in line 34 column 12", 40, 19));
+		expectedExceptionContainer.addException(new CodeCompilationException("Duplicate case value \"5\"", 43, 15));
+
+		
+		
+		
+		expectedExceptionContainer.addException(new SymbolTableException("The method f() is undefined", 44, 5));
+		expectedExceptionContainer.addException(
+				new CodeCompilationException("There is no meta data for type String", 45, 7));
+		expectedExceptionContainer.addException(
+				new CodeCompilationException("Type mismatch: cannot convert from double to int", 49, 13));
+		expectedExceptionContainer.addException(
+				new CodeCompilationException("Non-deterministic terms must be constant expressions", 49, 15));
+		expectedExceptionContainer.addException(
+				new SymbolTableException("The method sib(double, Test1) is undefined for the type Test1", 59, 16));
 
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
