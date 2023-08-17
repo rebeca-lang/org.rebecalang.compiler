@@ -1,0 +1,17 @@
+
+@features(INCLUDED)
+reactiveclass A(2) {
+	
+}
+
+reactiveclass A(2) {
+
+	@features(10)
+	msgsrv test() {
+	
+	} 	
+}
+
+main {
+	
+}

@@ -85,23 +85,23 @@ public abstract class AbstractCompilerFacade {
 	
 	private boolean evaluateAnnotationExpression(StatementSemanticCheckContainer statementSemanticCheckContainer,
 						Expression annotationExpression) {
-		Pair<Type, Object> valueCheckResult = 
-				statementSemanticCheckContainer.check(annotationExpression);
-
-		if(valueCheckResult.getFirst() == CoreRebecaTypeSystem.BOOLEAN_TYPE) {
-			try {
-				String expressionValue = constantExpressionToString(annotationExpression);
-				ExpressionParser parser = new SpelExpressionParser();        
-		        return (boolean) parser.parseExpression(expressionValue).getValue(featureExpressoinEvaluationContext);
-			} catch (CodeCompilationException e) {
-				e.printStackTrace();
+		try {
+			String expressionValue = constantExpressionToString(annotationExpression);
+			ExpressionParser parser = new SpelExpressionParser();
+			Class<?> valueType = parser.parseExpression(expressionValue).getValueType(featureExpressoinEvaluationContext);
+			if(valueType == Boolean.class) {
+				return (boolean) parser.parseExpression(expressionValue).getValue(featureExpressoinEvaluationContext);
+			} else if(valueType == null) {
+				return false;
+			} else {
+				CodeCompilationException cce = new CodeCompilationException("Feature expression must be evaluated to a boolean value",
+						annotationExpression.getLineNumber(), annotationExpression.getCharacter());
+				exceptionContainer.addException(cce);					
 			}
-		} else {
-			CodeCompilationException cce = new CodeCompilationException("Feature expression must be evaluated to a boolean value",
-					annotationExpression.getLineNumber(), annotationExpression.getCharacter());
-			exceptionContainer.addException(cce);					
+		} catch (CodeCompilationException e) {
+			
 		}
-		return true;
+		return false;
 	}
 	
 	protected boolean satisfiesFeatureCondition(List<Annotation> annotations) {

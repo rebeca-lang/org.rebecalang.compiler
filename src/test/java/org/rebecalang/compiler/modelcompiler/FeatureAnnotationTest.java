@@ -14,6 +14,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MsgsrvDeclar
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStatement;
+import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CompilerExtension;
 import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
@@ -32,6 +33,21 @@ public class FeatureAnnotationTest {
 	public ExceptionContainer exceptionContainer;
 
 	public static final String MODEL_FILES_BASE = "src/test/resources/org/rebecalang/compiler/modelcompiler/featureannotation/"; 
+
+	@Test
+	public void GIVEN_ModelWithTwoReactiveclasses_WHEN_OneHasUndefinedFeatureAndWrongTypeFeature_THEN_Error() {
+		File model = new File(MODEL_FILES_BASE + "ErrorInTypeAndDefinition.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+
+		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
+
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+		expectedExceptionContainer.addException(new CodeCompilationException("Feature expression must be evaluated to a boolean value", 9, 11));
+
+		Assertions.assertEquals(expectedExceptionContainer, expectedExceptionContainer);
+		
+	}
 
 	@Test
 	public void GIVEN_ModelWithTwoReactiveclasses_WHEN_OneDoesNotSatisfyFeature_THEN_NoErrors() {
