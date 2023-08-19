@@ -1,0 +1,24 @@
+interface I1 {
+	msgsrv m1();
+}
+
+interface I2 {
+	msgsrv m2();
+}
+
+reactiveclass A extends B implements I1(1) {
+	msgsrv m3() {
+		self.m2();
+		self.m5();
+	}
+}
+
+reactiveclass B implements I2(1) {
+	msgsrv m4(){
+
+	}
+}
+
+main {
+	
+}

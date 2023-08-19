@@ -15,8 +15,10 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.AccessModifier;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InterfaceDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
@@ -198,23 +200,38 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 		if (lookupBaseType instanceof GenericTypeInstance) {
 			lookupBaseType = ((GenericTypeInstance) lookupBaseType).getBase();
 		}
-		while(true) {
+		
+		LinkedList<Type> searchList = new LinkedList<>();
+		searchList.add(lookupBaseType);
+		SymbolTableException theFirstTryFailureException = null;
+		while(!searchList.isEmpty()) {
+			Type lookupType = searchList.removeFirst();
 			try {
-				methodInSymbolTableSpecifier = symbolTable.getCastableMethodSpecification(lookupBaseType, termName, argumentTypes);
+				methodInSymbolTableSpecifier = symbolTable.getCastableMethodSpecification(lookupType, termName, argumentTypes);
 				// TODO this code only works for GenericType with 1 parameters
 				if ( methodInSymbolTableSpecifier.getReturnValue() == AbstractTypeSystem.UNKNOWN_TYPE )
 					methodInSymbolTableSpecifier.setReturnValue(((GenericTypeInstance) type).getParameters().get(0));
 				return methodInSymbolTableSpecifier;
 			}
 			catch(SymbolTableException ste) {
-				ReactiveClassDeclaration rcd = (ReactiveClassDeclaration)typeSystem.getMetaData(lookupBaseType);
-
-				if (rcd.getExtends() == null)
-					throw ste;
-				lookupBaseType = rcd.getExtends();
+				if(theFirstTryFailureException == null)
+					theFirstTryFailureException = ste;
+				
+				BaseClassDeclaration bcd = (BaseClassDeclaration)typeSystem.getMetaData(lookupType);
+				
+				if(bcd instanceof ReactiveClassDeclaration) {
+					ReactiveClassDeclaration rcd = (ReactiveClassDeclaration)bcd;
+					if (rcd.getExtends() != null)
+						searchList.addLast(rcd.getExtends());
+					if(!rcd.getImplements().isEmpty())
+						searchList.addAll(rcd.getImplements());
+				} else if(bcd instanceof InterfaceDeclaration) {
+					InterfaceDeclaration id = (InterfaceDeclaration)bcd;
+					if (!id.getExtends().isEmpty())
+						searchList.addAll(id.getExtends());
+				}
 			}
-
-
-		} 	
+		}
+		throw theFirstTryFailureException;
 	}
 }

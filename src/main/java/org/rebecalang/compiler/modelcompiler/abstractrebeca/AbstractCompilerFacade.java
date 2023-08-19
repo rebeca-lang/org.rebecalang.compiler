@@ -38,14 +38,12 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SwitchStatem
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SwitchStatementGroup;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.UnaryExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStatement;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
-import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
@@ -364,17 +362,16 @@ public abstract class AbstractCompilerFacade {
 							vd.getLineNumber(), vd.getCharacter());
 					exceptionContainer.addException(rce);
 				} else {
-					TermPrimary termPrimary = new TermPrimary();
-					termPrimary.setLabel(CoreRebecaLabelUtility.FEATURE_VARIABLE);
-					termPrimary.setName("true");
-					termPrimary.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
-					termPrimary.setCharacter(vd.getCharacter());
-					termPrimary.setLineNumber(vd.getLineNumber());
+					Literal literal = new Literal();
+					literal.setLiteralValue("true");
+					literal.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
+					literal.setCharacter(vd.getCharacter());
+					literal.setLineNumber(vd.getLineNumber());
 					OrdinaryVariableInitializer variableInitializer = new OrdinaryVariableInitializer();
 					variableInitializer.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 					variableInitializer.setLineNumber(vd.getLineNumber());
 					variableInitializer.setCharacter(vd.getCharacter());
-					variableInitializer.setValue(termPrimary);
+					variableInitializer.setValue(literal);
 					vd.setVariableInitializer(variableInitializer);
 				}
 				try {
