@@ -653,7 +653,6 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 				+ " is not applicable for the arguments (" + actual + ")";
 	}
 
-	@SafeVarargs
 	protected final void addMethodToSymbolTable(Label methodLabel, Type base, String name, Type returnType,
 			Pair<Type, String>... arguments) {
 
