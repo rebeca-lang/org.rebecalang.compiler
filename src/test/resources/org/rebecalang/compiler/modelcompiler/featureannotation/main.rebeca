@@ -1,4 +1,4 @@
-feature INCLUDED;
+featurevar INCLUDED;
 
 reactiveclass A(2) {
 	
@@ -9,12 +9,12 @@ reactiveclass B(2) {
 }
 
 main {
-	@features(INCLUDED)
+	@feature(INCLUDED)
 	A a() : ();
-	@features(INCLUDED)
+	@feature(INCLUDED)
 	B b() : ();
-	@features(!INCLUDED)
+	@feature(!INCLUDED)
 	C c() : ();
-	@features(!INCLUDED)
+	@feature(!INCLUDED)
 	D a() : ();
 }

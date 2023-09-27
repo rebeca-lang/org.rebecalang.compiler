@@ -1,18 +1,18 @@
-feature INCLUDED;
+featurevar INCLUDED;
 
 
 reactiveclass A(3) {
 	
 	msgsrv m() {
-		@features(INCLUDED)
+		@feature(INCLUDED)
 		int a = 10;
-		@features(!INCLUDED)
+		@feature(!INCLUDED)
 		boolean a = 10;
 
-		@features(true)
+		@feature(true)
 		if(a == 20);
 
-		@features(!INCLUDED) {
+		@feature(!INCLUDED) {
 			byte a = 1;
 		}
 	}

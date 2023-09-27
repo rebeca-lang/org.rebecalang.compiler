@@ -30,7 +30,7 @@ null
 'switch'
 'while'
 'env'
-'feature'
+'featurevar'
 'instanceof'
 'reactiveclass'
 'interface'
@@ -124,7 +124,7 @@ RETURN
 SWITCH
 WHILE
 ENV
-FEATURE
+FEATUREVAR
 INSTANCEOF
 REACTIVECLASS
 INTERFACE

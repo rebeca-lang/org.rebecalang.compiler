@@ -1,7 +1,17 @@
 // Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/HybridRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.hybridrebeca.compiler;
-	import org.antlr.v4.runtime.ParserRuleContext;
+	import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.*;
+	import org.rebecalang.compiler.modelcompiler.timedrebeca.objectmodel.*;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
+	import org.rebecalang.compiler.modelcompiler.hybridrebeca.HybridrebecaUtils;
+	
+	import java.util.*;
+	import org.antlr.runtime.BitSet;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
+
+
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 

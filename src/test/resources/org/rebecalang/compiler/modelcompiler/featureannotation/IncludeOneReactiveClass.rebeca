@@ -1,7 +1,7 @@
-feature INCLUDED;
+featurevar INCLUDED;
 
 
-@features(!INCLUDED && INCLUDED)
+@feature(!INCLUDED && INCLUDED)
 reactiveclass A(2) {
 	
 }

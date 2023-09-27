@@ -199,8 +199,8 @@ ENV
     :   'env'
     ;
 
-FEATURE
-    :   'feature'
+FEATUREVAR
+    :   'featurevar'
     ;
 
     

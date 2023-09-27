@@ -50,7 +50,7 @@ rebecaCode returns [RebecaCode rc]
 		(		
 			(ENV fd = fieldDeclaration SEMI {$rc.getEnvironmentVariables().add($fd.fd);})
 			|
-			(FEATURE featureName = IDENTIFIER SEMI 
+			(FEATUREVAR featureName = IDENTIFIER SEMI 
 				{
 				VariableDeclarator vd = new VariableDeclarator();
 				vd.setVariableName($featureName.text);

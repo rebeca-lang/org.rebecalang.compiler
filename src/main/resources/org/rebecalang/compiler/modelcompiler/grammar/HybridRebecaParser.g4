@@ -5,9 +5,22 @@ rebecaCode returns [HybridRebecaCode rc]
     	{$rc = new HybridRebecaCode();}
 		(rd = recordDeclaration {$rc.getRecordDeclaration().add($rd.rd);})*
 		(		
-			ENV fd = fieldDeclaration SEMI {$rc.getEnvironmentVariables().add($fd.fd);}
+			(ENV fd = fieldDeclaration SEMI {$rc.getEnvironmentVariables().add($fd.fd);})
 			|
-			FEATURE fd = fieldDeclaration SEMI {$rc.getFeatureVariables().add($fd.fd);}
+			(FEATUREVAR featureName = IDENTIFIER SEMI 
+				{
+				VariableDeclarator vd = new VariableDeclarator();
+				vd.setVariableName($featureName.text);
+				vd.setLineNumber($featureName.getLine());
+				vd.setCharacter($featureName.getCharPositionInLine());
+				FieldDeclaration fd = new FieldDeclaration();
+				fd.getVariableDeclarators().add(vd);
+				fd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);				
+    			fd.setCharacter($featureName.getCharPositionInLine());
+				fd.setLineNumber($featureName.getLine());
+				$rc.getFeatureVariables().add(fd);				
+				}
+			)
 		)*
         (
         	rcd = reactiveClassDeclaration {$rc.getReactiveClassDeclaration().add($rcd.rcd);}

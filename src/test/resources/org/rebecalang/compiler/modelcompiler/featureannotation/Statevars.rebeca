@@ -1,16 +1,16 @@
-feature INCLUDED;
+featurevar INCLUDED;
 
 reactiveclass A(2) {
 	knownrebecs {
-		@features(!INCLUDED)
+		@feature(!INCLUDED)
 		B a;
-		@features(INCLUDED)
+		@feature(INCLUDED)
 		A a;
 	}
 	statevars {
-		@features(INCLUDED)
+		@feature(INCLUDED)
 		int b;
-		@features(!INCLUDED)
+		@feature(!INCLUDED)
 		float b;
 	}
 	msgsrv m() {

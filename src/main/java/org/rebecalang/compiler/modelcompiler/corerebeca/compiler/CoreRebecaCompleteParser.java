@@ -27,7 +27,7 @@ public class CoreRebecaCompleteParser extends Parser {
 		WS=6, COMMENT=7, LINE_COMMENT=8, BREAK=9, CASE=10, CLASS=11, CONTINUE=12, 
 		DEFAULT=13, ELSE=14, FOR=15, GOTO=16, IF=17, IMPORT=18, NEW=19, PACKAGE=20, 
 		PRIVATE=21, PROTECTED=22, PUBLIC=23, RECORD=24, RETURN=25, SWITCH=26, 
-		WHILE=27, ENV=28, FEATURE=29, INSTANCEOF=30, REACTIVECLASS=31, INTERFACE=32, 
+		WHILE=27, ENV=28, FEATUREVAR=29, INSTANCEOF=30, REACTIVECLASS=31, INTERFACE=32, 
 		ABSTRACT=33, EXTENDS=34, IMPLEMENTS=35, MSGSRV=36, MAIN=37, STATEVARS=38, 
 		KNOWNREBECS=39, THIS=40, TRUE=41, FALSE=42, NULL=43, LPAREN=44, RPAREN=45, 
 		LBRACE=46, RBRACE=47, LBRACKET=48, RBRACKET=49, SEMI=50, COMMA=51, DOT=52, 
@@ -80,7 +80,7 @@ public class CoreRebecaCompleteParser extends Parser {
 			null, null, null, null, null, null, null, null, null, "'break'", "'case'", 
 			"'class'", "'continue'", "'default'", "'else'", "'for'", "'goto'", "'if'", 
 			"'import'", "'new'", "'package'", "'private'", "'protected'", "'public'", 
-			"'record'", "'return'", "'switch'", "'while'", "'env'", "'feature'", 
+			"'record'", "'return'", "'switch'", "'while'", "'env'", "'featurevar'", 
 			"'instanceof'", "'reactiveclass'", "'interface'", "'abstract'", "'extends'", 
 			"'implements'", "'msgsrv'", "'main'", "'statevars'", "'knownrebecs'", 
 			"'this'", "'true'", "'false'", "'null'", "'('", "')'", "'{'", "'}'", 
@@ -98,15 +98,15 @@ public class CoreRebecaCompleteParser extends Parser {
 			"WS", "COMMENT", "LINE_COMMENT", "BREAK", "CASE", "CLASS", "CONTINUE", 
 			"DEFAULT", "ELSE", "FOR", "GOTO", "IF", "IMPORT", "NEW", "PACKAGE", "PRIVATE", 
 			"PROTECTED", "PUBLIC", "RECORD", "RETURN", "SWITCH", "WHILE", "ENV", 
-			"FEATURE", "INSTANCEOF", "REACTIVECLASS", "INTERFACE", "ABSTRACT", "EXTENDS", 
-			"IMPLEMENTS", "MSGSRV", "MAIN", "STATEVARS", "KNOWNREBECS", "THIS", "TRUE", 
-			"FALSE", "NULL", "LPAREN", "RPAREN", "LBRACE", "RBRACE", "LBRACKET", 
-			"RBRACKET", "SEMI", "COMMA", "DOT", "EQ", "BANG", "TILDA", "QUES", "COLON", 
-			"EQEQ", "AMPAMP", "BARBAR", "PLUSPLUS", "SUBSUB", "SUPER", "PLUS", "SUB", 
-			"STAR", "SLASH", "AMP", "BAR", "CARET", "PERCENT", "PLUSEQ", "SUBEQ", 
-			"STAREQ", "SLASHEQ", "AMPEQ", "BAREQ", "CARETEQ", "TILDAEQ", "PERCENTEQ", 
-			"MONKEYS_AT", "BANGEQ", "GT", "LT", "LTLT", "LTLTEQ", "GTGT", "GTGTEQ", 
-			"IDENTIFIER"
+			"FEATUREVAR", "INSTANCEOF", "REACTIVECLASS", "INTERFACE", "ABSTRACT", 
+			"EXTENDS", "IMPLEMENTS", "MSGSRV", "MAIN", "STATEVARS", "KNOWNREBECS", 
+			"THIS", "TRUE", "FALSE", "NULL", "LPAREN", "RPAREN", "LBRACE", "RBRACE", 
+			"LBRACKET", "RBRACKET", "SEMI", "COMMA", "DOT", "EQ", "BANG", "TILDA", 
+			"QUES", "COLON", "EQEQ", "AMPAMP", "BARBAR", "PLUSPLUS", "SUBSUB", "SUPER", 
+			"PLUS", "SUB", "STAR", "SLASH", "AMP", "BAR", "CARET", "PERCENT", "PLUSEQ", 
+			"SUBEQ", "STAREQ", "SLASHEQ", "AMPEQ", "BAREQ", "CARETEQ", "TILDAEQ", 
+			"PERCENTEQ", "MONKEYS_AT", "BANGEQ", "GT", "LT", "LTLT", "LTLTEQ", "GTGT", 
+			"GTGTEQ", "IDENTIFIER"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -357,9 +357,9 @@ public class CoreRebecaCompleteParser extends Parser {
 		public TerminalNode SEMI(int i) {
 			return getToken(CoreRebecaCompleteParser.SEMI, i);
 		}
-		public List<TerminalNode> FEATURE() { return getTokens(CoreRebecaCompleteParser.FEATURE); }
-		public TerminalNode FEATURE(int i) {
-			return getToken(CoreRebecaCompleteParser.FEATURE, i);
+		public List<TerminalNode> FEATUREVAR() { return getTokens(CoreRebecaCompleteParser.FEATUREVAR); }
+		public TerminalNode FEATUREVAR(int i) {
+			return getToken(CoreRebecaCompleteParser.FEATUREVAR, i);
 		}
 		public List<FieldDeclarationContext> fieldDeclaration() {
 			return getRuleContexts(FieldDeclarationContext.class);
@@ -411,7 +411,7 @@ public class CoreRebecaCompleteParser extends Parser {
 			setState(145);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==ENV || _la==FEATURE) {
+			while (_la==ENV || _la==FEATUREVAR) {
 				{
 				setState(143);
 				_errHandler.sync(this);
@@ -429,11 +429,11 @@ public class CoreRebecaCompleteParser extends Parser {
 					}
 					}
 					break;
-				case FEATURE:
+				case FEATUREVAR:
 					{
 					{
 					setState(139);
-					match(FEATURE);
+					match(FEATUREVAR);
 					setState(140);
 					((RebecaCodeContext)_localctx).featureName = match(IDENTIFIER);
 					setState(141);
@@ -2642,7 +2642,11 @@ public class CoreRebecaCompleteParser extends Parser {
 						}
 						setState(613);
 						((SwitchBlockContext)_localctx).st = statement();
-						((SwitchBlockContext)_localctx).st.s.getAnnotations().addAll(anns); _localctx.ss.getSwitchStatementGroups().get(_localctx.ss.getSwitchStatementGroups().size() - 1).getStatements().add(((SwitchBlockContext)_localctx).st.s);
+
+											((SwitchBlockContext)_localctx).st.s.getAnnotations().addAll(anns);
+											_localctx.ss.getSwitchStatementGroups().get(_localctx.ss.getSwitchStatementGroups().size() - 1)
+												.getStatements().add(((SwitchBlockContext)_localctx).st.s);
+										
 						}
 						} 
 					}

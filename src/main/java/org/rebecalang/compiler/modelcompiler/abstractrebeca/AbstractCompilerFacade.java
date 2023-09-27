@@ -54,7 +54,7 @@ import org.springframework.stereotype.Component;
 @Component
 public abstract class AbstractCompilerFacade {
 
-	public static final String FEATURES_LABEL = "features";
+	public static final String FEATURES_LABEL = "feature";
 
 	@Autowired	
 	protected ExceptionContainer exceptionContainer;

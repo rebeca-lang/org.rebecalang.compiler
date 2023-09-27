@@ -1,10 +1,10 @@
-feature INCLUDED;
+featurevar INCLUDED;
 
 
 
 reactiveclass A(2) {
 
-	@features(false)
+	@feature(false)
 	A(int a) {
 		self.m4();
 	}
@@ -14,21 +14,21 @@ reactiveclass A(2) {
 		m3();
 	}
 
-	@features(!INCLUDED)
+	@feature(!INCLUDED)
 	msgsrv m1() {
 		int a = false;
 	}
 
-	@features(INCLUDED)
+	@feature(INCLUDED)
 	msgsrv m2() {
 
 	}
 
-	@features(!INCLUDED || true)
+	@feature(!INCLUDED || true)
 	int m3() {
 		return 10;
 	}
-	@features(!INCLUDED && false)
+	@feature(!INCLUDED && false)
 	int m3() {
 		return 10;
 	}

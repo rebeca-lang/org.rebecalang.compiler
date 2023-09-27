@@ -1,4 +1,4 @@
-feature INCLUDED;
+featurevar INCLUDED;
 
 
 reactiveclass A(3) {
@@ -6,17 +6,17 @@ reactiveclass A(3) {
 	msgsrv m() {
 		
 		while(true) {
-			@features(INCLUDED)
+			@feature(INCLUDED)
 			for(;;) {
 				byte a = 1;
-				@features(!INCLUDED)
+				@feature(!INCLUDED)
 				boolean a;
 				if(a == 3) {
 
 				} else {
 					{
 						a = 4;
-						@features(INCLUDED)
+						@feature(INCLUDED)
 						switch (a) {
 						case 7:
 							int d = 10; 

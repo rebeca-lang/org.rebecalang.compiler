@@ -1,12 +1,12 @@
 
-@features(INCLUDED)
+@feature(INCLUDED)
 reactiveclass A(2) {
 	
 }
 
 reactiveclass A(2) {
 
-	@features(10)
+	@feature(10)
 	msgsrv test() {
 	
 	} 	

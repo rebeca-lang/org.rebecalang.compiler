@@ -30,7 +30,7 @@ public class ProbabilisticTimedRebecaCompleteParser extends Parser {
 		CHARLITERAL=8, STRINGLITERAL=9, WS=10, COMMENT=11, LINE_COMMENT=12, BREAK=13, 
 		CASE=14, CLASS=15, CONTINUE=16, DEFAULT=17, ELSE=18, FOR=19, GOTO=20, 
 		IF=21, IMPORT=22, NEW=23, PACKAGE=24, PRIVATE=25, PROTECTED=26, PUBLIC=27, 
-		RECORD=28, RETURN=29, SWITCH=30, WHILE=31, ENV=32, FEATURE=33, INSTANCEOF=34, 
+		RECORD=28, RETURN=29, SWITCH=30, WHILE=31, ENV=32, FEATUREVAR=33, INSTANCEOF=34, 
 		REACTIVECLASS=35, INTERFACE=36, ABSTRACT=37, EXTENDS=38, IMPLEMENTS=39, 
 		MSGSRV=40, MAIN=41, STATEVARS=42, KNOWNREBECS=43, THIS=44, TRUE=45, FALSE=46, 
 		NULL=47, LPAREN=48, RPAREN=49, LBRACE=50, RBRACE=51, LBRACKET=52, RBRACKET=53, 
@@ -85,7 +85,7 @@ public class ProbabilisticTimedRebecaCompleteParser extends Parser {
 			null, null, null, null, null, "'break'", "'case'", "'class'", "'continue'", 
 			"'default'", "'else'", "'for'", "'goto'", "'if'", "'import'", "'new'", 
 			"'package'", "'private'", "'protected'", "'public'", "'record'", "'return'", 
-			"'switch'", "'while'", "'env'", "'feature'", "'instanceof'", "'reactiveclass'", 
+			"'switch'", "'while'", "'env'", "'featurevar'", "'instanceof'", "'reactiveclass'", 
 			"'interface'", "'abstract'", "'extends'", "'implements'", "'msgsrv'", 
 			"'main'", "'statevars'", "'knownrebecs'", "'this'", "'true'", "'false'", 
 			"'null'", "'('", "')'", "'{'", "'}'", "'['", "']'", "';'", "','", "'.'", 
@@ -102,7 +102,7 @@ public class ProbabilisticTimedRebecaCompleteParser extends Parser {
 			"DOUBLELITERAL", "CHARLITERAL", "STRINGLITERAL", "WS", "COMMENT", "LINE_COMMENT", 
 			"BREAK", "CASE", "CLASS", "CONTINUE", "DEFAULT", "ELSE", "FOR", "GOTO", 
 			"IF", "IMPORT", "NEW", "PACKAGE", "PRIVATE", "PROTECTED", "PUBLIC", "RECORD", 
-			"RETURN", "SWITCH", "WHILE", "ENV", "FEATURE", "INSTANCEOF", "REACTIVECLASS", 
+			"RETURN", "SWITCH", "WHILE", "ENV", "FEATUREVAR", "INSTANCEOF", "REACTIVECLASS", 
 			"INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", "MSGSRV", "MAIN", "STATEVARS", 
 			"KNOWNREBECS", "THIS", "TRUE", "FALSE", "NULL", "LPAREN", "RPAREN", "LBRACE", 
 			"RBRACE", "LBRACKET", "RBRACKET", "SEMI", "COMMA", "DOT", "EQ", "BANG", 
@@ -1258,9 +1258,9 @@ public class ProbabilisticTimedRebecaCompleteParser extends Parser {
 		public TerminalNode SEMI(int i) {
 			return getToken(ProbabilisticTimedRebecaCompleteParser.SEMI, i);
 		}
-		public List<TerminalNode> FEATURE() { return getTokens(ProbabilisticTimedRebecaCompleteParser.FEATURE); }
-		public TerminalNode FEATURE(int i) {
-			return getToken(ProbabilisticTimedRebecaCompleteParser.FEATURE, i);
+		public List<TerminalNode> FEATUREVAR() { return getTokens(ProbabilisticTimedRebecaCompleteParser.FEATUREVAR); }
+		public TerminalNode FEATUREVAR(int i) {
+			return getToken(ProbabilisticTimedRebecaCompleteParser.FEATUREVAR, i);
 		}
 		public List<FieldDeclarationContext> fieldDeclaration() {
 			return getRuleContexts(FieldDeclarationContext.class);
@@ -1312,7 +1312,7 @@ public class ProbabilisticTimedRebecaCompleteParser extends Parser {
 			setState(367);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==ENV || _la==FEATURE) {
+			while (_la==ENV || _la==FEATUREVAR) {
 				{
 				setState(365);
 				_errHandler.sync(this);
@@ -1330,11 +1330,11 @@ public class ProbabilisticTimedRebecaCompleteParser extends Parser {
 					}
 					}
 					break;
-				case FEATURE:
+				case FEATUREVAR:
 					{
 					{
 					setState(361);
-					match(FEATURE);
+					match(FEATUREVAR);
 					setState(362);
 					((RebecaCodeContext)_localctx).featureName = match(IDENTIFIER);
 					setState(363);

@@ -1,13 +1,13 @@
-feature INCLUDED;
+featurevar INCLUDED;
 
 interface I {
-	@features(INCLUDED)
+	@feature(INCLUDED)
 	msgsrv m1();
-	@features(!INCLUDED)
+	@feature(!INCLUDED)
 	msgsrv m1();
 }
 
-@features(!INCLUDED)
+@feature(!INCLUDED)
 interface I {
 	msgsrv m2();
 }
