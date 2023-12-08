@@ -154,4 +154,17 @@ public class FeatureAnnotationTest {
 		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
 		
 	}
+	
+	@Test
+	public void GIVEN_ModelWithFeaturevar_WHEN_FeatureUsedInExpressions_THEN_NoErrors() {
+		File model = new File(MODEL_FILES_BASE + "FeatureVariableInLogic.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+		extension.add(CompilerExtension.TIMED_REBECA);
+
+		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
+
+		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
+		
+	}
+
 }

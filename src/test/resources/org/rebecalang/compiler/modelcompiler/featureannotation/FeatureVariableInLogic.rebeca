@@ -1,0 +1,18 @@
+featurevar INCLUDED;
+
+
+reactiveclass A(3) {
+	
+	msgsrv m() {
+		
+		while(INCLUDED) {
+			if(!INCLUDED);
+			boolean b = INCLUDED && INCLUDED;
+		}
+	}
+
+}
+
+main {
+	
+}

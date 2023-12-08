@@ -58,8 +58,10 @@ public abstract class AbstractCompilerFacade {
 
 	@Autowired	
 	protected ExceptionContainer exceptionContainer;
+	
 	@Autowired	
 	protected ScopeHandler scopeHandler;
+	
 	@Autowired	
 	protected SymbolTable symbolTable;
 	
@@ -235,7 +237,6 @@ public abstract class AbstractCompilerFacade {
 		mrds.addAll(included);
 	}
 
-
 	private String constantExpressionToString(Expression expression) throws CodeCompilationException {
 		if(expression instanceof Literal) {
 			return ((Literal)expression).getLiteralValue();
@@ -303,7 +304,6 @@ public abstract class AbstractCompilerFacade {
 	 *            corresponding RebecaModel object
 	 * @return The generated RebecaModel
 	 */
-	
 	public final void compile(CharStream input, CoreVersion coreVersion) {
 		this.coreVersion = coreVersion;
 		
@@ -358,7 +358,7 @@ public abstract class AbstractCompilerFacade {
 			for (VariableDeclarator vd : fd.getVariableDeclarators()) {
 				if (vd.getVariableInitializer() != null) {
 					CodeCompilationException rce = new CodeCompilationException(
-							"Feature variable \"" + vd.getVariableName() + "\" is automatically initiliazed to true",
+							"Feature variables \"" + vd.getVariableName() + "\" are automatically initiliazed to true",
 							vd.getLineNumber(), vd.getCharacter());
 					exceptionContainer.addException(rce);
 				} else {
@@ -383,6 +383,7 @@ public abstract class AbstractCompilerFacade {
 			}
 		}
 	}
+	
 	protected abstract void initializeStatementSemanticCheckContainer();
 
 	protected abstract void initializeExpressionSemanticCheckContainer();
@@ -396,5 +397,4 @@ public abstract class AbstractCompilerFacade {
 	public RebecaModel getRebecaModel() {
 		return rebecaModel;
 	}
-
 }
