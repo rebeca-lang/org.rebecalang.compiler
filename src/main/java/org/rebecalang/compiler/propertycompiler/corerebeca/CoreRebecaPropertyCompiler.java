@@ -124,15 +124,15 @@ public class CoreRebecaPropertyCompiler extends GeneralPropertyCompiler {
 		weakUntilMethod.setReturnType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 
 		modelSymbolTable.addMethod(null, globallyMethod,
-				CoreRebecaLabelUtility.SYNCH_METHOD);
+				CoreRebecaLabelUtility.BUILT_IN_METHOD);
 		modelSymbolTable.addMethod(null, finallyMethod,
-				CoreRebecaLabelUtility.SYNCH_METHOD);
+				CoreRebecaLabelUtility.BUILT_IN_METHOD);
 		modelSymbolTable.addMethod(null, nextMethod,
-				CoreRebecaLabelUtility.SYNCH_METHOD);
+				CoreRebecaLabelUtility.BUILT_IN_METHOD);
 		modelSymbolTable.addMethod(null, untilMethod,
-				CoreRebecaLabelUtility.SYNCH_METHOD);
+				CoreRebecaLabelUtility.BUILT_IN_METHOD);
 		modelSymbolTable.addMethod(null, weakUntilMethod,
-				CoreRebecaLabelUtility.SYNCH_METHOD);
+				CoreRebecaLabelUtility.BUILT_IN_METHOD);
 	}
 
 	@Override

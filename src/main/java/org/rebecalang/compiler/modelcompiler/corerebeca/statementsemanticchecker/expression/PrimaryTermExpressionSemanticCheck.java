@@ -111,11 +111,9 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 					return returnValue;
 				///
 				MethodInSymbolTableSpecifier methodInSymbolTableSpecifier = null;
+				Type selfType = scopeHandler.retreiveVariableFromScope("self").getType();
 				if (baseType == AbstractTypeSystem.NO_TYPE) {
-					Type selfType = scopeHandler.retreiveVariableFromScope("self").getType();
 					try {
-						// methodInSymbolTableSpecifier = symbolTable.getMethodSpecification(selfType,
-						// termName, argumentTypes);
 						methodInSymbolTableSpecifier = checkMethodInParents(selfType, termName, argumentTypes);
 
 					} catch (SymbolTableException se) {
@@ -128,12 +126,22 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 
 				}
 				if (methodInSymbolTableSpecifier.getLabel() == CoreRebecaLabelUtility.CONSTRUCTOR) {
-					exceptionContainer.addException(new CodeCompilationException(
+					exceptionContainer.addException(new SymbolTableException(
 							"The method " + termName + SymbolTable.convertMethodArgumentsToString(argumentTypes)
 							+ " is undefined"
 							+ (baseType == null || baseType == AbstractTypeSystem.NO_TYPE ? ""
 									: " for the type " + baseType.getTypeName()),
 							termPrimary.getLineNumber(), termPrimary.getCharacter()));
+				}
+				if (methodInSymbolTableSpecifier.getLabel() == CoreRebecaLabelUtility.SYNCH_METHOD) {
+					if(methodInSymbolTableSpecifier.getRebecType() != selfType) {
+						exceptionContainer.addException(new SymbolTableException(
+								"The method " + termName + SymbolTable.convertMethodArgumentsToString(argumentTypes)
+								+ " is not visible"
+								+ (baseType == null || baseType == AbstractTypeSystem.NO_TYPE ? ""
+										: " for the type " + baseType.getTypeName()),
+								termPrimary.getLineNumber(), termPrimary.getCharacter()));
+					}
 				}
 				termPrimary.setLabel(methodInSymbolTableSpecifier.getLabel());
 				returnValue.setFirst(methodInSymbolTableSpecifier.getReturnValue());

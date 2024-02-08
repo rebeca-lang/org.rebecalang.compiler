@@ -1,0 +1,25 @@
+reactiveclass A(1) {
+	msgsrv x() {
+
+	}
+}
+
+reactiveclass B(1) {
+	knownrebecs {
+		A a;
+	}
+	msgsrv y() {
+		self.y();
+		y();
+		z();
+		a.x();
+	}
+	msgsrv z() {
+
+	}
+}
+
+main {
+	A a():();
+	B b(a):();
+}

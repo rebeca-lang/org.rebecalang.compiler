@@ -136,13 +136,13 @@ public class TimedRebecaPropertyCompiler extends GeneralPropertyCompiler {
 		AFMethod.setReturnType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
 
 		modelSymbolTable.addMethod(null, EUMethod,
-				CoreRebecaLabelUtility.SYNCH_METHOD);
+				CoreRebecaLabelUtility.BUILT_IN_METHOD);
 		modelSymbolTable.addMethod(null, AUMethod,
-				CoreRebecaLabelUtility.SYNCH_METHOD);
+				CoreRebecaLabelUtility.BUILT_IN_METHOD);
 		modelSymbolTable.addMethod(null, AGMethod,
-				CoreRebecaLabelUtility.SYNCH_METHOD);
+				CoreRebecaLabelUtility.BUILT_IN_METHOD);
 		modelSymbolTable.addMethod(null, AFMethod,
-				CoreRebecaLabelUtility.SYNCH_METHOD);
+				CoreRebecaLabelUtility.BUILT_IN_METHOD);
 	}
 
 	@Override

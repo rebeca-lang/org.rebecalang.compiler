@@ -252,7 +252,7 @@ public class SymbolTable {
         public void setArgumentsNames(List<String> argumentsNames) {
             this.argumentsNames = argumentsNames;
         }
-
+        
         public Type getRebecType() { return rebecType; }
 
         public void setRebecType(Type rebecType) { this.rebecType = rebecType; }

@@ -1,0 +1,21 @@
+reactiveclass A(1) {
+	A() {
+
+	}
+	void f() {
+		self.A();
+	}
+}
+
+reactiveclass B(1) {
+	knownrebecs {
+		A a;
+	}
+	msgsrv g() {
+		a.A();
+	}
+}
+
+main {
+	
+}

@@ -1,0 +1,18 @@
+reactiveclass A(1) {
+	void f() {
+
+	}
+}
+
+reactiveclass B(1) {
+	knownrebecs {
+		A a;
+	}
+	msgsrv g() {
+		a.f();
+	}
+}
+
+main {
+	
+}
