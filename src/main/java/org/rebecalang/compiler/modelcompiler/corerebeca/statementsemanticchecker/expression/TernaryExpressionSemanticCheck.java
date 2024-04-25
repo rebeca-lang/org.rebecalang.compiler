@@ -54,7 +54,7 @@ public class TernaryExpressionSemanticCheck extends AbstractExpressionSemanticCh
 		}
 		
 		returnValue.setFirst(tExpression.getType());
-		if (cType.getSecond() != null) {
+		if (cType.getSecond() != AbstractExpressionSemanticCheck.NO_VALUE) {
 			if (lType.getSecond() != null && rType.getSecond() != null)
 				if (((Boolean) cType.getSecond()).booleanValue()) {
 					returnValue.setSecond(lType.getSecond());

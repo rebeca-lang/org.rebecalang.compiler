@@ -66,7 +66,8 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 					returnValue.setFirst(variableInScopeSpecifier.getType());
 					termPrimary.setType(variableInScopeSpecifier.getType());
 					Object value = variableInScopeSpecifier.getPrecompilationValue();
-					returnValue.setSecond(value);
+					if(value != null)
+						returnValue.setSecond(value);
 				} else {
 					Type curType = baseType;
 					Type symbolType = null;
