@@ -50,4 +50,21 @@ public class InheritanceTest {
 		
 	}
 
+	@Test
+	public void test2() {
+		File model = new File(MODEL_FILES_BASE + "CoreRebecaModelWithAbstract.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+//		extension.add(CompilerExtension.TIMED_REBECA);
+
+		Pair<RebecaModel,SymbolTable> compileRebecaFile = compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_3);
+		
+		RebecaModel rebecaModel = compileRebecaFile.getFirst();
+		rebecaModel.getRebecaCode();
+		
+		ExceptionContainer expected = new ExceptionContainer();
+		expected.setCorrespondingResource(model);
+		
+		Assertions.assertEquals(expected, exceptionContainer);
+		
+	}
 }

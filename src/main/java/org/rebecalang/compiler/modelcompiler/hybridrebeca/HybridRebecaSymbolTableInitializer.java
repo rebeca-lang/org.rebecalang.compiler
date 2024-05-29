@@ -19,6 +19,8 @@ public class HybridRebecaSymbolTableInitializer extends SymbolTableInitializer {
 	}
 
 	public void fillSymbolTable(RebecaModel rebecaModel, CoreVersion coreVersion) {
+		super.fillSymbolTable(rebecaModel, coreVersion);
+		
 		for (PhysicalClassDeclaration physicalClassDeclaration : ((HybridRebecaCode)rebecaModel.getRebecaCode()).getPhysicalClassDeclaration()) {
 
 			if (physicalClassDeclaration.getExtends() != null) {

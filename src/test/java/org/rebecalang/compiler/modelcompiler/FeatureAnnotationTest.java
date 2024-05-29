@@ -43,9 +43,9 @@ public class FeatureAnnotationTest {
 
 		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
 		expectedExceptionContainer.setCorrespondingResource(model);
-		expectedExceptionContainer.addException(new CodeCompilationException("Feature expression must be evaluated to a boolean value", 9, 11));
+		expectedExceptionContainer.addException(new CodeCompilationException("Feature expression must be evaluated to a boolean value", 9, 10));
 
-		Assertions.assertEquals(expectedExceptionContainer, expectedExceptionContainer);
+		Assertions.assertEquals(exceptionContainer, expectedExceptionContainer);
 		
 	}
 

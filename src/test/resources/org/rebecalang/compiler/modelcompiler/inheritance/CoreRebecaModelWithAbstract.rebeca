@@ -1,0 +1,40 @@
+abstract reactiveclass A(1) {
+	statevars {
+		byte id;
+	}
+	knownrebecs {
+		D d;
+	}
+	msgsrv m2() {
+		self.m1();
+	}
+	abstract msgsrv m1();
+}
+
+reactiveclass B extends A(2) {	
+	B() {
+		self.m2();
+	}
+	msgsrv m1() {
+		d.m3();
+	}
+}
+
+reactiveclass C extends A(2){
+	C() {
+		self.m2();
+	}
+	msgsrv m1() {
+		d.m3();
+	}
+}
+reactiveclass D(10) {
+	msgsrv m3() {
+	}
+}
+
+main {
+	B b(d):();
+	C c(d):();
+	D d():();
+}

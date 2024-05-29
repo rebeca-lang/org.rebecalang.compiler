@@ -240,17 +240,17 @@ reactiveClassDeclaration returns[ReactiveClassDeclaration rcd]
         LPAREN queueSize = INTLITERAL {if(!$queueSize.getText().equals("<missing INTLITERAL>")) $rcd.setQueueSize(Integer.parseInt($queueSize.text));} RPAREN
         LBRACE
 
-        (KNOWNREBECS
-		LBRACE
-			(fd = fieldDeclaration {$rcd.getKnownRebecs().add($fd.fd);} SEMI)*
-		RBRACE)?
-
-        (STATEVARS
-		LBRACE
-			(fd = fieldDeclaration {$rcd.getStatevars().add($fd.fd);} SEMI)*
-		RBRACE)?
-
-		(	cd = constructorDeclaration {$rcd.getConstructors().add($cd.cd);}
+        (
+        	(KNOWNREBECS
+			LBRACE
+				(fd = fieldDeclaration {$rcd.getKnownRebecs().add($fd.fd);} SEMI)*
+			RBRACE)
+		|
+        	(STATEVARS
+			LBRACE
+				(fd = fieldDeclaration {$rcd.getStatevars().add($fd.fd);} SEMI)*
+			RBRACE)
+		|	cd = constructorDeclaration {$rcd.getConstructors().add($cd.cd);}
 		|	md = msgsrvDeclaration {$rcd.getMsgsrvs().add($md.md);}
 		|	smd = synchMethodDeclaration {$rcd.getSynchMethods().add($smd.smd);}
 		)*

@@ -66,7 +66,7 @@ public class HybridRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompil
 		return allClasses;
 	}
 	
-	protected void addMethodsAndVariablesOfRebecaExtensionToSymbolTableAndScope() {
+	protected void addVariablesOfRebecaExtensionToScope() {
 		super.addEnvironmentVariablesToScope();
 		try {
 			scopeHandler.addVariableToCurrentScope("none",
