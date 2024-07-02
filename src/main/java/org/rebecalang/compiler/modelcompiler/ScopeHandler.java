@@ -36,21 +36,29 @@ public class ScopeHandler {
 		scopeStack.pop();
 	}
 
+	public void popScopeRecordToLabel(Label label) {
+		Label stackLabel = null; 
+		while(stackLabel != label) {
+			stackLabel = scopeStack.pop().getFirst();
+		}
+		
+	}
+
+
 	public void addVariableToCurrentScope(String variableName, Type type, Label label, 
 			int lineNumber, int column) throws ScopeException {
-		addVaribaleToCurrentScope(variableName, type, label, null, lineNumber, column);
+		addVariableToCurrentScope(variableName, type, label, null, lineNumber, column);
 	}
 		
-	public void addVaribaleToCurrentScope(String variableName, Type type, Label label, Object precompilationValue, 
+	public void addVariableToCurrentScope(String variableName, Type type, Label label, Object precompilationValue, 
 			int lineNumber, int column) throws ScopeException {
-		VariableInScopeSpecifier info = null;
-		try {
-			info = retreiveVariableFromScope(variableName);
-		} catch (ScopeException se) {
+		HashMap<String, VariableInScopeSpecifier> ar = 
+				scopeStack.peek().getSecond();
+		if (!ar.containsKey(variableName)) {
 			VariableInScopeSpecifier data;
-				data = new VariableInScopeSpecifier(variableName, type, label, precompilationValue, 
-						lineNumber, column);
-			scopeStack.peek().getSecond().put(variableName, data);
+			data = new VariableInScopeSpecifier(variableName, type, label, precompilationValue, 
+					lineNumber, column);
+			ar.put(variableName, data);
 			return;
 		}
 		String exceptionMessage;
@@ -61,15 +69,15 @@ public class ScopeHandler {
 			exceptionMessage = "Redeclaration of \""
 					+ type.getTypeName() + " " + variableName
 					+ "\", it has already been declared in line "
-					+ info.getLineNumber() + " column "
-					+ info.getColumn();
+					+ variableInfo.getLineNumber() + " column "
+					+ variableInfo.getColumn();
 		}
 		throw new ScopeException(exceptionMessage, lineNumber, column);
 	}
 
 	public VariableInScopeSpecifier retreiveVariableFromScope(
 			String variableName) throws ScopeException {
-		for (int cnt = 0; cnt < scopeStack.size(); cnt++) {
+		for (int cnt = scopeStack.size() - 1; cnt >= 0; cnt--) {
 			HashMap<String, VariableInScopeSpecifier> ar = scopeStack
 					.get(cnt).getSecond();
 			if (ar.containsKey(variableName))
@@ -158,6 +166,16 @@ public class ScopeHandler {
 		} catch (ScopeException se) {
 			se.printStackTrace();
 		}
+	}
+
+	public VariableInScopeSpecifier removeVariable(String variableName) throws ScopeException {
+		for (int cnt = scopeStack.size() - 1; cnt >= 0; cnt--) {
+			HashMap<String, VariableInScopeSpecifier> ar = scopeStack
+					.get(cnt).getSecond();
+			if (ar.containsKey(variableName))
+				return ar.remove(variableName);
+		}
+		throw new ScopeException("\"" + variableName + "\" undeclared", 0, 0);
 	}
 
 }

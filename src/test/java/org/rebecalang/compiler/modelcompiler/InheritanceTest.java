@@ -29,6 +29,23 @@ public class InheritanceTest {
 	public static final String MODEL_FILES_BASE = "src/test/resources/org/rebecalang/compiler/modelcompiler/inheritance/"; 
 
 	@Test
+	public void CoreRebecaModelWithVariableRedefinition() {
+		File model = new File(MODEL_FILES_BASE + "CoreRebecaModelWithVariableRedefinition.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+
+		Pair<RebecaModel,SymbolTable> compileRebecaFile = compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_3);
+		
+		RebecaModel rebecaModel = compileRebecaFile.getFirst();
+		rebecaModel.getRebecaCode();
+		
+		ExceptionContainer expected = new ExceptionContainer();
+		expected.setCorrespondingResource(model);
+		
+		Assertions.assertEquals(expected, exceptionContainer);
+		
+	}
+
+	@Test
 	public void test() {
 		File model = new File(MODEL_FILES_BASE + "LookupInheritedMethod.rebeca");
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
@@ -67,4 +84,5 @@ public class InheritanceTest {
 		Assertions.assertEquals(expected, exceptionContainer);
 		
 	}
+	
 }

@@ -184,6 +184,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 						expressionSemanticCheckContainer));
 		statementSemanticCheckContainer.registerSemanticsChecker(ForStatement.class, 
 				appContext.getBean(ForStatementSemanticCheck.class,
+						typeSystem,
 						statementSemanticCheckContainer,
 						expressionSemanticCheckContainer));
 		statementSemanticCheckContainer.registerSemanticsChecker(WhileStatement.class,
@@ -274,7 +275,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 
 			scopeHandler.pushScopeRecord(CoreRebecaLabelUtility.REACTIVE_CLASS);
 
-			addStatevarsToScope(rcd);
+			addKnownRebecsAndStatevarsToScope(rcd);
 
 			semanticCheckForConstructorsOfReactiveClassDeclaration(rcd);
 
@@ -282,7 +283,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 
 			semanticCheckForMessageServersOfReactiveClassDeclaration(rcd);
 
-			scopeHandler.popScopeRecord();
+			scopeHandler.popScopeRecordToLabel(CoreRebecaLabelUtility.REACTIVE_CLASS);
 		}
 	}
 
@@ -344,7 +345,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		}
 	}
 
-	protected void addStatevarsToScope(ReactiveClassDeclaration rcd) {
+	protected void addKnownRebecsAndStatevarsToScope(ReactiveClassDeclaration rcd) {
 		if ((rcd.getExtends() != null || rcd.isAbstract())
 				&& !coreVersionIsCompatibleWithInheritanceAndInterfaceDeclaration()) {
 
@@ -381,6 +382,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 			}
 		}
 		while (!extendStack.isEmpty()) {
+			scopeHandler.pushScopeRecord(null);
 			addIntraReactiveClassVariablesToScope(extendStack.pop());
 		}
 	}

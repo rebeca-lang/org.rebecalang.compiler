@@ -44,7 +44,6 @@ public class ModelStructureTest {
 		File model = new File(MODEL_FILES_BASE + "CoreRebecaModelAllExpressions.rebeca");
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
-
 		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
 		expectedExceptionContainer.setCorrespondingResource(model);
 		expectedExceptionContainer.addException(new ScopeException("\"c\" undeclared", 20, 2));
@@ -59,9 +58,6 @@ public class ModelStructureTest {
 		expectedExceptionContainer.addException(new ScopeException("Redeclaration of \"int b\", it has already been declared in line 34 column 12", 40, 19));
 		expectedExceptionContainer.addException(new CodeCompilationException("Duplicate case value \"5\"", 43, 15));
 
-		
-		
-		
 		expectedExceptionContainer.addException(new SymbolTableException("The method f() is undefined", 44, 5));
 		expectedExceptionContainer.addException(
 				new CodeCompilationException("There is no meta data for type String", 45, 7));

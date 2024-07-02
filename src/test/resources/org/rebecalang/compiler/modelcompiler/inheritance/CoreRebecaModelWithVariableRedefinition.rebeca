@@ -1,0 +1,32 @@
+reactiveclass A(1) {
+	statevars {
+		byte id;
+	}
+	knownrebecs {
+		D d;
+	}
+	msgsrv m2() {
+	}
+}
+
+reactiveclass B extends A(2) {	
+	statevars {
+		byte id;
+	}
+	B() {
+		self.m2();
+	}
+	msgsrv m1(boolean id) {
+		d.m3();
+		id = false;
+	}
+}
+reactiveclass D(10) {
+	msgsrv m3() {
+	}
+}
+
+main {
+	B b(d):();
+	D d():();
+}
