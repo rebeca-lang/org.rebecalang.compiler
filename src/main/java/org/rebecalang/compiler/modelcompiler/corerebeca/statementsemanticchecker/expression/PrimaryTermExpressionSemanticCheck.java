@@ -135,7 +135,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 							termPrimary.getLineNumber(), termPrimary.getCharacter()));
 				}
 				if (methodInSymbolTableSpecifier.getLabel() == CoreRebecaLabelUtility.SYNCH_METHOD) {
-					if(methodInSymbolTableSpecifier.getRebecType() != selfType) {
+					if(!selfType.canTypeUpCastTo(methodInSymbolTableSpecifier.getRebecType())) {
 						exceptionContainer.addException(new SymbolTableException(
 								"The method " + termName + SymbolTable.convertMethodArgumentsToString(argumentTypes)
 								+ " is not visible"

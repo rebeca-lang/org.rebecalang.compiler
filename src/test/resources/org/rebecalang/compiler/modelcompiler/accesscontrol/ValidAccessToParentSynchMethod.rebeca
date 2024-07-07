@@ -1,0 +1,20 @@
+reactiveclass A(1) {
+	void f() {
+
+	}
+}
+
+reactiveclass B extends A(1) {
+	knownrebecs {
+		A a;
+	}
+
+	msgsrv g() {
+		self.f();
+		a.f();
+	}
+}
+
+main {
+	
+}

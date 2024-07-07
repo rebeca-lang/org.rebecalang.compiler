@@ -53,6 +53,18 @@ public class AccessControlTest {
 	}
 	
 	@Test
+	public void GIVEN_RebecaModelWithTwoReactiveclasses_WHEN_AccessToLocalMethodOfParentActorTHEN_NoError() {
+		File model = new File(MODEL_FILES_BASE + "accesscontrol/ValidAccessToParentSynchMethod.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_3);
+
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
+	}
+	
+	@Test
 	public void GIVEN_RebecaModelWithTwoReactiveclasses_WHEN_ValidAccessToMsgsrvsTHEN_NoError() {
 		File model = new File(MODEL_FILES_BASE + "accesscontrol/ValidAccessToMsgsrvs.rebeca");
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
