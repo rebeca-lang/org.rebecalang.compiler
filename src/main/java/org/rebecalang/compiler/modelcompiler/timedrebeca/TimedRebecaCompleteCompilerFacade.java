@@ -70,15 +70,9 @@ public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompile
 	protected void addMethodsOfRebecaExtensionToSymbolTable() {
 		super.addMethodsOfRebecaExtensionToSymbolTable();
 
-		SynchMethodDeclaration delayMethod = new SynchMethodDeclaration();
-		delayMethod.setName("delay");
+		addMethodToSymbolTable(CoreRebecaLabelUtility.BUILT_IN_METHOD, null, "delay", CoreRebecaTypeSystem.INT_TYPE,
+				new Pair<Type, String>(CoreRebecaTypeSystem.INT_TYPE, "arg0"));
 		FormalParameterDeclaration fpd = new FormalParameterDeclaration();
-		fpd.setName("arg0");
-		fpd.setType(CoreRebecaTypeSystem.INT_TYPE);
-		delayMethod.getFormalParameters().add(fpd);
-		delayMethod.setReturnType(CoreRebecaTypeSystem.VOID_TYPE);
-
-		symbolTable.addMethod(null, delayMethod, TimedRebecaLabelUtility.DELAY);
 		
 		SynchMethodDeclaration startTimerMethod = new SynchMethodDeclaration();
 		startTimerMethod.setName("startTimer");
