@@ -70,7 +70,7 @@ public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompile
 	protected void addMethodsOfRebecaExtensionToSymbolTable() {
 		super.addMethodsOfRebecaExtensionToSymbolTable();
 
-		addMethodToSymbolTable(CoreRebecaLabelUtility.BUILT_IN_METHOD, null, "delay", CoreRebecaTypeSystem.INT_TYPE,
+		addMethodToSymbolTable(CoreRebecaLabelUtility.BUILT_IN_METHOD, null, "delay", CoreRebecaTypeSystem.VOID_TYPE,
 				new Pair<Type, String>(CoreRebecaTypeSystem.INT_TYPE, "arg0"));
 		FormalParameterDeclaration fpd = new FormalParameterDeclaration();
 		
