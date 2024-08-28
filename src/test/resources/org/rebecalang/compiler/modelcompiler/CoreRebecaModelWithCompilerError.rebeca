@@ -6,8 +6,13 @@ reactiveclass A (3) {
 }
 
 reactiveclass B (3) {
+	knownrebecs {
+		A bb;
+		A c;
+	}
 }
 
 main {
 	A a(b):();
+	A b(a, null):();
 }
