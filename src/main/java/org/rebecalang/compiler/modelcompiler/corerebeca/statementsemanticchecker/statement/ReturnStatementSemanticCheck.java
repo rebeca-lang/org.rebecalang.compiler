@@ -4,6 +4,8 @@ import org.rebecalang.compiler.modelcompiler.ScopeHandler;
 import org.rebecalang.compiler.modelcompiler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractStatementSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReturnStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
@@ -29,14 +31,16 @@ public class ReturnStatementSemanticCheck extends AbstractStatementSemanticCheck
 	public void check(Statement statement)
 			throws CompilerInternalErrorRuntimeException {
 		ReturnStatement returnStatement = (ReturnStatement) statement;
-		Type returnValueType = statementSemanticCheckContainer.check(
+		Type returnValueType = CoreRebecaTypeSystem.VOID_TYPE;
+		if(returnStatement.getExpression() != null)
+			returnValueType = statementSemanticCheckContainer.check(
 				returnStatement.getExpression()).getFirst();
 		Type expectedType;
 		try {
 			expectedType = scopeHandler
 					.retreiveVariableFromScope(ScopeHandler.RETURN_VALUE_KEY_IN_SCOPE).getType();
 		} catch (ScopeException e) {
-			throw new CompilerInternalErrorRuntimeException(e);
+			expectedType = CoreRebecaTypeSystem.VOID_TYPE;
 		}
 		if (!returnValueType.canTypeUpCastTo(expectedType)) {
 			CodeCompilationException rce = new CodeCompilationException(

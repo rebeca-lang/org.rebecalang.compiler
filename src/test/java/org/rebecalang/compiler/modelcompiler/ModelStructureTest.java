@@ -81,8 +81,9 @@ public class ModelStructureTest {
 		expectedExceptionContainer.setCorrespondingResource(model);
 		expectedExceptionContainer.addException(new CodeCompilationException("Unknown type C", 4, 2));
 		expectedExceptionContainer.addException(new CodeCompilationException(
-				"The A knownrebecs type binding of (B, C) is not applicable for the arguments (unknown)", 12, 3));
-		expectedExceptionContainer.addException(new ScopeException("\"b\" undeclared", 12, 5));
+				"The A knownrebecs type binding of (B, C) is not applicable for the arguments (A)", 16, 3));
+		expectedExceptionContainer.addException(new CodeCompilationException(
+				"The A knownrebecs type binding of (B, C) is not applicable for the arguments (A, null)", 17, 3));
 
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
@@ -198,6 +199,20 @@ public class ModelStructureTest {
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
 	
+	@Test
+	public void GIVEN_CoreRebecaModelWithReturn_WHEN_CoreIs2_3_THEN_Two_Errors() {
+		File model = new File(MODEL_FILES_BASE + "ReturnValue.rebeca");
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+
+		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_3);
+		
+		ExceptionContainer expectedExceptionContainer = new ExceptionContainer();
+		expectedExceptionContainer.setCorrespondingResource(model);
+		expectedExceptionContainer.addException(new CodeCompilationException("Type mismatch: cannot convert from int to void", 9, 2));
+		expectedExceptionContainer.addException(new CodeCompilationException("Type mismatch: cannot convert from double to int", 15, 2));
+
+		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
+	}
 
 
 	@Test

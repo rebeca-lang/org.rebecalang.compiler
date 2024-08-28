@@ -1,0 +1,21 @@
+reactiveclass A(3) {
+	msgsrv m1() {
+		return;
+	}
+}
+
+reactiveclass B(3) {
+	msgsrv m2() {
+		return 1+2;
+	}
+	int sm1() {
+		return sm2();
+	}
+	int sm2() {
+		return 1.5;
+	}
+}
+
+main {
+	
+}

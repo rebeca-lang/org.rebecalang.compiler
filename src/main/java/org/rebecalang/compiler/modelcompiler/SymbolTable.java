@@ -15,7 +15,6 @@ public class SymbolTable {
 
     @Autowired
     ExceptionContainer exceptionContainer;
-//	AbstractTypeSystem typeSystem;
 
     private Hashtable<Type, Hashtable<String, FieldDeclaration>> variablesSymbolTable;
     private HashMap<Type, Hashtable<String, LinkedList<MethodInSymbolTableSpecifier>>> methodsSymbolTable;

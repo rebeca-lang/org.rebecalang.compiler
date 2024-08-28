@@ -351,8 +351,10 @@ statement returns [Statement s]
     	RPAREN st = statement {((ForStatement)$s).setStatement($st.s);}
     |   SWITCH LPAREN e = expression RPAREN LBRACE sb = switchBlock RBRACE
     	{$s = $sb.ss; ((SwitchStatement)$s).setExpression($e.e); $s.setLineNumber($SWITCH.getLine()); $s.setCharacter($SWITCH.getCharPositionInLine());}
-    |   RETURN e = expression? SEMI
-    	{$s = new ReturnStatement(); ((ReturnStatement)$s).setExpression($e.e); $s.setLineNumber($RETURN.getLine());$s.setCharacter($RETURN.getCharPositionInLine());}
+    |   RETURN {$s = new ReturnStatement();} 
+    	(e = expression {((ReturnStatement)$s).setExpression($e.e);})? SEMI
+    	{$s.setLineNumber($RETURN.getLine());
+    	 $s.setCharacter($RETURN.getCharPositionInLine());}
     |   BREAK SEMI
     	{$s = new BreakStatement(); $s.setLineNumber($BREAK.getLine());$s.setCharacter($BREAK.getCharPositionInLine());}
     |   CONTINUE SEMI
