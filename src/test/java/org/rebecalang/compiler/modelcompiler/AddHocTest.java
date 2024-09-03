@@ -4,7 +4,11 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.rebecalang.compiler.CompilerConfig;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
@@ -33,8 +37,7 @@ public class AddHocTest {
 		File model = new File(MODEL_FILES_BASE + "VarSensorImmediate.rebeca");
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		extension.add(CompilerExtension.TIMED_REBECA);
-
-		Pair<RebecaModel,SymbolTable> compileRebecaFile = compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
+		Pair<RebecaModel,SymbolTable> compileRebecaFile = compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_3);
 		
 		RebecaModel rebecaModel = compileRebecaFile.getFirst();
 		rebecaModel.getRebecaCode();
@@ -46,6 +49,12 @@ public class AddHocTest {
 
 		Assertions.assertEquals(expected, exceptionContainer);
 		
+	}
+	
+	public static void main(String[] args) throws JAXBException {
+		JAXBContext jaxbContext = JAXBContext.newInstance(RebecaModel.class.getPackage().getName());
+		System.out.println(jaxbContext);
+
 	}
 
 }

@@ -99,8 +99,8 @@ import org.springframework.stereotype.Component;
 public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 
 	
-	public static final String PRIORITY_LABEL = "Priority";
-	public static final String GLOBAL_PRIORITY_LABEL = "GlobalPriority";
+	public static final String PRIORITY_LABEL = "priority";
+	public static final String GLOBAL_PRIORITY_LABEL = "globalPriority";
 	
 	public CoreRebecaCompleteCompilerFacade(@Qualifier("CORE_REBECA") TypeSystemInitializer typeSystemInitializer,
 			@Qualifier("CORE_REBECA") SymbolTableInitializer symbolTableInitializer) {

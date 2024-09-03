@@ -4,7 +4,6 @@ import org.rebecalang.compiler.modelcompiler.ScopeHandler;
 import org.rebecalang.compiler.modelcompiler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractStatementSemanticCheck;
-import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReturnStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;

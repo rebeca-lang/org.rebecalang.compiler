@@ -8,7 +8,7 @@ reactiveclass A (3) {
 	A() {
 	}
 	
-	@Priority(3)
+	@priority(3)
 	msgsrv m2() {
 	}
 }
@@ -19,14 +19,14 @@ reactiveclass B (3) {
 	B() {
 	}
 	
-	@GlobalPriority(2)
+	@globalPriority(2)
 	msgsrv m(A param1, int param2) {
 	}
 }
 
 main {
-	@Priority(1)
+	@priority(1)
 	A a():();
-	@Priority("2")
+	@priority("2")
 	B b():();
 }

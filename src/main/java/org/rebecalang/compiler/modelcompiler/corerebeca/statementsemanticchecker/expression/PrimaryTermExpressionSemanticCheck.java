@@ -86,7 +86,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 					} else {
 						VariableInScopeSpecifier owner = scopeHandler
 								.retreiveVariableFromScope(CoreRebecaCompleteCompilerFacade.OWNER_REACTIVE_CLASS_KEY);
-						AccessModifier accessModifier = symbolTable.getSymbolAccessModifier(baseType, termName);
+						AccessModifier accessModifier = symbolTable.getSymbolAccessModifier(curType, termName);
 						returnValue.setFirst(symbolType);
 						termPrimary.setType(symbolType);
 						if (accessModifier != AccessModifierUtilities.PUBLIC) {
