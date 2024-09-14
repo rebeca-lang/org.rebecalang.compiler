@@ -152,7 +152,7 @@ public abstract class AbstractCompilerFacade {
 		blockStatement.getStatements().addAll(remaindStatements);
 	}
 	
-	protected <T extends MethodDeclaration> List<T> removeMethods(List<T> methodDeclarations) {
+	protected <T extends MethodDeclaration> List<T> removeMethodsBasedOnTheRequiredFeature(List<T> methodDeclarations) {
 		LinkedList<T> included = new LinkedList<T>();
 		for(T methodDeclaration : methodDeclarations) {				
 			if(satisfiesFeatureCondition(methodDeclaration.getAnnotations())) {
@@ -170,7 +170,7 @@ public abstract class AbstractCompilerFacade {
 		for (InterfaceDeclaration id : rebecaModel.getRebecaCode().getInterfaceDeclaration()) {
 			if(satisfiesFeatureCondition(id.getAnnotations())) {
 				includedInterfaceDeclarations.add(id);
-				List<MsgsrvDeclaration> includedMsgsrvs = removeMethods(id.getMsgsrvs());
+				List<MsgsrvDeclaration> includedMsgsrvs = removeMethodsBasedOnTheRequiredFeature(id.getMsgsrvs());
 				id.getMsgsrvs().clear();
 				id.getMsgsrvs().addAll(includedMsgsrvs);
 			}
@@ -187,15 +187,15 @@ public abstract class AbstractCompilerFacade {
 			if(satisfiesFeatureCondition(rcd.getAnnotations())) {
 				includedReactiveClassDeclarations.add(rcd);
 				
-				List<ConstructorDeclaration> includedConstructurs = removeMethods(rcd.getConstructors());
+				List<ConstructorDeclaration> includedConstructurs = removeMethodsBasedOnTheRequiredFeature(rcd.getConstructors());
 				rcd.getConstructors().clear();
 				rcd.getConstructors().addAll(includedConstructurs);
 					
-				List<SynchMethodDeclaration> includedSynchMethods = removeMethods(rcd.getSynchMethods());
+				List<SynchMethodDeclaration> includedSynchMethods = removeMethodsBasedOnTheRequiredFeature(rcd.getSynchMethods());
 				rcd.getSynchMethods().clear();
 				rcd.getSynchMethods().addAll(includedSynchMethods);
 			
-				List<MsgsrvDeclaration> includedMsgsrvs = removeMethods(rcd.getMsgsrvs());
+				List<MsgsrvDeclaration> includedMsgsrvs = removeMethodsBasedOnTheRequiredFeature(rcd.getMsgsrvs());
 				rcd.getMsgsrvs().clear();
 				rcd.getMsgsrvs().addAll(includedMsgsrvs);
 				
