@@ -46,10 +46,8 @@ pAltStatementGroup returns [PAltStatementGroup pasg]
     	RBRACE
 	;
 
-unaryExpressionNotPlusMinus returns [Expression e]
-    :   TILDA e1 = unaryExpression {$e = new UnaryExpression(); ((UnaryExpression)$e).setOperator($TILDA.text); ((UnaryExpression)$e).setExpression($e1.e); $e.setLineNumber($e1.e.getLineNumber()); $e.setCharacter($e1.e.getCharacter());}
-    |	BANG e1 = unaryExpression {$e = new UnaryExpression(); ((UnaryExpression)$e).setOperator($BANG.text); ((UnaryExpression)$e).setExpression($e1.e); $e.setLineNumber($e1.e.getLineNumber()); $e.setCharacter($e1.e.getCharacter());}
-    |   (
+coreExpression returns [Expression e]
+    :   (
 	    	ec = castExpression {$e = $ec.e;}
     	|	LPAREN ep = expression {$e = $ep.e;} RPAREN
 	    |   p = primary  {$e = $p.tp;}

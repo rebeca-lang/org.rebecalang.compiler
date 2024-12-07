@@ -104,7 +104,7 @@ EscapeSequence
 ;     
 
 WS
-	:  [ \r\t\u000C\n]+ -> channel(HIDDEN)
+	:  [ \r\t\u000C\n]+ -> skip
     ;
 
 COMMENT
