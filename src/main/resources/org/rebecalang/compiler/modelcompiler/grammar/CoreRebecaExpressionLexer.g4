@@ -115,6 +115,14 @@ LINE_COMMENT
 	:	'//' ~[\r\n]* ('\r'? '\n' | EOF) -> channel(HIDDEN)
     ;
 
+INSTANCEOF
+	:	'instanceof'
+	;
+
+NEW
+    :   'new'
+    ;
+
 TRUE
     :   'true'
     ;

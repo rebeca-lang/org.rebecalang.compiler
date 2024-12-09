@@ -368,95 +368,25 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitAssignmentOperator(HybridRebecaCompleteParser.AssignmentOperatorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#conditionalExpression}.
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#multiplicativeOp}.
 	 * @param ctx the parse tree
 	 */
-	void enterConditionalExpression(HybridRebecaCompleteParser.ConditionalExpressionContext ctx);
+	void enterMultiplicativeOp(HybridRebecaCompleteParser.MultiplicativeOpContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#conditionalExpression}.
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#multiplicativeOp}.
 	 * @param ctx the parse tree
 	 */
-	void exitConditionalExpression(HybridRebecaCompleteParser.ConditionalExpressionContext ctx);
+	void exitMultiplicativeOp(HybridRebecaCompleteParser.MultiplicativeOpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#conditionalOrExpression}.
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#additiveOp}.
 	 * @param ctx the parse tree
 	 */
-	void enterConditionalOrExpression(HybridRebecaCompleteParser.ConditionalOrExpressionContext ctx);
+	void enterAdditiveOp(HybridRebecaCompleteParser.AdditiveOpContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#conditionalOrExpression}.
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#additiveOp}.
 	 * @param ctx the parse tree
 	 */
-	void exitConditionalOrExpression(HybridRebecaCompleteParser.ConditionalOrExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#conditionalAndExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConditionalAndExpression(HybridRebecaCompleteParser.ConditionalAndExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#conditionalAndExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConditionalAndExpression(HybridRebecaCompleteParser.ConditionalAndExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#inclusiveOrExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterInclusiveOrExpression(HybridRebecaCompleteParser.InclusiveOrExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#inclusiveOrExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitInclusiveOrExpression(HybridRebecaCompleteParser.InclusiveOrExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#exclusiveOrExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExclusiveOrExpression(HybridRebecaCompleteParser.ExclusiveOrExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#exclusiveOrExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExclusiveOrExpression(HybridRebecaCompleteParser.ExclusiveOrExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#andExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterAndExpression(HybridRebecaCompleteParser.AndExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#andExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitAndExpression(HybridRebecaCompleteParser.AndExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#equalityExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterEqualityExpression(HybridRebecaCompleteParser.EqualityExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#equalityExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitEqualityExpression(HybridRebecaCompleteParser.EqualityExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#instanceOfExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterInstanceOfExpression(HybridRebecaCompleteParser.InstanceOfExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#instanceOfExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitInstanceOfExpression(HybridRebecaCompleteParser.InstanceOfExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#relationalExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelationalExpression(HybridRebecaCompleteParser.RelationalExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#relationalExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelationalExpression(HybridRebecaCompleteParser.RelationalExpressionContext ctx);
+	void exitAdditiveOp(HybridRebecaCompleteParser.AdditiveOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#relationalOp}.
 	 * @param ctx the parse tree
@@ -468,16 +398,6 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitRelationalOp(HybridRebecaCompleteParser.RelationalOpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#shiftExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterShiftExpression(HybridRebecaCompleteParser.ShiftExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#shiftExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitShiftExpression(HybridRebecaCompleteParser.ShiftExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#shiftOp}.
 	 * @param ctx the parse tree
 	 */
@@ -488,25 +408,15 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitShiftOp(HybridRebecaCompleteParser.ShiftOpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#additiveExpression}.
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#equalityOp}.
 	 * @param ctx the parse tree
 	 */
-	void enterAdditiveExpression(HybridRebecaCompleteParser.AdditiveExpressionContext ctx);
+	void enterEqualityOp(HybridRebecaCompleteParser.EqualityOpContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#additiveExpression}.
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#equalityOp}.
 	 * @param ctx the parse tree
 	 */
-	void exitAdditiveExpression(HybridRebecaCompleteParser.AdditiveExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#multiplicativeExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterMultiplicativeExpression(HybridRebecaCompleteParser.MultiplicativeExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#multiplicativeExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitMultiplicativeExpression(HybridRebecaCompleteParser.MultiplicativeExpressionContext ctx);
+	void exitEqualityOp(HybridRebecaCompleteParser.EqualityOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#unaryExpression}.
 	 * @param ctx the parse tree
@@ -518,15 +428,15 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitUnaryExpression(HybridRebecaCompleteParser.UnaryExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#unaryExpressionNotPlusMinus}.
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#coreExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnaryExpressionNotPlusMinus(HybridRebecaCompleteParser.UnaryExpressionNotPlusMinusContext ctx);
+	void enterCoreExpression(HybridRebecaCompleteParser.CoreExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#unaryExpressionNotPlusMinus}.
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#coreExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnaryExpressionNotPlusMinus(HybridRebecaCompleteParser.UnaryExpressionNotPlusMinusContext ctx);
+	void exitCoreExpression(HybridRebecaCompleteParser.CoreExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#castExpression}.
 	 * @param ctx the parse tree

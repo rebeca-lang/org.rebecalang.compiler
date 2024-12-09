@@ -6,7 +6,7 @@ public class ANTLRFilesGenerator {
 		String grammarBase = base.replaceFirst("loc", "resources") + "/grammar";
 
 		String[] antlrArgs;
-		antlrArgs = new String[] { "-Xexact-output-dir", "-o", 
+		antlrArgs = new String[] { "-Xexact-output-dir", "-o",
 				base.replaceFirst("loc", "java") + "/corerebeca/compiler",
 				grammarBase + "/CoreRebecaComplete.g4" };
 
@@ -16,7 +16,7 @@ public class ANTLRFilesGenerator {
 
 //		antlrArgs = new String[] { "-Xexact-output-dir", "-o",
 //				base.replaceFirst("loc", "java") + "/probabilisticrebeca/compiler",
-//				grammarBase + "/ProbabilisticRebecaComplete.g4" 
+//				grammarBase + "/ProbabilisticRebecaComplete.g4"
 //				};
 		
 //		antlrArgs = new String[] {

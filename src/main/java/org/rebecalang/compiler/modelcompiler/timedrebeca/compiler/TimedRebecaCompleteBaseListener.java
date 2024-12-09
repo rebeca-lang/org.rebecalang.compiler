@@ -419,109 +419,25 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalExpression(TimedRebecaCompleteParser.ConditionalExpressionContext ctx) { }
+	@Override public void enterMultiplicativeOp(TimedRebecaCompleteParser.MultiplicativeOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConditionalExpression(TimedRebecaCompleteParser.ConditionalExpressionContext ctx) { }
+	@Override public void exitMultiplicativeOp(TimedRebecaCompleteParser.MultiplicativeOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalOrExpression(TimedRebecaCompleteParser.ConditionalOrExpressionContext ctx) { }
+	@Override public void enterAdditiveOp(TimedRebecaCompleteParser.AdditiveOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConditionalOrExpression(TimedRebecaCompleteParser.ConditionalOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConditionalAndExpression(TimedRebecaCompleteParser.ConditionalAndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConditionalAndExpression(TimedRebecaCompleteParser.ConditionalAndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInclusiveOrExpression(TimedRebecaCompleteParser.InclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInclusiveOrExpression(TimedRebecaCompleteParser.InclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExclusiveOrExpression(TimedRebecaCompleteParser.ExclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExclusiveOrExpression(TimedRebecaCompleteParser.ExclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAndExpression(TimedRebecaCompleteParser.AndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAndExpression(TimedRebecaCompleteParser.AndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEqualityExpression(TimedRebecaCompleteParser.EqualityExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEqualityExpression(TimedRebecaCompleteParser.EqualityExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInstanceOfExpression(TimedRebecaCompleteParser.InstanceOfExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInstanceOfExpression(TimedRebecaCompleteParser.InstanceOfExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRelationalExpression(TimedRebecaCompleteParser.RelationalExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRelationalExpression(TimedRebecaCompleteParser.RelationalExpressionContext ctx) { }
+	@Override public void exitAdditiveOp(TimedRebecaCompleteParser.AdditiveOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -539,18 +455,6 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterShiftExpression(TimedRebecaCompleteParser.ShiftExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitShiftExpression(TimedRebecaCompleteParser.ShiftExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterShiftOp(TimedRebecaCompleteParser.ShiftOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -563,25 +467,13 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAdditiveExpression(TimedRebecaCompleteParser.AdditiveExpressionContext ctx) { }
+	@Override public void enterEqualityOp(TimedRebecaCompleteParser.EqualityOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAdditiveExpression(TimedRebecaCompleteParser.AdditiveExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMultiplicativeExpression(TimedRebecaCompleteParser.MultiplicativeExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMultiplicativeExpression(TimedRebecaCompleteParser.MultiplicativeExpressionContext ctx) { }
+	@Override public void exitEqualityOp(TimedRebecaCompleteParser.EqualityOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -599,13 +491,13 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpressionNotPlusMinus(TimedRebecaCompleteParser.UnaryExpressionNotPlusMinusContext ctx) { }
+	@Override public void enterCoreExpression(TimedRebecaCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpressionNotPlusMinus(TimedRebecaCompleteParser.UnaryExpressionNotPlusMinusContext ctx) { }
+	@Override public void exitCoreExpression(TimedRebecaCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

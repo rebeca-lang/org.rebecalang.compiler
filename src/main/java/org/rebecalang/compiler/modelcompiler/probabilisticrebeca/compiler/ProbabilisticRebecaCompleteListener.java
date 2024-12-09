@@ -36,15 +36,15 @@ public interface ProbabilisticRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitPAltStatementGroup(ProbabilisticRebecaCompleteParser.PAltStatementGroupContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#unaryExpressionNotPlusMinus}.
+	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#coreExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnaryExpressionNotPlusMinus(ProbabilisticRebecaCompleteParser.UnaryExpressionNotPlusMinusContext ctx);
+	void enterCoreExpression(ProbabilisticRebecaCompleteParser.CoreExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#unaryExpressionNotPlusMinus}.
+	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#coreExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnaryExpressionNotPlusMinus(ProbabilisticRebecaCompleteParser.UnaryExpressionNotPlusMinusContext ctx);
+	void exitCoreExpression(ProbabilisticRebecaCompleteParser.CoreExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#probabilisticList}.
 	 * @param ctx the parse tree
@@ -366,95 +366,25 @@ public interface ProbabilisticRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitAssignmentOperator(ProbabilisticRebecaCompleteParser.AssignmentOperatorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#conditionalExpression}.
+	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#multiplicativeOp}.
 	 * @param ctx the parse tree
 	 */
-	void enterConditionalExpression(ProbabilisticRebecaCompleteParser.ConditionalExpressionContext ctx);
+	void enterMultiplicativeOp(ProbabilisticRebecaCompleteParser.MultiplicativeOpContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#conditionalExpression}.
+	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#multiplicativeOp}.
 	 * @param ctx the parse tree
 	 */
-	void exitConditionalExpression(ProbabilisticRebecaCompleteParser.ConditionalExpressionContext ctx);
+	void exitMultiplicativeOp(ProbabilisticRebecaCompleteParser.MultiplicativeOpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#conditionalOrExpression}.
+	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#additiveOp}.
 	 * @param ctx the parse tree
 	 */
-	void enterConditionalOrExpression(ProbabilisticRebecaCompleteParser.ConditionalOrExpressionContext ctx);
+	void enterAdditiveOp(ProbabilisticRebecaCompleteParser.AdditiveOpContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#conditionalOrExpression}.
+	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#additiveOp}.
 	 * @param ctx the parse tree
 	 */
-	void exitConditionalOrExpression(ProbabilisticRebecaCompleteParser.ConditionalOrExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#conditionalAndExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterConditionalAndExpression(ProbabilisticRebecaCompleteParser.ConditionalAndExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#conditionalAndExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitConditionalAndExpression(ProbabilisticRebecaCompleteParser.ConditionalAndExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#inclusiveOrExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterInclusiveOrExpression(ProbabilisticRebecaCompleteParser.InclusiveOrExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#inclusiveOrExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitInclusiveOrExpression(ProbabilisticRebecaCompleteParser.InclusiveOrExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#exclusiveOrExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExclusiveOrExpression(ProbabilisticRebecaCompleteParser.ExclusiveOrExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#exclusiveOrExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExclusiveOrExpression(ProbabilisticRebecaCompleteParser.ExclusiveOrExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#andExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterAndExpression(ProbabilisticRebecaCompleteParser.AndExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#andExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitAndExpression(ProbabilisticRebecaCompleteParser.AndExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#equalityExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterEqualityExpression(ProbabilisticRebecaCompleteParser.EqualityExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#equalityExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitEqualityExpression(ProbabilisticRebecaCompleteParser.EqualityExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#instanceOfExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterInstanceOfExpression(ProbabilisticRebecaCompleteParser.InstanceOfExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#instanceOfExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitInstanceOfExpression(ProbabilisticRebecaCompleteParser.InstanceOfExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#relationalExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelationalExpression(ProbabilisticRebecaCompleteParser.RelationalExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#relationalExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelationalExpression(ProbabilisticRebecaCompleteParser.RelationalExpressionContext ctx);
+	void exitAdditiveOp(ProbabilisticRebecaCompleteParser.AdditiveOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#relationalOp}.
 	 * @param ctx the parse tree
@@ -466,16 +396,6 @@ public interface ProbabilisticRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitRelationalOp(ProbabilisticRebecaCompleteParser.RelationalOpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#shiftExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterShiftExpression(ProbabilisticRebecaCompleteParser.ShiftExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#shiftExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitShiftExpression(ProbabilisticRebecaCompleteParser.ShiftExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#shiftOp}.
 	 * @param ctx the parse tree
 	 */
@@ -486,25 +406,15 @@ public interface ProbabilisticRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitShiftOp(ProbabilisticRebecaCompleteParser.ShiftOpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#additiveExpression}.
+	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#equalityOp}.
 	 * @param ctx the parse tree
 	 */
-	void enterAdditiveExpression(ProbabilisticRebecaCompleteParser.AdditiveExpressionContext ctx);
+	void enterEqualityOp(ProbabilisticRebecaCompleteParser.EqualityOpContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#additiveExpression}.
+	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#equalityOp}.
 	 * @param ctx the parse tree
 	 */
-	void exitAdditiveExpression(ProbabilisticRebecaCompleteParser.AdditiveExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#multiplicativeExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterMultiplicativeExpression(ProbabilisticRebecaCompleteParser.MultiplicativeExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#multiplicativeExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitMultiplicativeExpression(ProbabilisticRebecaCompleteParser.MultiplicativeExpressionContext ctx);
+	void exitEqualityOp(ProbabilisticRebecaCompleteParser.EqualityOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#unaryExpression}.
 	 * @param ctx the parse tree

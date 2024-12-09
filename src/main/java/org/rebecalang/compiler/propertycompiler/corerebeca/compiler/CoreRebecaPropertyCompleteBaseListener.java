@@ -1,7 +1,17 @@
-// Generated from src/main/resources/org/rebecalang/compiler/propertycompiler/grammar/CoreRebecaPropertyComplete.g4 by ANTLR 4.7.1
+// Generated from src/main/resources/org/rebecalang/compiler/propertycompiler/grammar/CoreRebecaPropertyComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.propertycompiler.corerebeca.compiler;
-	import org.antlr.v4.runtime.ParserRuleContext;
+	import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.*;
+	import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.Definition;
+	import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.AssertionDefinition;
+	import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.Label;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
+	import java.util.*;
+	import org.antlr.runtime.BitSet;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
+
+
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -100,109 +110,25 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalExpression(CoreRebecaPropertyCompleteParser.ConditionalExpressionContext ctx) { }
+	@Override public void enterMultiplicativeOp(CoreRebecaPropertyCompleteParser.MultiplicativeOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConditionalExpression(CoreRebecaPropertyCompleteParser.ConditionalExpressionContext ctx) { }
+	@Override public void exitMultiplicativeOp(CoreRebecaPropertyCompleteParser.MultiplicativeOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalOrExpression(CoreRebecaPropertyCompleteParser.ConditionalOrExpressionContext ctx) { }
+	@Override public void enterAdditiveOp(CoreRebecaPropertyCompleteParser.AdditiveOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConditionalOrExpression(CoreRebecaPropertyCompleteParser.ConditionalOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConditionalAndExpression(CoreRebecaPropertyCompleteParser.ConditionalAndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConditionalAndExpression(CoreRebecaPropertyCompleteParser.ConditionalAndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInclusiveOrExpression(CoreRebecaPropertyCompleteParser.InclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInclusiveOrExpression(CoreRebecaPropertyCompleteParser.InclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExclusiveOrExpression(CoreRebecaPropertyCompleteParser.ExclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExclusiveOrExpression(CoreRebecaPropertyCompleteParser.ExclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAndExpression(CoreRebecaPropertyCompleteParser.AndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAndExpression(CoreRebecaPropertyCompleteParser.AndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEqualityExpression(CoreRebecaPropertyCompleteParser.EqualityExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEqualityExpression(CoreRebecaPropertyCompleteParser.EqualityExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInstanceOfExpression(CoreRebecaPropertyCompleteParser.InstanceOfExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInstanceOfExpression(CoreRebecaPropertyCompleteParser.InstanceOfExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRelationalExpression(CoreRebecaPropertyCompleteParser.RelationalExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRelationalExpression(CoreRebecaPropertyCompleteParser.RelationalExpressionContext ctx) { }
+	@Override public void exitAdditiveOp(CoreRebecaPropertyCompleteParser.AdditiveOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -220,18 +146,6 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterShiftExpression(CoreRebecaPropertyCompleteParser.ShiftExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitShiftExpression(CoreRebecaPropertyCompleteParser.ShiftExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterShiftOp(CoreRebecaPropertyCompleteParser.ShiftOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -244,25 +158,13 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAdditiveExpression(CoreRebecaPropertyCompleteParser.AdditiveExpressionContext ctx) { }
+	@Override public void enterEqualityOp(CoreRebecaPropertyCompleteParser.EqualityOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAdditiveExpression(CoreRebecaPropertyCompleteParser.AdditiveExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMultiplicativeExpression(CoreRebecaPropertyCompleteParser.MultiplicativeExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMultiplicativeExpression(CoreRebecaPropertyCompleteParser.MultiplicativeExpressionContext ctx) { }
+	@Override public void exitEqualityOp(CoreRebecaPropertyCompleteParser.EqualityOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -280,13 +182,13 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpressionNotPlusMinus(CoreRebecaPropertyCompleteParser.UnaryExpressionNotPlusMinusContext ctx) { }
+	@Override public void enterCoreExpression(CoreRebecaPropertyCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpressionNotPlusMinus(CoreRebecaPropertyCompleteParser.UnaryExpressionNotPlusMinusContext ctx) { }
+	@Override public void exitCoreExpression(CoreRebecaPropertyCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

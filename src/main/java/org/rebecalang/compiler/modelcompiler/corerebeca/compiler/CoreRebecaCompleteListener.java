@@ -334,6 +334,26 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitAssignmentOperator(CoreRebecaCompleteParser.AssignmentOperatorContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#multiplicativeOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiplicativeOp(CoreRebecaCompleteParser.MultiplicativeOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#multiplicativeOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiplicativeOp(CoreRebecaCompleteParser.MultiplicativeOpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#additiveOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterAdditiveOp(CoreRebecaCompleteParser.AdditiveOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#additiveOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitAdditiveOp(CoreRebecaCompleteParser.AdditiveOpContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#relationalOp}.
 	 * @param ctx the parse tree
 	 */
@@ -353,6 +373,16 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitShiftOp(CoreRebecaCompleteParser.ShiftOpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#equalityOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterEqualityOp(CoreRebecaCompleteParser.EqualityOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#equalityOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitEqualityOp(CoreRebecaCompleteParser.EqualityOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#unaryExpression}.
 	 * @param ctx the parse tree

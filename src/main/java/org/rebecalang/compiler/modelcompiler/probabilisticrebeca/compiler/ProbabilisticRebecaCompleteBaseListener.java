@@ -48,13 +48,13 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExpressionNotPlusMinus(ProbabilisticRebecaCompleteParser.UnaryExpressionNotPlusMinusContext ctx) { }
+	@Override public void enterCoreExpression(ProbabilisticRebecaCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnaryExpressionNotPlusMinus(ProbabilisticRebecaCompleteParser.UnaryExpressionNotPlusMinusContext ctx) { }
+	@Override public void exitCoreExpression(ProbabilisticRebecaCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -444,109 +444,25 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalExpression(ProbabilisticRebecaCompleteParser.ConditionalExpressionContext ctx) { }
+	@Override public void enterMultiplicativeOp(ProbabilisticRebecaCompleteParser.MultiplicativeOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConditionalExpression(ProbabilisticRebecaCompleteParser.ConditionalExpressionContext ctx) { }
+	@Override public void exitMultiplicativeOp(ProbabilisticRebecaCompleteParser.MultiplicativeOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConditionalOrExpression(ProbabilisticRebecaCompleteParser.ConditionalOrExpressionContext ctx) { }
+	@Override public void enterAdditiveOp(ProbabilisticRebecaCompleteParser.AdditiveOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConditionalOrExpression(ProbabilisticRebecaCompleteParser.ConditionalOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConditionalAndExpression(ProbabilisticRebecaCompleteParser.ConditionalAndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConditionalAndExpression(ProbabilisticRebecaCompleteParser.ConditionalAndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInclusiveOrExpression(ProbabilisticRebecaCompleteParser.InclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInclusiveOrExpression(ProbabilisticRebecaCompleteParser.InclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExclusiveOrExpression(ProbabilisticRebecaCompleteParser.ExclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExclusiveOrExpression(ProbabilisticRebecaCompleteParser.ExclusiveOrExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAndExpression(ProbabilisticRebecaCompleteParser.AndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAndExpression(ProbabilisticRebecaCompleteParser.AndExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEqualityExpression(ProbabilisticRebecaCompleteParser.EqualityExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEqualityExpression(ProbabilisticRebecaCompleteParser.EqualityExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInstanceOfExpression(ProbabilisticRebecaCompleteParser.InstanceOfExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInstanceOfExpression(ProbabilisticRebecaCompleteParser.InstanceOfExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRelationalExpression(ProbabilisticRebecaCompleteParser.RelationalExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRelationalExpression(ProbabilisticRebecaCompleteParser.RelationalExpressionContext ctx) { }
+	@Override public void exitAdditiveOp(ProbabilisticRebecaCompleteParser.AdditiveOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -564,18 +480,6 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterShiftExpression(ProbabilisticRebecaCompleteParser.ShiftExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitShiftExpression(ProbabilisticRebecaCompleteParser.ShiftExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterShiftOp(ProbabilisticRebecaCompleteParser.ShiftOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -588,25 +492,13 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAdditiveExpression(ProbabilisticRebecaCompleteParser.AdditiveExpressionContext ctx) { }
+	@Override public void enterEqualityOp(ProbabilisticRebecaCompleteParser.EqualityOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAdditiveExpression(ProbabilisticRebecaCompleteParser.AdditiveExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMultiplicativeExpression(ProbabilisticRebecaCompleteParser.MultiplicativeExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMultiplicativeExpression(ProbabilisticRebecaCompleteParser.MultiplicativeExpressionContext ctx) { }
+	@Override public void exitEqualityOp(ProbabilisticRebecaCompleteParser.EqualityOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

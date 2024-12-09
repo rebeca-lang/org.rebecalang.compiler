@@ -2,7 +2,7 @@ parser grammar CoreRebecaExpressionParser;
 
 annotation returns [Annotation an]
     :   {$an = new Annotation();} 
-    	'@' annotationName = IDENTIFIER 
+    	MONKEYS_AT annotationName = IDENTIFIER
     	{$an.setIdentifier($annotationName.text);
     	 $an.setLineNumber($annotationName.getLine());
     	 $an.setCharacter($annotationName.getCharPositionInLine());}
@@ -40,75 +40,47 @@ expression returns [Expression e]
     :
 		ece = coreExpression {$e = $ece.e;}
         | ue = unaryExpression {$e = $ue.e;}
-        | me1 = expression {$e = $me1.e;}
-        	{BinaryExpression e3 = new BinaryExpression(); e3.setLeft($e); e3.setLineNumber($e.getLineNumber()); e3.setCharacter($e.getCharacter());}
-            (   STAR {e3.setOperator($STAR.text);} | SLASH {e3.setOperator($SLASH.text);} | PERCENT {e3.setOperator($PERCENT.text);} )
-            me2 = expression {e3.setRight($me2.e); $e = e3;}
-    	| ae1 = expression {$e = $ae1.e;}
-        	{BinaryExpression e3 = new BinaryExpression(); e3.setLeft($e); e3.setLineNumber($e.getLineNumber()); e3.setCharacter($e.getCharacter());}
-            (   PLUS {e3.setOperator($PLUS.text);} | SUB {e3.setOperator($SUB.text);} )
-            ae2 = expression {e3.setRight($ae2.e); $e = e3;}
-    	| se1 = expression {$e = $se1.e;} so = shiftOp se2 = expression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($so.so); e3.setLeft($e); e3.setRight($se2.e);
-			e3.setLineNumber($e.getLineNumber()); e3.setCharacter($e.getCharacter()); $e = e3;
-			}
-    	| re1 = expression {$e = $re1.e;} ro = relationalOp re2 = expression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($ro.ro); e3.setLeft($e); e3.setRight($re2.e);
-			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-			}
-        | ie1 = expression {$e = $ie1.e;} INSTANCEOF t=type {$e = new InstanceofExpression();
-                ((InstanceofExpression)$e).setValue($ie1.e);
-                ((InstanceofExpression)$e).setEvaluationType($t.t);
-                $e.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
-                $e.setLineNumber($t.t.getLineNumber()); $e.setCharacter($t.t.getCharacter());
-                }
-    	| ase1 = expression {$e = $ase1.e;} {$e = new BinaryExpression();
-                ((BinaryExpression)$e).setLeft($ase1.e); $e.setLineNumber($ase1.e.getLineNumber()); $e.setCharacter($ase1.e.getCharacter());}
-                   (   EQEQ {((BinaryExpression)$e).setOperator($EQEQ.text);}
-                   |   BANGEQ {((BinaryExpression)$e).setOperator($BANGEQ.text);}
-                   )
-                   ase2 = expression {((BinaryExpression)$e).setRight($ase2.e);}
-        | ane1 = expression {$e = $ane1.e;} AMP ane2 = expression {BinaryExpression e3 = new BinaryExpression();
-         	e3.setOperator($AMP.text); e3.setLeft($e); e3.setRight($ane2.e);
-         	e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-            }
-		| ce1 = expression {$e = $ce1.e;} CARET ce2 = expression {BinaryExpression e3 = new BinaryExpression();
-          	e3.setOperator($CARET.text); e3.setLeft($e); e3.setRight($ce2.e);
-          	e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-            }
-		| be1 = expression {$e = $be1.e;} BAR be2 = expression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($BAR.text); e3.setLeft($e); e3.setRight($be2.e);
-			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-		    }
-		| aae1 = expression {$e = $aae1.e;} AMPAMP aae2 = expression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($AMPAMP.text); e3.setLeft($e); e3.setRight($aae2.e);
-			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-		    }
-        | bbe1 = expression {$e = $bbe1.e;} BARBAR bbe2 = expression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($BARBAR.text); e3.setLeft($e); e3.setRight($bbe2.e);
-			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-		    }
-    	| cee1 = expression {$e = $cee1.e;} QUES cee2 = expression COLON cee3 = expression
-        	{TernaryExpression e4 = new TernaryExpression();
-			e4.setCondition($cee1.e); e4.setLeft($cee2.e); e4.setRight($cee3.e);
-			e4.setLineNumber($cee1.e.getLineNumber());e4.setCharacter($cee1.e.getCharacter()); $e = e4;
-			}
-    	| asge1 = expression {$e = $asge1.e;} ao = assignmentOperator asge2 = expression {BinaryExpression e3 = new BinaryExpression();
-			e3.setOperator($ao.ao); e3.setLeft($asge1.e); e3.setRight($asge2.e);
-			e3.setLineNumber($asge1.e.getLineNumber());e3.setCharacter($asge1.e.getCharacter()); $e = e3;
-			}
+        | me1 = expression mo = multiplicativeOp me2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($mo.mo); e3.setLeft($me1.e); e3.setRight($me2.e);
+			e3.setLineNumber($me1.e.getLineNumber()); e3.setCharacter($me1.e.getCharacter()); $e = e3; }
+    	| ae1 = expression ado = additiveOp ae2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($ado.ado); e3.setLeft($ae1.e); e3.setRight($ae2.e);
+			e3.setLineNumber($ae1.e.getLineNumber()); e3.setCharacter($ae1.e.getCharacter()); $e = e3; }
+    	| se1 = expression so = shiftOp se2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($so.so); e3.setLeft($se1.e); e3.setRight($se2.e);
+			e3.setLineNumber($se1.e.getLineNumber()); e3.setCharacter($se1.e.getCharacter()); $e = e3; }
+    	| re1 = expression ro = relationalOp re2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($ro.ro); e3.setLeft($re1.e); e3.setRight($re2.e);
+			e3.setLineNumber($re1.e.getLineNumber()); e3.setCharacter($re1.e.getCharacter()); $e = e3; }
+        | ie1 = expression INSTANCEOF t=type
+            {InstanceofExpression e3 = new InstanceofExpression(); e3.setValue($ie1.e); e3.setEvaluationType($t.t);
+             e3.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE); e3.setLineNumber($t.t.getLineNumber()); e3.setCharacter($t.t.getCharacter());
+             $e = e3; }
+    	| ee1 = expression eo = equalityOp ee2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($eo.eo); e3.setLeft($ee1.e); e3.setRight($ee2.e);
+			e3.setLineNumber($ee1.e.getLineNumber()); e3.setCharacter($ee1.e.getCharacter()); $e = e3; }
+        | ane1 = expression AMP ane2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($AMP.text); e3.setLeft($ane1.e); e3.setRight($ane2.e);
+			e3.setLineNumber($ane1.e.getLineNumber()); e3.setCharacter($ane1.e.getCharacter()); $e = e3; }
+		| ce1 = expression CARET ce2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($CARET.text); e3.setLeft($ce1.e); e3.setRight($ce2.e);
+			e3.setLineNumber($ce1.e.getLineNumber()); e3.setCharacter($ce1.e.getCharacter()); $e = e3; }
+		| be1 = expression BAR be2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($BAR.text); e3.setLeft($be1.e); e3.setRight($be2.e);
+			e3.setLineNumber($be1.e.getLineNumber()); e3.setCharacter($be1.e.getCharacter()); $e = e3; }
+		| aae1 = expression AMPAMP aae2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($AMPAMP.text); e3.setLeft($aae1.e); e3.setRight($aae2.e);
+			e3.setLineNumber($aae1.e.getLineNumber()); e3.setCharacter($aae1.e.getCharacter()); $e = e3; }
+        | bbe1 = expression BARBAR bbe2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($BARBAR.text); e3.setLeft($bbe1.e); e3.setRight($bbe2.e);
+			e3.setLineNumber($bbe1.e.getLineNumber()); e3.setCharacter($bbe1.e.getCharacter()); $e = e3; }
+    	| cee1 = expression QUES cee2 = expression COLON cee3 = expression
+        	{ TernaryExpression e4 = new TernaryExpression(); e4.setCondition($cee1.e); e4.setLeft($cee2.e); e4.setRight($cee3.e);
+			e4.setLineNumber($cee1.e.getLineNumber());e4.setCharacter($cee1.e.getCharacter()); $e = e4;}
+    	| ase1 = expression ao = assignmentOperator ase2 = expression
+    	    { BinaryExpression e3 = new BinaryExpression(); e3.setOperator($ao.ao); e3.setLeft($ase1.e); e3.setRight($ase2.e);
+			e3.setLineNumber($ase1.e.getLineNumber());e3.setCharacter($ase1.e.getCharacter()); $e = e3; }
     ;
-
-//expression returns [Expression e]
-//    :
-//    	e1 = conditionalExpression {$e = $e1.e;}
-//        (ao = assignmentOperator e2 = expression {BinaryExpression e3 = new BinaryExpression();
-//			e3.setOperator($ao.ao); e3.setLeft($e1.e); e3.setRight($e2.e);
-//			e3.setLineNumber($e1.e.getLineNumber());e3.setCharacter($e1.e.getCharacter()); $e = e3;
-//			}
-//        )?
-//    ;
-
 
 assignmentOperator returns [String ao]
     :   EQ {$ao = $EQ.text;}
@@ -125,100 +97,16 @@ assignmentOperator returns [String ao]
     |   GTGTEQ {$ao = $GTGTEQ.text;}
     ;
 
+multiplicativeOp returns [String mo]
+    :   STAR {$mo = $STAR.text;}
+    |   SLASH {$mo = $SLASH.text;}
+    |   PERCENT {$mo = $PERCENT.text;}
+    ;
 
-//conditionalExpression returns [Expression e]
-//    :
-//    	e1 = conditionalOrExpression {$e = $e1.e;}
-//        (QUES e2 = expression COLON e3 = conditionalExpression
-//        	{TernaryExpression e4 = new TernaryExpression();
-//			e4.setCondition($e1.e); e4.setLeft($e2.e); e4.setRight($e3.e);
-//			e4.setLineNumber($e1.e.getLineNumber());e4.setCharacter($e1.e.getCharacter()); $e = e4;
-//			}
-//        )?
-//    ;
-//
-//conditionalOrExpression returns [Expression e]
-//    :
-//    	e1 = conditionalAndExpression {$e = $e1.e;}
-//        (BARBAR e2 = conditionalAndExpression {BinaryExpression e3 = new BinaryExpression();
-//			e3.setOperator($BARBAR.text); e3.setLeft($e); e3.setRight($e2.e);
-//			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-//			}
-//        )*
-//    ;
-//
-//conditionalAndExpression returns [Expression e]
-//    :
-//    	e1 = inclusiveOrExpression {$e = $e1.e;}
-//        (AMPAMP e2 = inclusiveOrExpression {BinaryExpression e3 = new BinaryExpression();
-//			e3.setOperator($AMPAMP.text); e3.setLeft($e); e3.setRight($e2.e);
-//			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-//			}
-//        )*
-//    ;
-//
-//inclusiveOrExpression returns [Expression e]
-//    :
-//    	e1 = exclusiveOrExpression {$e = $e1.e;}
-//        (BAR e2 = exclusiveOrExpression {BinaryExpression e3 = new BinaryExpression();
-//			e3.setOperator($BAR.text); e3.setLeft($e); e3.setRight($e2.e);
-//			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-//			}
-//        )*
-//    ;
-//
-//exclusiveOrExpression returns [Expression e]
-//    :   e1 = andExpression {$e = $e1.e;}
-//        (CARET e2 = andExpression {BinaryExpression e3 = new BinaryExpression();
-//			e3.setOperator($CARET.text); e3.setLeft($e); e3.setRight($e2.e);
-//			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-//			}
-//        )*
-//    ;
-//
-//andExpression returns [Expression e]
-//    :   e1 = equalityExpression {$e = $e1.e;}
-//        (AMP e2 = equalityExpression {BinaryExpression e3 = new BinaryExpression();
-//			e3.setOperator($AMP.text); e3.setLeft($e); e3.setRight($e2.e);
-//			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-//			}
-//        )*
-//    ;
-//
-//equalityExpression returns [Expression e]
-//    :
-//    	e1 = instanceOfExpression {$e = $e1.e;}
-//        (
-//        	{$e = new BinaryExpression(); ((BinaryExpression)$e).setLeft($e1.e); $e.setLineNumber($e1.e.getLineNumber()); $e.setCharacter($e1.e.getCharacter());}
-//            (   EQEQ {((BinaryExpression)$e).setOperator($EQEQ.text);}
-//            |   BANGEQ {((BinaryExpression)$e).setOperator($BANGEQ.text);}
-//            )
-//            e2 = instanceOfExpression {((BinaryExpression)$e).setRight($e2.e);}
-//        )?
-//    ;
-//
-//instanceOfExpression returns [Expression e]
-//    :
-//    	e1 = relationalExpression {$e = $e1.e;}
-//        (INSTANCEOF t=type {$e = new InstanceofExpression();
-//        					((InstanceofExpression)$e).setValue($e1.e);
-//        					((InstanceofExpression)$e).setEvaluationType($t.t);
-//        					$e.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
-//        					$e.setLineNumber($t.t.getLineNumber()); $e.setCharacter($t.t.getCharacter());
-//        					}
-//        )?
-//    ;
-//
-//
-//relationalExpression returns [Expression e]
-//    :
-//    	e1 = shiftExpression {$e = $e1.e;}
-//        (ro = relationalOp e2 = shiftExpression {BinaryExpression e3 = new BinaryExpression();
-//			e3.setOperator($ro.ro); e3.setLeft($e); e3.setRight($e2.e);
-//			e3.setLineNumber($e.getLineNumber());e3.setCharacter($e.getCharacter()); $e = e3;
-//			}
-//        )*
-//    ;
+additiveOp returns [String ado]
+    :   PLUS {$ado = $PLUS.text;}
+    |   SUB {$ado = $SUB.text;}
+    ;
 
 relationalOp returns [String ro]
     :    LT EQ {$ro = $LT.text + $EQ.text;}
@@ -227,48 +115,15 @@ relationalOp returns [String ro]
     |   GT {$ro = $GT.text;}
     ;
 
-//shiftExpression returns [Expression e]
-//    :
-//    	e1 = additiveExpression {$e = $e1.e;}
-//        (so = shiftOp e2 = additiveExpression {BinaryExpression e3 = new BinaryExpression();
-//			e3.setOperator($so.so); e3.setLeft($e); e3.setRight($e2.e);
-//			e3.setLineNumber($e.getLineNumber()); e3.setCharacter($e.getCharacter()); $e = e3;
-//			}
-//        )*
-//    ;
-
-
 shiftOp returns [String so]
     :    LT LT {$so = "<<";}
     |    GT GT {$so = ">>";}
     ;
 
-
-//additiveExpression returns [Expression e]
-//    :
-//    	e1 = multiplicativeExpression {$e = $e1.e;}
-//        (
-//        	{BinaryExpression e3 = new BinaryExpression(); e3.setLeft($e); e3.setLineNumber($e.getLineNumber()); e3.setCharacter($e.getCharacter());}
-//            (   PLUS {e3.setOperator($PLUS.text);}
-//            |   SUB {e3.setOperator($SUB.text);}
-//            )
-//            e2 = multiplicativeExpression {e3.setRight($e2.e); $e = e3;}
-//         )*
-//    ;
-//
-//multiplicativeExpression returns [Expression e]
-//    :
-//        e1 = unaryExpression {$e = $e1.e;}
-//        (
-//        	{BinaryExpression e3 = new BinaryExpression(); e3.setLeft($e); e3.setLineNumber($e.getLineNumber()); e3.setCharacter($e.getCharacter());}
-//            (   STAR {e3.setOperator($STAR.text);}
-//            |   SLASH {e3.setOperator($SLASH.text);}
-//            |   PERCENT {e3.setOperator($PERCENT.text);}
-//            )
-//            e2 = unaryExpression {e3.setRight($e2.e); $e = e3;}
-//        )*
-//    ;
-
+equalityOp returns [String eo]
+    :    EQEQ {$eo = $EQEQ.text;}
+    |    BANGEQ {$eo = $BANGEQ.text;}
+    ;
 /**
  * NOTE: for '+' and '-', if the next token is int or long interal, then it's not a unary expression.
  *       it's a literal with signed value. INTLTERAL AND LONG LITERAL are added here for this.
@@ -385,4 +240,3 @@ literal returns [Literal l]
     	$l.setType(CoreRebecaTypeSystem.NULL_TYPE);
     	$l.setLineNumber($NULL.getLine());$l.setCharacter($NULL.getCharPositionInLine());}
     ;
-

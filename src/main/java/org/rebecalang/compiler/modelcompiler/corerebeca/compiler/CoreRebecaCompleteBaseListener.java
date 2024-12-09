@@ -406,6 +406,30 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMultiplicativeOp(CoreRebecaCompleteParser.MultiplicativeOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiplicativeOp(CoreRebecaCompleteParser.MultiplicativeOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAdditiveOp(CoreRebecaCompleteParser.AdditiveOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAdditiveOp(CoreRebecaCompleteParser.AdditiveOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRelationalOp(CoreRebecaCompleteParser.RelationalOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -425,6 +449,18 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitShiftOp(CoreRebecaCompleteParser.ShiftOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEqualityOp(CoreRebecaCompleteParser.EqualityOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEqualityOp(CoreRebecaCompleteParser.EqualityOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
