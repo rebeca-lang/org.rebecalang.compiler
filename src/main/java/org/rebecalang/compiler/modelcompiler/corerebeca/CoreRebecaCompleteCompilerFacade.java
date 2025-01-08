@@ -678,6 +678,8 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		return new CoreRebecaCompleteParser(tokens);
 	}
+	@Override
+	public void processListener(Object rebecaModelObj) {}
 
 	@Override
 	protected StatementSemanticCheckContainer getStatementSemanticCheckContainer() {

@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.rebecalang.compiler.modelcompiler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.ScopeHandler;
 import org.rebecalang.compiler.modelcompiler.StatementSemanticCheckContainer;
@@ -76,7 +77,11 @@ public abstract class AbstractCompilerFacade {
 	private EvaluationContext featureExpressoinEvaluationContext;
 
 	public abstract Parser getParser(CharStream input);
-	
+
+	public void processListener(Object rebecaModelObj) {
+
+	}
+
 	@Autowired
 	public AbstractCompilerFacade(TypeSystemInitializer typeSystemInitializer, SymbolTableInitializer symbolTableInitializer) {
 		this.typeSystemInitializer = typeSystemInitializer;
@@ -328,7 +333,10 @@ public abstract class AbstractCompilerFacade {
 			//is stored in the variable "r"
 			Field field = rebecaModelObj.getClass().getDeclaredField("r");
 			this.rebecaModel = (RebecaModel)field.get(rebecaModelObj);
-						
+
+			// Attach listener and walk the parse tree
+			processListener(rebecaModelObj);
+
 			initializeStatementSemanticCheckContainer();
 
 			initializeExpressionSemanticCheckContainer();

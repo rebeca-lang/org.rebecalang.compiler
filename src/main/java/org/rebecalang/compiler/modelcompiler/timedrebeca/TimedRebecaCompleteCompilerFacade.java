@@ -5,6 +5,8 @@ import java.util.List;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.rebecalang.compiler.modelcompiler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.SymbolTableInitializer;
@@ -20,6 +22,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaCompleteParser;
+import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaListener;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.statementsemanticchecker.expression.TimedPrimaryTermSemanticCheck;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
@@ -127,8 +130,12 @@ public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompile
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		return new TimedRebecaCompleteParser(tokens);
 	}
-	
-	
+	@Override
+	public void processListener(Object rebecaModelObj) {
+		ParseTreeWalker walker = new ParseTreeWalker();
+		TimedRebecaListener listener = new TimedRebecaListener();
+		walker.walk(listener, (ParseTree) rebecaModelObj);
+	}
 	
 	protected void checkPriorityAnnotations(List<Annotation> annotations) {
 		for (Annotation annotation : annotations) {
