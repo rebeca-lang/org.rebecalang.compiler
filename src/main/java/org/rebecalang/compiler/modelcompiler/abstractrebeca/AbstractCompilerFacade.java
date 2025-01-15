@@ -78,7 +78,7 @@ public abstract class AbstractCompilerFacade {
 
 	public abstract Parser getParser(CharStream input);
 
-	public void processListener(Object rebecaModelObj) {
+	public void attachListener(Parser parser)  {
 
 	}
 
@@ -325,6 +325,9 @@ public abstract class AbstractCompilerFacade {
 				}
 			});
 
+			// Attach listener
+			attachListener(parser);
+
 			//Method "parser.rebecaModel()" is called
 			Method method = parser.getClass().getDeclaredMethod("rebecaModel", new Class[0]);
 			Object rebecaModelObj = method.invoke(parser);
@@ -334,8 +337,6 @@ public abstract class AbstractCompilerFacade {
 			Field field = rebecaModelObj.getClass().getDeclaredField("r");
 			this.rebecaModel = (RebecaModel)field.get(rebecaModelObj);
 
-			// Attach listener and walk the parse tree
-			processListener(rebecaModelObj);
 
 			initializeStatementSemanticCheckContainer();
 

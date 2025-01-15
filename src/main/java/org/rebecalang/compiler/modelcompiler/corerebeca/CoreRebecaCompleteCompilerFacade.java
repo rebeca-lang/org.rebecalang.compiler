@@ -679,7 +679,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		return new CoreRebecaCompleteParser(tokens);
 	}
 	@Override
-	public void processListener(Object rebecaModelObj) {}
+	public void attachListener(Parser parser)  {}
 
 	@Override
 	protected StatementSemanticCheckContainer getStatementSemanticCheckContainer() {

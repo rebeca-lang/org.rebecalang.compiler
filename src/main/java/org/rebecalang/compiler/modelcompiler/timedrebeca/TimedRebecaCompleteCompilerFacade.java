@@ -131,10 +131,9 @@ public class TimedRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompile
 		return new TimedRebecaCompleteParser(tokens);
 	}
 	@Override
-	public void processListener(Object rebecaModelObj) {
-		ParseTreeWalker walker = new ParseTreeWalker();
+	public void attachListener(Parser parser) {
 		TimedRebecaListener listener = new TimedRebecaListener();
-		walker.walk(listener, (ParseTree) rebecaModelObj);
+		parser.addParseListener(listener);
 	}
 	
 	protected void checkPriorityAnnotations(List<Annotation> annotations) {
