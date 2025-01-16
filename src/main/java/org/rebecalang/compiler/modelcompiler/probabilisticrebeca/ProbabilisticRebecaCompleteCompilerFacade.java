@@ -8,10 +8,12 @@ import org.rebecalang.compiler.modelcompiler.abstractrebeca.TypeSystemInitialize
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaCompleteCompilerFacade;
 import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler.ProbabilisticRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler.ProbabilisticRebecaCompleteParser;
+import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler.ProbabilisticRebecaListener;
 import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.objectmodel.PAltStatement;
 import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.objectmodel.ProbabilisticExpression;
 import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.statementsemanticchecker.expression.ProbabilisticExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.statementsemanticchecker.statement.PALTStatementSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -57,5 +59,11 @@ public class ProbabilisticRebecaCompleteCompilerFacade extends
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		return new ProbabilisticRebecaCompleteParser(tokens);
 	}
+	@Override
+	public void attachListener(Parser parser) {
+		ProbabilisticRebecaListener listener = new ProbabilisticRebecaListener();
+		parser.addParseListener(listener);
+	}
+
 
 }
