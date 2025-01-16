@@ -1,35 +1,11 @@
 parser grammar HybridRebecaParser;
 
 rebecaCode returns [HybridRebecaCode rc]
-    :   
-    	{$rc = new HybridRebecaCode();}
-		(rd = recordDeclaration {$rc.getRecordDeclaration().add($rd.rd);})*
-		(		
-			(ENV fd = fieldDeclaration SEMI {$rc.getEnvironmentVariables().add($fd.fd);})
-			|
-			(FEATUREVAR featureName = IDENTIFIER SEMI 
-				{
-				VariableDeclarator vd = new VariableDeclarator();
-				vd.setVariableName($featureName.text);
-				vd.setLineNumber($featureName.getLine());
-				vd.setCharacter($featureName.getCharPositionInLine());
-				FieldDeclaration fd = new FieldDeclaration();
-				fd.getVariableDeclarators().add(vd);
-				fd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);				
-    			fd.setCharacter($featureName.getCharPositionInLine());
-				fd.setLineNumber($featureName.getLine());
-				$rc.getFeatureVariables().add(fd);				
-				}
-			)
-		)*
-        (
-        	rcd = reactiveClassDeclaration {$rc.getReactiveClassDeclaration().add($rcd.rcd);}
-        	|
-        	intd = interfaceDeclaration {$rc.getInterfaceDeclaration().add($intd.intd);}
-        	|
-        	pcd = physicalClassDeclaration {$rc.getPhysicalClassDeclaration().add($pcd.pcd);}
-    	)+
-        md = mainDeclaration  {$rc.setMainDeclaration($md.md);}
+    :
+		(recordDeclaration)*
+		((ENV fieldDeclaration SEMI) | (FEATUREVAR IDENTIFIER SEMI))*
+        (reactiveClassDeclaration | interfaceDeclaration | physicalClassDeclaration)+
+        mainDeclaration
     ;
     
 physicalClassDeclaration returns[PhysicalClassDeclaration pcd]

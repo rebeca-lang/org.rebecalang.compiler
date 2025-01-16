@@ -17,11 +17,13 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClas
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.compiler.HybridRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.compiler.HybridRebecaCompleteParser;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.compiler.HybridRebecaListener;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.HybridRebecaCode;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.HybridTermPrimary;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.ModeDeclaration;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.PhysicalClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.statementsemanticchecker.expression.HybridPrimaryTermSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler.ProbabilisticRebecaListener;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,5 +153,10 @@ public class HybridRebecaCompleteCompilerFacade extends CoreRebecaCompleteCompil
 		HybridRebecaCompleteLexer lexer = new HybridRebecaCompleteLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		return new HybridRebecaCompleteParser(tokens);
+	}
+	@Override
+	public void attachListener(Parser parser) {
+		HybridRebecaListener listener = new HybridRebecaListener();
+		parser.addParseListener(listener);
 	}
 }
