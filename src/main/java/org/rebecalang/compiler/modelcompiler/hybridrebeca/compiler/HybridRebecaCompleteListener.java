@@ -58,6 +58,26 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitPrimary(HybridRebecaCompleteParser.PrimaryContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#after}.
+	 * @param ctx the parse tree
+	 */
+	void enterAfter(HybridRebecaCompleteParser.AfterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#after}.
+	 * @param ctx the parse tree
+	 */
+	void exitAfter(HybridRebecaCompleteParser.AfterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#deadline}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeadline(HybridRebecaCompleteParser.DeadlineContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#deadline}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeadline(HybridRebecaCompleteParser.DeadlineContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#rebecaModel}.
 	 * @param ctx the parse tree
 	 */

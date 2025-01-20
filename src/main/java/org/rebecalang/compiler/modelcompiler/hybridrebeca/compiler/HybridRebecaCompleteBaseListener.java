@@ -74,6 +74,30 @@ public class HybridRebecaCompleteBaseListener implements HybridRebecaCompleteLis
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAfter(HybridRebecaCompleteParser.AfterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAfter(HybridRebecaCompleteParser.AfterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeadline(HybridRebecaCompleteParser.DeadlineContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeadline(HybridRebecaCompleteParser.DeadlineContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRebecaModel(HybridRebecaCompleteParser.RebecaModelContext ctx) { }
 	/**
 	 * {@inheritDoc}

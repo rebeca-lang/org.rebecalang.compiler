@@ -25,6 +25,26 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitPrimary(TimedRebecaCompleteParser.PrimaryContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#after}.
+	 * @param ctx the parse tree
+	 */
+	void enterAfter(TimedRebecaCompleteParser.AfterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#after}.
+	 * @param ctx the parse tree
+	 */
+	void exitAfter(TimedRebecaCompleteParser.AfterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#deadline}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeadline(TimedRebecaCompleteParser.DeadlineContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#deadline}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeadline(TimedRebecaCompleteParser.DeadlineContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#rebecaModel}.
 	 * @param ctx the parse tree
 	 */
