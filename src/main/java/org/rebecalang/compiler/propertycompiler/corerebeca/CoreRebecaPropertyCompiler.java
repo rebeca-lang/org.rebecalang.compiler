@@ -32,6 +32,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.UnaryExpressionSemanticCheck;
 import org.rebecalang.compiler.propertycompiler.corerebeca.compiler.CoreRebecaPropertyCompleteLexer;
 import org.rebecalang.compiler.propertycompiler.corerebeca.compiler.CoreRebecaPropertyCompleteParser;
+import org.rebecalang.compiler.propertycompiler.corerebeca.compiler.CoreRebecaPropertyListener;
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.LTLDefinition;
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.PropertyModel;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.GeneralPropertyCompiler;
@@ -181,6 +182,12 @@ public class CoreRebecaPropertyCompiler extends GeneralPropertyCompiler {
 		CoreRebecaPropertyCompleteLexer lexer = new CoreRebecaPropertyCompleteLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		return new CoreRebecaPropertyCompleteParser(tokens);
+	}
+
+	@Override
+	public void attachListener(Parser parser) {
+		CoreRebecaPropertyListener listener = new CoreRebecaPropertyListener();
+		parser.addParseListener(listener);
 	}
 
 }

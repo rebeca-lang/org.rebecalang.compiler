@@ -53,6 +53,8 @@ public abstract class GeneralPropertyCompiler {
 	public void setTypeSystem(AbstractTypeSystem typeSystem) {
 		this.typeSystem = typeSystem;
 	}
+
+	abstract public void attachListener(Parser parser);
 	
 	public PropertyModel compile(CharStream input, RebecaModel rebecaModel) {
 
@@ -71,6 +73,8 @@ public abstract class GeneralPropertyCompiler {
 						charPositionInLine));
 			}
 		});
+
+		attachListener(parser);
 
 		try {
             

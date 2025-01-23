@@ -38,6 +38,30 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAssertionBlock(CoreRebecaPropertyCompleteParser.AssertionBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssertionBlock(CoreRebecaPropertyCompleteParser.AssertionBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLtlBlock(CoreRebecaPropertyCompleteParser.LtlBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLtlBlock(CoreRebecaPropertyCompleteParser.LtlBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAnnotation(CoreRebecaPropertyCompleteParser.AnnotationContext ctx) { }
 	/**
 	 * {@inheritDoc}

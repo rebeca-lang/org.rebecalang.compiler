@@ -28,6 +28,26 @@ public interface TimedRebecaPropertyCompleteListener extends ParseTreeListener {
 	 */
 	void exitPropertyDefinition(TimedRebecaPropertyCompleteParser.PropertyDefinitionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TimedRebecaPropertyCompleteParser#assertionBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssertionBlock(TimedRebecaPropertyCompleteParser.AssertionBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaPropertyCompleteParser#assertionBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssertionBlock(TimedRebecaPropertyCompleteParser.AssertionBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaPropertyCompleteParser#tctlBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterTctlBlock(TimedRebecaPropertyCompleteParser.TctlBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaPropertyCompleteParser#tctlBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitTctlBlock(TimedRebecaPropertyCompleteParser.TctlBlockContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TimedRebecaPropertyCompleteParser#annotation}.
 	 * @param ctx the parse tree
 	 */

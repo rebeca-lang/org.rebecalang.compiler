@@ -38,6 +38,30 @@ public class TimedRebecaPropertyCompleteBaseListener implements TimedRebecaPrope
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAssertionBlock(TimedRebecaPropertyCompleteParser.AssertionBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAssertionBlock(TimedRebecaPropertyCompleteParser.AssertionBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTctlBlock(TimedRebecaPropertyCompleteParser.TctlBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTctlBlock(TimedRebecaPropertyCompleteParser.TctlBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAnnotation(TimedRebecaPropertyCompleteParser.AnnotationContext ctx) { }
 	/**
 	 * {@inheritDoc}

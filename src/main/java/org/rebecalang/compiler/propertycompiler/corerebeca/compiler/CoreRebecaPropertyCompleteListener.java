@@ -28,6 +28,26 @@ public interface CoreRebecaPropertyCompleteListener extends ParseTreeListener {
 	 */
 	void exitPropertyDefinition(CoreRebecaPropertyCompleteParser.PropertyDefinitionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#assertionBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssertionBlock(CoreRebecaPropertyCompleteParser.AssertionBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaPropertyCompleteParser#assertionBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssertionBlock(CoreRebecaPropertyCompleteParser.AssertionBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#ltlBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterLtlBlock(CoreRebecaPropertyCompleteParser.LtlBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaPropertyCompleteParser#ltlBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitLtlBlock(CoreRebecaPropertyCompleteParser.LtlBlockContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#annotation}.
 	 * @param ctx the parse tree
 	 */
