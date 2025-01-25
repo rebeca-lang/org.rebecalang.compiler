@@ -3,8 +3,6 @@ package org.rebecalang.compiler.propertycompiler.corerebeca.compiler;
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.LTLDefinition;
 import org.rebecalang.compiler.propertycompiler.corerebeca.objectmodel.PropertyModel;
 import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.AssertionDefinition;
-import org.rebecalang.compiler.propertycompiler.timedrebeca.compiler.TimedRebecaPropertyCompleteParser;
-import org.rebecalang.compiler.propertycompiler.timedrebeca.objectmodel.TCTLDefinition;
 
 import java.util.ArrayList;
 import java.util.List;

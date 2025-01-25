@@ -3,105 +3,35 @@ parser grammar RebecaParser;
 import CoreRebecaExpressionParser;
 
 rebecaModel returns [RebecaModel r]
-    :   {$r = new RebecaModel();
-        } 
-        (p = packageDeclaration {$r.setPackageDeclaration($p.p);}
-        )?
-        (i = importDeclaration {$r.getImportDeclaration().add($i.i);}
-        )*
-        (t1 = rebecaCode {$r.setRebecaCode($t1.rc);}
-        )
+    :   (packageDeclaration)?
+        (importDeclaration)*
+        rebecaCode
     ;
 
 packageDeclaration returns [PackageDeclaration p]
-    :   
-    	PACKAGE
-    	/*{$p = new PackageDeclaration();}
-        'package' id1 = IDENTIFIER {$p.setPath($id1.text);$p.setLineNumber($id1.getLine());$p.setCharacter($id1.getCharPositionInLine());}
-        (DOT id2 = IDENTIFIER  {$p.setPath($p.getPath()+"."+$id2.text);}
-        )* 
-        SEMI
-        */
+    :   PACKAGE
     ;
 
 importDeclaration returns [ImportDeclaration i]
-    :   
-    	IMPORT
-    	/*
-    	{$i = new ImportDeclaration();}
-        'import'
-        id = IDENTIFIER DOT '*' {$i.setPath($id.text+".*");$i.setLineNumber($id.getLine());$i.setCharacter($id.getCharPositionInLine());}
-        SEMI
-    |   {$i = new ImportDeclaration();}
-        'import'
-        id1 = IDENTIFIER  {$i.setPath($id1.text);$i.setLineNumber($id.getLine());$i.setCharacter($id.getCharPositionInLine());}
-        (DOT id2 = IDENTIFIER  {$i.setPath($i.getPath()+"."+$id2.text);}
-        )+
-        (DOT '*' {$i.setPath($i.getPath()+".*");}
-        )?
-        SEMI
-        */
+    :   IMPORT
     ;
 
 rebecaCode returns [RebecaCode rc]
-    :   
-    	{$rc = new RebecaCode();}
-		(rd = recordDeclaration {$rc.getRecordDeclaration().add($rd.rd);})*
-		(		
-			(ENV fd = fieldDeclaration SEMI {$rc.getEnvironmentVariables().add($fd.fd);})
-			|
-			(FEATUREVAR featureName = IDENTIFIER SEMI 
-				{
-				VariableDeclarator vd = new VariableDeclarator();
-				vd.setVariableName($featureName.text);
-				vd.setLineNumber($featureName.getLine());
-				vd.setCharacter($featureName.getCharPositionInLine());
-				FieldDeclaration fd = new FieldDeclaration();
-				fd.getVariableDeclarators().add(vd);
-				fd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);				
-    			fd.setCharacter($featureName.getCharPositionInLine());
-				fd.setLineNumber($featureName.getLine());
-				$rc.getFeatureVariables().add(fd);				
-				}
-			)
-		)*
-        (
-        	rcd = reactiveClassDeclaration {$rc.getReactiveClassDeclaration().add($rcd.rcd);}
-        	|
-        	intd = interfaceDeclaration {$rc.getInterfaceDeclaration().add($intd.intd);}
-    	)+
-        md = mainDeclaration  {$rc.setMainDeclaration($md.md);}
+    :
+		(recordDeclaration)*
+		((ENV fieldDeclaration SEMI) | (FEATUREVAR IDENTIFIER SEMI))*
+        (reactiveClassDeclaration | interfaceDeclaration)+
+        mainDeclaration
     ;
 
 /////////////////////////record
 recordDeclaration returns [RecordDeclaration rd]
-	:
-		RECORD
-/*		'record' id = IDENTIFIER LBRACE
-		{$r = new RecordDeclaration();
-		$r.setName($id.text);
-		$r.setLineNumber($LBRACE.getLine());
-		$r.setCharacter($LBRACE.getCharPositionInLine());
-		}
-		(rc = recordContent  SEMI
-		{$r.getRecordContent().add($rc.r);})*
-		RBRACE
-	;
-	
-recordContent returns [RecordContent r]
-	:
-		 t = type id = IDENTIFIER
-		{$r = new RecordContent();
-		$r.setType($t.t); $r.setName($id.text);
-		$r.setLineNumber($id.getLine()); $r.setCharacter($id.getCharPositionInLine());}
-		(COMMA id2 = IDENTIFIER{$r.setName($r.getName()+","+$id2.text);})*
-*/		
-	;
+	:   RECORD
 	
 
 /////////////////////////
 mainDeclaration returns [MainDeclaration md]
-	: 	
+	:
 		{$md = new MainDeclaration();}
 		MAIN {$md.setLineNumber($MAIN.getLine());$md.setCharacter($MAIN.getCharPositionInLine());}
 		LBRACE
@@ -123,48 +53,23 @@ mainRebecDefinition returns [MainRebecDefinition mrd]
 
 ////////////////////////////// 
 fieldDeclaration returns [FieldDeclaration fd]
-    :   
-    	{$fd = new FieldDeclaration();}
-    	(an = annotation {$fd.getAnnotations().add($an.an);})*
-    	t = type vds = variableDeclarators 
-    	{$fd.setType($t.t);
-		 $fd.getVariableDeclarators().addAll($vds.vds);
-    	 $fd.setCharacter($t.t.getCharacter());
-		 $fd.setLineNumber($t.t.getLineNumber());}
+    :   (annotation)* type variableDeclarators
     ;
+
 variableDeclarators returns [List<VariableDeclarator> vds]
-    :   
-    	{$vds = new LinkedList<VariableDeclarator>();}
-    	vd = variableDeclarator {$vds.add($vd.vd);} (COMMA vd = variableDeclarator {$vds.add($vd.vd);})*
+    :   variableDeclarator (COMMA variableDeclarator)*
     ;
 
 variableDeclarator returns [VariableDeclarator vd]
-    :   
-    	{$vd = new VariableDeclarator();}
-    	name = IDENTIFIER {$vd.setVariableName($name.text); $vd.setLineNumber($name.getLine());$vd.setCharacter($name.getCharPositionInLine());} 
-    	(EQ vi = variableInitializer {$vd.setVariableInitializer($vi.vi);})?
+    :   IDENTIFIER (EQ variableInitializer)?
     ;
 
 variableInitializer returns [VariableInitializer vi]
-    :   
-    	ai = arrayInitializer {$vi = $ai.avi;}
-    |   e = expression {if($e.e != null) {
-    						$vi = new OrdinaryVariableInitializer();
-    						((OrdinaryVariableInitializer)$vi).setValue($e.e);
-    						$vi.setLineNumber($e.e.getLineNumber());
-    						$vi.setCharacter($e.e.getCharacter());
-    					}
-    					}
+    :   arrayInitializer | expression
     ;
 
 arrayInitializer returns [ArrayVariableInitializer avi]
-    :   
-    	{$avi = new ArrayVariableInitializer();}
-    	LBRACE (vi = variableInitializer 
-    		{$avi.setCharacter($LBRACE.getCharPositionInLine()); $avi.setLineNumber($LBRACE.getLine());
-    		$avi.getValues().add($vi.vi);} 
-    		(COMMA vi = variableInitializer {$avi.getValues().add($vi.vi);})* )? 
-    	RBRACE
+    :   LBRACE (variableInitializer (COMMA variableInitializer)* )? RBRACE
     ;
 
 /////////////////////////////////////	
@@ -259,21 +164,12 @@ reactiveClassDeclaration returns[ReactiveClassDeclaration rcd]
 	
 //////////////////////////////////
 methodDeclaration [MethodDeclaration md]
-	:
-		name = IDENTIFIER {$md.setName($name.text); $md.setLineNumber($name.getLine());$md.setCharacter($name.getCharPositionInLine());}
-		fps = formalParameters {$md.getFormalParameters().addAll($fps.fps);}
-		(
-			b = block {$md.setBlock($b.bs);$md.setEndLineNumber($b.bs.getEndLineNumber());$md.setEndCharacter($b.bs.getEndCharacter());}
-			|
-			SEMI
-		)
+	:   IDENTIFIER formalParameters
+	    (block | SEMI)
 	;
 
 constructorDeclaration returns [ConstructorDeclaration cd]
-	:
-		{$cd = new ConstructorDeclaration();}
-    	(an = annotation {$cd.getAnnotations().add($an.an);})*
-		methodDeclaration[{$cd}]
+	:   (annotation)* methodDeclaration[{$cd}]
 	;
 	
 	
