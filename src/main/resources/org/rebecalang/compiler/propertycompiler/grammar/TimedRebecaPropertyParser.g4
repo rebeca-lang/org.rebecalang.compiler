@@ -4,8 +4,8 @@ import CoreRebecaExpressionParser, GeneralPropertyParser;
 
 
 propertyDefinition[PropertyModel pm]
-    : (assertionBlock)?
-      (tctlBlock)?
+    : assertionBlock?
+      tctlBlock?
     ;
 
 assertionBlock returns [List<AssertionDefinition> assertions]

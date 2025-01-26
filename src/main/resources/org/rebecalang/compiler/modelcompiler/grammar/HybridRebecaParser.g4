@@ -2,7 +2,7 @@ parser grammar HybridRebecaParser;
 
 rebecaCode returns [HybridRebecaCode rc]
     :
-		(recordDeclaration)*
+		recordDeclaration*
 		((ENV fieldDeclaration SEMI) | (FEATUREVAR IDENTIFIER SEMI))*
         (reactiveClassDeclaration | interfaceDeclaration | physicalClassDeclaration)+
         mainDeclaration
@@ -10,7 +10,7 @@ rebecaCode returns [HybridRebecaCode rc]
     
 physicalClassDeclaration returns[PhysicalClassDeclaration pcd]
     :
-    	(annotation)*
+    	annotation*
         PHYSICALCLASS IDENTIFIER LPAREN INTLITERAL RPAREN
         LBRACE
         (KNOWNREBECS LBRACE (fieldDeclaration SEMI)* RBRACE)?
@@ -29,7 +29,7 @@ modeDeclaration returns[ModeDeclaration md]
 	;
     
 primary returns [TermPrimary tp]
-    : IDENTIFIER (LPAREN (expressionList)? RPAREN (after)? (deadline)?)? (LBRACKET expression RBRACKET)* (PRIME)*
+    : IDENTIFIER (LPAREN expressionList? RPAREN after? deadline?)? (LBRACKET expression RBRACKET)* PRIME*
     ;
 after returns [Expression e]
     : AFTER LPAREN expression RPAREN

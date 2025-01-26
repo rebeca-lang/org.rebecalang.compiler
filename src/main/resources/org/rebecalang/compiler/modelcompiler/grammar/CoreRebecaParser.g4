@@ -27,29 +27,24 @@ rebecaCode returns [RebecaCode rc]
 /////////////////////////record
 recordDeclaration returns [RecordDeclaration rd]
 	:   RECORD
-	
+	;
 
 /////////////////////////
 mainDeclaration returns [MainDeclaration md]
-	:
-		{$md = new MainDeclaration();}
-		MAIN {$md.setLineNumber($MAIN.getLine());$md.setCharacter($MAIN.getCharPositionInLine());}
-		LBRACE
-		(mrd = mainRebecDefinition{$md.getMainRebecDefinition().add($mrd.mrd);})*
-		RBRACE {$md.setEndLineNumber($RBRACE.getLine());$md.setEndCharacter($RBRACE.getCharPositionInLine());}
+	:   MAIN LBRACE mainRebecDefinition* RBRACE
 	;
 
 mainRebecDefinition returns [MainRebecDefinition mrd]
-	:	
-		{$mrd = new MainRebecDefinition();}
-    	(an = annotation {$mrd.getAnnotations().add($an.an);})*
-		t = type rebecName = IDENTIFIER {$mrd.setType($t.t);$mrd.setName($rebecName.text);
-			$mrd.setLineNumber($rebecName.getLine()); $mrd.setCharacter($rebecName.getCharPositionInLine());}
-		LPAREN (el = expressionList {$mrd.getBindings().addAll($el.el);})? RPAREN 
-		COLON
-		LPAREN (el = expressionList {$mrd.getArguments().addAll($el.el);})? RPAREN 
-		SEMI
+	:	annotation* type IDENTIFIER
+		LPAREN bindingsExpressionList? RPAREN COLON LPAREN argumentsExpressionList? RPAREN SEMI
 	;
+bindingsExpressionList
+    : expressionList
+    ;
+
+argumentsExpressionList
+    : expressionList
+    ;
 
 ////////////////////////////// 
 fieldDeclaration returns [FieldDeclaration fd]
@@ -190,78 +185,44 @@ synchMethodDeclaration returns [SynchMethodDeclaration smd]
 	;
 
 formalParameters returns [List<FormalParameterDeclaration> fps]
-    :   
-    	{$fps = new ArrayList<FormalParameterDeclaration>();}
-    	LPAREN
-        (fpds = formalParametersDeclaration {$fps.addAll($fpds.fpds);})?
-        RPAREN
+    :   LPAREN (formalParametersDeclaration)? RPAREN
     ;
 
 formalParametersDeclaration returns [List<FormalParameterDeclaration> fpds]
-    :	
-    	{$fpds = new ArrayList<FormalParameterDeclaration>();}
-        fpd = formalParameterDeclaration {$fpds.add($fpd.fpd);}
-        (COMMA fpd = formalParameterDeclaration {$fpds.add($fpd.fpd);})*
+    :   formalParameterDeclaration (COMMA formalParameterDeclaration)*
     ;
 
 formalParameterDeclaration returns [FormalParameterDeclaration fpd]
-    :   
-    	t = type name = IDENTIFIER
-        {
-            $fpd = new FormalParameterDeclaration();
-			$fpd.setLineNumber($name.getLine());
-			$fpd.setCharacter($name.getCharPositionInLine());
-            $fpd.setName($name.text);
-            $fpd.setType($t.t);
-        }
+    :   type IDENTIFIER
     ;
 
 ///////////////////////
 
 block returns [BlockStatement bs]
-    :   {$bs = new BlockStatement();}
-        LBRACE {$bs.setLineNumber($LBRACE.getLine());$bs.setCharacter($LBRACE.getCharPositionInLine());}
-    	(
-    		{ArrayList<Annotation> anns = new ArrayList<Annotation>();}
-    		(an = annotation {anns.add($an.an);})*
-        	s = statement {$bs.getStatements().add ($s.s); $s.s.getAnnotations().addAll(anns);}
-        )*
-        RBRACE {$bs.setEndLineNumber($RBRACE.getLine());$bs.setEndCharacter($RBRACE.getCharPositionInLine());}
+    :   LBRACE annotatedStatement* RBRACE
+    ;
+
+annotatedStatement returns [Statement s]
+    : annotation* statement
     ;
 
 statement returns [Statement s]
 	:
-        se = statementExpression {$s = $se.se;} SEMI
-	|	fd = fieldDeclaration {$s = $fd.fd;} SEMI
-    |	b = block {$s = $b.bs;}
-    |   IF {$s = new ConditionalStatement(); $s.setLineNumber($IF.getLine());$s.setCharacter($IF.getCharPositionInLine());}
-    	LPAREN e = expression RPAREN st = statement
-    	{((ConditionalStatement)$s).setCondition($e.e); ((ConditionalStatement)$s).setStatement($st.s);}
-		(ELSE est = statement {((ConditionalStatement)$s).setElseStatement($est.s);})?
-    |   WHILE {$s = new WhileStatement(); $s.setLineNumber($WHILE.getLine());$s.setCharacter($WHILE.getCharPositionInLine());} 
-    	LPAREN e = expression RPAREN st = statement {((WhileStatement)$s).setCondition($e.e); ((WhileStatement)$s).setStatement($st.s);}
-    |   FOR {$s = new ForStatement(); $s.setLineNumber($FOR.getLine());$s.setCharacter($FOR.getCharPositionInLine());} 
-    	LPAREN (fi = forInit {((ForStatement)$s).setForInitializer($fi.fi);})? SEMI 
-    	(e = expression {((ForStatement)$s).setCondition($e.e);})? SEMI 
-    	(el = expressionList {((ForStatement)$s).getForIncrement().addAll($el.el); })? 
-    	RPAREN st = statement {((ForStatement)$s).setStatement($st.s);}
-    |   SWITCH LPAREN e = expression RPAREN LBRACE sb = switchBlock RBRACE
-    	{$s = $sb.ss; ((SwitchStatement)$s).setExpression($e.e); $s.setLineNumber($SWITCH.getLine()); $s.setCharacter($SWITCH.getCharPositionInLine());}
-    |   RETURN {$s = new ReturnStatement();} 
-    	(e = expression {((ReturnStatement)$s).setExpression($e.e);})? SEMI
-    	{$s.setLineNumber($RETURN.getLine());
-    	 $s.setCharacter($RETURN.getCharPositionInLine());}
+		fieldDeclaration SEMI
+	|	block
+    |   IF LPAREN expression RPAREN statement (ELSE statement)?
+    |   WHILE LPAREN expression RPAREN statement
+    |   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statement
+    |   SWITCH LPAREN expression RPAREN LBRACE switchBlock RBRACE
+    |   RETURN expression? SEMI
     |   BREAK SEMI
-    	{$s = new BreakStatement(); $s.setLineNumber($BREAK.getLine());$s.setCharacter($BREAK.getCharPositionInLine());}
     |   CONTINUE SEMI
-    	{$s = new ContinueStatement(); $s.setLineNumber($CONTINUE.getLine());$s.setCharacter($CONTINUE.getCharPositionInLine());}
-    |   SEMI {$s = new Statement();}
+    |   SEMI
+    |   statementExpression SEMI
 	;
 
 forInit returns [ForInitializer fi]
-    :   
-		fd = fieldDeclaration {$fi = new ForInitializer(); $fi.setFieldDeclaration($fd.fd); }
-    |   el = expressionList {$fi = new ForInitializer(); $fi.getExpressions().addAll($el.el);}
+    :   fieldDeclaration | expressionList
     ;
 
 switchBlock returns [SwitchStatement ss]
@@ -307,6 +268,5 @@ switchBlock returns [SwitchStatement ss]
     ;
 
 statementExpression returns [Statement se]
-	:
-		e = expression {$se = $e.e;}
+	:   expression
 	;

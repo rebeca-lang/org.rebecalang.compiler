@@ -3,8 +3,8 @@ parser grammar CoreRebecaPropertyParser;
 import CoreRebecaExpressionParser, GeneralPropertyParser;
 
 propertyDefinition[PropertyModel pm]
-    : (assertionBlock)?
-      (ltlBlock)?
+    : assertionBlock?
+      ltlBlock?
     ;
 
 assertionBlock returns [List<AssertionDefinition> assertions]
