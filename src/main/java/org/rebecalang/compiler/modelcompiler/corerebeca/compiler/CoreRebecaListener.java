@@ -168,62 +168,34 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
 
     @Override
     public void exitConstructorDeclaration(CoreRebecaCompleteParser.ConstructorDeclarationContext ctx) {
-        ConstructorDeclaration cd = new ConstructorDeclaration();
+        ConstructorDeclaration cd = (ConstructorDeclaration) ctx.methodDeclaration().md;
         for (CoreRebecaCompleteParser.AnnotationContext annotationCtx : ctx.annotation()) {
             cd.getAnnotations().add(annotationCtx.an);
-        }
-        if (ctx.methodDeclaration() != null) {
-            // Process the methodDeclaration but use cd as the target
-            populateMethodDeclaration(ctx.methodDeclaration(), cd);
         }
         ctx.cd = cd;
     }
 
     @Override
-    public void exitMsgsrvDeclaration(Parser.MsgsrvDeclarationContext ctx) {
-        MsgsrvDeclaration md = new MsgsrvDeclaration();
-
-        // Handle annotations
-        for (Parser.AnnotationContext annotationCtx : ctx.annotation()) {
-            Annotation annotation = annotationCtx.an;
-            md.getAnnotations().add(annotation);
+    public void exitMsgsrvDeclaration(CoreRebecaCompleteParser.MsgsrvDeclarationContext ctx) {
+        MsgsrvDeclaration msgd = (MsgsrvDeclaration) ctx.methodDeclaration().md;
+        for (CoreRebecaCompleteParser.AnnotationContext annotationCtx : ctx.annotation()) {
+            msgd.getAnnotations().add(annotationCtx.an);
         }
-
-        // Handle abstract modifier
         if (ctx.ABSTRACT() != null) {
-            md.setAbstract(true);
+            msgd.setAbstract(true);
         }
-
-        // Process method declaration
-        MethodDeclaration method = ctx.methodDeclaration().md;
-        md.setName(method.getName());
-        md.setFormalParameters(method.getFormalParameters());
-        md.setBlock(method.getBlock());
     }
 
     @Override
-    public void exitSynchMethodDeclaration(Parser.SynchMethodDeclarationContext ctx) {
-        SynchMethodDeclaration smd = new SynchMethodDeclaration();
-
-        // Handle annotations
-        for (Parser.AnnotationContext annotationCtx : ctx.annotation()) {
-            Annotation annotation = annotationCtx.an;
-            smd.getAnnotations().add(annotation);
+    public void exitSynchMethodDeclaration(CoreRebecaCompleteParser.SynchMethodDeclarationContext ctx) {
+        SynchMethodDeclaration smd = (SynchMethodDeclaration) ctx.methodDeclaration().md;
+        for (CoreRebecaCompleteParser.AnnotationContext annotationCtx : ctx.annotation()) {
+            smd.getAnnotations().add(annotationCtx.an);
         }
-
-        // Handle abstract modifier
         if (ctx.ABSTRACT() != null) {
             smd.setAbstract(true);
         }
-
-        // Set return type
         smd.setReturnType(ctx.type().t);
-
-        // Process method declaration
-        MethodDeclaration method = ctx.methodDeclaration().md;
-        smd.setName(method.getName());
-        smd.setFormalParameters(method.getFormalParameters());
-        smd.setBlock(method.getBlock());
     }
 
     @Override
@@ -291,6 +263,43 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
         }
         ctx.fi = fi;
     }
+    @Override
+    public void exitSwitchBlock(CoreRebecaCompleteParser.SwitchBlockContext ctx) {
+        SwitchStatement switchStatement = new SwitchStatement();
+        for(CoreRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()){
+            switchStatement.getAnnotations().add(annotation.an);
+        }
+        for(CoreRebecaCompleteParser.CaseSwitchGroupContext switchGroup : ctx.caseSwitchGroup()){
+            switchStatement.getSwitchStatementGroups().add(switchGroup.ssg);
+        }
+        if(ctx.defaultSwitchGroup() != null) {
+            switchStatement.getSwitchStatementGroups().add(ctx.defaultGroup().ssg);
+        }
+        ctx.ss = switchStatement;
+    }
+    @Override
+    public void exitCaseSwitchGroup(CoreRebecaCompleteParser.CaseSwitchGroupContext ctx) {
+        SwitchStatementGroup switchStatementGroup = new SwitchStatementGroup();
+        switchStatementGroup.setExpression(ctx.expression().e);
+        switchStatementGroup.setLineNumber(ctx.expression().e.getLineNumber());
+        switchStatementGroup.setCharacter(ctx.expression().e.getCharacter());
+        for(CoreRebecaCompleteParser.AnnotatedStatementContext annotatedStatement : ctx.annotatedStatement()){
+            switchStatementGroup.getStatements().add(annotatedStatement.s);
+        }
+        ctx.ssg = switchStatementGroup;
+    }
+
+    @Override
+    public void exitDefaultSwitchGroup(CoreRebecaCompleteParser.DefaultSwitchGroupContext ctx) {
+        SwitchStatementGroup switchStatementGroup = new SwitchStatementGroup();
+        switchStatementGroup.setLineNumber(ctx.DEFAULT().getSymbol().getLine());
+        switchStatementGroup.setCharacter(ctx.DEFAULT().getSymbol().getCharPositionInLine());
+        for(CoreRebecaCompleteParser.AnnotatedStatementContext annotatedStatement : ctx.annotatedStatement()){
+            switchStatementGroup.getStatements().add(annotatedStatement.s);
+        }
+        ctx.ssg = switchStatementGroup;
+    }
+
     @Override
     public void exitStatement(CoreRebecaCompleteParser.StatementContext ctx) {
         Statement s;
@@ -381,6 +390,7 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
         if (ctx.statementExpression() != null) return "statementExpression";
         return "unknown";
     }
+
 
     //
     // EXPRESSION PARSER

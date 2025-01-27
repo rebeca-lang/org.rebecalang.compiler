@@ -8,7 +8,6 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.HybridrebecaUtils;
 import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.*;
-import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaCompleteParser;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.objectmodel.TimedRebecaParentSuffixPrimary;
 
 public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {

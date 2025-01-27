@@ -68,120 +68,54 @@ arrayInitializer returns [ArrayVariableInitializer avi]
     ;
 
 /////////////////////////////////////	
-interfaceDeclaration returns[InterfaceDeclaration intd]
-    :   
-    	{$intd = new InterfaceDeclaration();}
-    	(an = annotation {$intd.getAnnotations().add($an.an);})*
-        INTERFACE interfaceName = IDENTIFIER 
-        	{	$intd.setName($interfaceName.text); 
-        		$intd.setLineNumber($interfaceName.getLine()); $intd.setCharacter($interfaceName.getCharPositionInLine());
-        	}
-        (EXTENDS extendingInterfaceName = IDENTIFIER
-        	{
-        		OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
-        		opt.setName($extendingInterfaceName.text);
-        		opt.setLineNumber($extendingInterfaceName.getLine());
-        		opt.setCharacter($extendingInterfaceName.getCharPositionInLine());
-        		$intd.getExtends().add(opt);
-        	}
-        	(COMMA extendingInterfaceName = IDENTIFIER
-        		{
-	        		opt = new OrdinaryPrimitiveType();
-	        		opt.setName($extendingInterfaceName.text);
-	        		opt.setLineNumber($extendingInterfaceName.getLine());
-	        		opt.setCharacter($extendingInterfaceName.getCharPositionInLine());
-	        		$intd.getExtends().add(opt);
-        		}
-        	)* )?
-        LBRACE
-
-		( {MethodDeclaration md = new MsgsrvDeclaration();md.setAbstract(true); $intd.getMsgsrvs().add((MsgsrvDeclaration)md);}
-			(an = annotation {md.getAnnotations().add($an.an);})*
-			MSGSRV name = IDENTIFIER {md.setName($name.text); md.setLineNumber($name.getLine());md.setCharacter($name.getCharPositionInLine());}
-			fps = formalParameters {md.getFormalParameters().addAll($fps.fps);} SEMI
-		)*
-        RBRACE {$intd.setEndLineNumber($RBRACE.getLine());$intd.setEndCharacter($RBRACE.getCharPositionInLine());}
+interfaceDeclaration returns [InterfaceDeclaration intd]
+    :   annotation*
+        INTERFACE IDENTIFIER (extendingInterface)?
+        LBRACE (msgsrvSignature)* RBRACE
     ;
-    
-reactiveClassDeclaration returns[ReactiveClassDeclaration rcd]
-    :   
-    	{$rcd = new ReactiveClassDeclaration();}
-    	(an = annotation {$rcd.getAnnotations().add($an.an);})*
-        (ABSTRACT {$rcd.setAbstract(true);})? REACTIVECLASS reactiveClassName = IDENTIFIER 
-        	{	$rcd.setName($reactiveClassName.text); 
-        		$rcd.setLineNumber($reactiveClassName.getLine()); $rcd.setCharacter($reactiveClassName.getCharPositionInLine());
-        	}
-        (EXTENDS extendingReactiveClassName = IDENTIFIER 
-        	{
-        		OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
-        		opt.setName($extendingReactiveClassName.text);
-        		opt.setLineNumber($extendingReactiveClassName.getLine());
-        		opt.setCharacter($extendingReactiveClassName.getCharPositionInLine());
-        		$rcd.setExtends(opt);
-        	}
-        )?
-        (IMPLEMENTS implementingInterfaceName = IDENTIFIER
-        	{
-        		OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
-        		opt.setName($implementingInterfaceName.text);
-        		opt.setLineNumber($implementingInterfaceName.getLine());
-        		opt.setCharacter($implementingInterfaceName.getCharPositionInLine());
-        		$rcd.getImplements().add(opt);
-        	}
-        	(COMMA implementingInterfaceName = IDENTIFIER
-        		{
-	        		opt = new OrdinaryPrimitiveType();
-	        		opt.setName($implementingInterfaceName.text);
-	        		opt.setLineNumber($implementingInterfaceName.getLine());
-	        		opt.setCharacter($implementingInterfaceName.getCharPositionInLine());
-	        		$rcd.getImplements().add(opt);
-        		}
-        	)* )?
-        LPAREN queueSize = INTLITERAL {if(!$queueSize.getText().equals("<missing INTLITERAL>")) $rcd.setQueueSize(Integer.parseInt($queueSize.text));} RPAREN
-        LBRACE
 
-        (
-        	(KNOWNREBECS
-			LBRACE
-				(fd = fieldDeclaration {$rcd.getKnownRebecs().add($fd.fd);} SEMI)*
-			RBRACE)
-		|
-        	(STATEVARS
-			LBRACE
-				(fd = fieldDeclaration {$rcd.getStatevars().add($fd.fd);} SEMI)*
-			RBRACE)
-		|	cd = constructorDeclaration {$rcd.getConstructors().add($cd.cd);}
-		|	md = msgsrvDeclaration {$rcd.getMsgsrvs().add($md.md);}
-		|	smd = synchMethodDeclaration {$rcd.getSynchMethods().add($smd.smd);}
-		)*
-        RBRACE {$rcd.setEndLineNumber($RBRACE.getLine());$rcd.setEndCharacter($RBRACE.getCharPositionInLine());}
+extendingInterface returns [OrdinaryPrimitiveType opt]
+    : EXTENDS IDENTIFIER (COMMA IDENTIFIER)*
     ;
-	
+
+msgsrvSignature returns [OrdinaryPrimitiveType opt]
+    : MSGSRV IDENTIFIER formalParameters SEMI
+    ;
+
+reactiveClassDeclaration returns [ReactiveClassDeclaration rcd]
+    :   annotation*
+        ABSTRACT? REACTIVECLASS IDENTIFIER (EXTENDS IDENTIFIER)? (implementingInterface)?
+        LPAREN INTLITERAL RPAREN
+        LBRACE
+        (knownRebecsDecleration | stateVarsDecleration | constructorDeclaration
+        | msgsrvDeclaration | synchMethodDeclaration)*
+        RBRACE
+    ;
+implementingInterface returns [OrdinaryPrimitiveType opt]
+    : IMPLEMENTS IDENTIFIER (COMMA IDENTIFIER)*
+    ;
+knownRebecsDecleration
+    : KNOWNREBECS LBRACE (fieldDeclaration SEMI)* RBRACE
+    ;
+stateVarsDecleration
+    : STATEVARS LBRACE (fieldDeclaration SEMI)* RBRACE
+    ;
 //////////////////////////////////
-methodDeclaration [MethodDeclaration md]
-	:   IDENTIFIER formalParameters
-	    (block | SEMI)
+methodDeclaration returns [MethodDeclaration md]
+	:   IDENTIFIER formalParameters (block | SEMI)
 	;
 
 constructorDeclaration returns [ConstructorDeclaration cd]
-	:   (annotation)* methodDeclaration[{$cd}]
+	:   annotation* methodDeclaration
 	;
-	
 	
 msgsrvDeclaration returns [MsgsrvDeclaration md]
     :
-		{$md = new MsgsrvDeclaration();}
-    	(an = annotation {$md.getAnnotations().add($an.an);})*
-		(ABSTRACT {$md.setAbstract(true);})? MSGSRV
-		methodDeclaration[{$md}]
+    	annotation* ABSTRACT? MSGSRV methodDeclaration
 	;
 	
 synchMethodDeclaration returns [SynchMethodDeclaration smd]
-	:
-        {$smd = new SynchMethodDeclaration();}
-    	(an = annotation {$smd.getAnnotations().add($an.an);})*
-        (ABSTRACT {$smd.setAbstract(true);})? t = type {$smd.setReturnType($t.t);}
-		methodDeclaration[{$smd}]
+	:   annotation* ABSTRACT? type methodDeclaration
 	;
 
 formalParameters returns [List<FormalParameterDeclaration> fps]
@@ -200,10 +134,6 @@ formalParameterDeclaration returns [FormalParameterDeclaration fpd]
 
 block returns [BlockStatement bs]
     :   LBRACE annotatedStatement* RBRACE
-    ;
-
-annotatedStatement returns [Statement s]
-    : annotation* statement
     ;
 
 statement returns [Statement s]
@@ -226,45 +156,19 @@ forInit returns [ForInitializer fi]
     ;
 
 switchBlock returns [SwitchStatement ss]
-    :   
-    	{$ss = new SwitchStatement();}
-    	(
-    		{
-    			$ss.getSwitchStatementGroups().add(new SwitchStatementGroup());
-    		 	ArrayList<Annotation> anns = new ArrayList<Annotation>();
-    		}
-	    	(an = annotation {anns.add($an.an);})*
-			CASE e = expression COLON  
-			{
-    			$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).setExpression($e.e);
-    			$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).setLineNumber($e.e.getLineNumber());
-    			$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).setCharacter($e.e.getCharacter());
-				$ss.getAnnotations().addAll(anns); anns = new ArrayList<Annotation>();
-			}
-			(
-				(an = annotation {anns.add($an.an);})*
-				st = statement 
-				{
-					$st.s.getAnnotations().addAll(anns);
-					$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1)
-						.getStatements().add($st.s);
-				}
-			)*
-		)+
-		(	
-			DEFAULT COLON
-    		{
-    			$ss.getSwitchStatementGroups().add(new SwitchStatementGroup());
-    		 	ArrayList<Annotation> anns = new ArrayList<Annotation>();
-    			$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).setLineNumber($DEFAULT.getCharPositionInLine());
-    			$ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).setCharacter($DEFAULT.getLine());
-				$ss.getAnnotations().addAll(anns); anns = new ArrayList<Annotation>();
-			}
-			(
-				(an = annotation {anns.add($an.an);})*
-				st = statement {$st.s.getAnnotations().addAll(anns); $ss.getSwitchStatementGroups().get($ss.getSwitchStatementGroups().size() - 1).getStatements().add($st.s);}
-			)*
-		)?
+    :   (annotation* caseSwitchGroup)+
+		(defualtSwitchGroup)?
+    ;
+caseSwitchGroup returns [SwitchStatementGroup ssg]
+    :   CASE expression COLON
+		annotatedStatement*
+    ;
+defualtSwitchGroup returns [SwitchStatementGroup ssg]
+    :   DEFAULT COLON
+     	annotatedStatement*
+    ;
+annotatedStatement returns [Statement s]
+    : annotation* statement
     ;
 
 statementExpression returns [Statement se]
