@@ -141,8 +141,8 @@ block returns [BlockStatement bs]
     ;
 
 statement returns [Statement s]
-	:
-		fieldDeclaration SEMI
+	:   statementExpression SEMI
+    |   fieldDeclaration SEMI
 	|	block
     |   IF LPAREN expression RPAREN statement (ELSE statement)?
     |   WHILE LPAREN expression RPAREN statement
@@ -152,7 +152,6 @@ statement returns [Statement s]
     |   BREAK SEMI
     |   CONTINUE SEMI
     |   SEMI
-    |   statementExpression SEMI
 	;
 
 forInit returns [ForInitializer fi]

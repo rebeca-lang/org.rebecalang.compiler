@@ -372,12 +372,10 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
 
     @Override
     public void exitAnnotatedStatement(CoreRebecaCompleteParser.AnnotatedStatementContext ctx) {
-        List<Annotation> annotationList = new ArrayList<>();
         Statement stm = ctx.statement().s;
         for(CoreRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()){
-            annotationList.add(annotation.an);
+            stm.getAnnotations().add(annotation.an);
         }
-        stm.getAnnotations().addAll(annotationList);
         ctx.s = stm;
     }
     @Override
@@ -428,12 +426,12 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
     }
     @Override
     public void exitStatement(CoreRebecaCompleteParser.StatementContext ctx) {
-        Statement s;
-
-        if (ctx.fieldDeclaration() != null) {
-            s = ctx.fieldDeclaration().fd;
+        if (ctx.statementExpression() != null) {
+            ctx.s = ctx.statementExpression().expression().e;
+        } else if (ctx.fieldDeclaration() != null) {
+            ctx.s = ctx.fieldDeclaration().fd;
         } else if (ctx.block() != null) {
-            s = ctx.block().bs;
+            ctx.s = ctx.block().bs;
         } else if (ctx.IF() != null) {
             ConditionalStatement condStmt = new ConditionalStatement();
             condStmt.setLineNumber(ctx.IF().getSymbol().getLine());
@@ -443,14 +441,14 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
             if (ctx.ELSE() != null) {
                 condStmt.setElseStatement(ctx.statement(1).s);
             }
-            s = condStmt;
+            ctx.s = condStmt;
         } else if (ctx.WHILE() != null) {
             WhileStatement whileStmt = new WhileStatement();
             whileStmt.setLineNumber(ctx.WHILE().getSymbol().getLine());
             whileStmt.setCharacter(ctx.WHILE().getSymbol().getCharPositionInLine());
             whileStmt.setCondition(ctx.expression().e);
             whileStmt.setStatement(ctx.statement(0).s);
-            s = whileStmt;
+            ctx.s = whileStmt;
         } else if (ctx.FOR() != null) {
             ForStatement forStmt = new ForStatement();
             forStmt.setLineNumber(ctx.FOR().getSymbol().getLine());
@@ -465,12 +463,13 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
                 forStmt.getForIncrement().addAll(ctx.expressionList().el);
             }
             forStmt.setStatement(ctx.statement(0).s);
-            s = forStmt;
+            ctx.s = forStmt;
         } else if (ctx.SWITCH() != null) {
-            s = ctx.switchBlock().ss;
-            ((SwitchStatement) s).setExpression(ctx.expression().e);
-            s.setLineNumber(ctx.SWITCH().getSymbol().getLine());
-            s.setCharacter(ctx.SWITCH().getSymbol().getCharPositionInLine());
+            SwitchStatement switchStatement = ctx.switchBlock().ss;
+            switchStatement.setExpression(ctx.expression().e);
+            switchStatement.setLineNumber(ctx.SWITCH().getSymbol().getLine());
+            switchStatement.setCharacter(ctx.SWITCH().getSymbol().getCharPositionInLine());
+            ctx.s = switchStatement;
         } else if (ctx.RETURN() != null) {
             ReturnStatement returnStmt = new ReturnStatement();
             if (ctx.expression() != null) {
@@ -478,25 +477,22 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
             }
             returnStmt.setLineNumber(ctx.RETURN().getSymbol().getLine());
             returnStmt.setCharacter(ctx.RETURN().getSymbol().getCharPositionInLine());
-            s = returnStmt;
+            ctx.s = returnStmt;
         } else if (ctx.BREAK() != null) {
             BreakStatement breakStmt = new BreakStatement();
             breakStmt.setLineNumber(ctx.BREAK().getSymbol().getLine());
             breakStmt.setCharacter(ctx.BREAK().getSymbol().getCharPositionInLine());
-            s = breakStmt;
+            ctx.s = breakStmt;
         } else if (ctx.CONTINUE() != null) {
             BreakStatement continueStmt = new BreakStatement();
             continueStmt.setLineNumber(ctx.CONTINUE().getSymbol().getLine());
             continueStmt.setCharacter(ctx.CONTINUE().getSymbol().getCharPositionInLine());
-            s = continueStmt;
+            ctx.s = continueStmt;
         } else if (ctx.SEMI() != null) {
-            s = new Statement();
-        } else if (ctx.statementExpression() != null) {
-            s = ctx.statementExpression().expression().e;
+            ctx.s = new Statement();
         } else {
             throw new IllegalStateException("Unrecognized statement type");
         }
-        ctx.s = s;
     }
 
     //

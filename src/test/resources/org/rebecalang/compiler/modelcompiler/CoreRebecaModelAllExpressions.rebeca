@@ -26,9 +26,9 @@ reactiveclass Test1 (3) {
 
 	msgsrv initial(int[3] ac, byte bc) {
 		Test1 tt = new Test1():();
-	
+
 		if (tt instanceof Test1) {}
-	
+
 		byte a = (byte)currentMessageArrival + tt;
 		short[3][5] j;
 		int[2][3] b = {{10, 5, 4}, {7, 1, 5}};
@@ -52,16 +52,16 @@ reactiveclass Test1 (3) {
 		t.sib(1, self);
 		if(!bbb);
 	}
-	
+
 	int u (){}
 	msgsrv sib(int a, Test1 tt) {
 		int[2] bs= {12, 17444};
 		bib(self, bs).sib(10.1, self);
 	}
-	
+
 	Test1 bib(Test1 yt, int[2] x) {
 	}
-	
+
 	void h() {
 		assertion(10==20);
 	}
