@@ -78,9 +78,7 @@ public abstract class AbstractCompilerFacade {
 
 	public abstract Parser getParser(CharStream input);
 
-	public void attachListener(Parser parser)  {
-
-	}
+	public abstract void attachListener(Parser parser);
 
 	@Autowired
 	public AbstractCompilerFacade(TypeSystemInitializer typeSystemInitializer, SymbolTableInitializer symbolTableInitializer) {

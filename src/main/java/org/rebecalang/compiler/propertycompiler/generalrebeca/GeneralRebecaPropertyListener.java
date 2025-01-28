@@ -41,8 +41,8 @@ public class GeneralRebecaPropertyListener extends CoreRebecaPropertyCompleteBas
                 binaryExpression.setOperator(ctx.AMPAMP().getText());
             } else if (ctx.BARBAR() != null) {
                 binaryExpression.setOperator(ctx.BARBAR().getText());
-            } else if (ctx.THEN() != null) {
-                binaryExpression.setOperator(ctx.THEN().getText());
+            //} else if (ctx.THEN() != null) {
+            //    binaryExpression.setOperator(ctx.THEN().getText());
             } else if (ctx.assignmentOperator() != null) {
                 binaryExpression.setOperator(ctx.assignmentOperator().getText());
             }

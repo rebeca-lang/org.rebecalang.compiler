@@ -38,15 +38,15 @@ mainRebecDefinition returns [MainRebecDefinition mrd]
 	:	annotation* type IDENTIFIER
 		LPAREN bindingsExpressionList? RPAREN COLON LPAREN argumentsExpressionList? RPAREN SEMI
 	;
-bindingsExpressionList
+bindingsExpressionList returns [List<Expression> el]
     : expressionList
     ;
 
-argumentsExpressionList
+argumentsExpressionList returns [List<Expression> el]
     : expressionList
     ;
 
-////////////////////////////// 
+//////////////////////////////
 fieldDeclaration returns [FieldDeclaration fd]
     :   (annotation)* type variableDeclarators
     ;
@@ -67,19 +67,20 @@ arrayInitializer returns [ArrayVariableInitializer avi]
     :   LBRACE (variableInitializer (COMMA variableInitializer)* )? RBRACE
     ;
 
-/////////////////////////////////////	
+/////////////////////////////////////
 interfaceDeclaration returns [InterfaceDeclaration intd]
     :   annotation*
         INTERFACE IDENTIFIER (extendingInterface)?
         LBRACE (msgsrvSignature)* RBRACE
     ;
 
-extendingInterface returns [OrdinaryPrimitiveType opt]
-    : EXTENDS IDENTIFIER (COMMA IDENTIFIER)*
+extendingInterface returns [List<OrdinaryPrimitiveType> opts]
+    :   EXTENDS IDENTIFIER (COMMA IDENTIFIER)*
     ;
 
-msgsrvSignature returns [OrdinaryPrimitiveType opt]
-    : MSGSRV IDENTIFIER formalParameters SEMI
+msgsrvSignature returns [MsgsrvDeclaration md]
+    :   annotation*
+        MSGSRV IDENTIFIER formalParameters SEMI
     ;
 
 reactiveClassDeclaration returns [ReactiveClassDeclaration rcd]
@@ -87,19 +88,23 @@ reactiveClassDeclaration returns [ReactiveClassDeclaration rcd]
         ABSTRACT? REACTIVECLASS IDENTIFIER (EXTENDS IDENTIFIER)? (implementingInterface)?
         LPAREN INTLITERAL RPAREN
         LBRACE
-        (knownRebecsDecleration | stateVarsDecleration | constructorDeclaration
+        (knownRebecsDeclaration | stateVarsDeclaration | constructorDeclaration
         | msgsrvDeclaration | synchMethodDeclaration)*
         RBRACE
     ;
-implementingInterface returns [OrdinaryPrimitiveType opt]
+
+implementingInterface returns [List<OrdinaryPrimitiveType> opts]
     : IMPLEMENTS IDENTIFIER (COMMA IDENTIFIER)*
     ;
-knownRebecsDecleration
+
+knownRebecsDeclaration returns [List<FieldDeclaration> fds]
     : KNOWNREBECS LBRACE (fieldDeclaration SEMI)* RBRACE
     ;
-stateVarsDecleration
+
+stateVarsDeclaration returns [List<FieldDeclaration> fds]
     : STATEVARS LBRACE (fieldDeclaration SEMI)* RBRACE
     ;
+
 //////////////////////////////////
 methodDeclaration returns [MethodDeclaration md]
 	:   IDENTIFIER formalParameters (block | SEMI)
@@ -108,12 +113,12 @@ methodDeclaration returns [MethodDeclaration md]
 constructorDeclaration returns [ConstructorDeclaration cd]
 	:   annotation* methodDeclaration
 	;
-	
+
 msgsrvDeclaration returns [MsgsrvDeclaration md]
     :
     	annotation* ABSTRACT? MSGSRV methodDeclaration
 	;
-	
+
 synchMethodDeclaration returns [SynchMethodDeclaration smd]
 	:   annotation* ABSTRACT? type methodDeclaration
 	;
@@ -131,7 +136,6 @@ formalParameterDeclaration returns [FormalParameterDeclaration fpd]
     ;
 
 ///////////////////////
-
 block returns [BlockStatement bs]
     :   LBRACE annotatedStatement* RBRACE
     ;
@@ -157,13 +161,13 @@ forInit returns [ForInitializer fi]
 
 switchBlock returns [SwitchStatement ss]
     :   (annotation* caseSwitchGroup)+
-		(defualtSwitchGroup)?
+		(defaultSwitchGroup)?
     ;
 caseSwitchGroup returns [SwitchStatementGroup ssg]
     :   CASE expression COLON
 		annotatedStatement*
     ;
-defualtSwitchGroup returns [SwitchStatementGroup ssg]
+defaultSwitchGroup returns [SwitchStatementGroup ssg]
     :   DEFAULT COLON
      	annotatedStatement*
     ;

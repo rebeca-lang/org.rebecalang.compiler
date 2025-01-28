@@ -19,7 +19,7 @@ dimensions returns [List<Integer> ds]
 ///////////////////////////
 expression returns [Expression e]
     :
-		coreExpression
+		extendableExpression
         | unaryExpression
         | expression multiplicativeOp expression
     	| expression additiveOp expression
@@ -71,13 +71,19 @@ unaryExpression returns [Expression e]
     |   SUBSUB unaryExpression
     |   TILDA unaryExpression
     |	BANG unaryExpression
-    |   coreExpression
+    |   extendableExpression
+    ;
+
+extendableExpression returns [Expression e]
+    :   coreExpression (DOT primary)* (PLUSPLUS | SUBSUB)?
     ;
 
 coreExpression returns [Expression e]
-    :  (castExpression | LPAREN expression RPAREN | primary | literal | QUES LPAREN expressionList RPAREN
-	    | NEW type LPAREN expressionList? RPAREN COLON LPAREN expressionList? RPAREN)
-        (DOT primary)* (PLUSPLUS | SUBSUB)?
+    :   castExpression | LPAREN expression RPAREN | primary | literal | QUES LPAREN expressionList RPAREN | rebecInstantiationExpression
+    ;
+
+rebecInstantiationExpression returns [Expression e]
+    : NEW type LPAREN expressionList? RPAREN COLON LPAREN expressionList? RPAREN
     ;
 
 castExpression returns [Expression e]

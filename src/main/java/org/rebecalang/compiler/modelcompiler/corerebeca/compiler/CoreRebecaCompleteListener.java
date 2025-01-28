@@ -84,6 +84,26 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitMainRebecDefinition(CoreRebecaCompleteParser.MainRebecDefinitionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#bindingsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void enterBindingsExpressionList(CoreRebecaCompleteParser.BindingsExpressionListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#bindingsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void exitBindingsExpressionList(CoreRebecaCompleteParser.BindingsExpressionListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#argumentsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void enterArgumentsExpressionList(CoreRebecaCompleteParser.ArgumentsExpressionListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#argumentsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void exitArgumentsExpressionList(CoreRebecaCompleteParser.ArgumentsExpressionListContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#fieldDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -144,6 +164,26 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitInterfaceDeclaration(CoreRebecaCompleteParser.InterfaceDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#extendingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void enterExtendingInterface(CoreRebecaCompleteParser.ExtendingInterfaceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#extendingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void exitExtendingInterface(CoreRebecaCompleteParser.ExtendingInterfaceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#msgsrvSignature}.
+	 * @param ctx the parse tree
+	 */
+	void enterMsgsrvSignature(CoreRebecaCompleteParser.MsgsrvSignatureContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#msgsrvSignature}.
+	 * @param ctx the parse tree
+	 */
+	void exitMsgsrvSignature(CoreRebecaCompleteParser.MsgsrvSignatureContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#reactiveClassDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -153,6 +193,36 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReactiveClassDeclaration(CoreRebecaCompleteParser.ReactiveClassDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#implementingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void enterImplementingInterface(CoreRebecaCompleteParser.ImplementingInterfaceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#implementingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void exitImplementingInterface(CoreRebecaCompleteParser.ImplementingInterfaceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#knownRebecsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterKnownRebecsDeclaration(CoreRebecaCompleteParser.KnownRebecsDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#knownRebecsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitKnownRebecsDeclaration(CoreRebecaCompleteParser.KnownRebecsDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#stateVarsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterStateVarsDeclaration(CoreRebecaCompleteParser.StateVarsDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#stateVarsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitStateVarsDeclaration(CoreRebecaCompleteParser.StateVarsDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#methodDeclaration}.
 	 * @param ctx the parse tree
@@ -263,6 +333,36 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSwitchBlock(CoreRebecaCompleteParser.SwitchBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#caseSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseSwitchGroup(CoreRebecaCompleteParser.CaseSwitchGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#caseSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseSwitchGroup(CoreRebecaCompleteParser.CaseSwitchGroupContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#defaultSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterDefaultSwitchGroup(CoreRebecaCompleteParser.DefaultSwitchGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#defaultSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitDefaultSwitchGroup(CoreRebecaCompleteParser.DefaultSwitchGroupContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#annotatedStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotatedStatement(CoreRebecaCompleteParser.AnnotatedStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#annotatedStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotatedStatement(CoreRebecaCompleteParser.AnnotatedStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#statementExpression}.
 	 * @param ctx the parse tree
@@ -394,6 +494,16 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitUnaryExpression(CoreRebecaCompleteParser.UnaryExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#extendableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExtendableExpression(CoreRebecaCompleteParser.ExtendableExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#extendableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExtendableExpression(CoreRebecaCompleteParser.ExtendableExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#coreExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -403,6 +513,16 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCoreExpression(CoreRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#rebecInstantiationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRebecInstantiationExpression(CoreRebecaCompleteParser.RebecInstantiationExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#rebecInstantiationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRebecInstantiationExpression(CoreRebecaCompleteParser.RebecInstantiationExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#castExpression}.
 	 * @param ctx the parse tree
@@ -433,6 +553,16 @@ public interface CoreRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionList(CoreRebecaCompleteParser.ExpressionListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#annotatedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotatedExpression(CoreRebecaCompleteParser.AnnotatedExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaCompleteParser#annotatedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotatedExpression(CoreRebecaCompleteParser.AnnotatedExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CoreRebecaCompleteParser#literal}.
 	 * @param ctx the parse tree

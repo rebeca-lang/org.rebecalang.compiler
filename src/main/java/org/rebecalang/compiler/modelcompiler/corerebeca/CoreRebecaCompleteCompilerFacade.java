@@ -23,6 +23,7 @@ import org.rebecalang.compiler.modelcompiler.abstractrebeca.SymbolTableInitializ
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.TypeSystemInitializer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteParser;
+import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaListener;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BaseClassDeclaration;
@@ -81,6 +82,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement.ReturnStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement.SwitchStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement.WhileStatementSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler.ProbabilisticRebecaListener;
 import org.rebecalang.compiler.utils.AccessModifierUtilities;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CoreVersion;
@@ -679,7 +681,10 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		return new CoreRebecaCompleteParser(tokens);
 	}
 	@Override
-	public void attachListener(Parser parser)  {}
+	public void attachListener(Parser parser) {
+		CoreRebecaListener listener = new CoreRebecaListener();
+		parser.addParseListener(listener);
+	}
 
 	@Override
 	protected StatementSemanticCheckContainer getStatementSemanticCheckContainer() {

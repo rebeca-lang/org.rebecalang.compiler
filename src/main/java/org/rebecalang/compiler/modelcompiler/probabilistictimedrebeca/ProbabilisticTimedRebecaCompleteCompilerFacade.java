@@ -55,4 +55,8 @@ public class ProbabilisticTimedRebecaCompleteCompilerFacade extends
 		return new ProbabilisticTimedRebecaCompleteParser(tokens);
 	}
 
+	@Override
+	public void attachListener(Parser parser)  {
+
+	}
 }

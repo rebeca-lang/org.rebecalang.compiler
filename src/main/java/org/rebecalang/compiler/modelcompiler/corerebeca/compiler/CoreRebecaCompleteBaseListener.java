@@ -106,6 +106,30 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBindingsExpressionList(CoreRebecaCompleteParser.BindingsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBindingsExpressionList(CoreRebecaCompleteParser.BindingsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArgumentsExpressionList(CoreRebecaCompleteParser.ArgumentsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArgumentsExpressionList(CoreRebecaCompleteParser.ArgumentsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFieldDeclaration(CoreRebecaCompleteParser.FieldDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -178,6 +202,30 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExtendingInterface(CoreRebecaCompleteParser.ExtendingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExtendingInterface(CoreRebecaCompleteParser.ExtendingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMsgsrvSignature(CoreRebecaCompleteParser.MsgsrvSignatureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMsgsrvSignature(CoreRebecaCompleteParser.MsgsrvSignatureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterReactiveClassDeclaration(CoreRebecaCompleteParser.ReactiveClassDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -185,6 +233,42 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReactiveClassDeclaration(CoreRebecaCompleteParser.ReactiveClassDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterImplementingInterface(CoreRebecaCompleteParser.ImplementingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImplementingInterface(CoreRebecaCompleteParser.ImplementingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterKnownRebecsDeclaration(CoreRebecaCompleteParser.KnownRebecsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitKnownRebecsDeclaration(CoreRebecaCompleteParser.KnownRebecsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStateVarsDeclaration(CoreRebecaCompleteParser.StateVarsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStateVarsDeclaration(CoreRebecaCompleteParser.StateVarsDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -317,6 +401,42 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSwitchBlock(CoreRebecaCompleteParser.SwitchBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCaseSwitchGroup(CoreRebecaCompleteParser.CaseSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCaseSwitchGroup(CoreRebecaCompleteParser.CaseSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDefaultSwitchGroup(CoreRebecaCompleteParser.DefaultSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDefaultSwitchGroup(CoreRebecaCompleteParser.DefaultSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotatedStatement(CoreRebecaCompleteParser.AnnotatedStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotatedStatement(CoreRebecaCompleteParser.AnnotatedStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -478,6 +598,18 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExtendableExpression(CoreRebecaCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExtendableExpression(CoreRebecaCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCoreExpression(CoreRebecaCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -485,6 +617,18 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCoreExpression(CoreRebecaCompleteParser.CoreExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRebecInstantiationExpression(CoreRebecaCompleteParser.RebecInstantiationExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRebecInstantiationExpression(CoreRebecaCompleteParser.RebecInstantiationExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -521,6 +665,18 @@ public class CoreRebecaCompleteBaseListener implements CoreRebecaCompleteListene
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpressionList(CoreRebecaCompleteParser.ExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotatedExpression(CoreRebecaCompleteParser.AnnotatedExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotatedExpression(CoreRebecaCompleteParser.AnnotatedExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

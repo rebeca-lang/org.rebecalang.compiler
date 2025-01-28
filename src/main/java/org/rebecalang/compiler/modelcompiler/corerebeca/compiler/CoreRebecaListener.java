@@ -1,13 +1,8 @@
 package org.rebecalang.compiler.modelcompiler.corerebeca.compiler;
 
-import com.oracle.js.parser.ir.Block;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
-import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler.ProbabilisticRebecaCompleteParser;
-import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.objectmodel.PAltStatement;
-import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.objectmodel.ProbabilisticAlternativeValue;
-import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.objectmodel.ProbabilisticExpression;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -68,109 +63,243 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
         }
         md.setEndLineNumber(ctx.RBRACE().getSymbol().getLine());
         md.setEndCharacter(ctx.RBRACE().getSymbol().getCharPositionInLine());
+        ctx.md = md;
     }
 
     @Override
     public void exitMainRebecDefinition(CoreRebecaCompleteParser.MainRebecDefinitionContext ctx) {
-        MainRebecDefinition mrd = new MainRebecDefinition();
+        MainRebecDefinition mainRebecDefinition = new MainRebecDefinition();
         for (CoreRebecaCompleteParser.AnnotationContext annCtx : ctx.annotation()) {
-            mrd.getAnnotations().add(annCtx.an);
+            mainRebecDefinition.getAnnotations().add(annCtx.an);
         }
-        mrd.setType(ctx.type().t);
-        mrd.setName(ctx.IDENTIFIER().getText());
-        mrd.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
-        mrd.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
+        mainRebecDefinition.setType(ctx.type().t);
+        mainRebecDefinition.setName(ctx.IDENTIFIER().getText());
+        mainRebecDefinition.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
+        mainRebecDefinition.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
         if (ctx.bindingsExpressionList() != null) {
-            mrd.getBindings().addAll(ctx.bindingsExpressionList().el);
+            mainRebecDefinition.getBindings().addAll(ctx.bindingsExpressionList().expressionList().el);
         }
         if (ctx.argumentsExpressionList() != null) {
-            mrd.getArguments().addAll(ctx.argumentsExpressionList().el);
+            mainRebecDefinition.getArguments().addAll(ctx.argumentsExpressionList().expressionList().el);
         }
-        ctx.mrd = mrd;
+        ctx.mrd = mainRebecDefinition;
     }
-
     @Override
     public void exitFieldDeclaration(CoreRebecaCompleteParser.FieldDeclarationContext ctx) {
-        FieldDeclaration fd = new FieldDeclaration();
+        FieldDeclaration fieldDeclaration = new FieldDeclaration();
         for (CoreRebecaCompleteParser.AnnotationContext annotationCtx : ctx.annotation()) {
-            fd.getAnnotations().add(annotationCtx.an);
+            fieldDeclaration.getAnnotations().add(annotationCtx.an);
         }
-        fd.setType(ctx.type().t);
-        fd.getVariableDeclarators().addAll(ctx.variableDeclarators().vds);
-        fd.setCharacter(ctx.type().t.getCharacter());
-        fd.setLineNumber(ctx.type().t.getLineNumber());
-        ctx.fd = fd;
+        fieldDeclaration.setType(ctx.type().t);
+        fieldDeclaration.getVariableDeclarators().addAll(ctx.variableDeclarators().vds);
+        fieldDeclaration.setCharacter(ctx.type().t.getCharacter());
+        fieldDeclaration.setLineNumber(ctx.type().t.getLineNumber());
+        ctx.fd = fieldDeclaration;
     }
 
     @Override
     public void exitVariableDeclarators(CoreRebecaCompleteParser.VariableDeclaratorsContext ctx) {
-        List<VariableDeclarator> vds = new LinkedList<>();
+        List<VariableDeclarator> variableDeclarators = new LinkedList<>();
         for (CoreRebecaCompleteParser.VariableDeclaratorContext vdCtx : ctx.variableDeclarator()) {
-            vds.add(vdCtx.vd);
+            variableDeclarators.add(vdCtx.vd);
         }
-        ctx.vds = vds;
+        ctx.vds = variableDeclarators;
     }
 
     @Override
     public void exitVariableDeclarator(CoreRebecaCompleteParser.VariableDeclaratorContext ctx) {
-        VariableDeclarator vd = new VariableDeclarator();
-        vd.setVariableName(ctx.IDENTIFIER().getText());
-        vd.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
-        vd.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
+        VariableDeclarator variableDeclarator = new VariableDeclarator();
+        variableDeclarator.setVariableName(ctx.IDENTIFIER().getText());
+        variableDeclarator.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
+        variableDeclarator.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
         if (ctx.variableInitializer() != null) {
-            vd.setVariableInitializer(ctx.variableInitializer().vi);
+            variableDeclarator.setVariableInitializer(ctx.variableInitializer().vi);
         }
-        ctx.vd = vd;
+        ctx.vd = variableDeclarator;
     }
 
     @Override
     public void exitVariableInitializer(CoreRebecaCompleteParser.VariableInitializerContext ctx) {
-        VariableInitializer vi = new VariableInitializer();
+        VariableInitializer variableInitializer = new VariableInitializer();
         if (ctx.arrayInitializer() != null) {
-            vi = ctx.arrayInitializer().avi;
+            variableInitializer = ctx.arrayInitializer().avi;
         } else {
             if (ctx.expression().e != null) {
                 OrdinaryVariableInitializer ovi = new OrdinaryVariableInitializer();
                 ovi.setValue(ctx.expression().e);
                 ovi.setLineNumber(ctx.expression().e.getLineNumber());
                 ovi.setCharacter(ctx.expression().e.getCharacter());
-                vi = ovi;
+                variableInitializer = ovi;
             }
         }
-        ctx.vi = vi;
+        ctx.vi = variableInitializer;
     }
 
     @Override
     public void exitArrayInitializer(CoreRebecaCompleteParser.ArrayInitializerContext ctx) {
-        ArrayVariableInitializer avi = new ArrayVariableInitializer();
-        avi.setCharacter(ctx.LBRACE().getSymbol().getCharPositionInLine());
-        avi.setLineNumber(ctx.LBRACE().getSymbol().getLine());
+        ArrayVariableInitializer arrayVariableInitializer = new ArrayVariableInitializer();
+        arrayVariableInitializer.setCharacter(ctx.LBRACE().getSymbol().getCharPositionInLine());
+        arrayVariableInitializer.setLineNumber(ctx.LBRACE().getSymbol().getLine());
         for (CoreRebecaCompleteParser.VariableInitializerContext viCtx : ctx.variableInitializer()) {
-            avi.getValues().add(viCtx.vi);
+            arrayVariableInitializer.getValues().add(viCtx.vi);
         }
-        ctx.avi = avi;
+        ctx.avi = arrayVariableInitializer;
+    }
+    @Override
+    public void exitInterfaceDeclaration(CoreRebecaCompleteParser.InterfaceDeclarationContext ctx) {
+        InterfaceDeclaration interfaceDeclaration = new InterfaceDeclaration();
+        for (CoreRebecaCompleteParser.AnnotationContext annotationCtx : ctx.annotation()) {
+            interfaceDeclaration.getAnnotations().add(annotationCtx.an);
+        }
+        interfaceDeclaration.setName(ctx.IDENTIFIER().getText());
+        interfaceDeclaration.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
+        interfaceDeclaration.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
+        if (ctx.extendingInterface() != null) {
+            interfaceDeclaration.getExtends().addAll(ctx.extendingInterface().opts);
+        }
+        for (CoreRebecaCompleteParser.MsgsrvSignatureContext msgsrvSignatureContext : ctx.msgsrvSignature()) {
+            interfaceDeclaration.getMsgsrvs().add(msgsrvSignatureContext.md);
+        }
+        interfaceDeclaration.setEndLineNumber(ctx.RBRACE().getSymbol().getLine());
+        interfaceDeclaration.setEndCharacter(ctx.RBRACE().getSymbol().getCharPositionInLine());
+        ctx.intd = interfaceDeclaration;
+    }
+    @Override
+    public void exitExtendingInterface(CoreRebecaCompleteParser.ExtendingInterfaceContext ctx) {
+        List<OrdinaryPrimitiveType> ordinaryPrimitiveTypes = new ArrayList<>();
+        for (TerminalNode name : ctx.IDENTIFIER()) {
+            OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
+            opt.setName(name.getText());
+            opt.setLineNumber(name.getSymbol().getLine());
+            opt.setCharacter(name.getSymbol().getCharPositionInLine());
+            ordinaryPrimitiveTypes.add(opt);
+        }
+        ctx.opts = ordinaryPrimitiveTypes;
+    }
+
+    @Override
+    public void exitMsgsrvSignature(CoreRebecaCompleteParser.MsgsrvSignatureContext ctx) {
+        MsgsrvDeclaration msgsrvDeclaration = new MsgsrvDeclaration();
+        msgsrvDeclaration.setAbstract(true);
+        for(CoreRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()){
+            msgsrvDeclaration.getAnnotations().add(annotation.an);
+        }
+        msgsrvDeclaration.setName(ctx.IDENTIFIER().getText());
+        msgsrvDeclaration.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
+        msgsrvDeclaration.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
+        msgsrvDeclaration.getFormalParameters().addAll(ctx.formalParameters().fps);
+        ctx.md = msgsrvDeclaration;
+    }
+
+    @Override
+    public void exitReactiveClassDeclaration(CoreRebecaCompleteParser.ReactiveClassDeclarationContext ctx) {
+        ReactiveClassDeclaration reactiveClassDeclaration = new ReactiveClassDeclaration();
+        for(CoreRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()){
+            reactiveClassDeclaration.getAnnotations().add(annotation.an);
+        }
+        if(ctx.ABSTRACT() != null){
+            reactiveClassDeclaration.setAbstract(true);
+        }
+        reactiveClassDeclaration.setName(ctx.IDENTIFIER(0).getText());
+        reactiveClassDeclaration.setCharacter(ctx.IDENTIFIER(0).getSymbol().getCharPositionInLine());
+        reactiveClassDeclaration.setLineNumber(ctx.IDENTIFIER(0).getSymbol().getLine());
+        if(ctx.EXTENDS() != null) {
+            OrdinaryPrimitiveType extend = new OrdinaryPrimitiveType();
+            extend.setName(ctx.IDENTIFIER(1).getText());
+            extend.setCharacter(ctx.IDENTIFIER(1).getSymbol().getCharPositionInLine());
+            extend.setLineNumber(ctx.IDENTIFIER(1).getSymbol().getLine());
+            reactiveClassDeclaration.setExtends(extend);
+        }
+        if(ctx.implementingInterface() != null){
+            reactiveClassDeclaration.getImplements().addAll(ctx.implementingInterface().opts);
+        }
+        if(ctx.INTLITERAL().getText().equals("<missing INTLITERAL>")) {
+            reactiveClassDeclaration.setQueueSize(Integer.parseInt(ctx.INTLITERAL().getText()));
+        }
+        for(CoreRebecaCompleteParser.KnownRebecsDeclarationContext knownRebecsDeclaration : ctx.knownRebecsDeclaration() ){
+            reactiveClassDeclaration.getKnownRebecs().addAll(knownRebecsDeclaration.fds);
+        }
+        for(CoreRebecaCompleteParser.StateVarsDeclarationContext stateVarsDeclaration : ctx.stateVarsDeclaration() ){
+            reactiveClassDeclaration.getStatevars().addAll(stateVarsDeclaration.fds);
+        }
+        for(CoreRebecaCompleteParser.ConstructorDeclarationContext constructorDeclaration: ctx.constructorDeclaration() ){
+            reactiveClassDeclaration.getConstructors().add(constructorDeclaration.cd);
+        }
+        for(CoreRebecaCompleteParser.MsgsrvDeclarationContext msgsrvDeclarationContext: ctx.msgsrvDeclaration() ){
+            reactiveClassDeclaration.getMsgsrvs().add(msgsrvDeclarationContext.md);
+        }
+        for(CoreRebecaCompleteParser.SynchMethodDeclarationContext synchMethodDeclarationContext: ctx.synchMethodDeclaration() ){
+            reactiveClassDeclaration.getSynchMethods().add(synchMethodDeclarationContext.smd);
+        }
+        reactiveClassDeclaration.setEndLineNumber(ctx.RBRACE().getSymbol().getLine());
+        reactiveClassDeclaration.setEndCharacter(ctx.RBRACE().getSymbol().getCharPositionInLine());
+        ctx.rcd = reactiveClassDeclaration;
+    }
+    @Override
+    public void exitImplementingInterface(CoreRebecaCompleteParser.ImplementingInterfaceContext ctx) {
+        List<OrdinaryPrimitiveType> ordinaryPrimitiveTypes = new ArrayList<>();
+        for (TerminalNode name : ctx.IDENTIFIER()) {
+            OrdinaryPrimitiveType opt = new OrdinaryPrimitiveType();
+            opt.setName(name.getText());
+            opt.setLineNumber(name.getSymbol().getLine());
+            opt.setCharacter(name.getSymbol().getCharPositionInLine());
+            ordinaryPrimitiveTypes.add(opt);
+        }
+        ctx.opts = ordinaryPrimitiveTypes;
+    }
+    @Override
+    public void exitKnownRebecsDeclaration(CoreRebecaCompleteParser.KnownRebecsDeclarationContext ctx) {
+        List<FieldDeclaration> fieldDeclarations = new ArrayList<>();
+        for(CoreRebecaCompleteParser.FieldDeclarationContext fieldDeclarationContext : ctx.fieldDeclaration()){
+            fieldDeclarations.add(fieldDeclarationContext.fd);
+        }
+        ctx.fds = fieldDeclarations;
+    }
+    @Override
+    public void exitStateVarsDeclaration(CoreRebecaCompleteParser.StateVarsDeclarationContext ctx) {
+        List<FieldDeclaration> fieldDeclarations = new ArrayList<>();
+        for(CoreRebecaCompleteParser.FieldDeclarationContext fieldDeclarationContext : ctx.fieldDeclaration()){
+            fieldDeclarations.add(fieldDeclarationContext.fd);
+        }
+        ctx.fds = fieldDeclarations;
+    }
+    private String declaration_type;
+    @Override
+    public void enterConstructorDeclaration(CoreRebecaCompleteParser.ConstructorDeclarationContext ctx){
+        declaration_type = "Constructor";
+    }
+    @Override
+    public void enterMsgsrvDeclaration(CoreRebecaCompleteParser.MsgsrvDeclarationContext ctx){
+        declaration_type = "Msgsrv";
+    }
+    @Override
+    public void enterSynchMethodDeclaration(CoreRebecaCompleteParser.SynchMethodDeclarationContext ctx){
+        declaration_type = "Synch";
     }
     @Override
     public void exitMethodDeclaration(CoreRebecaCompleteParser.MethodDeclarationContext ctx) {
-        MethodDeclaration md = ctx.md;
-        md.setName(ctx.IDENTIFIER().getText());
-        md.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
-        md.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
-        md.getFormalParameters().addAll(ctx.formalParameters().fps);
+        switch (declaration_type) {
+            case "Constructor" -> ctx.md = new ConstructorDeclaration();
+            case "Msgsrv" -> ctx.md = new MsgsrvDeclaration();
+            case "Synch" -> ctx.md = new SynchMethodDeclaration();
+        }
+        ctx.md.setName(ctx.IDENTIFIER().getText());
+        ctx.md.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
+        ctx.md.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
+        ctx.md.getFormalParameters().addAll(ctx.formalParameters().fps);
         if (ctx.block() != null) {
             BlockStatement block = ctx.block().bs;
-            md.setBlock(block);
-            md.setEndLineNumber(block.getEndLineNumber());
-            md.setEndCharacter(block.getEndCharacter());
+            ctx.md.setBlock(block);
+            ctx.md.setEndLineNumber(block.getEndLineNumber());
+            ctx.md.setEndCharacter(block.getEndCharacter());
         }
-        ctx.md = md;
     }
 
     @Override
     public void exitConstructorDeclaration(CoreRebecaCompleteParser.ConstructorDeclarationContext ctx) {
         ConstructorDeclaration cd = (ConstructorDeclaration) ctx.methodDeclaration().md;
         for (CoreRebecaCompleteParser.AnnotationContext annotationCtx : ctx.annotation()) {
-            cd.getAnnotations().add(annotationCtx.an);
+            ctx.methodDeclaration().md.getAnnotations().add(annotationCtx.an);
         }
         ctx.cd = cd;
     }
@@ -184,6 +313,7 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
         if (ctx.ABSTRACT() != null) {
             msgd.setAbstract(true);
         }
+        ctx.md = msgd;
     }
 
     @Override
@@ -196,6 +326,7 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
             smd.setAbstract(true);
         }
         smd.setReturnType(ctx.type().t);
+        ctx.smd = smd;
     }
 
     @Override
@@ -240,7 +371,7 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
     }
 
     @Override
-    public void exitAnnotatedStatement(CoreRebecaCompleteParser.BlockContext ctx) {
+    public void exitAnnotatedStatement(CoreRebecaCompleteParser.AnnotatedStatementContext ctx) {
         List<Annotation> annotationList = new ArrayList<>();
         Statement stm = ctx.statement().s;
         for(CoreRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()){
@@ -248,10 +379,6 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
         }
         stm.getAnnotations().addAll(annotationList);
         ctx.s = stm;
-    }
-    @Override
-    public void exitStatementExpression(CoreRebecaCompleteParser.StatementExpressionContext ctx){
-        ctx.se = ctx.expression().e;
     }
     @Override
     public void exitForInit(CoreRebecaCompleteParser.ForInitContext ctx) {
@@ -273,7 +400,7 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
             switchStatement.getSwitchStatementGroups().add(switchGroup.ssg);
         }
         if(ctx.defaultSwitchGroup() != null) {
-            switchStatement.getSwitchStatementGroups().add(ctx.defaultGroup().ssg);
+            switchStatement.getSwitchStatementGroups().add(ctx.defaultSwitchGroup().ssg);
         }
         ctx.ss = switchStatement;
     }
@@ -299,103 +426,137 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
         }
         ctx.ssg = switchStatementGroup;
     }
-
     @Override
     public void exitStatement(CoreRebecaCompleteParser.StatementContext ctx) {
         Statement s;
-        switch (getStatementType(ctx)) {
-            case "fieldDeclaration" -> s = ctx.fieldDeclaration().fd;
-            case "block" -> s = ctx.block().bs;
-            case "ifStatement" -> {
-                ConditionalStatement condStmt = new ConditionalStatement();
-                condStmt.setLineNumber(ctx.IF().getSymbol().getLine());
-                condStmt.setCharacter(ctx.IF().getSymbol().getCharPositionInLine());
-                condStmt.setCondition(ctx.expression().e);
-                condStmt.setStatement(ctx.statement(0).s);
-                if (ctx.ELSE() != null) {
-                    condStmt.setElseStatement(ctx.statement(1).s);
-                }
-                s = condStmt;
-            }
-            case "whileStatement" -> {
-                WhileStatement whileStmt = new WhileStatement();
-                whileStmt.setLineNumber(ctx.WHILE().getSymbol().getLine());
-                whileStmt.setCharacter(ctx.WHILE().getSymbol().getCharPositionInLine());
-                whileStmt.setCondition(ctx.expression().e);
-                whileStmt.setStatement(ctx.statement(0).s);
-                s = whileStmt;
-            }
-            case "forStatement" -> {
-                ForStatement forStmt = new ForStatement();
-                forStmt.setLineNumber(ctx.FOR().getSymbol().getLine());
-                forStmt.setCharacter(ctx.FOR().getSymbol().getCharPositionInLine());
-                if (ctx.forInit() != null) {
-                    forStmt.setForInitializer(ctx.forInit().fi);
-                }
-                if (ctx.expression() != null) {
-                    forStmt.setCondition(ctx.expression().e);
-                }
-                if (ctx.expressionList() != null) {
-                    forStmt.getForIncrement().addAll(ctx.expressionList().el);
-                }
-                forStmt.setStatement(ctx.statement(0).s);
-                s = forStmt;
-            }
-            case "switchStatement" -> {
-                s = ctx.switchBlock().ss;
-                ((SwitchStatement) s).setExpression(ctx.expression().e);
-                s.setLineNumber(ctx.SWITCH().getSymbol().getLine());
-                s.setCharacter(ctx.SWITCH().getSymbol().getCharPositionInLine());
-            }
 
-            case "returnStatement" -> {
-                ReturnStatement returnStmt = new ReturnStatement();
-                if (ctx.expression() != null) {
-                    returnStmt.setExpression(ctx.expression().e);
-                }
-                returnStmt.setLineNumber(ctx.RETURN().getSymbol().getLine());
-                returnStmt.setCharacter(ctx.RETURN().getSymbol().getCharPositionInLine());
-                s = returnStmt;
+        if (ctx.fieldDeclaration() != null) {
+            s = ctx.fieldDeclaration().fd;
+        } else if (ctx.block() != null) {
+            s = ctx.block().bs;
+        } else if (ctx.IF() != null) {
+            ConditionalStatement condStmt = new ConditionalStatement();
+            condStmt.setLineNumber(ctx.IF().getSymbol().getLine());
+            condStmt.setCharacter(ctx.IF().getSymbol().getCharPositionInLine());
+            condStmt.setCondition(ctx.expression().e);
+            condStmt.setStatement(ctx.statement(0).s);
+            if (ctx.ELSE() != null) {
+                condStmt.setElseStatement(ctx.statement(1).s);
             }
-            case "breakStatement" -> {
-                BreakStatement breakStmt = new BreakStatement();
-                breakStmt.setLineNumber(ctx.BREAK().getSymbol().getLine());
-                breakStmt.setCharacter(ctx.BREAK().getSymbol().getCharPositionInLine());
-                s = breakStmt;
+            s = condStmt;
+        } else if (ctx.WHILE() != null) {
+            WhileStatement whileStmt = new WhileStatement();
+            whileStmt.setLineNumber(ctx.WHILE().getSymbol().getLine());
+            whileStmt.setCharacter(ctx.WHILE().getSymbol().getCharPositionInLine());
+            whileStmt.setCondition(ctx.expression().e);
+            whileStmt.setStatement(ctx.statement(0).s);
+            s = whileStmt;
+        } else if (ctx.FOR() != null) {
+            ForStatement forStmt = new ForStatement();
+            forStmt.setLineNumber(ctx.FOR().getSymbol().getLine());
+            forStmt.setCharacter(ctx.FOR().getSymbol().getCharPositionInLine());
+            if (ctx.forInit() != null) {
+                forStmt.setForInitializer(ctx.forInit().fi);
             }
-            case "continueStatement" -> {
-                BreakStatement continueStmt = new BreakStatement();
-                continueStmt.setLineNumber(ctx.CONTINUE().getSymbol().getLine());
-                continueStmt.setCharacter(ctx.CONTINUE().getSymbol().getCharPositionInLine());
-                s = continueStmt;
+            if (ctx.expression() != null) {
+                forStmt.setCondition(ctx.expression().e);
             }
-            case "semiStatement" -> s = new Statement();
-            case "statementExpression" -> s = ctx.statementExpression().se;
-            default -> throw new IllegalStateException("Unrecognized statement type");
+            if (ctx.expressionList() != null) {
+                forStmt.getForIncrement().addAll(ctx.expressionList().el);
+            }
+            forStmt.setStatement(ctx.statement(0).s);
+            s = forStmt;
+        } else if (ctx.SWITCH() != null) {
+            s = ctx.switchBlock().ss;
+            ((SwitchStatement) s).setExpression(ctx.expression().e);
+            s.setLineNumber(ctx.SWITCH().getSymbol().getLine());
+            s.setCharacter(ctx.SWITCH().getSymbol().getCharPositionInLine());
+        } else if (ctx.RETURN() != null) {
+            ReturnStatement returnStmt = new ReturnStatement();
+            if (ctx.expression() != null) {
+                returnStmt.setExpression(ctx.expression().e);
+            }
+            returnStmt.setLineNumber(ctx.RETURN().getSymbol().getLine());
+            returnStmt.setCharacter(ctx.RETURN().getSymbol().getCharPositionInLine());
+            s = returnStmt;
+        } else if (ctx.BREAK() != null) {
+            BreakStatement breakStmt = new BreakStatement();
+            breakStmt.setLineNumber(ctx.BREAK().getSymbol().getLine());
+            breakStmt.setCharacter(ctx.BREAK().getSymbol().getCharPositionInLine());
+            s = breakStmt;
+        } else if (ctx.CONTINUE() != null) {
+            BreakStatement continueStmt = new BreakStatement();
+            continueStmt.setLineNumber(ctx.CONTINUE().getSymbol().getLine());
+            continueStmt.setCharacter(ctx.CONTINUE().getSymbol().getCharPositionInLine());
+            s = continueStmt;
+        } else if (ctx.SEMI() != null) {
+            s = new Statement();
+        } else if (ctx.statementExpression() != null) {
+            s = ctx.statementExpression().expression().e;
+        } else {
+            throw new IllegalStateException("Unrecognized statement type");
         }
         ctx.s = s;
     }
-
-    private String getStatementType(CoreRebecaCompleteParser.StatementContext ctx) {
-        if (ctx.fieldDeclaration() != null) return "fieldDeclaration";
-        if (ctx.block() != null) return "block";
-        if (ctx.IF() != null) return "ifStatement";
-        if (ctx.WHILE() != null) return "whileStatement";
-        if (ctx.FOR() != null) return "forStatement";
-        if (ctx.SWITCH() != null) return "switchStatement";
-        if (ctx.RETURN() != null) return "returnStatement";
-        if (ctx.BREAK() != null) return "breakStatement";
-        if (ctx.CONTINUE() != null) return "continueStatement";
-        if (ctx.SEMI() != null) return "semiStatement";
-        if (ctx.statementExpression() != null) return "statementExpression";
-        return "unknown";
-    }
-
 
     //
     // EXPRESSION PARSER
     //
 
+    @Override
+    public void exitExpression(CoreRebecaCompleteParser.ExpressionContext ctx) {
+        if (ctx.extendableExpression() != null) {
+            ctx.e = ctx.extendableExpression().e;
+        } else if (ctx.unaryExpression() != null) {
+            ctx.e = ctx.unaryExpression().e;
+        } else if (ctx.expression(0) != null && ctx.expression(1) != null) {
+            BinaryExpression binaryExpression = new BinaryExpression();
+            binaryExpression.setLeft(ctx.expression(0).e);
+            binaryExpression.setRight(ctx.expression(1).e);
+            if (ctx.multiplicativeOp() != null) {
+                binaryExpression.setOperator(ctx.multiplicativeOp().getText());
+            } else if (ctx.additiveOp() != null) {
+                binaryExpression.setOperator(ctx.additiveOp().getText());
+            } else if (ctx.shiftOp() != null) {
+                binaryExpression.setOperator(ctx.shiftOp().getText());
+            } else if (ctx.relationalOp() != null) {
+                binaryExpression.setOperator(ctx.relationalOp().getText());
+            } else if (ctx.equalityOp() != null) {
+                binaryExpression.setOperator(ctx.equalityOp().getText());
+            } else if (ctx.AMP() != null) {
+                binaryExpression.setOperator(ctx.AMP().getText());
+            } else if (ctx.CARET() != null) {
+                binaryExpression.setOperator(ctx.CARET().getText());
+            } else if (ctx.BAR() != null) {
+                binaryExpression.setOperator(ctx.BAR().getText());
+            } else if (ctx.AMPAMP() != null) {
+                binaryExpression.setOperator(ctx.AMPAMP().getText());
+            } else if (ctx.BARBAR() != null) {
+                binaryExpression.setOperator(ctx.BARBAR().getText());
+            } else if (ctx.assignmentOperator() != null) {
+                binaryExpression.setOperator(ctx.assignmentOperator().getText());
+            }
+            binaryExpression.setLineNumber(ctx.expression(0).e.getLineNumber());
+            binaryExpression.setCharacter(ctx.expression(0).e.getCharacter());
+            ctx.e = binaryExpression;
+        } else if (ctx.INSTANCEOF() != null) {
+            InstanceofExpression instanceofExpression = new InstanceofExpression();
+            instanceofExpression.setValue(ctx.expression(0).e);
+            instanceofExpression.setEvaluationType(ctx.type().t);
+            instanceofExpression.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
+            instanceofExpression.setLineNumber(ctx.type().t.getLineNumber());
+            instanceofExpression.setCharacter(ctx.type().t.getCharacter());
+            ctx.e = instanceofExpression;
+        } else if (ctx.QUES() != null && ctx.COLON() != null) {
+            TernaryExpression ternaryExpression = new TernaryExpression();
+            ternaryExpression.setCondition(ctx.expression(0).e);
+            ternaryExpression.setLeft(ctx.expression(1).e);
+            ternaryExpression.setRight(ctx.expression(2).e);
+            ternaryExpression.setLineNumber(ctx.expression(0).e.getLineNumber());
+            ternaryExpression.setCharacter(ctx.expression(0).e.getCharacter());
+            ctx.e = ternaryExpression;
+        }
+    }
     @Override
     public void exitAnnotation(CoreRebecaCompleteParser.AnnotationContext ctx) {
         Annotation annotation = new Annotation();
@@ -458,39 +619,13 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
         ctx.ds = dimensions;
     }
     @Override
-    public void exitCoreExpression(CoreRebecaCompleteParser.CoreExpressionContext ctx) {
-        Expression e;
-        if (ctx.castExpression() != null) {
-            e = ctx.castExpression().e;
-        } else if (ctx.expression() != null) {
-            e = ctx.expression().e;
-        } else if (ctx.primary(0) != null) {
-            e = ctx.primary(0).tp;
-        } else if (ctx.literal() != null) {
-            e = ctx.literal().l;
-        } else if (ctx.QUES() != null) {
-            e = new NonDetExpression();
-            List<Expression> choices = ctx.expressionList(0).el;
-            ((NonDetExpression) e).getChoices().addAll(choices);
-            e.setLineNumber(ctx.QUES().getSymbol().getLine());
-            e.setCharacter(ctx.QUES().getSymbol().getCharPositionInLine());
-        } else if (ctx.NEW() != null) {
-            e = new RebecInstantiationPrimary();
-            e.setLineNumber(ctx.type().t.getLineNumber());
-            e.setCharacter(ctx.type().t.getCharacter());
-            e.setType(ctx.type().t);
-            for(CoreRebecaCompleteParser.ExpressionListContext expressionListContext : ctx.expressionList()) {
-                ((RebecInstantiationPrimary)e).getBindings().addAll(expressionListContext.el);
-            }
-        } else {
-            throw new IllegalStateException("Unrecognized expression type");
-        }
+    public void exitExtendableExpression(CoreRebecaCompleteParser.ExtendableExpressionContext ctx) {
+        Expression e = ctx.coreExpression().e ;
         for (int i = 0; i < ctx.primary().size(); i++) {
             CoreRebecaCompleteParser.PrimaryContext primaryCtx = ctx.primary(i);
             DotPrimary de = new DotPrimary();
             de.setLineNumber(ctx.DOT(i).getSymbol().getLine());
             de.setCharacter(ctx.DOT(i).getSymbol().getCharPositionInLine());
-
             if (e instanceof DotPrimary temp) {
                 while (temp.getRight() instanceof DotPrimary) {
                     temp = (DotPrimary) temp.getRight();
@@ -518,6 +653,41 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
             pse.setLineNumber(ctx.SUBSUB().getSymbol().getLine());
             pse.setCharacter(ctx.SUBSUB().getSymbol().getCharPositionInLine());
             e = pse;
+        }
+        ctx.e = e;
+    }
+    @Override
+    public void exitCoreExpression(CoreRebecaCompleteParser.CoreExpressionContext ctx) {
+        Expression e;
+        if (ctx.castExpression() != null) {
+            e = ctx.castExpression().e;
+        } else if (ctx.expression() != null) {
+            e = ctx.expression().e;
+        } else if (ctx.primary() != null) {
+            e = ctx.primary().tp;
+        } else if (ctx.literal() != null) {
+            e = ctx.literal().l;
+        } else if (ctx.rebecInstantiationExpression() != null) {
+            e = ctx.rebecInstantiationExpression().e;
+        } else if (ctx.QUES() != null) {
+            e = new NonDetExpression();
+            List<Expression> choices = ctx.expressionList().el;
+            ((NonDetExpression) e).getChoices().addAll(choices);
+            e.setLineNumber(ctx.QUES().getSymbol().getLine());
+            e.setCharacter(ctx.QUES().getSymbol().getCharPositionInLine());
+        } else {
+            throw new IllegalStateException("Unrecognized expression type");
+        }
+        ctx.e = e;
+    }
+    @Override
+    public void exitRebecInstantiationExpression(CoreRebecaCompleteParser.RebecInstantiationExpressionContext ctx){
+        RebecInstantiationPrimary e = new RebecInstantiationPrimary();
+        e.setLineNumber(ctx.type().t.getLineNumber());
+        e.setCharacter(ctx.type().t.getCharacter());
+        e.setType(ctx.type().t);
+        for(CoreRebecaCompleteParser.ExpressionListContext expressionListContext : ctx.expressionList()) {
+            e.getBindings().addAll(expressionListContext.el);
         }
         ctx.e = e;
     }
@@ -614,11 +784,11 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
 
     @Override
     public void exitUnaryExpression(CoreRebecaCompleteParser.UnaryExpressionContext ctx) {
-        Expression expression = null;
+        Expression expression;
         if (ctx.PLUS() != null) {
             expression = ctx.unaryExpression().e;
-        } else if (ctx.coreExpression() != null) {
-            expression = ctx.coreExpression().e;
+        } else if (ctx.extendableExpression() != null) {
+            expression = ctx.extendableExpression().e;
         }
         else {
             UnaryExpression ue = new UnaryExpression();
@@ -652,30 +822,30 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
 
     @Override
     public void exitPrimary(CoreRebecaCompleteParser.PrimaryContext ctx) {
-        TermPrimary tp = new TermPrimary();
-        tp.setName(ctx.IDENTIFIER().getText());
-        tp.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
-        tp.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
+        TermPrimary termPrimary = new TermPrimary();
+        termPrimary.setName(ctx.IDENTIFIER().getText());
+        termPrimary.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
+        termPrimary.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
         if (ctx.LPAREN() != null) {
-            ParentSuffixPrimary psp = new ParentSuffixPrimary();
-            psp.setLineNumber(ctx.LPAREN().getSymbol().getLine());
-            psp.setCharacter(ctx.LPAREN().getSymbol().getCharPositionInLine());
-            tp.setParentSuffixPrimary(psp);
+            ParentSuffixPrimary parentSuffixPrimary = new ParentSuffixPrimary();
+            parentSuffixPrimary.setLineNumber(ctx.LPAREN().getSymbol().getLine());
+            parentSuffixPrimary.setCharacter(ctx.LPAREN().getSymbol().getCharPositionInLine());
+            termPrimary.setParentSuffixPrimary(parentSuffixPrimary);
             if (ctx.expressionList() != null) {
-                tp.getParentSuffixPrimary().getArguments().addAll(ctx.expressionList().el);
+                termPrimary.getParentSuffixPrimary().getArguments().addAll(ctx.expressionList().el);
             }
         }
         for (CoreRebecaCompleteParser.ExpressionContext exprCtx : ctx.expression()) {
-            tp.getIndices().add(exprCtx.e);
+            termPrimary.getIndices().add(exprCtx.e);
         }
-        ctx.tp = tp;
+        ctx.tp = termPrimary;
     }
 
     @Override
     public void exitExpressionList(CoreRebecaCompleteParser.ExpressionListContext ctx) {
         List<Expression> expressions = new LinkedList<>();
         for (CoreRebecaCompleteParser.AnnotatedExpressionContext annotatedExpression : ctx.annotatedExpression()) {
-            expressions.add(annotatedExpression);
+            expressions.add(annotatedExpression.e);
         }
         ctx.el = expressions;
     }
