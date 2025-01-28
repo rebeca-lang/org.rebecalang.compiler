@@ -170,6 +170,30 @@ public class HybridRebecaCompleteBaseListener implements HybridRebecaCompleteLis
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBindingsExpressionList(HybridRebecaCompleteParser.BindingsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBindingsExpressionList(HybridRebecaCompleteParser.BindingsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArgumentsExpressionList(HybridRebecaCompleteParser.ArgumentsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArgumentsExpressionList(HybridRebecaCompleteParser.ArgumentsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFieldDeclaration(HybridRebecaCompleteParser.FieldDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -242,6 +266,30 @@ public class HybridRebecaCompleteBaseListener implements HybridRebecaCompleteLis
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExtendingInterface(HybridRebecaCompleteParser.ExtendingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExtendingInterface(HybridRebecaCompleteParser.ExtendingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMsgsrvSignature(HybridRebecaCompleteParser.MsgsrvSignatureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMsgsrvSignature(HybridRebecaCompleteParser.MsgsrvSignatureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterReactiveClassDeclaration(HybridRebecaCompleteParser.ReactiveClassDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -249,6 +297,42 @@ public class HybridRebecaCompleteBaseListener implements HybridRebecaCompleteLis
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReactiveClassDeclaration(HybridRebecaCompleteParser.ReactiveClassDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterImplementingInterface(HybridRebecaCompleteParser.ImplementingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImplementingInterface(HybridRebecaCompleteParser.ImplementingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterKnownRebecsDeclaration(HybridRebecaCompleteParser.KnownRebecsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitKnownRebecsDeclaration(HybridRebecaCompleteParser.KnownRebecsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStateVarsDeclaration(HybridRebecaCompleteParser.StateVarsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStateVarsDeclaration(HybridRebecaCompleteParser.StateVarsDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -381,6 +465,42 @@ public class HybridRebecaCompleteBaseListener implements HybridRebecaCompleteLis
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSwitchBlock(HybridRebecaCompleteParser.SwitchBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCaseSwitchGroup(HybridRebecaCompleteParser.CaseSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCaseSwitchGroup(HybridRebecaCompleteParser.CaseSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDefaultSwitchGroup(HybridRebecaCompleteParser.DefaultSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDefaultSwitchGroup(HybridRebecaCompleteParser.DefaultSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotatedStatement(HybridRebecaCompleteParser.AnnotatedStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotatedStatement(HybridRebecaCompleteParser.AnnotatedStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -542,6 +662,18 @@ public class HybridRebecaCompleteBaseListener implements HybridRebecaCompleteLis
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExtendableExpression(HybridRebecaCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExtendableExpression(HybridRebecaCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCoreExpression(HybridRebecaCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -549,6 +681,18 @@ public class HybridRebecaCompleteBaseListener implements HybridRebecaCompleteLis
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCoreExpression(HybridRebecaCompleteParser.CoreExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRebecInstantiationExpression(HybridRebecaCompleteParser.RebecInstantiationExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRebecInstantiationExpression(HybridRebecaCompleteParser.RebecInstantiationExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -573,6 +717,18 @@ public class HybridRebecaCompleteBaseListener implements HybridRebecaCompleteLis
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpressionList(HybridRebecaCompleteParser.ExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotatedExpression(HybridRebecaCompleteParser.AnnotatedExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotatedExpression(HybridRebecaCompleteParser.AnnotatedExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

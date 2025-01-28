@@ -11,6 +11,7 @@ import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.statementsemant
 import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.statementsemanticchecker.statement.PALTStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.compiler.ProbabilisticTimedRebecaCompleteLexer;
 import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.compiler.ProbabilisticTimedRebecaCompleteParser;
+import org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.compiler.ProbabilisticTimedRebecaListener;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.TimedRebecaCompleteCompilerFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,9 +55,9 @@ public class ProbabilisticTimedRebecaCompleteCompilerFacade extends
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		return new ProbabilisticTimedRebecaCompleteParser(tokens);
 	}
-
 	@Override
-	public void attachListener(Parser parser)  {
-
+	public void attachListener(Parser parser) {
+		ProbabilisticTimedRebecaListener listener = new ProbabilisticTimedRebecaListener();
+		parser.addParseListener(listener);
 	}
 }

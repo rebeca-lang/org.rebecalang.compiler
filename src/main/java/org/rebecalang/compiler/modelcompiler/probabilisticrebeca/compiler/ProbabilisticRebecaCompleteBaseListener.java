@@ -156,6 +156,30 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBindingsExpressionList(ProbabilisticRebecaCompleteParser.BindingsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBindingsExpressionList(ProbabilisticRebecaCompleteParser.BindingsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArgumentsExpressionList(ProbabilisticRebecaCompleteParser.ArgumentsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArgumentsExpressionList(ProbabilisticRebecaCompleteParser.ArgumentsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFieldDeclaration(ProbabilisticRebecaCompleteParser.FieldDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -228,6 +252,30 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExtendingInterface(ProbabilisticRebecaCompleteParser.ExtendingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExtendingInterface(ProbabilisticRebecaCompleteParser.ExtendingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMsgsrvSignature(ProbabilisticRebecaCompleteParser.MsgsrvSignatureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMsgsrvSignature(ProbabilisticRebecaCompleteParser.MsgsrvSignatureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterReactiveClassDeclaration(ProbabilisticRebecaCompleteParser.ReactiveClassDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -235,6 +283,42 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReactiveClassDeclaration(ProbabilisticRebecaCompleteParser.ReactiveClassDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterImplementingInterface(ProbabilisticRebecaCompleteParser.ImplementingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImplementingInterface(ProbabilisticRebecaCompleteParser.ImplementingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterKnownRebecsDeclaration(ProbabilisticRebecaCompleteParser.KnownRebecsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitKnownRebecsDeclaration(ProbabilisticRebecaCompleteParser.KnownRebecsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStateVarsDeclaration(ProbabilisticRebecaCompleteParser.StateVarsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStateVarsDeclaration(ProbabilisticRebecaCompleteParser.StateVarsDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -355,6 +439,42 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSwitchBlock(ProbabilisticRebecaCompleteParser.SwitchBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCaseSwitchGroup(ProbabilisticRebecaCompleteParser.CaseSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCaseSwitchGroup(ProbabilisticRebecaCompleteParser.CaseSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDefaultSwitchGroup(ProbabilisticRebecaCompleteParser.DefaultSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDefaultSwitchGroup(ProbabilisticRebecaCompleteParser.DefaultSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotatedStatement(ProbabilisticRebecaCompleteParser.AnnotatedStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotatedStatement(ProbabilisticRebecaCompleteParser.AnnotatedStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -516,6 +636,30 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExtendableExpression(ProbabilisticRebecaCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExtendableExpression(ProbabilisticRebecaCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRebecInstantiationExpression(ProbabilisticRebecaCompleteParser.RebecInstantiationExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRebecInstantiationExpression(ProbabilisticRebecaCompleteParser.RebecInstantiationExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCastExpression(ProbabilisticRebecaCompleteParser.CastExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -547,6 +691,18 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpressionList(ProbabilisticRebecaCompleteParser.ExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotatedExpression(ProbabilisticRebecaCompleteParser.AnnotatedExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotatedExpression(ProbabilisticRebecaCompleteParser.AnnotatedExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

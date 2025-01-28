@@ -143,6 +143,30 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBindingsExpressionList(TimedRebecaCompleteParser.BindingsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBindingsExpressionList(TimedRebecaCompleteParser.BindingsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArgumentsExpressionList(TimedRebecaCompleteParser.ArgumentsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArgumentsExpressionList(TimedRebecaCompleteParser.ArgumentsExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFieldDeclaration(TimedRebecaCompleteParser.FieldDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -215,6 +239,30 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExtendingInterface(TimedRebecaCompleteParser.ExtendingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExtendingInterface(TimedRebecaCompleteParser.ExtendingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMsgsrvSignature(TimedRebecaCompleteParser.MsgsrvSignatureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMsgsrvSignature(TimedRebecaCompleteParser.MsgsrvSignatureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterReactiveClassDeclaration(TimedRebecaCompleteParser.ReactiveClassDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -222,6 +270,42 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReactiveClassDeclaration(TimedRebecaCompleteParser.ReactiveClassDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterImplementingInterface(TimedRebecaCompleteParser.ImplementingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitImplementingInterface(TimedRebecaCompleteParser.ImplementingInterfaceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterKnownRebecsDeclaration(TimedRebecaCompleteParser.KnownRebecsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitKnownRebecsDeclaration(TimedRebecaCompleteParser.KnownRebecsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStateVarsDeclaration(TimedRebecaCompleteParser.StateVarsDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStateVarsDeclaration(TimedRebecaCompleteParser.StateVarsDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -354,6 +438,42 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSwitchBlock(TimedRebecaCompleteParser.SwitchBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCaseSwitchGroup(TimedRebecaCompleteParser.CaseSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCaseSwitchGroup(TimedRebecaCompleteParser.CaseSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDefaultSwitchGroup(TimedRebecaCompleteParser.DefaultSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDefaultSwitchGroup(TimedRebecaCompleteParser.DefaultSwitchGroupContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotatedStatement(TimedRebecaCompleteParser.AnnotatedStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotatedStatement(TimedRebecaCompleteParser.AnnotatedStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -515,6 +635,18 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExtendableExpression(TimedRebecaCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExtendableExpression(TimedRebecaCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCoreExpression(TimedRebecaCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -522,6 +654,18 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCoreExpression(TimedRebecaCompleteParser.CoreExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRebecInstantiationExpression(TimedRebecaCompleteParser.RebecInstantiationExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRebecInstantiationExpression(TimedRebecaCompleteParser.RebecInstantiationExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -546,6 +690,18 @@ public class TimedRebecaCompleteBaseListener implements TimedRebecaCompleteListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpressionList(TimedRebecaCompleteParser.ExpressionListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotatedExpression(TimedRebecaCompleteParser.AnnotatedExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotatedExpression(TimedRebecaCompleteParser.AnnotatedExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

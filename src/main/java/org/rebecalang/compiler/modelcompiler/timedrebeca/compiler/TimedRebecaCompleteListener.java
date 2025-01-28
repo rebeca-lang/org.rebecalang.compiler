@@ -115,6 +115,26 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitMainRebecDefinition(TimedRebecaCompleteParser.MainRebecDefinitionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#bindingsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void enterBindingsExpressionList(TimedRebecaCompleteParser.BindingsExpressionListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#bindingsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void exitBindingsExpressionList(TimedRebecaCompleteParser.BindingsExpressionListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#argumentsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void enterArgumentsExpressionList(TimedRebecaCompleteParser.ArgumentsExpressionListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#argumentsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void exitArgumentsExpressionList(TimedRebecaCompleteParser.ArgumentsExpressionListContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#fieldDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -175,6 +195,26 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitInterfaceDeclaration(TimedRebecaCompleteParser.InterfaceDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#extendingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void enterExtendingInterface(TimedRebecaCompleteParser.ExtendingInterfaceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#extendingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void exitExtendingInterface(TimedRebecaCompleteParser.ExtendingInterfaceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#msgsrvSignature}.
+	 * @param ctx the parse tree
+	 */
+	void enterMsgsrvSignature(TimedRebecaCompleteParser.MsgsrvSignatureContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#msgsrvSignature}.
+	 * @param ctx the parse tree
+	 */
+	void exitMsgsrvSignature(TimedRebecaCompleteParser.MsgsrvSignatureContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#reactiveClassDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -184,6 +224,36 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReactiveClassDeclaration(TimedRebecaCompleteParser.ReactiveClassDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#implementingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void enterImplementingInterface(TimedRebecaCompleteParser.ImplementingInterfaceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#implementingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void exitImplementingInterface(TimedRebecaCompleteParser.ImplementingInterfaceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#knownRebecsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterKnownRebecsDeclaration(TimedRebecaCompleteParser.KnownRebecsDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#knownRebecsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitKnownRebecsDeclaration(TimedRebecaCompleteParser.KnownRebecsDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#stateVarsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterStateVarsDeclaration(TimedRebecaCompleteParser.StateVarsDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#stateVarsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitStateVarsDeclaration(TimedRebecaCompleteParser.StateVarsDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#methodDeclaration}.
 	 * @param ctx the parse tree
@@ -294,6 +364,36 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSwitchBlock(TimedRebecaCompleteParser.SwitchBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#caseSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseSwitchGroup(TimedRebecaCompleteParser.CaseSwitchGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#caseSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseSwitchGroup(TimedRebecaCompleteParser.CaseSwitchGroupContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#defaultSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterDefaultSwitchGroup(TimedRebecaCompleteParser.DefaultSwitchGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#defaultSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitDefaultSwitchGroup(TimedRebecaCompleteParser.DefaultSwitchGroupContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#annotatedStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotatedStatement(TimedRebecaCompleteParser.AnnotatedStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#annotatedStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotatedStatement(TimedRebecaCompleteParser.AnnotatedStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#statementExpression}.
 	 * @param ctx the parse tree
@@ -425,6 +525,16 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitUnaryExpression(TimedRebecaCompleteParser.UnaryExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#extendableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExtendableExpression(TimedRebecaCompleteParser.ExtendableExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#extendableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExtendableExpression(TimedRebecaCompleteParser.ExtendableExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#coreExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -434,6 +544,16 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCoreExpression(TimedRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#rebecInstantiationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRebecInstantiationExpression(TimedRebecaCompleteParser.RebecInstantiationExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#rebecInstantiationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRebecInstantiationExpression(TimedRebecaCompleteParser.RebecInstantiationExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#castExpression}.
 	 * @param ctx the parse tree
@@ -454,6 +574,16 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionList(TimedRebecaCompleteParser.ExpressionListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#annotatedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotatedExpression(TimedRebecaCompleteParser.AnnotatedExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#annotatedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotatedExpression(TimedRebecaCompleteParser.AnnotatedExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#literal}.
 	 * @param ctx the parse tree

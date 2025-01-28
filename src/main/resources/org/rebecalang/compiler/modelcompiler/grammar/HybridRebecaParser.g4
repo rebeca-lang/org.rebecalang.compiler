@@ -13,8 +13,8 @@ physicalClassDeclaration returns[PhysicalClassDeclaration pcd]
     	annotation*
         PHYSICALCLASS IDENTIFIER LPAREN INTLITERAL RPAREN
         LBRACE
-        (KNOWNREBECS LBRACE (fieldDeclaration SEMI)* RBRACE)?
-        (STATEVARS LBRACE (fieldDeclaration SEMI)* RBRACE)?
+        knownRebecsDeclaration?
+        stateVarsDeclaration?
         (constructorDeclaration | msgsrvDeclaration | synchMethodDeclaration | modeDeclaration)*
         RBRACE
     ;

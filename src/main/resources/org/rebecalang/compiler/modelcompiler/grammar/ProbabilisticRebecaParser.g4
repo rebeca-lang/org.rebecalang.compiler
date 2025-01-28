@@ -6,9 +6,10 @@ parser grammar ProbabilisticRebecaParser;
 
 
 statement returns [Statement s]
-	:
-		fieldDeclaration SEMI
+	:   statementExpression SEMI
+	|	fieldDeclaration SEMI
 	|	block
+    |   PALT LBRACE pAltStatementGroup+ RBRACE
     |   IF LPAREN expression RPAREN statement (ELSE statement)?
     |   WHILE LPAREN expression RPAREN statement
     |   FOR LPAREN forInit? SEMI expression? SEMI expressionList? RPAREN statement
@@ -17,19 +18,14 @@ statement returns [Statement s]
     |   BREAK SEMI
     |   CONTINUE SEMI
     |   SEMI
-    |   statementExpression SEMI
-    |   PALT LBRACE pAltStatementGroup+ RBRACE
 	;
 
 pAltStatementGroup returns [PAltStatementGroup pasg]
-	:
-		PROB LPAREN expression RPAREN COLON
+	:   PROB LPAREN expression RPAREN COLON
 		LBRACE statement* RBRACE
 	;
-
 coreExpression returns [Expression e]
-    :   (castExpression | LPAREN expression RPAREN | primary | literal | QUES LPAREN probabilisticList RPAREN)
-        (DOT primary)* (PLUSPLUS | SUBSUB)?
+    :   castExpression | LPAREN expression RPAREN | primary | literal | QUES LPAREN probabilisticList RPAREN
     ;
 
 probabilisticList returns [List<ProbabilisticAlternativeValue> el]

@@ -1,6 +1,6 @@
 parser grammar TimedRebecaParser;
 
-//import CoreRebecaParser;
+import CoreRebecaParser;
 
 primary returns [TermPrimary tp]
     : IDENTIFIER (LPAREN expressionList? RPAREN after? deadline?)? (LBRACKET expression RBRACKET)*

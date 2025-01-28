@@ -67,6 +67,26 @@ public interface ProbabilisticTimedRebecaCompleteListener extends ParseTreeListe
 	 */
 	void exitPrimary(ProbabilisticTimedRebecaCompleteParser.PrimaryContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#after}.
+	 * @param ctx the parse tree
+	 */
+	void enterAfter(ProbabilisticTimedRebecaCompleteParser.AfterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#after}.
+	 * @param ctx the parse tree
+	 */
+	void exitAfter(ProbabilisticTimedRebecaCompleteParser.AfterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#deadline}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeadline(ProbabilisticTimedRebecaCompleteParser.DeadlineContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#deadline}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeadline(ProbabilisticTimedRebecaCompleteParser.DeadlineContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#rebecaModel}.
 	 * @param ctx the parse tree
 	 */
@@ -137,6 +157,26 @@ public interface ProbabilisticTimedRebecaCompleteListener extends ParseTreeListe
 	 */
 	void exitMainRebecDefinition(ProbabilisticTimedRebecaCompleteParser.MainRebecDefinitionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#bindingsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void enterBindingsExpressionList(ProbabilisticTimedRebecaCompleteParser.BindingsExpressionListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#bindingsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void exitBindingsExpressionList(ProbabilisticTimedRebecaCompleteParser.BindingsExpressionListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#argumentsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void enterArgumentsExpressionList(ProbabilisticTimedRebecaCompleteParser.ArgumentsExpressionListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#argumentsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void exitArgumentsExpressionList(ProbabilisticTimedRebecaCompleteParser.ArgumentsExpressionListContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#fieldDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -197,6 +237,26 @@ public interface ProbabilisticTimedRebecaCompleteListener extends ParseTreeListe
 	 */
 	void exitInterfaceDeclaration(ProbabilisticTimedRebecaCompleteParser.InterfaceDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#extendingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void enterExtendingInterface(ProbabilisticTimedRebecaCompleteParser.ExtendingInterfaceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#extendingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void exitExtendingInterface(ProbabilisticTimedRebecaCompleteParser.ExtendingInterfaceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#msgsrvSignature}.
+	 * @param ctx the parse tree
+	 */
+	void enterMsgsrvSignature(ProbabilisticTimedRebecaCompleteParser.MsgsrvSignatureContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#msgsrvSignature}.
+	 * @param ctx the parse tree
+	 */
+	void exitMsgsrvSignature(ProbabilisticTimedRebecaCompleteParser.MsgsrvSignatureContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#reactiveClassDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -206,6 +266,36 @@ public interface ProbabilisticTimedRebecaCompleteListener extends ParseTreeListe
 	 * @param ctx the parse tree
 	 */
 	void exitReactiveClassDeclaration(ProbabilisticTimedRebecaCompleteParser.ReactiveClassDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#implementingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void enterImplementingInterface(ProbabilisticTimedRebecaCompleteParser.ImplementingInterfaceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#implementingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void exitImplementingInterface(ProbabilisticTimedRebecaCompleteParser.ImplementingInterfaceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#knownRebecsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterKnownRebecsDeclaration(ProbabilisticTimedRebecaCompleteParser.KnownRebecsDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#knownRebecsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitKnownRebecsDeclaration(ProbabilisticTimedRebecaCompleteParser.KnownRebecsDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#stateVarsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterStateVarsDeclaration(ProbabilisticTimedRebecaCompleteParser.StateVarsDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#stateVarsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitStateVarsDeclaration(ProbabilisticTimedRebecaCompleteParser.StateVarsDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#methodDeclaration}.
 	 * @param ctx the parse tree
@@ -306,6 +396,36 @@ public interface ProbabilisticTimedRebecaCompleteListener extends ParseTreeListe
 	 * @param ctx the parse tree
 	 */
 	void exitSwitchBlock(ProbabilisticTimedRebecaCompleteParser.SwitchBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#caseSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseSwitchGroup(ProbabilisticTimedRebecaCompleteParser.CaseSwitchGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#caseSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseSwitchGroup(ProbabilisticTimedRebecaCompleteParser.CaseSwitchGroupContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#defaultSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterDefaultSwitchGroup(ProbabilisticTimedRebecaCompleteParser.DefaultSwitchGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#defaultSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitDefaultSwitchGroup(ProbabilisticTimedRebecaCompleteParser.DefaultSwitchGroupContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#annotatedStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotatedStatement(ProbabilisticTimedRebecaCompleteParser.AnnotatedStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#annotatedStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotatedStatement(ProbabilisticTimedRebecaCompleteParser.AnnotatedStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#statementExpression}.
 	 * @param ctx the parse tree
@@ -437,6 +557,26 @@ public interface ProbabilisticTimedRebecaCompleteListener extends ParseTreeListe
 	 */
 	void exitUnaryExpression(ProbabilisticTimedRebecaCompleteParser.UnaryExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#extendableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExtendableExpression(ProbabilisticTimedRebecaCompleteParser.ExtendableExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#extendableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExtendableExpression(ProbabilisticTimedRebecaCompleteParser.ExtendableExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#rebecInstantiationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRebecInstantiationExpression(ProbabilisticTimedRebecaCompleteParser.RebecInstantiationExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#rebecInstantiationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRebecInstantiationExpression(ProbabilisticTimedRebecaCompleteParser.RebecInstantiationExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#castExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -456,6 +596,16 @@ public interface ProbabilisticTimedRebecaCompleteListener extends ParseTreeListe
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionList(ProbabilisticTimedRebecaCompleteParser.ExpressionListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#annotatedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotatedExpression(ProbabilisticTimedRebecaCompleteParser.AnnotatedExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#annotatedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotatedExpression(ProbabilisticTimedRebecaCompleteParser.AnnotatedExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#literal}.
 	 * @param ctx the parse tree

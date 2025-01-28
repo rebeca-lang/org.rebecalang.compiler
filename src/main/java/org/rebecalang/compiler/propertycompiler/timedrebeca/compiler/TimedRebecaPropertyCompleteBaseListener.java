@@ -62,6 +62,30 @@ public class TimedRebecaPropertyCompleteBaseListener implements TimedRebecaPrope
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExpression(TimedRebecaPropertyCompleteParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpression(TimedRebecaPropertyCompleteParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPropertyModel(TimedRebecaPropertyCompleteParser.PropertyModelContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPropertyModel(TimedRebecaPropertyCompleteParser.PropertyModelContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAnnotation(TimedRebecaPropertyCompleteParser.AnnotationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -105,18 +129,6 @@ public class TimedRebecaPropertyCompleteBaseListener implements TimedRebecaPrope
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDimensions(TimedRebecaPropertyCompleteParser.DimensionsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExpression(TimedRebecaPropertyCompleteParser.ExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExpression(TimedRebecaPropertyCompleteParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -206,6 +218,18 @@ public class TimedRebecaPropertyCompleteBaseListener implements TimedRebecaPrope
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExtendableExpression(TimedRebecaPropertyCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExtendableExpression(TimedRebecaPropertyCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCoreExpression(TimedRebecaPropertyCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -213,6 +237,18 @@ public class TimedRebecaPropertyCompleteBaseListener implements TimedRebecaPrope
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCoreExpression(TimedRebecaPropertyCompleteParser.CoreExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRebecInstantiationExpression(TimedRebecaPropertyCompleteParser.RebecInstantiationExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRebecInstantiationExpression(TimedRebecaPropertyCompleteParser.RebecInstantiationExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -254,6 +290,18 @@ public class TimedRebecaPropertyCompleteBaseListener implements TimedRebecaPrope
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAnnotatedExpression(TimedRebecaPropertyCompleteParser.AnnotatedExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotatedExpression(TimedRebecaPropertyCompleteParser.AnnotatedExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLiteral(TimedRebecaPropertyCompleteParser.LiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -261,18 +309,6 @@ public class TimedRebecaPropertyCompleteBaseListener implements TimedRebecaPrope
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLiteral(TimedRebecaPropertyCompleteParser.LiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPropertyModel(TimedRebecaPropertyCompleteParser.PropertyModelContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPropertyModel(TimedRebecaPropertyCompleteParser.PropertyModelContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

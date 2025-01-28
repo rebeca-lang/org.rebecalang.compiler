@@ -138,6 +138,26 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitMainRebecDefinition(HybridRebecaCompleteParser.MainRebecDefinitionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#bindingsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void enterBindingsExpressionList(HybridRebecaCompleteParser.BindingsExpressionListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#bindingsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void exitBindingsExpressionList(HybridRebecaCompleteParser.BindingsExpressionListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#argumentsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void enterArgumentsExpressionList(HybridRebecaCompleteParser.ArgumentsExpressionListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#argumentsExpressionList}.
+	 * @param ctx the parse tree
+	 */
+	void exitArgumentsExpressionList(HybridRebecaCompleteParser.ArgumentsExpressionListContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#fieldDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -198,6 +218,26 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitInterfaceDeclaration(HybridRebecaCompleteParser.InterfaceDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#extendingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void enterExtendingInterface(HybridRebecaCompleteParser.ExtendingInterfaceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#extendingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void exitExtendingInterface(HybridRebecaCompleteParser.ExtendingInterfaceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#msgsrvSignature}.
+	 * @param ctx the parse tree
+	 */
+	void enterMsgsrvSignature(HybridRebecaCompleteParser.MsgsrvSignatureContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#msgsrvSignature}.
+	 * @param ctx the parse tree
+	 */
+	void exitMsgsrvSignature(HybridRebecaCompleteParser.MsgsrvSignatureContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#reactiveClassDeclaration}.
 	 * @param ctx the parse tree
 	 */
@@ -207,6 +247,36 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReactiveClassDeclaration(HybridRebecaCompleteParser.ReactiveClassDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#implementingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void enterImplementingInterface(HybridRebecaCompleteParser.ImplementingInterfaceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#implementingInterface}.
+	 * @param ctx the parse tree
+	 */
+	void exitImplementingInterface(HybridRebecaCompleteParser.ImplementingInterfaceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#knownRebecsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterKnownRebecsDeclaration(HybridRebecaCompleteParser.KnownRebecsDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#knownRebecsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitKnownRebecsDeclaration(HybridRebecaCompleteParser.KnownRebecsDeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#stateVarsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterStateVarsDeclaration(HybridRebecaCompleteParser.StateVarsDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#stateVarsDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitStateVarsDeclaration(HybridRebecaCompleteParser.StateVarsDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#methodDeclaration}.
 	 * @param ctx the parse tree
@@ -317,6 +387,36 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSwitchBlock(HybridRebecaCompleteParser.SwitchBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#caseSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseSwitchGroup(HybridRebecaCompleteParser.CaseSwitchGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#caseSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseSwitchGroup(HybridRebecaCompleteParser.CaseSwitchGroupContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#defaultSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterDefaultSwitchGroup(HybridRebecaCompleteParser.DefaultSwitchGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#defaultSwitchGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitDefaultSwitchGroup(HybridRebecaCompleteParser.DefaultSwitchGroupContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#annotatedStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotatedStatement(HybridRebecaCompleteParser.AnnotatedStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#annotatedStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotatedStatement(HybridRebecaCompleteParser.AnnotatedStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#statementExpression}.
 	 * @param ctx the parse tree
@@ -448,6 +548,16 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitUnaryExpression(HybridRebecaCompleteParser.UnaryExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#extendableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExtendableExpression(HybridRebecaCompleteParser.ExtendableExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#extendableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExtendableExpression(HybridRebecaCompleteParser.ExtendableExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#coreExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -457,6 +567,16 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCoreExpression(HybridRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#rebecInstantiationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRebecInstantiationExpression(HybridRebecaCompleteParser.RebecInstantiationExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#rebecInstantiationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRebecInstantiationExpression(HybridRebecaCompleteParser.RebecInstantiationExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#castExpression}.
 	 * @param ctx the parse tree
@@ -477,6 +597,16 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpressionList(HybridRebecaCompleteParser.ExpressionListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#annotatedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotatedExpression(HybridRebecaCompleteParser.AnnotatedExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#annotatedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotatedExpression(HybridRebecaCompleteParser.AnnotatedExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#literal}.
 	 * @param ctx the parse tree

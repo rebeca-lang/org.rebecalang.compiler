@@ -62,6 +62,30 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExpression(CoreRebecaPropertyCompleteParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpression(CoreRebecaPropertyCompleteParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPropertyModel(CoreRebecaPropertyCompleteParser.PropertyModelContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPropertyModel(CoreRebecaPropertyCompleteParser.PropertyModelContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAnnotation(CoreRebecaPropertyCompleteParser.AnnotationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -105,18 +129,6 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitDimensions(CoreRebecaPropertyCompleteParser.DimensionsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExpression(CoreRebecaPropertyCompleteParser.ExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExpression(CoreRebecaPropertyCompleteParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -206,6 +218,18 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExtendableExpression(CoreRebecaPropertyCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExtendableExpression(CoreRebecaPropertyCompleteParser.ExtendableExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCoreExpression(CoreRebecaPropertyCompleteParser.CoreExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -213,6 +237,18 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCoreExpression(CoreRebecaPropertyCompleteParser.CoreExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRebecInstantiationExpression(CoreRebecaPropertyCompleteParser.RebecInstantiationExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRebecInstantiationExpression(CoreRebecaPropertyCompleteParser.RebecInstantiationExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -254,6 +290,18 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAnnotatedExpression(CoreRebecaPropertyCompleteParser.AnnotatedExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotatedExpression(CoreRebecaPropertyCompleteParser.AnnotatedExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLiteral(CoreRebecaPropertyCompleteParser.LiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -261,18 +309,6 @@ public class CoreRebecaPropertyCompleteBaseListener implements CoreRebecaPropert
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLiteral(CoreRebecaPropertyCompleteParser.LiteralContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPropertyModel(CoreRebecaPropertyCompleteParser.PropertyModelContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPropertyModel(CoreRebecaPropertyCompleteParser.PropertyModelContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

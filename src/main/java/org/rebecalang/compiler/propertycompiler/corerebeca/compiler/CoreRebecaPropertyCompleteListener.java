@@ -48,6 +48,26 @@ public interface CoreRebecaPropertyCompleteListener extends ParseTreeListener {
 	 */
 	void exitLtlBlock(CoreRebecaPropertyCompleteParser.LtlBlockContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpression(CoreRebecaPropertyCompleteParser.ExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaPropertyCompleteParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpression(CoreRebecaPropertyCompleteParser.ExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#propertyModel}.
+	 * @param ctx the parse tree
+	 */
+	void enterPropertyModel(CoreRebecaPropertyCompleteParser.PropertyModelContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaPropertyCompleteParser#propertyModel}.
+	 * @param ctx the parse tree
+	 */
+	void exitPropertyModel(CoreRebecaPropertyCompleteParser.PropertyModelContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#annotation}.
 	 * @param ctx the parse tree
 	 */
@@ -87,16 +107,6 @@ public interface CoreRebecaPropertyCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDimensions(CoreRebecaPropertyCompleteParser.DimensionsContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpression(CoreRebecaPropertyCompleteParser.ExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CoreRebecaPropertyCompleteParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpression(CoreRebecaPropertyCompleteParser.ExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#assignmentOperator}.
 	 * @param ctx the parse tree
@@ -168,6 +178,16 @@ public interface CoreRebecaPropertyCompleteListener extends ParseTreeListener {
 	 */
 	void exitUnaryExpression(CoreRebecaPropertyCompleteParser.UnaryExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#extendableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExtendableExpression(CoreRebecaPropertyCompleteParser.ExtendableExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaPropertyCompleteParser#extendableExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExtendableExpression(CoreRebecaPropertyCompleteParser.ExtendableExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#coreExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -177,6 +197,16 @@ public interface CoreRebecaPropertyCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCoreExpression(CoreRebecaPropertyCompleteParser.CoreExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#rebecInstantiationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRebecInstantiationExpression(CoreRebecaPropertyCompleteParser.RebecInstantiationExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaPropertyCompleteParser#rebecInstantiationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRebecInstantiationExpression(CoreRebecaPropertyCompleteParser.RebecInstantiationExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#castExpression}.
 	 * @param ctx the parse tree
@@ -208,6 +238,16 @@ public interface CoreRebecaPropertyCompleteListener extends ParseTreeListener {
 	 */
 	void exitExpressionList(CoreRebecaPropertyCompleteParser.ExpressionListContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#annotatedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotatedExpression(CoreRebecaPropertyCompleteParser.AnnotatedExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CoreRebecaPropertyCompleteParser#annotatedExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotatedExpression(CoreRebecaPropertyCompleteParser.AnnotatedExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#literal}.
 	 * @param ctx the parse tree
 	 */
@@ -217,14 +257,4 @@ public interface CoreRebecaPropertyCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLiteral(CoreRebecaPropertyCompleteParser.LiteralContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CoreRebecaPropertyCompleteParser#propertyModel}.
-	 * @param ctx the parse tree
-	 */
-	void enterPropertyModel(CoreRebecaPropertyCompleteParser.PropertyModelContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CoreRebecaPropertyCompleteParser#propertyModel}.
-	 * @param ctx the parse tree
-	 */
-	void exitPropertyModel(CoreRebecaPropertyCompleteParser.PropertyModelContext ctx);
 }

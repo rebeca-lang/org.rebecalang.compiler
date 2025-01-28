@@ -1,8 +1,8 @@
 parser grammar CoreRebecaPropertyParser;
 
-import CoreRebecaExpressionParser, GeneralPropertyParser;
+import GeneralPropertyParser, CoreRebecaExpressionParser;
 
-propertyDefinition[PropertyModel pm]
+propertyDefinition returns [PropertyModel pm]
     : assertionBlock?
       ltlBlock?
     ;
