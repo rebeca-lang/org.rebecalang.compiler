@@ -66,7 +66,7 @@ public class ModelStructureTest {
 		expectedExceptionContainer.addException(
 				new CodeCompilationException("Non-deterministic terms must be constant expressions", 49, 15));
 		expectedExceptionContainer.addException(
-				new SymbolTableException("The method sib(double, Test1) is undefined for the type Test1", 59, 16));
+				new SymbolTableException("The method sib(double, Test1) is undefined for the type Test1", 60, 16));
 
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}

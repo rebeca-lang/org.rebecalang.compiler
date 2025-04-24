@@ -51,6 +51,7 @@ reactiveclass Test1 (3) {
 		if(?(true, false)){};
 		t.sib(1, self);
 		if(!bbb);
+		return;
 	}
 
 	int u (){}

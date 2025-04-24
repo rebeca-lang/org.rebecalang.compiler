@@ -5,8 +5,6 @@ import java.util.List;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.rebecalang.compiler.modelcompiler.ScopeException;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractTypeSystem;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.SymbolTableInitializer;

@@ -82,7 +82,6 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement.ReturnStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement.SwitchStatementSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.statement.WhileStatementSemanticCheck;
-import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler.ProbabilisticRebecaListener;
 import org.rebecalang.compiler.utils.AccessModifierUtilities;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.CoreVersion;
