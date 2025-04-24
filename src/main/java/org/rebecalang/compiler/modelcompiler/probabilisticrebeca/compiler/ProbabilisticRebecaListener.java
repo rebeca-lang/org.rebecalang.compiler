@@ -363,7 +363,7 @@ public class ProbabilisticRebecaListener extends ProbabilisticRebecaCompleteBase
         if(ctx.implementingInterface() != null){
             reactiveClassDeclaration.getImplements().addAll(ctx.implementingInterface().opts);
         }
-        if(ctx.INTLITERAL().getText().equals("<missing INTLITERAL>")) {
+        if(!ctx.INTLITERAL().getText().equals("<missing INTLITERAL>")) {
             reactiveClassDeclaration.setQueueSize(Integer.parseInt(ctx.INTLITERAL().getText()));
         }
         for(ProbabilisticRebecaCompleteParser.KnownRebecsDeclarationContext knownRebecsDeclaration : ctx.knownRebecsDeclaration() ){
