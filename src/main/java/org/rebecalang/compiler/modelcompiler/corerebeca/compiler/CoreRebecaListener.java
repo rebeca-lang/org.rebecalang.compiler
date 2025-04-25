@@ -505,6 +505,12 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
             ctx.e = ctx.extendableExpression().e;
         } else if (ctx.unaryExpression() != null) {
             ctx.e = ctx.unaryExpression().e;
+        } else if (ctx.expression(0) != null && ctx.expression(1) != null && ctx.expression(2) != null) {
+        	TernaryExpression te = new TernaryExpression();
+        	te.setCondition(ctx.expression(0).e);
+        	te.setLeft(ctx.expression(1).e);
+        	te.setRight(ctx.expression(2).e);
+        	ctx.e = te;
         } else if (ctx.expression(0) != null && ctx.expression(1) != null) {
             BinaryExpression binaryExpression = new BinaryExpression();
             binaryExpression.setLeft(ctx.expression(0).e);

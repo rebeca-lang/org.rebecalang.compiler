@@ -31,9 +31,14 @@ public class BinaryExpressionSemanticCheck extends
 
 	ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 	
+	Set<String> assignmentOperators;
+	
 	@Autowired
 	public BinaryExpressionSemanticCheck(ExpressionSemanticCheckContainer expressionSemanticCheckContainer) {
 		this.expressionSemanticCheckContainer = expressionSemanticCheckContainer;
+		assignmentOperators = new HashSet<String>();
+		assignmentOperators.addAll(Arrays.asList("=", "+=", "-=", "*=",
+				"/=", "%=", "~=", "^=", "&=", "|=", "<<=", ">>="));
 	}
 
 	@Override
@@ -51,9 +56,6 @@ public class BinaryExpressionSemanticCheck extends
 					SemanticCheckerUtils.getResultType(bExpression.getOperator(), lType
 					.getFirst(), rType.getFirst()));
 			returnValue.setFirst(bExpression.getType());
-			Set<String> assignmentOperators = new HashSet<String>();
-			assignmentOperators.addAll(Arrays.asList("=", "+=", "-=", "*=",
-					"/=", "%=", "~=", "^=", "&=", "|=", "<<=", ">>="));
 			LValueState lValueState = isInLValueStyle(bExpression.getLeft(), scopeHandler);
 			if (assignmentOperators.contains(bExpression.getOperator())) {
 				if (lValueState == LValueState.NONE_VARIABLE)
