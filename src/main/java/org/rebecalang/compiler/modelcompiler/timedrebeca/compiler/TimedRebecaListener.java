@@ -3,6 +3,7 @@ package org.rebecalang.compiler.modelcompiler.timedrebeca.compiler;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
+import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaCompleteParser.ExpressionContext;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.objectmodel.TimedRebecaParentSuffixPrimary;
 
 import java.util.ArrayList;
@@ -11,40 +12,9 @@ import java.util.List;
 
 public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
     @Override
-    public void exitPrimary(TimedRebecaCompleteParser.PrimaryContext ctx) {
-        TermPrimary tp = new TermPrimary();
-        tp.setName(ctx.IDENTIFIER().getText());
-        tp.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
-        tp.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
-        if (ctx.LPAREN() != null) {
-            TimedRebecaParentSuffixPrimary psp = new TimedRebecaParentSuffixPrimary();
-            psp.setLineNumber(ctx.LPAREN().getSymbol().getLine());
-            psp.setCharacter(ctx.LPAREN().getSymbol().getCharPositionInLine());
-            tp.setParentSuffixPrimary(psp);
-            if (ctx.expressionList() != null) {
-                tp.getParentSuffixPrimary().getArguments().addAll(ctx.expressionList().el);
-            }
-            if (ctx.after() != null) {
-                psp.setAfterExpression(ctx.after().e);
-            }
-            if (ctx.deadline() != null) {
-                psp.setDeadlineExpression(ctx.deadline().e);
-            }
-        }
-        for (TimedRebecaCompleteParser.ExpressionContext ex : ctx.expression()) {
-            tp.getIndices().add(ex.e);
-        }
-        ctx.tp = tp;
-    }
-
-    ////
-    //// SHARED LOGIC
-    ////
-
-    @Override
     public void exitRebecaModel(TimedRebecaCompleteParser.RebecaModelContext ctx) {
         RebecaModel rebecaModel = new RebecaModel();
-        if (ctx.packageDeclaration() != null) {
+        if(ctx.packageDeclaration() != null){
             rebecaModel.setPackageDeclaration(ctx.packageDeclaration().p);
         }
         for (TimedRebecaCompleteParser.ImportDeclarationContext imp : ctx.importDeclaration()) {
@@ -84,7 +54,6 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         rebecaCode.setMainDeclaration(ctx.mainDeclaration().md);
         ctx.rc = rebecaCode;
     }
-
     @Override
     public void exitMainDeclaration(TimedRebecaCompleteParser.MainDeclarationContext ctx) {
         MainDeclaration md = new MainDeclaration();
@@ -116,7 +85,6 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         }
         ctx.mrd = mainRebecDefinition;
     }
-
     @Override
     public void exitFieldDeclaration(TimedRebecaCompleteParser.FieldDeclarationContext ctx) {
         FieldDeclaration fieldDeclaration = new FieldDeclaration();
@@ -157,7 +125,7 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         if (ctx.arrayInitializer() != null) {
             variableInitializer = ctx.arrayInitializer().avi;
         } else {
-            if (ctx.expression().e != null) {
+            if (ctx.expression() != null) {
                 OrdinaryVariableInitializer ovi = new OrdinaryVariableInitializer();
                 ovi.setValue(ctx.expression().e);
                 ovi.setLineNumber(ctx.expression().e.getLineNumber());
@@ -178,7 +146,6 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         }
         ctx.avi = arrayVariableInitializer;
     }
-
     @Override
     public void exitInterfaceDeclaration(TimedRebecaCompleteParser.InterfaceDeclarationContext ctx) {
         InterfaceDeclaration interfaceDeclaration = new InterfaceDeclaration();
@@ -198,7 +165,6 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         interfaceDeclaration.setEndCharacter(ctx.RBRACE().getSymbol().getCharPositionInLine());
         ctx.intd = interfaceDeclaration;
     }
-
     @Override
     public void exitExtendingInterface(TimedRebecaCompleteParser.ExtendingInterfaceContext ctx) {
         List<OrdinaryPrimitiveType> ordinaryPrimitiveTypes = new ArrayList<>();
@@ -216,7 +182,7 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
     public void exitMsgsrvSignature(TimedRebecaCompleteParser.MsgsrvSignatureContext ctx) {
         MsgsrvDeclaration msgsrvDeclaration = new MsgsrvDeclaration();
         msgsrvDeclaration.setAbstract(true);
-        for (TimedRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()) {
+        for(TimedRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()){
             msgsrvDeclaration.getAnnotations().add(annotation.an);
         }
         msgsrvDeclaration.setName(ctx.IDENTIFIER().getText());
@@ -229,48 +195,47 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
     @Override
     public void exitReactiveClassDeclaration(TimedRebecaCompleteParser.ReactiveClassDeclarationContext ctx) {
         ReactiveClassDeclaration reactiveClassDeclaration = new ReactiveClassDeclaration();
-        for (TimedRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()) {
+        for(TimedRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()){
             reactiveClassDeclaration.getAnnotations().add(annotation.an);
         }
-        if (ctx.ABSTRACT() != null) {
+        if(ctx.ABSTRACT() != null){
             reactiveClassDeclaration.setAbstract(true);
         }
         reactiveClassDeclaration.setName(ctx.IDENTIFIER(0).getText());
         reactiveClassDeclaration.setCharacter(ctx.IDENTIFIER(0).getSymbol().getCharPositionInLine());
         reactiveClassDeclaration.setLineNumber(ctx.IDENTIFIER(0).getSymbol().getLine());
-        if (ctx.EXTENDS() != null) {
+        if(ctx.EXTENDS() != null) {
             OrdinaryPrimitiveType extend = new OrdinaryPrimitiveType();
             extend.setName(ctx.IDENTIFIER(1).getText());
             extend.setCharacter(ctx.IDENTIFIER(1).getSymbol().getCharPositionInLine());
             extend.setLineNumber(ctx.IDENTIFIER(1).getSymbol().getLine());
             reactiveClassDeclaration.setExtends(extend);
         }
-        if (ctx.implementingInterface() != null) {
+        if(ctx.implementingInterface() != null){
             reactiveClassDeclaration.getImplements().addAll(ctx.implementingInterface().opts);
         }
-        if (!ctx.INTLITERAL().getText().equals("<missing INTLITERAL>")) {
-            reactiveClassDeclaration.setQueueSize(Integer.parseInt(ctx.INTLITERAL().getText()));
+        if(!ctx.DECIMAL_LITERAL().getText().equals("<missing INTLITERAL>")) {
+            reactiveClassDeclaration.setQueueSize(Integer.parseInt(ctx.DECIMAL_LITERAL().getText()));
         }
-        for (TimedRebecaCompleteParser.KnownRebecsDeclarationContext knownRebecsDeclaration : ctx.knownRebecsDeclaration()) {
+        for(TimedRebecaCompleteParser.KnownRebecsDeclarationContext knownRebecsDeclaration : ctx.knownRebecsDeclaration() ){
             reactiveClassDeclaration.getKnownRebecs().addAll(knownRebecsDeclaration.fds);
         }
-        for (TimedRebecaCompleteParser.StateVarsDeclarationContext stateVarsDeclaration : ctx.stateVarsDeclaration()) {
+        for(TimedRebecaCompleteParser.StateVarsDeclarationContext stateVarsDeclaration : ctx.stateVarsDeclaration() ){
             reactiveClassDeclaration.getStatevars().addAll(stateVarsDeclaration.fds);
         }
-        for (TimedRebecaCompleteParser.ConstructorDeclarationContext constructorDeclaration : ctx.constructorDeclaration()) {
+        for(TimedRebecaCompleteParser.ConstructorDeclarationContext constructorDeclaration: ctx.constructorDeclaration() ){
             reactiveClassDeclaration.getConstructors().add(constructorDeclaration.cd);
         }
-        for (TimedRebecaCompleteParser.MsgsrvDeclarationContext msgsrvDeclarationContext : ctx.msgsrvDeclaration()) {
+        for(TimedRebecaCompleteParser.MsgsrvDeclarationContext msgsrvDeclarationContext: ctx.msgsrvDeclaration() ){
             reactiveClassDeclaration.getMsgsrvs().add(msgsrvDeclarationContext.md);
         }
-        for (TimedRebecaCompleteParser.SynchMethodDeclarationContext synchMethodDeclarationContext : ctx.synchMethodDeclaration()) {
+        for(TimedRebecaCompleteParser.SynchMethodDeclarationContext synchMethodDeclarationContext: ctx.synchMethodDeclaration() ){
             reactiveClassDeclaration.getSynchMethods().add(synchMethodDeclarationContext.smd);
         }
         reactiveClassDeclaration.setEndLineNumber(ctx.RBRACE().getSymbol().getLine());
         reactiveClassDeclaration.setEndCharacter(ctx.RBRACE().getSymbol().getCharPositionInLine());
         ctx.rcd = reactiveClassDeclaration;
     }
-
     @Override
     public void exitImplementingInterface(TimedRebecaCompleteParser.ImplementingInterfaceContext ctx) {
         List<OrdinaryPrimitiveType> ordinaryPrimitiveTypes = new ArrayList<>();
@@ -283,42 +248,35 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         }
         ctx.opts = ordinaryPrimitiveTypes;
     }
-
     @Override
     public void exitKnownRebecsDeclaration(TimedRebecaCompleteParser.KnownRebecsDeclarationContext ctx) {
         List<FieldDeclaration> fieldDeclarations = new ArrayList<>();
-        for (TimedRebecaCompleteParser.FieldDeclarationContext fieldDeclarationContext : ctx.fieldDeclaration()) {
+        for(TimedRebecaCompleteParser.FieldDeclarationContext fieldDeclarationContext : ctx.fieldDeclaration()){
             fieldDeclarations.add(fieldDeclarationContext.fd);
         }
         ctx.fds = fieldDeclarations;
     }
-
     @Override
     public void exitStateVarsDeclaration(TimedRebecaCompleteParser.StateVarsDeclarationContext ctx) {
         List<FieldDeclaration> fieldDeclarations = new ArrayList<>();
-        for (TimedRebecaCompleteParser.FieldDeclarationContext fieldDeclarationContext : ctx.fieldDeclaration()) {
+        for(TimedRebecaCompleteParser.FieldDeclarationContext fieldDeclarationContext : ctx.fieldDeclaration()){
             fieldDeclarations.add(fieldDeclarationContext.fd);
         }
         ctx.fds = fieldDeclarations;
     }
-
     private String declaration_type;
-
     @Override
-    public void enterConstructorDeclaration(TimedRebecaCompleteParser.ConstructorDeclarationContext ctx) {
+    public void enterConstructorDeclaration(TimedRebecaCompleteParser.ConstructorDeclarationContext ctx){
         declaration_type = "Constructor";
     }
-
     @Override
-    public void enterMsgsrvDeclaration(TimedRebecaCompleteParser.MsgsrvDeclarationContext ctx) {
+    public void enterMsgsrvDeclaration(TimedRebecaCompleteParser.MsgsrvDeclarationContext ctx){
         declaration_type = "Msgsrv";
     }
-
     @Override
-    public void enterSynchMethodDeclaration(TimedRebecaCompleteParser.SynchMethodDeclarationContext ctx) {
+    public void enterSynchMethodDeclaration(TimedRebecaCompleteParser.SynchMethodDeclarationContext ctx){
         declaration_type = "Synch";
     }
-
     @Override
     public void exitMethodDeclaration(TimedRebecaCompleteParser.MethodDeclarationContext ctx) {
         switch (declaration_type) {
@@ -401,13 +359,13 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
     }
 
     @Override
-    public void exitBlock(TimedRebecaCompleteParser.BlockContext ctx) {
+    public void exitBlock(TimedRebecaCompleteParser.BlockContext ctx){
         BlockStatement blockStatement = new BlockStatement();
         blockStatement.setLineNumber(ctx.LBRACE().getSymbol().getLine());
         blockStatement.setCharacter(ctx.LBRACE().getSymbol().getCharPositionInLine());
         blockStatement.setEndLineNumber(ctx.RBRACE().getSymbol().getLine());
         blockStatement.setEndCharacter(ctx.RBRACE().getSymbol().getCharPositionInLine());
-        for (TimedRebecaCompleteParser.AnnotatedStatementContext annotatedStatement : ctx.annotatedStatement()) {
+        for(TimedRebecaCompleteParser.AnnotatedStatementContext annotatedStatement : ctx.annotatedStatement()){
             blockStatement.getStatements().add(annotatedStatement.s);
         }
         ctx.bs = blockStatement;
@@ -416,12 +374,11 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
     @Override
     public void exitAnnotatedStatement(TimedRebecaCompleteParser.AnnotatedStatementContext ctx) {
         Statement stm = ctx.statement().s;
-        for (TimedRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()) {
+        for(TimedRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()){
             stm.getAnnotations().add(annotation.an);
         }
         ctx.s = stm;
     }
-
     @Override
     public void exitForInit(TimedRebecaCompleteParser.ForInitContext ctx) {
         ForInitializer fi = new ForInitializer();
@@ -432,29 +389,27 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         }
         ctx.fi = fi;
     }
-
     @Override
     public void exitSwitchBlock(TimedRebecaCompleteParser.SwitchBlockContext ctx) {
         SwitchStatement switchStatement = new SwitchStatement();
-        for (TimedRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()) {
+        for(TimedRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()){
             switchStatement.getAnnotations().add(annotation.an);
         }
-        for (TimedRebecaCompleteParser.CaseSwitchGroupContext switchGroup : ctx.caseSwitchGroup()) {
+        for(TimedRebecaCompleteParser.CaseSwitchGroupContext switchGroup : ctx.caseSwitchGroup()){
             switchStatement.getSwitchStatementGroups().add(switchGroup.ssg);
         }
-        if (ctx.defaultSwitchGroup() != null) {
+        if(ctx.defaultSwitchGroup() != null) {
             switchStatement.getSwitchStatementGroups().add(ctx.defaultSwitchGroup().ssg);
         }
         ctx.ss = switchStatement;
     }
-
     @Override
     public void exitCaseSwitchGroup(TimedRebecaCompleteParser.CaseSwitchGroupContext ctx) {
         SwitchStatementGroup switchStatementGroup = new SwitchStatementGroup();
         switchStatementGroup.setExpression(ctx.expression().e);
         switchStatementGroup.setLineNumber(ctx.expression().e.getLineNumber());
         switchStatementGroup.setCharacter(ctx.expression().e.getCharacter());
-        for (TimedRebecaCompleteParser.AnnotatedStatementContext annotatedStatement : ctx.annotatedStatement()) {
+        for(TimedRebecaCompleteParser.AnnotatedStatementContext annotatedStatement : ctx.annotatedStatement()){
             switchStatementGroup.getStatements().add(annotatedStatement.s);
         }
         ctx.ssg = switchStatementGroup;
@@ -465,12 +420,11 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         SwitchStatementGroup switchStatementGroup = new SwitchStatementGroup();
         switchStatementGroup.setLineNumber(ctx.DEFAULT().getSymbol().getLine());
         switchStatementGroup.setCharacter(ctx.DEFAULT().getSymbol().getCharPositionInLine());
-        for (TimedRebecaCompleteParser.AnnotatedStatementContext annotatedStatement : ctx.annotatedStatement()) {
+        for(TimedRebecaCompleteParser.AnnotatedStatementContext annotatedStatement : ctx.annotatedStatement()){
             switchStatementGroup.getStatements().add(annotatedStatement.s);
         }
         ctx.ssg = switchStatementGroup;
     }
-
     @Override
     public void exitStatement(TimedRebecaCompleteParser.StatementContext ctx) {
         if (ctx.statementExpression() != null) {
@@ -545,67 +499,151 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
     //
     // EXPRESSION PARSER
     //
+    
+
+    public boolean isBinaryExpression(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	if (ctx.bop == null)
+    		return false;
+    	return !ctx.bop.getText().equals("?") && !ctx.bop.getText().equals("instanceof");
+    }
+    public boolean isTernaryExpression(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	if (ctx.bop == null)
+    		return false;
+    	return ctx.bop.getText().equals("?");
+    }
+    
+    public boolean isInstanceofExpression(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	if (ctx.bop == null)
+    		return false;
+    	return ctx.bop.getText().equals("instanceof");
+    }
+
+    public boolean isUnaryExpression(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.prefix != null;
+    }
+    
+    public boolean isPLUSUBExpression(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.postfix != null;
+    }
+    
+    public boolean isCastExpression(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.castType != null;
+    }
+
+    public boolean isNondet(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.nondet != null;
+    }
+    
+    public boolean isNewInstance(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.NEW() != null;
+    }
+    
+    public boolean isDotExpression(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.dot != null;
+    }
+
+    public boolean isPrimary(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.primary() != null;
+    }
+    
+    public boolean isLiteral(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.literal() != null;
+    }
+    
+    public boolean isParenExp(TimedRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.parenExp != null;
+    }
+    
     @Override
     public void exitExpression(TimedRebecaCompleteParser.ExpressionContext ctx) {
-        if (ctx.extendableExpression() != null) {
-            ctx.e = ctx.extendableExpression().e;
-        } else if (ctx.unaryExpression() != null) {
-            ctx.e = ctx.unaryExpression().e;
-        } else if (ctx.expression(0) != null && ctx.expression(1) != null && ctx.expression(2) != null) {
+        if (isPrimary(ctx)) {
+            ctx.e = ctx.primary().tp;
+        } else if (isParenExp(ctx)) {
+        	ctx.e = ctx.expression(0).e;
+        } else if (isTernaryExpression(ctx)) {
         	TernaryExpression te = new TernaryExpression();
         	te.setCondition(ctx.expression(0).e);
         	te.setLeft(ctx.expression(1).e);
         	te.setRight(ctx.expression(2).e);
+        	te.setCharacter(ctx.bop.getCharPositionInLine());
+        	te.setLineNumber(ctx.bop.getLine());
         	ctx.e = te;
-        } else if (ctx.expression(0) != null && ctx.expression(1) != null) {
-            BinaryExpression binaryExpression = new BinaryExpression();
-            binaryExpression.setLeft(ctx.expression(0).e);
-            binaryExpression.setRight(ctx.expression(1).e);
-            if (ctx.multiplicativeOp() != null) {
-                binaryExpression.setOperator(ctx.multiplicativeOp().getText());
-            } else if (ctx.additiveOp() != null) {
-                binaryExpression.setOperator(ctx.additiveOp().getText());
-            } else if (ctx.shiftOp() != null) {
-                binaryExpression.setOperator(ctx.shiftOp().getText());
-            } else if (ctx.relationalOp() != null) {
-                binaryExpression.setOperator(ctx.relationalOp().getText());
-            } else if (ctx.equalityOp() != null) {
-                binaryExpression.setOperator(ctx.equalityOp().getText());
-            } else if (ctx.AMP() != null) {
-                binaryExpression.setOperator(ctx.AMP().getText());
-            } else if (ctx.CARET() != null) {
-                binaryExpression.setOperator(ctx.CARET().getText());
-            } else if (ctx.BAR() != null) {
-                binaryExpression.setOperator(ctx.BAR().getText());
-            } else if (ctx.AMPAMP() != null) {
-                binaryExpression.setOperator(ctx.AMPAMP().getText());
-            } else if (ctx.BARBAR() != null) {
-                binaryExpression.setOperator(ctx.BARBAR().getText());
-            } else if (ctx.assignmentOperator() != null) {
-                binaryExpression.setOperator(ctx.assignmentOperator().getText());
-            }
-            binaryExpression.setLineNumber(ctx.expression(0).e.getLineNumber());
-            binaryExpression.setCharacter(ctx.expression(0).e.getCharacter());
-            ctx.e = binaryExpression;
-        } else if (ctx.INSTANCEOF() != null) {
+        } else if (isNewInstance(ctx)) {
+        	RebecInstantiationPrimary rip = new RebecInstantiationPrimary();
+        	OrdinaryPrimitiveType type = new OrdinaryPrimitiveType();
+        	type.setName(ctx.IDENTIFIER().getText());
+			rip.setType(type);
+			rip.getBindings().addAll(ctx.arguments(0).args);
+			rip.getArguments().addAll(ctx.arguments(1).args);
+			rip.setCharacter(ctx.NEW().getSymbol().getCharPositionInLine());
+			rip.setLineNumber(ctx.NEW().getSymbol().getLine());
+        	ctx.e = rip;
+        } else if (isNondet(ctx)) {
+        	NonDetExpression nde = new NonDetExpression();
+        	for (ExpressionContext ec : ctx.expression()) {
+            	nde.getChoices().add(ec.e);
+        		if(nde.getType() == null)
+        			nde.setType(ec.e.getType());
+        	}
+        	nde.setCharacter(ctx.nondet.getCharPositionInLine());
+        	nde.setLineNumber(ctx.nondet.getLine());
+        	ctx.e = nde;
+        } else if (isBinaryExpression(ctx)) {
+        	BinaryExpression be = new BinaryExpression();
+        	be.setOperator(ctx.bop.getText());
+        	be.setLeft(ctx.expression(0).e);
+        	be.setRight(ctx.expression(1).e);
+        	be.setCharacter(ctx.bop.getCharPositionInLine());
+        	be.setLineNumber(ctx.bop.getLine());
+        	ctx.e = be;
+        } else if (isUnaryExpression(ctx)) {
+        	UnaryExpression ue = new UnaryExpression();
+        	ue.setExpression(ctx.expression(0).e);
+        	ue.setOperator(ctx.prefix.getText());
+        	ue.setCharacter(ctx.prefix.getCharPositionInLine());
+        	ue.setLineNumber(ctx.prefix.getLine());
+        	ctx.e = ue;
+        } else if (isPLUSUBExpression(ctx)) {
+        	PlusSubExpression pse = new PlusSubExpression();
+        	pse.setValue(ctx.expression(0).e);
+        	pse.setOperator(ctx.postfix.getText());
+        	pse.setCharacter(ctx.postfix.getCharPositionInLine());
+        	pse.setLineNumber(ctx.postfix.getLine());
+        	ctx.e = pse;
+        } else if (isCastExpression(ctx)) {
+        	CastExpression ce = new CastExpression();
+        	ce.setExpression(ctx.expression(0).e);
+        	ce.setType(ctx.type().t);
+        	ce.setCharacter(ctx.type().t.getCharacter());
+        	ce.setLineNumber(ctx.type().t.getLineNumber());
+        	ctx.e = ce;
+        } else if (isDotExpression(ctx)) {
+        	DotPrimary dp = new DotPrimary();
+    		dp.setLeft(ctx.expression(0).e);
+    		dp.setRight(ctx.expression(1).e);
+        	dp.setCharacter(ctx.DOT(0).getSymbol().getCharPositionInLine());
+        	dp.setLineNumber(ctx.DOT(0).getSymbol().getLine());
+        	ctx.e = dp;
+        	for(int cnt = 2; cnt < ctx.expression().size(); cnt++) {
+    			DotPrimary dpTemp = new DotPrimary();
+    			dpTemp.setLeft((PrimaryExpression) dp.getRight());
+    			dpTemp.setRight(ctx.expression(cnt).e);
+    			dpTemp.setCharacter(ctx.DOT(cnt - 1).getSymbol().getCharPositionInLine());
+    			dpTemp.setLineNumber(ctx.DOT(cnt - 1).getSymbol().getLine());
+    			dp.setRight(dpTemp);
+        	}
+        } else if (isInstanceofExpression(ctx)) {
             InstanceofExpression instanceofExpression = new InstanceofExpression();
             instanceofExpression.setValue(ctx.expression(0).e);
             instanceofExpression.setEvaluationType(ctx.type().t);
             instanceofExpression.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
-            instanceofExpression.setLineNumber(ctx.type().t.getLineNumber());
-            instanceofExpression.setCharacter(ctx.type().t.getCharacter());
+            instanceofExpression.setLineNumber(ctx.expression(0).e.getLineNumber());
+            instanceofExpression.setCharacter(ctx.expression(0).e.getCharacter());
             ctx.e = instanceofExpression;
-        } else if (ctx.QUES() != null && ctx.COLON() != null) {
-            TernaryExpression ternaryExpression = new TernaryExpression();
-            ternaryExpression.setCondition(ctx.expression(0).e);
-            ternaryExpression.setLeft(ctx.expression(1).e);
-            ternaryExpression.setRight(ctx.expression(2).e);
-            ternaryExpression.setLineNumber(ctx.expression(0).e.getLineNumber());
-            ternaryExpression.setCharacter(ctx.expression(0).e.getCharacter());
-            ctx.e = ternaryExpression;
+        } else if (isLiteral(ctx)) {
+        	ctx.e = ctx.literal().l;
         }
     }
-
     @Override
     public void exitAnnotation(TimedRebecaCompleteParser.AnnotationContext ctx) {
         Annotation annotation = new Annotation();
@@ -632,10 +670,12 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
             GenericType genericType = new GenericType();
             genericType.setName(baseType.getName());
             genericType.setNumberOfParameters(ctx.genericTypeParams().gts.size());
+
             GenericTypeInstance genericTypeInstance = new GenericTypeInstance();
             genericTypeInstance.setBase(genericType);
             genericTypeInstance.getParameters().addAll(ctx.genericTypeParams().gts);
             type = genericTypeInstance;
+
             type.setLineNumber(typeName.getSymbol().getLine());
             type.setCharacter(typeName.getSymbol().getCharPositionInLine());
         }
@@ -660,217 +700,56 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
     @Override
     public void exitDimensions(TimedRebecaCompleteParser.DimensionsContext ctx) {
         List<Integer> dimensions = new LinkedList<>();
-        for (TerminalNode intLiteral : ctx.INTLITERAL()) {
+        for (TerminalNode intLiteral : ctx.DECIMAL_LITERAL()) {
             dimensions.add(Integer.parseInt(intLiteral.getText()));
         }
         ctx.ds = dimensions;
     }
 
     @Override
-    public void exitExtendableExpression(TimedRebecaCompleteParser.ExtendableExpressionContext ctx) {
-        Expression e = ctx.coreExpression().e;
-        for (int i = 0; i < ctx.primary().size(); i++) {
-            TimedRebecaCompleteParser.PrimaryContext primaryCtx = ctx.primary(i);
-            DotPrimary de = new DotPrimary();
-            de.setLineNumber(ctx.DOT(i).getSymbol().getLine());
-            de.setCharacter(ctx.DOT(i).getSymbol().getCharPositionInLine());
-            if (e instanceof DotPrimary temp) {
-                while (temp.getRight() instanceof DotPrimary) {
-                    temp = (DotPrimary) temp.getRight();
-                }
-                de.setLeft(temp.getRight());
-                temp.setRight(de);
-                de.setRight(primaryCtx.tp);
-            } else {
-                de.setLeft(e);
-                de.setRight(primaryCtx.tp);
-                e = de;
+    public void exitPrimary(TimedRebecaCompleteParser.PrimaryContext ctx) {
+        TermPrimary termPrimary = new TermPrimary();
+        if(ctx.THIS() != null) {
+            termPrimary.setName("this");
+            termPrimary.setLineNumber(ctx.THIS().getSymbol().getLine());
+            termPrimary.setCharacter(ctx.THIS().getSymbol().getCharPositionInLine());
+        } else if(ctx.SUPER() != null) {
+            termPrimary.setName("super");
+            termPrimary.setLineNumber(ctx.SUPER().getSymbol().getLine());
+            termPrimary.setCharacter(ctx.SUPER().getSymbol().getCharPositionInLine());
+        } else if(ctx.IDENTIFIER() != null) {
+            termPrimary.setName(ctx.IDENTIFIER().getText());
+            termPrimary.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
+            termPrimary.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
+            if (ctx.arguments() != null) {
+                TimedRebecaParentSuffixPrimary parentSuffixPrimary = new TimedRebecaParentSuffixPrimary();
+                parentSuffixPrimary.setLineNumber(termPrimary.getLineNumber());
+                parentSuffixPrimary.setCharacter(termPrimary.getCharacter());
+                termPrimary.setParentSuffixPrimary(parentSuffixPrimary);
+                parentSuffixPrimary.getArguments().addAll(ctx.arguments().args);
+                if(ctx.after() != null)
+                	parentSuffixPrimary.setAfterExpression(ctx.after().e);
+                if(ctx.deadline() != null)
+                	parentSuffixPrimary.setDeadlineExpression(ctx.deadline().e);
+            }
+            if (ctx.expression() != null) {
+            	for(ExpressionContext ec : ctx.expression())
+            		termPrimary.getIndices().add(ec.e);
             }
         }
-        if (ctx.PLUSPLUS() != null) {
-            PlusSubExpression pse = new PlusSubExpression();
-            pse.setValue(e);
-            pse.setOperator("++");
-            pse.setLineNumber(ctx.PLUSPLUS().getSymbol().getLine());
-            pse.setCharacter(ctx.PLUSPLUS().getSymbol().getCharPositionInLine());
-            e = pse;
-        } else if (ctx.SUBSUB() != null) {
-            PlusSubExpression pse = new PlusSubExpression();
-            pse.setValue(e);
-            pse.setOperator("--");
-            pse.setLineNumber(ctx.SUBSUB().getSymbol().getLine());
-            pse.setCharacter(ctx.SUBSUB().getSymbol().getCharPositionInLine());
-            e = pse;
-        }
-        ctx.e = e;
+        ctx.tp = termPrimary;
     }
 
     @Override
-    public void exitCoreExpression(TimedRebecaCompleteParser.CoreExpressionContext ctx) {
-        Expression e;
-        if (ctx.castExpression() != null) {
-            e = ctx.castExpression().e;
-        } else if (ctx.expression() != null) {
-            e = ctx.expression().e;
-        } else if (ctx.primary() != null) {
-            e = ctx.primary().tp;
-        } else if (ctx.literal() != null) {
-            e = ctx.literal().l;
-        } else if (ctx.rebecInstantiationExpression() != null) {
-            e = ctx.rebecInstantiationExpression().e;
-        } else if (ctx.QUES() != null) {
-            e = new NonDetExpression();
-            List<Expression> choices = ctx.expressionList().el;
-            ((NonDetExpression) e).getChoices().addAll(choices);
-            e.setLineNumber(ctx.QUES().getSymbol().getLine());
-            e.setCharacter(ctx.QUES().getSymbol().getCharPositionInLine());
-        } else {
-            throw new IllegalStateException("Unrecognized expression type");
-        }
-        ctx.e = e;
+    public void exitAfter(TimedRebecaCompleteParser.AfterContext ctx) {
+    	ctx.e = ctx.expression().e;
     }
-
+    
     @Override
-    public void exitRebecInstantiationExpression(TimedRebecaCompleteParser.RebecInstantiationExpressionContext ctx) {
-        RebecInstantiationPrimary e = new RebecInstantiationPrimary();
-        e.setLineNumber(ctx.type().t.getLineNumber());
-        e.setCharacter(ctx.type().t.getCharacter());
-        e.setType(ctx.type().t);
-        for (TimedRebecaCompleteParser.ExpressionListContext expressionListContext : ctx.expressionList()) {
-            e.getBindings().addAll(expressionListContext.el);
-        }
-        ctx.e = e;
+    public void exitDeadline(TimedRebecaCompleteParser.DeadlineContext ctx) {
+    	ctx.e = ctx.expression().e;
     }
-
-    @Override
-    public void exitAssignmentOperator(TimedRebecaCompleteParser.AssignmentOperatorContext ctx) {
-        String assignmentOperator = null;
-        if (ctx.EQ() != null) {
-            assignmentOperator = ctx.EQ().getText();
-        } else if (ctx.PLUSEQ() != null) {
-            assignmentOperator = ctx.PLUSEQ().getText();
-        } else if (ctx.SUBEQ() != null) {
-            assignmentOperator = ctx.SUBEQ().getText();
-        } else if (ctx.STAREQ() != null) {
-            assignmentOperator = ctx.STAREQ().getText();
-        } else if (ctx.SLASHEQ() != null) {
-            assignmentOperator = ctx.SLASHEQ().getText();
-        } else if (ctx.AMPEQ() != null) {
-            assignmentOperator = ctx.AMPEQ().getText();
-        } else if (ctx.BAREQ() != null) {
-            assignmentOperator = ctx.BAREQ().getText();
-        } else if (ctx.CARETEQ() != null) {
-            assignmentOperator = ctx.CARETEQ().getText();
-        } else if (ctx.TILDAEQ() != null) {
-            assignmentOperator = ctx.TILDAEQ().getText();
-        } else if (ctx.PERCENTEQ() != null) {
-            assignmentOperator = ctx.PERCENTEQ().getText();
-        } else if (ctx.LTLTEQ() != null) {
-            assignmentOperator = ctx.LTLTEQ().getText();
-        } else if (ctx.GTGTEQ() != null) {
-            assignmentOperator = ctx.GTGTEQ().getText();
-        }
-        ctx.ao = assignmentOperator;
-    }
-
-    @Override
-    public void exitMultiplicativeOp(TimedRebecaCompleteParser.MultiplicativeOpContext ctx) {
-        String multiplicativeOperator = null;
-        if (ctx.STAR() != null) {
-            multiplicativeOperator = ctx.STAR().getText();
-        } else if (ctx.SLASH() != null) {
-            multiplicativeOperator = ctx.SLASH().getText();
-        } else if (ctx.PERCENT() != null) {
-            multiplicativeOperator = ctx.PERCENT().getText();
-        }
-        ctx.mo = multiplicativeOperator;
-    }
-
-    @Override
-    public void exitAdditiveOp(TimedRebecaCompleteParser.AdditiveOpContext ctx) {
-        String additiveOperator = null;
-        if (ctx.PLUS() != null) {
-            additiveOperator = ctx.PLUS().getText();
-        } else if (ctx.SUB() != null) {
-            additiveOperator = ctx.SUB().getText();
-        }
-        ctx.ado = additiveOperator;
-    }
-
-    @Override
-    public void exitRelationalOp(TimedRebecaCompleteParser.RelationalOpContext ctx) {
-        String relationalOperator = null;
-        if (ctx.LT() != null && ctx.EQ() != null) {
-            relationalOperator = ctx.LT().getText() + ctx.EQ().getText();
-        } else if (ctx.GT() != null && ctx.EQ() != null) {
-            relationalOperator = ctx.GT().getText() + ctx.EQ().getText();
-        } else if (ctx.LT() != null) {
-            relationalOperator = ctx.LT().getText();
-        } else if (ctx.GT() != null) {
-            relationalOperator = ctx.GT().getText();
-        }
-        ctx.ro = relationalOperator;
-    }
-
-    @Override
-    public void exitShiftOp(TimedRebecaCompleteParser.ShiftOpContext ctx) {
-        String shiftOperator = null;
-        if (ctx.LT().size() == 2) {
-            shiftOperator = "<<";
-        } else if (ctx.GT().size() == 2) {
-            shiftOperator = ">>";
-        }
-        ctx.so = shiftOperator;
-    }
-
-    @Override
-    public void exitEqualityOp(TimedRebecaCompleteParser.EqualityOpContext ctx) {
-        String equalityOperator = null;
-        if (ctx.EQEQ() != null) {
-            equalityOperator = ctx.EQEQ().getText();
-        } else if (ctx.BANGEQ() != null) {
-            equalityOperator = ctx.BANGEQ().getText();
-        }
-        ctx.eo = equalityOperator;
-    }
-
-    @Override
-    public void exitUnaryExpression(TimedRebecaCompleteParser.UnaryExpressionContext ctx) {
-        Expression expression;
-        if (ctx.PLUS() != null) {
-            expression = ctx.unaryExpression().e;
-        } else if (ctx.extendableExpression() != null) {
-            expression = ctx.extendableExpression().e;
-        } else {
-            UnaryExpression ue = new UnaryExpression();
-            ue.setExpression(ctx.unaryExpression().e);
-            ue.setLineNumber(ctx.unaryExpression().e.getLineNumber());
-            ue.setCharacter(ctx.unaryExpression().e.getCharacter());
-            if (ctx.SUB() != null) {
-                ue.setOperator(ctx.SUB().getText());
-            } else if (ctx.PLUSPLUS() != null) {
-                ue.setOperator(ctx.PLUSPLUS().getText());
-            } else if (ctx.SUBSUB() != null) {
-                ue.setOperator(ctx.SUBSUB().getText());
-            } else if (ctx.TILDA() != null) {
-                ue.setOperator(ctx.TILDA().getText());
-            } else if (ctx.BANG() != null) {
-                ue.setOperator(ctx.BANG().getText());
-            }
-            expression = ue;
-        }
-        ctx.e = expression;
-    }
-
-    @Override
-    public void exitCastExpression(TimedRebecaCompleteParser.CastExpressionContext ctx) {
-        CastExpression castExpr = new CastExpression();
-        castExpr.setExpression(ctx.expression().e);
-        castExpr.setType(ctx.type().t);
-        castExpr.setLineNumber(ctx.expression().e.getLineNumber());
-        castExpr.setCharacter(ctx.expression().e.getCharacter());
-        ctx.e = castExpr;
-    }
+    
 
     @Override
     public void exitExpressionList(TimedRebecaCompleteParser.ExpressionListContext ctx) {
@@ -880,62 +759,69 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         }
         ctx.el = expressions;
     }
-
     @Override
     public void exitAnnotatedExpression(TimedRebecaCompleteParser.AnnotatedExpressionContext ctx) {
         List<Annotation> annotationList = new ArrayList<>();
         Expression expr = ctx.expression().e;
-        for (TimedRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()) {
+        for(TimedRebecaCompleteParser.AnnotationContext annotation : ctx.annotation()){
             annotationList.add(annotation.an);
         }
         expr.getAnnotations().addAll(annotationList);
         ctx.e = expr;
     }
-
+    
     @Override
+    //TODO: different types of integer and float literals have to be considered
     public void exitLiteral(TimedRebecaCompleteParser.LiteralContext ctx) {
         Literal literal = new Literal();
-        if (ctx.INTLITERAL() != null) {
-            literal.setLiteralValue(ctx.INTLITERAL().getText());
+
+        if (ctx.integerLiteral() != null) {
+            String value = ctx.integerLiteral().DECIMAL_LITERAL().getText();
+			literal.setLiteralValue(value);
             literal.setType(CoreRebecaTypeSystem.INT_TYPE);
-            literal.setLineNumber(ctx.INTLITERAL().getSymbol().getLine());
-            literal.setCharacter(ctx.INTLITERAL().getSymbol().getCharPositionInLine());
-        } else if (ctx.FLOATLITERAL() != null) {
-            literal.setLiteralValue(ctx.FLOATLITERAL().getText());
+            try {
+            	Short.parseShort(value);
+                literal.setType(CoreRebecaTypeSystem.SHORT_TYPE);
+            	Byte.parseByte(value);
+                literal.setType(CoreRebecaTypeSystem.BYTE_TYPE);
+            } catch(NumberFormatException nfe) {
+            	
+            }
+            literal.setLineNumber(ctx.integerLiteral().DECIMAL_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.integerLiteral().DECIMAL_LITERAL().getSymbol().getCharPositionInLine());
+        } else if (ctx.floatLiteral() != null) {
+            literal.setLiteralValue(ctx.floatLiteral().getText());
             literal.setType(CoreRebecaTypeSystem.FLOAT_TYPE);
-            literal.setLineNumber(ctx.FLOATLITERAL().getSymbol().getLine());
-            literal.setCharacter(ctx.FLOATLITERAL().getSymbol().getCharPositionInLine());
-        } else if (ctx.DOUBLELITERAL() != null) {
-            literal.setLiteralValue(ctx.DOUBLELITERAL().getText());
-            literal.setType(CoreRebecaTypeSystem.DOUBLE_TYPE);
-            literal.setLineNumber(ctx.DOUBLELITERAL().getSymbol().getLine());
-            literal.setCharacter(ctx.DOUBLELITERAL().getSymbol().getCharPositionInLine());
-        } else if (ctx.CHARLITERAL() != null) {
-            literal.setLiteralValue(ctx.CHARLITERAL().getText());
+            literal.setLineNumber(ctx.floatLiteral().FLOAT_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.floatLiteral().FLOAT_LITERAL().getSymbol().getCharPositionInLine());
+        } else if (ctx.BOOL_LITERAL() != null) {
+            literal.setLiteralValue(ctx.BOOL_LITERAL().getText());
+            literal.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
+            literal.setLineNumber(ctx.BOOL_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.BOOL_LITERAL().getSymbol().getCharPositionInLine());
+        } else if (ctx.CHAR_LITERAL() != null) {
+            literal.setLiteralValue(ctx.CHAR_LITERAL().getText());
             literal.setType(CoreRebecaTypeSystem.CHAR_TYPE);
-            literal.setLineNumber(ctx.CHARLITERAL().getSymbol().getLine());
-            literal.setCharacter(ctx.CHARLITERAL().getSymbol().getCharPositionInLine());
-        } else if (ctx.STRINGLITERAL() != null) {
-            literal.setLiteralValue(ctx.STRINGLITERAL().getText());
+            literal.setLineNumber(ctx.CHAR_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.CHAR_LITERAL().getSymbol().getCharPositionInLine());
+        } else if (ctx.STRING_LITERAL() != null) {
+            literal.setLiteralValue(ctx.STRING_LITERAL().getText());
             literal.setType(CoreRebecaTypeSystem.STRING_TYPE);
-            literal.setLineNumber(ctx.STRINGLITERAL().getSymbol().getLine());
-            literal.setCharacter(ctx.STRINGLITERAL().getSymbol().getCharPositionInLine());
-        } else if (ctx.TRUE() != null) {
-            literal.setLiteralValue("true");
-            literal.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
-            literal.setLineNumber(ctx.TRUE().getSymbol().getLine());
-            literal.setCharacter(ctx.TRUE().getSymbol().getCharPositionInLine());
-        } else if (ctx.FALSE() != null) {
-            literal.setLiteralValue("false");
-            literal.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
-            literal.setLineNumber(ctx.FALSE().getSymbol().getLine());
-            literal.setCharacter(ctx.FALSE().getSymbol().getCharPositionInLine());
-        } else if (ctx.NULL() != null) {
+            literal.setLineNumber(ctx.STRING_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.STRING_LITERAL().getSymbol().getCharPositionInLine());
+        } else if (ctx.NULL_LITERAL() != null) {
             literal.setLiteralValue("null");
             literal.setType(CoreRebecaTypeSystem.NULL_TYPE);
-            literal.setLineNumber(ctx.NULL().getSymbol().getLine());
-            literal.setCharacter(ctx.NULL().getSymbol().getCharPositionInLine());
+            literal.setLineNumber(ctx.NULL_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.NULL_LITERAL().getSymbol().getCharPositionInLine());
         }
         ctx.l = literal;
     }
-}
+    
+    @Override
+    public void exitArguments(TimedRebecaCompleteParser.ArgumentsContext ctx) {
+    	if(ctx.expressionList() != null)
+    		ctx.args = ctx.expressionList().el;
+    	else
+    		ctx.args = new ArrayList<Expression>();
+    }}

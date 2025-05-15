@@ -51,7 +51,11 @@ reactiveclass Test1 (3) {
 		if(?(true, false)){};
 		t.sib(1, self);
 		if(!bbb);
+
+		((Test1)sender).sib();
+
 		return;
+		byte x = 1 + 2;
 	}
 
 	int u (){}

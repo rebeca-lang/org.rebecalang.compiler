@@ -7,9 +7,11 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.modelcompiler.corerebeca.statementsemanticchecker.expression.PrimaryTermExpressionSemanticCheck;
+import org.rebecalang.compiler.modelcompiler.timedrebeca.TimedRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.objectmodel.TimedRebecaParentSuffixPrimary;
 import org.rebecalang.compiler.utils.CodeCompilationException;
 import org.rebecalang.compiler.utils.Pair;
+import org.rebecalang.compiler.utils.TypesUtilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -61,7 +63,12 @@ public class TimedPrimaryTermSemanticCheck extends
 					checkAfterAndDeadline(deadlineExpression);
 				}
 			}
-
+			if(termPrimary.getName().equals("delay") && afterExpression == null &&
+					deadlineExpression == null && 
+					termPrimary.getParentSuffixPrimary().getArguments().size() == 1) {
+				if(termPrimary.getParentSuffixPrimary().getArguments().get(0).getType().canTypeCastTo(CoreRebecaTypeSystem.INT_TYPE))
+					termPrimary.setLabel(TimedRebecaLabelUtility.DELAY);
+			}
 		}
 
 		return retValue;		

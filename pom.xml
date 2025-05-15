@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.rebecalang</groupId>
 	<artifactId>compiler</artifactId>
-	<version>2.26</version>
+	<version>2.27</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<springframework.version>6.1.14</springframework.version>

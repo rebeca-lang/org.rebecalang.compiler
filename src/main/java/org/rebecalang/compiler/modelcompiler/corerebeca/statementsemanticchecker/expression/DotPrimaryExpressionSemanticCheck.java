@@ -4,6 +4,7 @@ import org.rebecalang.compiler.modelcompiler.ExpressionSemanticCheckContainer;
 import org.rebecalang.compiler.modelcompiler.abstractrebeca.AbstractExpressionSemanticCheck;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaLabelUtility;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimaryExpression;
@@ -36,9 +37,16 @@ public class DotPrimaryExpressionSemanticCheck extends AbstractExpressionSemanti
 		DotPrimary dotPrimary = (DotPrimary) expression;
 
 		Expression leftTerm = dotPrimary.getLeft();
-		Type leftTermType = expressionSemanticCheckContainer.check(leftTerm, baseType).getFirst();
+		Type leftTermType = expressionSemanticCheckContainer.check(leftTerm, baseType).getFirst();			
+//		if(left instanceof CastExpression) {
+//			PrimaryExpression leftTerm = dotPrimary.getLeft();
+//		} else if(left instanceof PrimaryExpression) {
+//			
+//		} else {
+//			
+//		}
 
-		PrimaryExpression rightTerm = dotPrimary.getRight();
+		Expression rightTerm = dotPrimary.getRight();
 		
 		Type rightTermType = expressionSemanticCheckContainer.check(rightTerm, leftTermType).getFirst();
 		expression.setType(rightTermType);
@@ -54,7 +62,6 @@ public class DotPrimaryExpressionSemanticCheck extends AbstractExpressionSemanti
 						"Direct sending to \"self\" is allowed in constructors",
 					leftTerm.getLineNumber(), leftTerm.getCharacter()));
 			}
-			
 		}
 
 		returnValue.setFirst(expression.getType());

@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemanticCheck {
 
-	AbstractTypeSystem typeSystem;
+	protected AbstractTypeSystem typeSystem;
 
 	protected ExpressionSemanticCheckContainer expressionSemanticCheckContainer;
 

@@ -86,7 +86,7 @@ msgsrvSignature returns [MsgsrvDeclaration md]
 reactiveClassDeclaration returns [ReactiveClassDeclaration rcd]
     :   annotation*
         ABSTRACT? REACTIVECLASS IDENTIFIER (EXTENDS IDENTIFIER)? (implementingInterface)?
-        LPAREN INTLITERAL RPAREN
+        LPAREN DECIMAL_LITERAL RPAREN
         LBRACE
         (knownRebecsDeclaration | stateVarsDeclaration | constructorDeclaration
         | msgsrvDeclaration | synchMethodDeclaration)*

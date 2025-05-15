@@ -62,19 +62,20 @@ public class SemanticCheckerUtils {
 				}
 			} else {
 				Type biggerType = getCommonSuperType(lType, rType);
-				if (!biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.DOUBLE_TYPE)) {
-					CodeCompilationException cce = createEvaluateExceptionMessage(
-							0, 0, operator, rType, lType);
-					if (cce == null)
-						return retValue;
-					throw cce;
-				} else {
-					if (biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE)) {
-						retValue = CoreRebecaTypeSystem.INT_TYPE;
-					} else {
-						retValue = biggerType;
-					}
-				}				
+				return biggerType;
+//				if (!biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.DOUBLE_TYPE)) {
+//					CodeCompilationException cce = createEvaluateExceptionMessage(
+//							0, 0, operator, rType, lType);
+//					if (cce == null)
+//						return retValue;
+//					throw cce;
+//				} else {
+//					if (biggerType.canTypeUpCastTo(CoreRebecaTypeSystem.INT_TYPE)) {
+//						retValue = CoreRebecaTypeSystem.INT_TYPE;
+//					} else {
+//						retValue = biggerType;
+//					}
+//				}				
 			}
 		}
 

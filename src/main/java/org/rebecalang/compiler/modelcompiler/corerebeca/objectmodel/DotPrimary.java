@@ -46,14 +46,14 @@ public class DotPrimary
     @XmlElement(required = true)
     protected Expression left;
     @XmlElement(required = true)
-    protected PrimaryExpression right;
+    protected Expression right;
 
     /**
      * Gets the value of the left property.
      * 
      * @return
      *     possible object is
-     *     {@link Expression }
+     *     {@link PrimaryExpression }
      *     
      */
     public Expression getLeft() {
@@ -77,10 +77,10 @@ public class DotPrimary
      * 
      * @return
      *     possible object is
-     *     {@link PrimaryExpression }
+     *     {@link Expression }
      *     
      */
-    public PrimaryExpression getRight() {
+    public Expression getRight() {
         return right;
     }
 
@@ -89,10 +89,10 @@ public class DotPrimary
      * 
      * @param value
      *     allowed object is
-     *     {@link PrimaryExpression }
+     *     {@link Expression }
      *     
      */
-    public void setRight(PrimaryExpression value) {
+    public void setRight(Expression value) {
         this.right = value;
     }
 

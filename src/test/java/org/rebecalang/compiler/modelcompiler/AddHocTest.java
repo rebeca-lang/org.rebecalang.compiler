@@ -34,7 +34,7 @@ public class AddHocTest {
 	@Test
 //	@Disabled
 	public void test() {
-		File model = new File(MODEL_FILES_BASE + "VarSensorImmediate.rebeca");
+		File model = new File(MODEL_FILES_BASE + "Mining.rebeca");
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		extension.add(CompilerExtension.TIMED_REBECA);
 		Pair<RebecaModel,SymbolTable> compileRebecaFile = compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_3);

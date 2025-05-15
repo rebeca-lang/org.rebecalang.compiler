@@ -15,6 +15,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpres
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimaryExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
 import org.rebecalang.compiler.utils.CodeCompilationException;
@@ -93,6 +94,10 @@ public class BinaryExpressionSemanticCheck extends
 	public static LValueState isInLValueStyle(Expression expression, ScopeHandler scopeHandler) {
 		if (!(expression instanceof PrimaryExpression))
 			return LValueState.NONE_VARIABLE;
+		if (expression instanceof RebecInstantiationPrimary) {
+			return LValueState.NONE_VARIABLE;
+		}
+		PrimaryExpression pExpression = null;
 		if (expression instanceof TermPrimary) {
 			TermPrimary tPrimary = (TermPrimary) expression;
 			VariableInScopeSpecifier retreiveVariableFromScope;
@@ -105,12 +110,13 @@ public class BinaryExpressionSemanticCheck extends
 			} catch (ScopeException e) {
 				return LValueState.VARIABLE;
 			}
+			pExpression = tPrimary;
+		} else if (expression instanceof DotPrimary) {
+			do {
+				expression = ((DotPrimary)expression).getRight();
+			} while(expression instanceof DotPrimary);
+			pExpression = (TermPrimary) expression;
 		}
-		PrimaryExpression pExpression = (PrimaryExpression) expression;
-		while (pExpression instanceof DotPrimary) {
-			pExpression = ((DotPrimary) pExpression).getRight();
-		}
-
 		return (((TermPrimary) pExpression).getParentSuffixPrimary() == null ? LValueState.VARIABLE : LValueState.NONE_VARIABLE);
 	}
 

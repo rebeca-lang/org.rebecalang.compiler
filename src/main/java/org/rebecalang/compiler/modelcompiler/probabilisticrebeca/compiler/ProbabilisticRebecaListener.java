@@ -589,6 +589,8 @@ public class ProbabilisticRebecaListener extends ProbabilisticRebecaCompleteBase
         	te.setCondition(ctx.expression(0).e);
         	te.setLeft(ctx.expression(1).e);
         	te.setRight(ctx.expression(2).e);
+            te.setLineNumber(ctx.expression(0).e.getLineNumber());
+            te.setCharacter(ctx.expression(0).e.getCharacter());
         	ctx.e = te;
         } else if (ctx.expression(0) != null && ctx.expression(1) != null) {
             BinaryExpression binaryExpression = new BinaryExpression();
@@ -628,14 +630,14 @@ public class ProbabilisticRebecaListener extends ProbabilisticRebecaCompleteBase
             instanceofExpression.setLineNumber(ctx.type().t.getLineNumber());
             instanceofExpression.setCharacter(ctx.type().t.getCharacter());
             ctx.e = instanceofExpression;
-        } else if (ctx.QUES() != null && ctx.COLON() != null) {
-            TernaryExpression ternaryExpression = new TernaryExpression();
-            ternaryExpression.setCondition(ctx.expression(0).e);
-            ternaryExpression.setLeft(ctx.expression(1).e);
-            ternaryExpression.setRight(ctx.expression(2).e);
-            ternaryExpression.setLineNumber(ctx.expression(0).e.getLineNumber());
-            ternaryExpression.setCharacter(ctx.expression(0).e.getCharacter());
-            ctx.e = ternaryExpression;
+//        } else if (ctx.QUES() != null && ctx.COLON() != null) {
+//            TernaryExpression ternaryExpression = new TernaryExpression();
+//            ternaryExpression.setCondition(ctx.expression(0).e);
+//            ternaryExpression.setLeft(ctx.expression(1).e);
+//            ternaryExpression.setRight(ctx.expression(2).e);
+//            ternaryExpression.setLineNumber(ctx.expression(0).e.getLineNumber());
+//            ternaryExpression.setCharacter(ctx.expression(0).e.getCharacter());
+//            ctx.e = ternaryExpression;
         }
     }
     @Override

@@ -11,7 +11,7 @@ rebecaCode returns [HybridRebecaCode rc]
 physicalClassDeclaration returns[PhysicalClassDeclaration pcd]
     :
     	annotation*
-        PHYSICALCLASS IDENTIFIER LPAREN INTLITERAL RPAREN
+        PHYSICALCLASS IDENTIFIER LPAREN DECIMAL_LITERAL RPAREN
         LBRACE
         knownRebecsDeclaration?
         stateVarsDeclaration?

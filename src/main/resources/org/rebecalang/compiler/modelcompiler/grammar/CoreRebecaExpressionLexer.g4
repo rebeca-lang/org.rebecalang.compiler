@@ -1,139 +1,9 @@
 lexer grammar CoreRebecaExpressionLexer;
 
-INTLITERAL
-    :   IntegerNumber 
-    ;
-    
-fragment
-IntegerNumber
-    :   '0' 
-    |   '1'..'9' ('0'..'9')*    
-    |   '0' ('0'..'7')+         
-    |   HexPrefix HexDigit+        
-    ;
-
-fragment
-HexPrefix
-    :   '0x' | '0X'
-    ;
-        
-fragment
-HexDigit
-    :   ('0'..'9'|'a'..'f'|'A'..'F')
-    ;
-
-fragment
-LongSuffix
-    :   'l' | 'L'
-    ;
-
-
-fragment
-NonIntegerNumber
-    :   ('0' .. '9')+ DOT ('0' .. '9')* Exponent?  
-    |   DOT ( '0' .. '9' )+ Exponent?  
-    |   ('0' .. '9')+ Exponent  
-    |   ('0' .. '9')+ 
-    |   
-        HexPrefix (HexDigit )* 
-        (    () 
-        |    (DOT (HexDigit )* ) 
-        ) 
-        ( 'p' | 'P' ) 
-        ( '+' | '-' )? 
-        ( '0' .. '9' )+
-        ;
-        
-fragment 
-Exponent    
-    :   ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ 
-    ;
-    
-fragment 
-FloatSuffix
-    :   'f' | 'F' 
-    ;     
-
-fragment
-DoubleSuffix
-    :   'd' | 'D'
-    ;
-        
-FLOATLITERAL
-    :   NonIntegerNumber FloatSuffix
-    ;
-    
-DOUBLELITERAL
-    :   NonIntegerNumber DoubleSuffix?
-    ;
-
-CHARLITERAL
-    :   '\'' 
-        (   EscapeSequence 
-        |   ~( '\'' | '\\' | '\r' | '\n' )
-        ) 
-        '\''
-    ; 
-
-STRINGLITERAL
-    :   '"' 
-        (   EscapeSequence
-        |   ~( '\\' | '"' | '\r' | '\n' )        
-        )* 
-        '"' 
-    ;
-
-fragment
-EscapeSequence 
-    :   '\\' (
-                 'b' 
-             |   't' 
-             |   'n' 
-             |   'f' 
-             |   'r' 
-//             |   '\"' 
-             |   '\'' 
-             |   '\\' 
-             |       
-                 ('0'..'3') ('0'..'7') ('0'..'7')
-             |       
-                 ('0'..'7') ('0'..'7') 
-             |       
-                 ('0'..'7')
-             )          
-;     
-
-WS
-	:  [ \r\t\u000C\n]+ -> skip
-    ;
-
-COMMENT
-    :   '/*' .*? '*/' -> channel(HIDDEN)
-    ;
-
-LINE_COMMENT
-	:	'//' ~[\r\n]* ('\r'? '\n' | EOF) -> channel(HIDDEN)
-    ;
-
-INSTANCEOF
-	:	'instanceof'
-	;
-
-NEW
-    :   'new'
-    ;
-
-TRUE
-    :   'true'
-    ;
-
-FALSE
-    :   'false'
-    ;
-
-NULL
-    :   'null'
-    ;
+INSTANCEOF		:	'instanceof';
+NEW				:	'new';
+THIS			:   'this';
+SUPER			:   'super';
 
 LPAREN
     :   '('
@@ -292,8 +162,16 @@ GT
     :   '>'
     ;
 
+GTEQ
+    :   '>='
+    ;
+
 LT
     :   '<'
+    ;        
+
+LTEQ
+    :   '<='
     ;        
 
 LTLT
@@ -312,48 +190,85 @@ GTGTEQ
 	:	'>>='
 	;
               
-IDENTIFIER
-    :   Letter (Letter|JavaIDDigit)*
+
+DECIMAL_LITERAL : 
+	('0' | [1-9] (Digits? | '_'+ Digits)) [lL]?
+	;
+
+HEX_LITERAL :
+	'0' [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
+	;
+
+OCT_LITERAL :
+	'0' '_'* [0-7] ([0-7_]* [0-7])? [lL]?
+	;
+
+BINARY_LITERAL :
+	'0' [bB] [01] ([01_]* [01])? [lL]?
+	;
+
+FLOAT_LITERAL:
+    (Digits '.' Digits? | '.' Digits) ExponentPart? [fFdD]?
+    | Digits (ExponentPart [fFdD]? | [fFdD])
+;
+
+//HEX_FLOAT_LITERAL: '0' [xX] (HexDigits '.'? | HexDigits? '.' HexDigits) [pP] [+-]? Digits [fFdD]?;
+
+BOOL_LITERAL:
+	'true' | 'false'
+	;
+
+CHAR_LITERAL:
+	'\'' (~['\\\r\n] | EscapeSequence) '\''
+	;
+
+STRING_LITERAL:
+	'"' (~["\\\r\n] | EscapeSequence)* '"'
+	;
+
+NULL_LITERAL:
+	'null'
+	;
+
+IDENTIFIER: Letter LetterOrDigit*;
+
+// Fragment rules
+
+fragment ExponentPart: [eE] [+-]? Digits;
+
+fragment EscapeSequence:
+    '\\' 'u005c'? [btnfr"'\\]
+    | '\\' 'u005c'? ([0-3]? [0-7])? [0-7]
+    | '\\' 'u'+ HexDigit HexDigit HexDigit HexDigit
+;
+
+WS
+	:  [ \r\t\u000C\n]+ -> skip
     ;
 
-
-/**I found this char range in JavaCC's grammar, but Letter and Digit overlap.
-   Still works, but...
- */
-fragment
-Letter
-    :  '\u0024' |               // $
-       '\u0041'..'\u005a' |     // A-Z
-       '\u005f' |               // _  
-       '\u0061'..'\u007a' |     // a-z
-       '\u00c0'..'\u00d6' |     // Latin Capital Letter A with grave - Latin Capital letter O with diaeresis
-       '\u00d8'..'\u00f6' |     // Latin Capital letter O with stroke - Latin Small Letter O with diaeresis
-       '\u00f8'..'\u00ff' |     // Latin Small Letter O with stroke - Latin Small Letter Y with diaeresis
-       '\u0100'..'\u1fff' |     // Latin Capital Letter A with macron - Latin Small Letter O with stroke and acute
-       '\u3040'..'\u318f' |     // Hiragana
-       '\u3300'..'\u337f' |     // CJK compatibility
-       '\u3400'..'\u3d2d' |     // CJK compatibility
-       '\u4e00'..'\u9fff' |     // CJK compatibility
-       '\uf900'..'\ufaff'       // CJK compatibility
+COMMENT
+    :   '/*' .*? '*/' -> channel(HIDDEN)
     ;
 
-fragment
-JavaIDDigit
-    :  '\u0030'..'\u0039' |     // 0-9
-       '\u0660'..'\u0669' |     // Arabic-Indic Digit 0-9
-       '\u06f0'..'\u06f9' |     // Extended Arabic-Indic Digit 0-9
-       '\u0966'..'\u096f' |     // Devanagari 0-9
-       '\u09e6'..'\u09ef' |     // Bengali 0-9
-       '\u0a66'..'\u0a6f' |     // Gurmukhi 0-9
-       '\u0ae6'..'\u0aef' |     // Gujarati 0-9
-       '\u0b66'..'\u0b6f' |     // Oriya 0-9
-       '\u0be7'..'\u0bef' |     // Tami 0-9
-       '\u0c66'..'\u0c6f' |     // Telugu 0-9
-       '\u0ce6'..'\u0cef' |     // Kannada 0-9
-       '\u0d66'..'\u0d6f' |     // Malayala 0-9
-       '\u0e50'..'\u0e59' |     // Thai 0-9
-       '\u0ed0'..'\u0ed9' |     // Lao 0-9
-       '\u1040'..'\u1049'       // Myanmar 0-9?
-   ;
+LINE_COMMENT
+	:	'//' ~[\r\n]* ('\r'? '\n' | EOF) -> channel(HIDDEN)
+    ;
+
+fragment HexDigits: HexDigit ((HexDigit | '_')* HexDigit)?;
+
+fragment HexDigit: [0-9a-fA-F];
+
+fragment Digits: [0-9] ([0-9_]* [0-9])?;
+
+fragment LetterOrDigit: Letter | [0-9];
+
+fragment Letter:
+    [a-zA-Z$_]                        // these are the "java letters" below 0x7F
+    | ~[\u0000-\u007F\uD800-\uDBFF]   // covers all characters above 0x7F which are not a surrogate
+    | [\uD800-\uDBFF] [\uDC00-\uDFFF] // covers UTF-16 surrogate pairs encodings for U+10000 to U+10FFFF
+;
+
+   
+
 
 
