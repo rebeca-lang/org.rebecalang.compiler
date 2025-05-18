@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @ContextConfiguration(classes = CompilerConfig.class) 
 @SpringJUnitConfig
-public class AddHocTest {
+public class AdhocTest {
 	
 	@Autowired
 	public RebecaModelCompiler compiler;
@@ -32,7 +32,7 @@ public class AddHocTest {
 	public static final String MODEL_FILES_BASE = "src/test/resources/org/rebecalang/compiler/adhoc/"; 
 
 	@Test
-//	@Disabled
+	@Disabled
 	public void test() {
 		File model = new File(MODEL_FILES_BASE + "Mining.rebeca");
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
