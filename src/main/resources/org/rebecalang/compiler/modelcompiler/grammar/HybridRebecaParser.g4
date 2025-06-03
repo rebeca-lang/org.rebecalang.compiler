@@ -29,11 +29,7 @@ modeDeclaration returns[ModeDeclaration md]
 	;
     
 primary returns [TermPrimary tp]
-    : IDENTIFIER (LPAREN expressionList? RPAREN after? deadline?)? (LBRACKET expression RBRACKET)* PRIME*
-    ;
-after returns [Expression e]
-    : AFTER LPAREN expression RPAREN
-    ;
-deadline returns [Expression e]
-    : DEADLINE LPAREN expression RPAREN
+    : THIS
+    | SUPER
+    | IDENTIFIER (arguments after? deadline?)? (LBRACKET expression RBRACKET)* PRIME*
     ;

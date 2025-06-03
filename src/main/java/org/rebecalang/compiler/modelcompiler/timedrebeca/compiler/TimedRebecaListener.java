@@ -3,7 +3,6 @@ package org.rebecalang.compiler.modelcompiler.timedrebeca.compiler;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
-import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaCompleteParser.ExpressionContext;
 import org.rebecalang.compiler.modelcompiler.timedrebeca.objectmodel.TimedRebecaParentSuffixPrimary;
 
 import java.util.ArrayList;
@@ -11,7 +10,55 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
+
+
     @Override
+    public void exitPrimary(TimedRebecaCompleteParser.PrimaryContext ctx) {
+        TermPrimary termPrimary = new TermPrimary();
+        if(ctx.THIS() != null) {
+            termPrimary.setName("this");
+            termPrimary.setLineNumber(ctx.THIS().getSymbol().getLine());
+            termPrimary.setCharacter(ctx.THIS().getSymbol().getCharPositionInLine());
+        } else if(ctx.SUPER() != null) {
+            termPrimary.setName("super");
+            termPrimary.setLineNumber(ctx.SUPER().getSymbol().getLine());
+            termPrimary.setCharacter(ctx.SUPER().getSymbol().getCharPositionInLine());
+        } else if(ctx.IDENTIFIER() != null) {
+            termPrimary.setName(ctx.IDENTIFIER().getText());
+            termPrimary.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
+            termPrimary.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
+            if (ctx.arguments() != null) {
+                TimedRebecaParentSuffixPrimary parentSuffixPrimary = new TimedRebecaParentSuffixPrimary();
+                parentSuffixPrimary.setLineNumber(termPrimary.getLineNumber());
+                parentSuffixPrimary.setCharacter(termPrimary.getCharacter());
+                termPrimary.setParentSuffixPrimary(parentSuffixPrimary);
+                parentSuffixPrimary.getArguments().addAll(ctx.arguments().args);
+                if(ctx.after() != null)
+                	parentSuffixPrimary.setAfterExpression(ctx.after().e);
+                if(ctx.deadline() != null)
+                	parentSuffixPrimary.setDeadlineExpression(ctx.deadline().e);
+            }
+            if (ctx.expression() != null) {
+            	for(TimedRebecaCompleteParser.ExpressionContext ec : ctx.expression())
+            		termPrimary.getIndices().add(ec.e);
+            }
+        }
+        ctx.tp = termPrimary;
+    }
+
+    @Override
+    public void exitAfter(TimedRebecaCompleteParser.AfterContext ctx) {
+    	ctx.e = ctx.expression().e;
+    }
+    
+    @Override
+    public void exitDeadline(TimedRebecaCompleteParser.DeadlineContext ctx) {
+    	ctx.e = ctx.expression().e;
+    }
+    
+    // Common Part
+    
+	@Override
     public void exitRebecaModel(TimedRebecaCompleteParser.RebecaModelContext ctx) {
         RebecaModel rebecaModel = new RebecaModel();
         if(ctx.packageDeclaration() != null){
@@ -531,7 +578,7 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
     }
 
     public boolean isNondet(TimedRebecaCompleteParser.ExpressionContext ctx) {
-    	return ctx.nondet != null;
+    	return ctx.nondetExpression() != null;
     }
     
     public boolean isNewInstance(TimedRebecaCompleteParser.ExpressionContext ctx) {
@@ -579,15 +626,7 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
 			rip.setLineNumber(ctx.NEW().getSymbol().getLine());
         	ctx.e = rip;
         } else if (isNondet(ctx)) {
-        	NonDetExpression nde = new NonDetExpression();
-        	for (ExpressionContext ec : ctx.expression()) {
-            	nde.getChoices().add(ec.e);
-        		if(nde.getType() == null)
-        			nde.setType(ec.e.getType());
-        	}
-        	nde.setCharacter(ctx.nondet.getCharPositionInLine());
-        	nde.setLineNumber(ctx.nondet.getLine());
-        	ctx.e = nde;
+        	ctx.e = ctx.nondetExpression().e;
         } else if (isBinaryExpression(ctx)) {
         	BinaryExpression be = new BinaryExpression();
         	be.setOperator(ctx.bop.getText());
@@ -645,6 +684,7 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         }
     }
     @Override
+
     public void exitAnnotation(TimedRebecaCompleteParser.AnnotationContext ctx) {
         Annotation annotation = new Annotation();
         TerminalNode annotationName = ctx.IDENTIFIER();
@@ -705,52 +745,20 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
         }
         ctx.ds = dimensions;
     }
-
     @Override
-    public void exitPrimary(TimedRebecaCompleteParser.PrimaryContext ctx) {
-        TermPrimary termPrimary = new TermPrimary();
-        if(ctx.THIS() != null) {
-            termPrimary.setName("this");
-            termPrimary.setLineNumber(ctx.THIS().getSymbol().getLine());
-            termPrimary.setCharacter(ctx.THIS().getSymbol().getCharPositionInLine());
-        } else if(ctx.SUPER() != null) {
-            termPrimary.setName("super");
-            termPrimary.setLineNumber(ctx.SUPER().getSymbol().getLine());
-            termPrimary.setCharacter(ctx.SUPER().getSymbol().getCharPositionInLine());
-        } else if(ctx.IDENTIFIER() != null) {
-            termPrimary.setName(ctx.IDENTIFIER().getText());
-            termPrimary.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
-            termPrimary.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
-            if (ctx.arguments() != null) {
-                TimedRebecaParentSuffixPrimary parentSuffixPrimary = new TimedRebecaParentSuffixPrimary();
-                parentSuffixPrimary.setLineNumber(termPrimary.getLineNumber());
-                parentSuffixPrimary.setCharacter(termPrimary.getCharacter());
-                termPrimary.setParentSuffixPrimary(parentSuffixPrimary);
-                parentSuffixPrimary.getArguments().addAll(ctx.arguments().args);
-                if(ctx.after() != null)
-                	parentSuffixPrimary.setAfterExpression(ctx.after().e);
-                if(ctx.deadline() != null)
-                	parentSuffixPrimary.setDeadlineExpression(ctx.deadline().e);
-            }
-            if (ctx.expression() != null) {
-            	for(ExpressionContext ec : ctx.expression())
-            		termPrimary.getIndices().add(ec.e);
-            }
-        }
-        ctx.tp = termPrimary;
-    }
-
-    @Override
-    public void exitAfter(TimedRebecaCompleteParser.AfterContext ctx) {
-    	ctx.e = ctx.expression().e;
+    public void exitNondetExpression(TimedRebecaCompleteParser.NondetExpressionContext ctx) {
+    	NonDetExpression nde = new NonDetExpression();
+    	
+    	for (TimedRebecaCompleteParser.ExpressionContext ec : ctx.expression()) {
+        	nde.getChoices().add(ec.e);
+    		if(nde.getType() == null)
+    			nde.setType(ec.e.getType());
+    	}
+    	nde.setCharacter(ctx.QUES().getSymbol().getCharPositionInLine());
+    	nde.setLineNumber(ctx.QUES().getSymbol().getLine());
+    	ctx.e = nde;
     }
     
-    @Override
-    public void exitDeadline(TimedRebecaCompleteParser.DeadlineContext ctx) {
-    	ctx.e = ctx.expression().e;
-    }
-    
-
     @Override
     public void exitExpressionList(TimedRebecaCompleteParser.ExpressionListContext ctx) {
         List<Expression> expressions = new LinkedList<>();
@@ -824,4 +832,6 @@ public class TimedRebecaListener extends TimedRebecaCompleteBaseListener {
     		ctx.args = ctx.expressionList().el;
     	else
     		ctx.args = new ArrayList<Expression>();
-    }}
+    }
+    
+}

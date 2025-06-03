@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
-import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteParser.ArgumentsContext;
-import org.rebecalang.compiler.modelcompiler.corerebeca.compiler.CoreRebecaCompleteParser.ExpressionContext;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayVariableInitializer;
@@ -53,7 +51,6 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.UnaryExpress
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableInitializer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStatement;
-import org.rebecalang.compiler.modelcompiler.timedrebeca.compiler.TimedRebecaCompleteParser;
 
 public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
 
@@ -577,7 +574,7 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
     }
 
     public boolean isNondet(CoreRebecaCompleteParser.ExpressionContext ctx) {
-    	return ctx.nondet != null;
+    	return ctx.nondetExpression() != null;
     }
     
     public boolean isNewInstance(CoreRebecaCompleteParser.ExpressionContext ctx) {
@@ -625,15 +622,7 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
 			rip.setLineNumber(ctx.NEW().getSymbol().getLine());
         	ctx.e = rip;
         } else if (isNondet(ctx)) {
-        	NonDetExpression nde = new NonDetExpression();
-        	for (ExpressionContext ec : ctx.expression()) {
-            	nde.getChoices().add(ec.e);
-        		if(nde.getType() == null)
-        			nde.setType(ec.e.getType());
-        	}
-        	nde.setCharacter(ctx.nondet.getCharPositionInLine());
-        	nde.setLineNumber(ctx.nondet.getLine());
-        	ctx.e = nde;
+        	ctx.e = ctx.nondetExpression().e;
         } else if (isBinaryExpression(ctx)) {
         	BinaryExpression be = new BinaryExpression();
         	be.setOperator(ctx.bop.getText());
@@ -775,11 +764,25 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
                 parentSuffixPrimary.getArguments().addAll(ctx.arguments().args);
             }
             if (ctx.expression() != null) {
-            	for(ExpressionContext ec : ctx.expression())
+            	for(CoreRebecaCompleteParser.ExpressionContext ec : ctx.expression())
             		termPrimary.getIndices().add(ec.e);
             }
         }
         ctx.tp = termPrimary;
+    }
+
+    @Override
+    public void exitNondetExpression(CoreRebecaCompleteParser.NondetExpressionContext ctx) {
+    	NonDetExpression nde = new NonDetExpression();
+    	
+    	for (CoreRebecaCompleteParser.ExpressionContext ec : ctx.expression()) {
+        	nde.getChoices().add(ec.e);
+    		if(nde.getType() == null)
+    			nde.setType(ec.e.getType());
+    	}
+    	nde.setCharacter(ctx.QUES().getSymbol().getCharPositionInLine());
+    	nde.setLineNumber(ctx.QUES().getSymbol().getLine());
+    	ctx.e = nde;
     }
 
     @Override

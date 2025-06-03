@@ -151,9 +151,13 @@ statement returns [Statement s]
     |   RETURN expression? SEMI
     |   BREAK SEMI
     |   CONTINUE SEMI
-    |   SEMI
+    |   statementExtension
 	;
 
+statementExtension
+	:	SEMI
+	;
+	
 forInit returns [ForInitializer fi]
     :   fieldDeclaration | expressionList
     ;

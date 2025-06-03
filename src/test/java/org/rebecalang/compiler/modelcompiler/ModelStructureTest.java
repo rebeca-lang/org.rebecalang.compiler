@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.rebecalang.compiler.CompilerConfig;
 import org.rebecalang.compiler.utils.CodeCompilationException;
@@ -146,7 +145,6 @@ public class ModelStructureTest {
 	}
 	
 	@Test
-	@Disabled
 	public void GIVEN_ProbabilisticRebecaModelWithStatements_WHEN_CoreIs2_1_THEN_NoErrors() {
 		File model = new File(MODEL_FILES_BASE + "ProbabilisticRebecaStatementsAndExpressions.rebeca");
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
@@ -218,9 +216,7 @@ public class ModelStructureTest {
 		Assertions.assertEquals(expectedExceptionContainer, exceptionContainer);
 	}
 
-
 	@Test
-	@Disabled
 	public void GIVEN_ManyTests_WHEN_AllAreCorrect_THEN_NoError() {
 		GIVEN_CoreRebecaModelWithDifferentExpressions_WHEN_CoreIs2_1_THEN_ManyErrors();
 		GIVEN_CorrectCoreRebecaModelWithInitialMethod_WHEN_CoreIs2_0_THEN_1Error();

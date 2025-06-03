@@ -69,6 +69,8 @@ reactiveclass Test1 (3) {
 
 	void h() {
 		assertion(10==20);
+	;
+	;
 	}
 }
 

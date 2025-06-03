@@ -18,6 +18,7 @@ reactiveclass Test1 (3) {
 			}
 		}
 		int pa2 = ?(0.25: 1, 0.5: 2, 0.25: 3);
+		int nda = ?(1, 5, 7);
 	}
 }
 

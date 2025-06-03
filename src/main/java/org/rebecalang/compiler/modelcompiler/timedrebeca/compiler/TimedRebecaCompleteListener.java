@@ -1,10 +1,7 @@
 // Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/TimedRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.timedrebeca.compiler;
-	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
-	import org.rebecalang.compiler.modelcompiler.timedrebeca.objectmodel.*;
-
-import org.antlr.v4.runtime.tree.ParseTreeListener;
+	import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -342,6 +339,16 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitStatement(TimedRebecaCompleteParser.StatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#statementExtension}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatementExtension(TimedRebecaCompleteParser.StatementExtensionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#statementExtension}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatementExtension(TimedRebecaCompleteParser.StatementExtensionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#forInit}.
 	 * @param ctx the parse tree
 	 */
@@ -481,6 +488,16 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpression(TimedRebecaCompleteParser.ExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#nondetExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNondetExpression(TimedRebecaCompleteParser.NondetExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#nondetExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNondetExpression(TimedRebecaCompleteParser.NondetExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#arguments}.
 	 * @param ctx the parse tree

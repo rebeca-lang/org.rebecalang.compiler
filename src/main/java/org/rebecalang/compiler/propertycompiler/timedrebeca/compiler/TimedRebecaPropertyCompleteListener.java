@@ -1,16 +1,7 @@
 // Generated from src/main/resources/org/rebecalang/compiler/propertycompiler/grammar/TimedRebecaPropertyComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.propertycompiler.timedrebeca.compiler;
-	import org.rebecalang.compiler.propertycompiler.timedrebeca.objectmodel.*;
-	import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.Definition;
-	import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.AssertionDefinition;
-	import org.rebecalang.compiler.propertycompiler.generalrebeca.objectmodel.Label;
-	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
-	import java.util.*;
-	import org.antlr.runtime.BitSet;
-	import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
-
-import org.antlr.v4.runtime.tree.ParseTreeListener;
+	import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
  * This interface defines a complete listener for a parse tree produced by

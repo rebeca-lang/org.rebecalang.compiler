@@ -1,16 +1,7 @@
 // Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/ProbabilisticTimedRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.probabilistictimedrebeca.compiler;
-	import org.rebecalang.compiler.modelcompiler.timedrebeca.objectmodel.*;
-	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
-	import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.objectmodel.*;
-	
-	import java.util.*;
-	import org.antlr.runtime.BitSet;
-	import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
-
-
-import org.antlr.v4.runtime.ParserRuleContext;
+	import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -25,13 +16,25 @@ public class ProbabilisticTimedRebecaCompleteBaseListener implements Probabilist
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatement(ProbabilisticTimedRebecaCompleteParser.StatementContext ctx) { }
+	@Override public void enterNondetExpression(ProbabilisticTimedRebecaCompleteParser.NondetExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatement(ProbabilisticTimedRebecaCompleteParser.StatementContext ctx) { }
+	@Override public void exitNondetExpression(ProbabilisticTimedRebecaCompleteParser.NondetExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatementExtension(ProbabilisticTimedRebecaCompleteParser.StatementExtensionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatementExtension(ProbabilisticTimedRebecaCompleteParser.StatementExtensionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -44,30 +47,6 @@ public class ProbabilisticTimedRebecaCompleteBaseListener implements Probabilist
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPAltStatementGroup(ProbabilisticTimedRebecaCompleteParser.PAltStatementGroupContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCoreExpression(ProbabilisticTimedRebecaCompleteParser.CoreExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCoreExpression(ProbabilisticTimedRebecaCompleteParser.CoreExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterProbabilisticList(ProbabilisticTimedRebecaCompleteParser.ProbabilisticListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitProbabilisticList(ProbabilisticTimedRebecaCompleteParser.ProbabilisticListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -457,6 +436,18 @@ public class ProbabilisticTimedRebecaCompleteBaseListener implements Probabilist
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStatement(ProbabilisticTimedRebecaCompleteParser.StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatement(ProbabilisticTimedRebecaCompleteParser.StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterForInit(ProbabilisticTimedRebecaCompleteParser.ForInitContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -577,138 +568,6 @@ public class ProbabilisticTimedRebecaCompleteBaseListener implements Probabilist
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpression(ProbabilisticTimedRebecaCompleteParser.ExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExpression(ProbabilisticTimedRebecaCompleteParser.ExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAssignmentOperator(ProbabilisticTimedRebecaCompleteParser.AssignmentOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAssignmentOperator(ProbabilisticTimedRebecaCompleteParser.AssignmentOperatorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMultiplicativeOp(ProbabilisticTimedRebecaCompleteParser.MultiplicativeOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMultiplicativeOp(ProbabilisticTimedRebecaCompleteParser.MultiplicativeOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAdditiveOp(ProbabilisticTimedRebecaCompleteParser.AdditiveOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAdditiveOp(ProbabilisticTimedRebecaCompleteParser.AdditiveOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRelationalOp(ProbabilisticTimedRebecaCompleteParser.RelationalOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRelationalOp(ProbabilisticTimedRebecaCompleteParser.RelationalOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterShiftOp(ProbabilisticTimedRebecaCompleteParser.ShiftOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitShiftOp(ProbabilisticTimedRebecaCompleteParser.ShiftOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEqualityOp(ProbabilisticTimedRebecaCompleteParser.EqualityOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEqualityOp(ProbabilisticTimedRebecaCompleteParser.EqualityOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterUnaryExpression(ProbabilisticTimedRebecaCompleteParser.UnaryExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitUnaryExpression(ProbabilisticTimedRebecaCompleteParser.UnaryExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExtendableExpression(ProbabilisticTimedRebecaCompleteParser.ExtendableExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExtendableExpression(ProbabilisticTimedRebecaCompleteParser.ExtendableExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRebecInstantiationExpression(ProbabilisticTimedRebecaCompleteParser.RebecInstantiationExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRebecInstantiationExpression(ProbabilisticTimedRebecaCompleteParser.RebecInstantiationExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCastExpression(ProbabilisticTimedRebecaCompleteParser.CastExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCastExpression(ProbabilisticTimedRebecaCompleteParser.CastExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterExpressionList(ProbabilisticTimedRebecaCompleteParser.ExpressionListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -733,6 +592,42 @@ public class ProbabilisticTimedRebecaCompleteBaseListener implements Probabilist
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMethodCall(ProbabilisticTimedRebecaCompleteParser.MethodCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodCall(ProbabilisticTimedRebecaCompleteParser.MethodCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpression(ProbabilisticTimedRebecaCompleteParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpression(ProbabilisticTimedRebecaCompleteParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArguments(ProbabilisticTimedRebecaCompleteParser.ArgumentsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArguments(ProbabilisticTimedRebecaCompleteParser.ArgumentsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLiteral(ProbabilisticTimedRebecaCompleteParser.LiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -740,6 +635,30 @@ public class ProbabilisticTimedRebecaCompleteBaseListener implements Probabilist
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLiteral(ProbabilisticTimedRebecaCompleteParser.LiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIntegerLiteral(ProbabilisticTimedRebecaCompleteParser.IntegerLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIntegerLiteral(ProbabilisticTimedRebecaCompleteParser.IntegerLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFloatLiteral(ProbabilisticTimedRebecaCompleteParser.FloatLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFloatLiteral(ProbabilisticTimedRebecaCompleteParser.FloatLiteralContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

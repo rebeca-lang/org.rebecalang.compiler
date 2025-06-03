@@ -12,39 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
-    @Override
-    public void exitRebecaCode(HybridRebecaCompleteParser.RebecaCodeContext ctx) {
-        HybridRebecaCode hybridRebecaCode = new HybridRebecaCode();
-        for (HybridRebecaCompleteParser.RecordDeclarationContext recordCtx : ctx.recordDeclaration()) {
-            hybridRebecaCode.getRecordDeclaration().add(recordCtx.rd);
-        }
-        for (HybridRebecaCompleteParser.FieldDeclarationContext fieldCtx : ctx.fieldDeclaration()) {
-            hybridRebecaCode.getEnvironmentVariables().add(fieldCtx.fd);
-        }
-        for (TerminalNode featureName : ctx.IDENTIFIER()) {
-            VariableDeclarator vd = new VariableDeclarator();
-            vd.setVariableName(featureName.getText());
-            vd.setLineNumber(featureName.getSymbol().getLine());
-            vd.setCharacter(featureName.getSymbol().getCharPositionInLine());
-            FieldDeclaration fd = new FieldDeclaration();
-            fd.getVariableDeclarators().add(vd);
-            fd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
-            fd.setCharacter(featureName.getSymbol().getCharPositionInLine());
-            fd.setLineNumber(featureName.getSymbol().getLine());
-            hybridRebecaCode.getFeatureVariables().add(fd);
-        }
-        for (HybridRebecaCompleteParser.ReactiveClassDeclarationContext reactiveCtx : ctx.reactiveClassDeclaration()) {
-            hybridRebecaCode.getReactiveClassDeclaration().add(reactiveCtx.rcd);
-        }
-        for (HybridRebecaCompleteParser.InterfaceDeclarationContext interfaceCtx : ctx.interfaceDeclaration()) {
-            hybridRebecaCode.getInterfaceDeclaration().add(interfaceCtx.intd);
-        }
-        for (HybridRebecaCompleteParser.PhysicalClassDeclarationContext physicalCtx : ctx.physicalClassDeclaration()) {
-            hybridRebecaCode.getPhysicalClassDeclaration().add(physicalCtx.pcd);
-        }
-        hybridRebecaCode.setMainDeclaration(ctx.mainDeclaration().md);
-        ctx.rc = hybridRebecaCode;
-    }
+
     @Override
     public void exitPhysicalClassDeclaration(HybridRebecaCompleteParser.PhysicalClassDeclarationContext ctx) {
         PhysicalClassDeclaration pcd = new PhysicalClassDeclaration();
@@ -54,8 +22,8 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
         pcd.setName(ctx.IDENTIFIER().getText());
         pcd.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
         pcd.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
-        if (ctx.INTLITERAL() != null && !ctx.INTLITERAL().getText().equals("<missing INTLITERAL>")) {
-            pcd.setQueueSize(Integer.parseInt(ctx.INTLITERAL().getText()));
+        if (!ctx.DECIMAL_LITERAL().getText().equals("<missing INTLITERAL>")) {
+            pcd.setQueueSize(Integer.parseInt(ctx.DECIMAL_LITERAL().getText()));
         }
         if (ctx.knownRebecsDeclaration() != null) {
             pcd.getKnownRebecs().addAll(ctx.knownRebecsDeclaration().fds);
@@ -103,44 +71,60 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
 
         ctx.md = md;
     }
+
     @Override
     public void exitPrimary(HybridRebecaCompleteParser.PrimaryContext ctx) {
-        TermPrimary tp = new TermPrimary();
-        tp.setName(ctx.IDENTIFIER().getText());
-        tp.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
-        tp.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
-        if (ctx.LPAREN() != null) {
-            TimedRebecaParentSuffixPrimary psp = new TimedRebecaParentSuffixPrimary();
-            psp.setLineNumber(ctx.LPAREN().getSymbol().getLine());
-            psp.setCharacter(ctx.LPAREN().getSymbol().getCharPositionInLine());
-            tp.setParentSuffixPrimary(psp);
-            if (ctx.expressionList() != null) {
-                tp.getParentSuffixPrimary().getArguments().addAll(ctx.expressionList().el);
+        TermPrimary termPrimary = new TermPrimary();
+        if(ctx.THIS() != null) {
+            termPrimary.setName("this");
+            termPrimary.setLineNumber(ctx.THIS().getSymbol().getLine());
+            termPrimary.setCharacter(ctx.THIS().getSymbol().getCharPositionInLine());
+        } else if(ctx.SUPER() != null) {
+            termPrimary.setName("super");
+            termPrimary.setLineNumber(ctx.SUPER().getSymbol().getLine());
+            termPrimary.setCharacter(ctx.SUPER().getSymbol().getCharPositionInLine());
+        } else if(ctx.IDENTIFIER() != null) {
+            termPrimary.setName(ctx.IDENTIFIER().getText());
+            termPrimary.setLineNumber(ctx.IDENTIFIER().getSymbol().getLine());
+            termPrimary.setCharacter(ctx.IDENTIFIER().getSymbol().getCharPositionInLine());
+            if (ctx.arguments() != null) {
+                TimedRebecaParentSuffixPrimary parentSuffixPrimary = new TimedRebecaParentSuffixPrimary();
+                parentSuffixPrimary.setLineNumber(termPrimary.getLineNumber());
+                parentSuffixPrimary.setCharacter(termPrimary.getCharacter());
+                termPrimary.setParentSuffixPrimary(parentSuffixPrimary);
+                parentSuffixPrimary.getArguments().addAll(ctx.arguments().args);
+                if(ctx.after() != null)
+                	parentSuffixPrimary.setAfterExpression(ctx.after().e);
+                if(ctx.deadline() != null)
+                	parentSuffixPrimary.setDeadlineExpression(ctx.deadline().e);
             }
-            if (ctx.after() != null) {
-                psp.setAfterExpression(ctx.after().e);
+            if (ctx.expression() != null) {
+            	for(HybridRebecaCompleteParser.ExpressionContext ec : ctx.expression())
+            		termPrimary.getIndices().add(ec.e);
             }
-            if (ctx.deadline() != null) {
-                psp.setDeadlineExpression(ctx.deadline().e);
+            int primeCount = ctx.PRIME().size();
+            if (primeCount > 0) {
+            	HybridTermPrimary hybridTp = HybridrebecaUtils.transformTermPrimaryToHybridTermPrimary(termPrimary);
+                hybridTp.setDerivativeOrder(hybridTp.getDerivativeOrder() + primeCount);
+                termPrimary = hybridTp;
             }
         }
-        for (HybridRebecaCompleteParser.ExpressionContext ex : ctx.expression()) {
-            tp.getIndices().add(ex.e);
-        }
-        int primeCount = ctx.PRIME().size();
-        if (primeCount > 0) {
-            tp = HybridrebecaUtils.transformTermPrimaryToHybridTermPrimary(tp);
-            HybridTermPrimary hybridTp = (HybridTermPrimary) tp;
-            hybridTp.setDerivativeOrder(hybridTp.getDerivativeOrder() + primeCount);
-        }
-        ctx.tp = tp;
+        ctx.tp = termPrimary;
     }
 
-    ////
-    //// Core
-    ////
-
     @Override
+    public void exitAfter(HybridRebecaCompleteParser.AfterContext ctx) {
+    	ctx.e = ctx.expression().e;
+    }
+    
+    @Override
+    public void exitDeadline(HybridRebecaCompleteParser.DeadlineContext ctx) {
+    	ctx.e = ctx.expression().e;
+    }
+    
+    // Common Part
+    
+	@Override
     public void exitRebecaModel(HybridRebecaCompleteParser.RebecaModelContext ctx) {
         RebecaModel rebecaModel = new RebecaModel();
         if(ctx.packageDeclaration() != null){
@@ -151,6 +135,40 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
         }
         rebecaModel.setRebecaCode(ctx.rebecaCode().rc);
         ctx.r = rebecaModel;
+    }
+
+    @Override
+    public void exitRebecaCode(HybridRebecaCompleteParser.RebecaCodeContext ctx) {
+    	HybridRebecaCode rebecaCode = new HybridRebecaCode();
+        for (HybridRebecaCompleteParser.RecordDeclarationContext recordCtx : ctx.recordDeclaration()) {
+            rebecaCode.getRecordDeclaration().add(recordCtx.rd);
+        }
+        for (HybridRebecaCompleteParser.FieldDeclarationContext fieldCtx : ctx.fieldDeclaration()) {
+            rebecaCode.getEnvironmentVariables().add(fieldCtx.fd);
+        }
+        for (TerminalNode featureName : ctx.IDENTIFIER()) {
+            VariableDeclarator vd = new VariableDeclarator();
+            vd.setVariableName(featureName.getText());
+            vd.setLineNumber(featureName.getSymbol().getLine());
+            vd.setCharacter(featureName.getSymbol().getCharPositionInLine());
+            FieldDeclaration fd = new FieldDeclaration();
+            fd.getVariableDeclarators().add(vd);
+            fd.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
+            fd.setCharacter(featureName.getSymbol().getCharPositionInLine());
+            fd.setLineNumber(featureName.getSymbol().getLine());
+            rebecaCode.getFeatureVariables().add(fd);
+        }
+        for (HybridRebecaCompleteParser.ReactiveClassDeclarationContext reactiveCtx : ctx.reactiveClassDeclaration()) {
+            rebecaCode.getReactiveClassDeclaration().add(reactiveCtx.rcd);
+        }
+        for (HybridRebecaCompleteParser.InterfaceDeclarationContext interfaceCtx : ctx.interfaceDeclaration()) {
+            rebecaCode.getInterfaceDeclaration().add(interfaceCtx.intd);
+        }
+        for (HybridRebecaCompleteParser.PhysicalClassDeclarationContext physicalCtx : ctx.physicalClassDeclaration()) {
+            rebecaCode.getPhysicalClassDeclaration().add(physicalCtx.pcd);
+        }
+        rebecaCode.setMainDeclaration(ctx.mainDeclaration().md);
+        ctx.rc = rebecaCode;
     }
     @Override
     public void exitMainDeclaration(HybridRebecaCompleteParser.MainDeclarationContext ctx) {
@@ -223,7 +241,7 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
         if (ctx.arrayInitializer() != null) {
             variableInitializer = ctx.arrayInitializer().avi;
         } else {
-            if (ctx.expression().e != null) {
+            if (ctx.expression() != null) {
                 OrdinaryVariableInitializer ovi = new OrdinaryVariableInitializer();
                 ovi.setValue(ctx.expression().e);
                 ovi.setLineNumber(ctx.expression().e.getLineNumber());
@@ -312,8 +330,8 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
         if(ctx.implementingInterface() != null){
             reactiveClassDeclaration.getImplements().addAll(ctx.implementingInterface().opts);
         }
-        if(!ctx.INTLITERAL().getText().equals("<missing INTLITERAL>")) {
-            reactiveClassDeclaration.setQueueSize(Integer.parseInt(ctx.INTLITERAL().getText()));
+        if(!ctx.DECIMAL_LITERAL().getText().equals("<missing INTLITERAL>")) {
+            reactiveClassDeclaration.setQueueSize(Integer.parseInt(ctx.DECIMAL_LITERAL().getText()));
         }
         for(HybridRebecaCompleteParser.KnownRebecsDeclarationContext knownRebecsDeclaration : ctx.knownRebecsDeclaration() ){
             reactiveClassDeclaration.getKnownRebecs().addAll(knownRebecsDeclaration.fds);
@@ -597,70 +615,145 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
     //
     // EXPRESSION PARSER
     //
+    
 
+    public boolean isBinaryExpression(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	if (ctx.bop == null)
+    		return false;
+    	return !ctx.bop.getText().equals("?") && !ctx.bop.getText().equals("instanceof");
+    }
+    public boolean isTernaryExpression(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	if (ctx.bop == null)
+    		return false;
+    	return ctx.bop.getText().equals("?");
+    }
+    
+    public boolean isInstanceofExpression(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	if (ctx.bop == null)
+    		return false;
+    	return ctx.bop.getText().equals("instanceof");
+    }
+
+    public boolean isUnaryExpression(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.prefix != null;
+    }
+    
+    public boolean isPLUSUBExpression(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.postfix != null;
+    }
+    
+    public boolean isCastExpression(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.castType != null;
+    }
+
+    public boolean isNondet(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.nondetExpression() != null;
+    }
+    
+    public boolean isNewInstance(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.NEW() != null;
+    }
+    
+    public boolean isDotExpression(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.dot != null;
+    }
+
+    public boolean isPrimary(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.primary() != null;
+    }
+    
+    public boolean isLiteral(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.literal() != null;
+    }
+    
+    public boolean isParenExp(HybridRebecaCompleteParser.ExpressionContext ctx) {
+    	return ctx.parenExp != null;
+    }
+    
     @Override
     public void exitExpression(HybridRebecaCompleteParser.ExpressionContext ctx) {
-        if (ctx.extendableExpression() != null) {
-            ctx.e = ctx.extendableExpression().e;
-        } else if (ctx.unaryExpression() != null) {
-            ctx.e = ctx.unaryExpression().e;
-        } else if (ctx.expression(0) != null && ctx.expression(1) != null && ctx.expression(2) != null) {
+        if (isPrimary(ctx)) {
+            ctx.e = ctx.primary().tp;
+        } else if (isParenExp(ctx)) {
+        	ctx.e = ctx.expression(0).e;
+        } else if (isTernaryExpression(ctx)) {
         	TernaryExpression te = new TernaryExpression();
         	te.setCondition(ctx.expression(0).e);
         	te.setLeft(ctx.expression(1).e);
         	te.setRight(ctx.expression(2).e);
-            te.setLineNumber(ctx.expression(0).e.getLineNumber());
-            te.setCharacter(ctx.expression(0).e.getCharacter());
+        	te.setCharacter(ctx.bop.getCharPositionInLine());
+        	te.setLineNumber(ctx.bop.getLine());
         	ctx.e = te;
-        } else if (ctx.expression(0) != null && ctx.expression(1) != null) {
-            BinaryExpression binaryExpression = new BinaryExpression();
-            binaryExpression.setLeft(ctx.expression(0).e);
-            binaryExpression.setRight(ctx.expression(1).e);
-            if (ctx.multiplicativeOp() != null) {
-                binaryExpression.setOperator(ctx.multiplicativeOp().getText());
-            } else if (ctx.additiveOp() != null) {
-                binaryExpression.setOperator(ctx.additiveOp().getText());
-            } else if (ctx.shiftOp() != null) {
-                binaryExpression.setOperator(ctx.shiftOp().getText());
-            } else if (ctx.relationalOp() != null) {
-                binaryExpression.setOperator(ctx.relationalOp().getText());
-            } else if (ctx.equalityOp() != null) {
-                binaryExpression.setOperator(ctx.equalityOp().getText());
-            } else if (ctx.AMP() != null) {
-                binaryExpression.setOperator(ctx.AMP().getText());
-            } else if (ctx.CARET() != null) {
-                binaryExpression.setOperator(ctx.CARET().getText());
-            } else if (ctx.BAR() != null) {
-                binaryExpression.setOperator(ctx.BAR().getText());
-            } else if (ctx.AMPAMP() != null) {
-                binaryExpression.setOperator(ctx.AMPAMP().getText());
-            } else if (ctx.BARBAR() != null) {
-                binaryExpression.setOperator(ctx.BARBAR().getText());
-            } else if (ctx.assignmentOperator() != null) {
-                binaryExpression.setOperator(ctx.assignmentOperator().getText());
-            }
-            binaryExpression.setLineNumber(ctx.expression(0).e.getLineNumber());
-            binaryExpression.setCharacter(ctx.expression(0).e.getCharacter());
-            ctx.e = binaryExpression;
-        } else if (ctx.INSTANCEOF() != null) {
+        } else if (isNewInstance(ctx)) {
+        	RebecInstantiationPrimary rip = new RebecInstantiationPrimary();
+        	OrdinaryPrimitiveType type = new OrdinaryPrimitiveType();
+        	type.setName(ctx.IDENTIFIER().getText());
+			rip.setType(type);
+			rip.getBindings().addAll(ctx.arguments(0).args);
+			rip.getArguments().addAll(ctx.arguments(1).args);
+			rip.setCharacter(ctx.NEW().getSymbol().getCharPositionInLine());
+			rip.setLineNumber(ctx.NEW().getSymbol().getLine());
+        	ctx.e = rip;
+        } else if (isNondet(ctx)) {
+        	ctx.e = ctx.nondetExpression().e;
+        } else if (isBinaryExpression(ctx)) {
+        	BinaryExpression be = new BinaryExpression();
+        	be.setOperator(ctx.bop.getText());
+        	be.setLeft(ctx.expression(0).e);
+        	be.setRight(ctx.expression(1).e);
+        	be.setCharacter(ctx.bop.getCharPositionInLine());
+        	be.setLineNumber(ctx.bop.getLine());
+        	ctx.e = be;
+        } else if (isUnaryExpression(ctx)) {
+        	UnaryExpression ue = new UnaryExpression();
+        	ue.setExpression(ctx.expression(0).e);
+        	ue.setOperator(ctx.prefix.getText());
+        	ue.setCharacter(ctx.prefix.getCharPositionInLine());
+        	ue.setLineNumber(ctx.prefix.getLine());
+        	ctx.e = ue;
+        } else if (isPLUSUBExpression(ctx)) {
+        	PlusSubExpression pse = new PlusSubExpression();
+        	pse.setValue(ctx.expression(0).e);
+        	pse.setOperator(ctx.postfix.getText());
+        	pse.setCharacter(ctx.postfix.getCharPositionInLine());
+        	pse.setLineNumber(ctx.postfix.getLine());
+        	ctx.e = pse;
+        } else if (isCastExpression(ctx)) {
+        	CastExpression ce = new CastExpression();
+        	ce.setExpression(ctx.expression(0).e);
+        	ce.setType(ctx.type().t);
+        	ce.setCharacter(ctx.type().t.getCharacter());
+        	ce.setLineNumber(ctx.type().t.getLineNumber());
+        	ctx.e = ce;
+        } else if (isDotExpression(ctx)) {
+        	DotPrimary dp = new DotPrimary();
+    		dp.setLeft(ctx.expression(0).e);
+    		dp.setRight(ctx.expression(1).e);
+        	dp.setCharacter(ctx.DOT(0).getSymbol().getCharPositionInLine());
+        	dp.setLineNumber(ctx.DOT(0).getSymbol().getLine());
+        	ctx.e = dp;
+        	for(int cnt = 2; cnt < ctx.expression().size(); cnt++) {
+    			DotPrimary dpTemp = new DotPrimary();
+    			dpTemp.setLeft((PrimaryExpression) dp.getRight());
+    			dpTemp.setRight(ctx.expression(cnt).e);
+    			dpTemp.setCharacter(ctx.DOT(cnt - 1).getSymbol().getCharPositionInLine());
+    			dpTemp.setLineNumber(ctx.DOT(cnt - 1).getSymbol().getLine());
+    			dp.setRight(dpTemp);
+        	}
+        } else if (isInstanceofExpression(ctx)) {
             InstanceofExpression instanceofExpression = new InstanceofExpression();
             instanceofExpression.setValue(ctx.expression(0).e);
             instanceofExpression.setEvaluationType(ctx.type().t);
             instanceofExpression.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
-            instanceofExpression.setLineNumber(ctx.type().t.getLineNumber());
-            instanceofExpression.setCharacter(ctx.type().t.getCharacter());
+            instanceofExpression.setLineNumber(ctx.expression(0).e.getLineNumber());
+            instanceofExpression.setCharacter(ctx.expression(0).e.getCharacter());
             ctx.e = instanceofExpression;
-//        } else if (ctx.QUES() != null && ctx.COLON() != null) {
-//            TernaryExpression ternaryExpression = new TernaryExpression();
-//            ternaryExpression.setCondition(ctx.expression(0).e);
-//            ternaryExpression.setLeft(ctx.expression(1).e);
-//            ternaryExpression.setRight(ctx.expression(2).e);
-//            ternaryExpression.setLineNumber(ctx.expression(0).e.getLineNumber());
-//            ternaryExpression.setCharacter(ctx.expression(0).e.getCharacter());
-//            ctx.e = ternaryExpression;
+        } else if (isLiteral(ctx)) {
+        	ctx.e = ctx.literal().l;
         }
     }
     @Override
+
     public void exitAnnotation(HybridRebecaCompleteParser.AnnotationContext ctx) {
         Annotation annotation = new Annotation();
         TerminalNode annotationName = ctx.IDENTIFIER();
@@ -716,213 +809,25 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
     @Override
     public void exitDimensions(HybridRebecaCompleteParser.DimensionsContext ctx) {
         List<Integer> dimensions = new LinkedList<>();
-        for (TerminalNode intLiteral : ctx.INTLITERAL()) {
+        for (TerminalNode intLiteral : ctx.DECIMAL_LITERAL()) {
             dimensions.add(Integer.parseInt(intLiteral.getText()));
         }
         ctx.ds = dimensions;
     }
     @Override
-    public void exitExtendableExpression(HybridRebecaCompleteParser.ExtendableExpressionContext ctx) {
-        Expression e = ctx.coreExpression().e ;
-        for (int i = 0; i < ctx.primary().size(); i++) {
-            HybridRebecaCompleteParser.PrimaryContext primaryCtx = ctx.primary(i);
-            DotPrimary de = new DotPrimary();
-            de.setLineNumber(ctx.DOT(i).getSymbol().getLine());
-            de.setCharacter(ctx.DOT(i).getSymbol().getCharPositionInLine());
-            if (e instanceof DotPrimary temp) {
-                while (temp.getRight() instanceof DotPrimary) {
-                    temp = (DotPrimary) temp.getRight();
-                }
-                de.setLeft(temp.getRight());
-                temp.setRight(de);
-                de.setRight(primaryCtx.tp);
-            } else {
-                de.setLeft(e);
-                de.setRight(primaryCtx.tp);
-                e = de;
-            }
-        }
-        if (ctx.PLUSPLUS() != null) {
-            PlusSubExpression pse = new PlusSubExpression();
-            pse.setValue(e);
-            pse.setOperator("++");
-            pse.setLineNumber(ctx.PLUSPLUS().getSymbol().getLine());
-            pse.setCharacter(ctx.PLUSPLUS().getSymbol().getCharPositionInLine());
-            e = pse;
-        } else if (ctx.SUBSUB() != null) {
-            PlusSubExpression pse = new PlusSubExpression();
-            pse.setValue(e);
-            pse.setOperator("--");
-            pse.setLineNumber(ctx.SUBSUB().getSymbol().getLine());
-            pse.setCharacter(ctx.SUBSUB().getSymbol().getCharPositionInLine());
-            e = pse;
-        }
-        ctx.e = e;
+    public void exitNondetExpression(HybridRebecaCompleteParser.NondetExpressionContext ctx) {
+    	NonDetExpression nde = new NonDetExpression();
+    	
+    	for (HybridRebecaCompleteParser.ExpressionContext ec : ctx.expression()) {
+        	nde.getChoices().add(ec.e);
+    		if(nde.getType() == null)
+    			nde.setType(ec.e.getType());
+    	}
+    	nde.setCharacter(ctx.QUES().getSymbol().getCharPositionInLine());
+    	nde.setLineNumber(ctx.QUES().getSymbol().getLine());
+    	ctx.e = nde;
     }
-    @Override
-    public void exitCoreExpression(HybridRebecaCompleteParser.CoreExpressionContext ctx) {
-        Expression e;
-        if (ctx.castExpression() != null) {
-            e = ctx.castExpression().e;
-        } else if (ctx.expression() != null) {
-            e = ctx.expression().e;
-        } else if (ctx.primary() != null) {
-            e = ctx.primary().tp;
-        } else if (ctx.literal() != null) {
-            e = ctx.literal().l;
-        } else if (ctx.rebecInstantiationExpression() != null) {
-            e = ctx.rebecInstantiationExpression().e;
-        } else if (ctx.QUES() != null) {
-            e = new NonDetExpression();
-            List<Expression> choices = ctx.expressionList().el;
-            ((NonDetExpression) e).getChoices().addAll(choices);
-            e.setLineNumber(ctx.QUES().getSymbol().getLine());
-            e.setCharacter(ctx.QUES().getSymbol().getCharPositionInLine());
-        } else {
-            throw new IllegalStateException("Unrecognized expression type");
-        }
-        ctx.e = e;
-    }
-    @Override
-    public void exitRebecInstantiationExpression(HybridRebecaCompleteParser.RebecInstantiationExpressionContext ctx){
-        RebecInstantiationPrimary e = new RebecInstantiationPrimary();
-        e.setLineNumber(ctx.type().t.getLineNumber());
-        e.setCharacter(ctx.type().t.getCharacter());
-        e.setType(ctx.type().t);
-        for(HybridRebecaCompleteParser.ExpressionListContext expressionListContext : ctx.expressionList()) {
-            e.getBindings().addAll(expressionListContext.el);
-        }
-        ctx.e = e;
-    }
-    @Override
-    public void exitAssignmentOperator(HybridRebecaCompleteParser.AssignmentOperatorContext ctx) {
-        String assignmentOperator = null;
-        if (ctx.EQ() != null) {
-            assignmentOperator = ctx.EQ().getText();
-        } else if (ctx.PLUSEQ() != null) {
-            assignmentOperator = ctx.PLUSEQ().getText();
-        } else if (ctx.SUBEQ() != null) {
-            assignmentOperator = ctx.SUBEQ().getText();
-        } else if (ctx.STAREQ() != null) {
-            assignmentOperator = ctx.STAREQ().getText();
-        } else if (ctx.SLASHEQ() != null) {
-            assignmentOperator = ctx.SLASHEQ().getText();
-        } else if (ctx.AMPEQ() != null) {
-            assignmentOperator = ctx.AMPEQ().getText();
-        } else if (ctx.BAREQ() != null) {
-            assignmentOperator = ctx.BAREQ().getText();
-        } else if (ctx.CARETEQ() != null) {
-            assignmentOperator = ctx.CARETEQ().getText();
-        } else if (ctx.TILDAEQ() != null) {
-            assignmentOperator = ctx.TILDAEQ().getText();
-        } else if (ctx.PERCENTEQ() != null) {
-            assignmentOperator = ctx.PERCENTEQ().getText();
-        } else if (ctx.LTLTEQ() != null) {
-            assignmentOperator = ctx.LTLTEQ().getText();
-        } else if (ctx.GTGTEQ() != null) {
-            assignmentOperator = ctx.GTGTEQ().getText();
-        }
-        ctx.ao = assignmentOperator;
-    }
-    @Override
-    public void exitMultiplicativeOp(HybridRebecaCompleteParser.MultiplicativeOpContext ctx) {
-        String multiplicativeOperator = null;
-        if (ctx.STAR() != null) {
-            multiplicativeOperator = ctx.STAR().getText();
-        } else if (ctx.SLASH() != null) {
-            multiplicativeOperator = ctx.SLASH().getText();
-        } else if (ctx.PERCENT() != null) {
-            multiplicativeOperator = ctx.PERCENT().getText();
-        }
-        ctx.mo = multiplicativeOperator;
-    }
-
-    @Override
-    public void exitAdditiveOp(HybridRebecaCompleteParser.AdditiveOpContext ctx) {
-        String additiveOperator = null;
-        if (ctx.PLUS() != null) {
-            additiveOperator = ctx.PLUS().getText();
-        } else if (ctx.SUB() != null) {
-            additiveOperator = ctx.SUB().getText();
-        }
-        ctx.ado = additiveOperator;
-    }
-
-    @Override
-    public void exitRelationalOp(HybridRebecaCompleteParser.RelationalOpContext ctx) {
-        String relationalOperator = null;
-        if (ctx.LT() != null && ctx.EQ() != null) {
-            relationalOperator = ctx.LT().getText() + ctx.EQ().getText();
-        } else if (ctx.GT() != null && ctx.EQ() != null) {
-            relationalOperator = ctx.GT().getText() + ctx.EQ().getText();
-        } else if (ctx.LT() != null) {
-            relationalOperator = ctx.LT().getText();
-        } else if (ctx.GT() != null) {
-            relationalOperator = ctx.GT().getText();
-        }
-        ctx.ro = relationalOperator;
-    }
-
-    @Override
-    public void exitShiftOp(HybridRebecaCompleteParser.ShiftOpContext ctx) {
-        String shiftOperator = null;
-        if (ctx.LT().size() == 2) {
-            shiftOperator = "<<";
-        } else if (ctx.GT().size() == 2) {
-            shiftOperator = ">>";
-        }
-        ctx.so = shiftOperator;
-    }
-
-    @Override
-    public void exitEqualityOp(HybridRebecaCompleteParser.EqualityOpContext ctx) {
-        String equalityOperator = null;
-        if (ctx.EQEQ() != null) {
-            equalityOperator = ctx.EQEQ().getText();
-        } else if (ctx.BANGEQ() != null) {
-            equalityOperator = ctx.BANGEQ().getText();
-        }
-        ctx.eo = equalityOperator;
-    }
-
-    @Override
-    public void exitUnaryExpression(HybridRebecaCompleteParser.UnaryExpressionContext ctx) {
-        Expression expression;
-        if (ctx.PLUS() != null) {
-            expression = ctx.unaryExpression().e;
-        } else if (ctx.extendableExpression() != null) {
-            expression = ctx.extendableExpression().e;
-        }
-        else {
-            UnaryExpression ue = new UnaryExpression();
-            ue.setExpression(ctx.unaryExpression().e);
-            ue.setLineNumber(ctx.unaryExpression().e.getLineNumber());
-            ue.setCharacter(ctx.unaryExpression().e.getCharacter());
-            if (ctx.SUB() != null) {
-                ue.setOperator(ctx.SUB().getText());
-            } else if (ctx.PLUSPLUS() != null) {
-                ue.setOperator(ctx.PLUSPLUS().getText());
-            } else if (ctx.SUBSUB() != null) {
-                ue.setOperator(ctx.SUBSUB().getText());
-            } else if (ctx.TILDA() != null) {
-                ue.setOperator(ctx.TILDA().getText());
-            } else if (ctx.BANG() != null) {
-                ue.setOperator(ctx.BANG().getText());
-            }
-            expression = ue;
-        }
-        ctx.e = expression;
-    }
-    @Override
-    public void exitCastExpression(HybridRebecaCompleteParser.CastExpressionContext ctx) {
-        CastExpression castExpr = new CastExpression();
-        castExpr.setExpression(ctx.expression().e);
-        castExpr.setType(ctx.type().t);
-        castExpr.setLineNumber(ctx.expression().e.getLineNumber());
-        castExpr.setCharacter(ctx.expression().e.getCharacter());
-        ctx.e = castExpr;
-    }
-
+    
     @Override
     public void exitExpressionList(HybridRebecaCompleteParser.ExpressionListContext ctx) {
         List<Expression> expressions = new LinkedList<>();
@@ -941,51 +846,61 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
         expr.getAnnotations().addAll(annotationList);
         ctx.e = expr;
     }
+    
     @Override
+    //TODO: different types of integer and float literals have to be considered
     public void exitLiteral(HybridRebecaCompleteParser.LiteralContext ctx) {
         Literal literal = new Literal();
 
-        if (ctx.INTLITERAL() != null) {
-            literal.setLiteralValue(ctx.INTLITERAL().getText());
+        if (ctx.integerLiteral() != null) {
+            String value = ctx.integerLiteral().DECIMAL_LITERAL().getText();
+			literal.setLiteralValue(value);
             literal.setType(CoreRebecaTypeSystem.INT_TYPE);
-            literal.setLineNumber(ctx.INTLITERAL().getSymbol().getLine());
-            literal.setCharacter(ctx.INTLITERAL().getSymbol().getCharPositionInLine());
-        } else if (ctx.FLOATLITERAL() != null) {
-            literal.setLiteralValue(ctx.FLOATLITERAL().getText());
+            try {
+            	Short.parseShort(value);
+                literal.setType(CoreRebecaTypeSystem.SHORT_TYPE);
+            	Byte.parseByte(value);
+                literal.setType(CoreRebecaTypeSystem.BYTE_TYPE);
+            } catch(NumberFormatException nfe) {
+            	
+            }
+            literal.setLineNumber(ctx.integerLiteral().DECIMAL_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.integerLiteral().DECIMAL_LITERAL().getSymbol().getCharPositionInLine());
+        } else if (ctx.floatLiteral() != null) {
+            literal.setLiteralValue(ctx.floatLiteral().getText());
             literal.setType(CoreRebecaTypeSystem.FLOAT_TYPE);
-            literal.setLineNumber(ctx.FLOATLITERAL().getSymbol().getLine());
-            literal.setCharacter(ctx.FLOATLITERAL().getSymbol().getCharPositionInLine());
-        } else if (ctx.DOUBLELITERAL() != null) {
-            literal.setLiteralValue(ctx.DOUBLELITERAL().getText());
-            literal.setType(CoreRebecaTypeSystem.DOUBLE_TYPE);
-            literal.setLineNumber(ctx.DOUBLELITERAL().getSymbol().getLine());
-            literal.setCharacter(ctx.DOUBLELITERAL().getSymbol().getCharPositionInLine());
-        } else if (ctx.CHARLITERAL() != null) {
-            literal.setLiteralValue(ctx.CHARLITERAL().getText());
+            literal.setLineNumber(ctx.floatLiteral().FLOAT_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.floatLiteral().FLOAT_LITERAL().getSymbol().getCharPositionInLine());
+        } else if (ctx.BOOL_LITERAL() != null) {
+            literal.setLiteralValue(ctx.BOOL_LITERAL().getText());
+            literal.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
+            literal.setLineNumber(ctx.BOOL_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.BOOL_LITERAL().getSymbol().getCharPositionInLine());
+        } else if (ctx.CHAR_LITERAL() != null) {
+            literal.setLiteralValue(ctx.CHAR_LITERAL().getText());
             literal.setType(CoreRebecaTypeSystem.CHAR_TYPE);
-            literal.setLineNumber(ctx.CHARLITERAL().getSymbol().getLine());
-            literal.setCharacter(ctx.CHARLITERAL().getSymbol().getCharPositionInLine());
-        } else if (ctx.STRINGLITERAL() != null) {
-            literal.setLiteralValue(ctx.STRINGLITERAL().getText());
+            literal.setLineNumber(ctx.CHAR_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.CHAR_LITERAL().getSymbol().getCharPositionInLine());
+        } else if (ctx.STRING_LITERAL() != null) {
+            literal.setLiteralValue(ctx.STRING_LITERAL().getText());
             literal.setType(CoreRebecaTypeSystem.STRING_TYPE);
-            literal.setLineNumber(ctx.STRINGLITERAL().getSymbol().getLine());
-            literal.setCharacter(ctx.STRINGLITERAL().getSymbol().getCharPositionInLine());
-        } else if (ctx.TRUE() != null) {
-            literal.setLiteralValue("true");
-            literal.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
-            literal.setLineNumber(ctx.TRUE().getSymbol().getLine());
-            literal.setCharacter(ctx.TRUE().getSymbol().getCharPositionInLine());
-        } else if (ctx.FALSE() != null) {
-            literal.setLiteralValue("false");
-            literal.setType(CoreRebecaTypeSystem.BOOLEAN_TYPE);
-            literal.setLineNumber(ctx.FALSE().getSymbol().getLine());
-            literal.setCharacter(ctx.FALSE().getSymbol().getCharPositionInLine());
-        } else if (ctx.NULL() != null) {
+            literal.setLineNumber(ctx.STRING_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.STRING_LITERAL().getSymbol().getCharPositionInLine());
+        } else if (ctx.NULL_LITERAL() != null) {
             literal.setLiteralValue("null");
             literal.setType(CoreRebecaTypeSystem.NULL_TYPE);
-            literal.setLineNumber(ctx.NULL().getSymbol().getLine());
-            literal.setCharacter(ctx.NULL().getSymbol().getCharPositionInLine());
+            literal.setLineNumber(ctx.NULL_LITERAL().getSymbol().getLine());
+            literal.setCharacter(ctx.NULL_LITERAL().getSymbol().getCharPositionInLine());
         }
         ctx.l = literal;
     }
+    
+    @Override
+    public void exitArguments(HybridRebecaCompleteParser.ArgumentsContext ctx) {
+    	if(ctx.expressionList() != null)
+    		ctx.args = ctx.expressionList().el;
+    	else
+    		ctx.args = new ArrayList<Expression>();
+    }
+    
 }

@@ -45,8 +45,8 @@ expression returns [Expression e]
     | expression postfix = (PLUSPLUS | SUBSUB)                            
     | prefix = (PLUS | SUB | PLUSPLUS | SUBSUB | TILDA | BANG) expression     
     | parenExp = LPAREN expression RPAREN       		
-    | LPAREN castType = type RPAREN expression       		
-    | nondet = QUES LPAREN expression (COMMA expression)+ RPAREN		
+    | LPAREN castType = type RPAREN expression
+    | nondetExpression
     //| '(' annotation* IDENTIFIER ')' expression       				
     | NEW IDENTIFIER arguments COLON arguments                                                
     | expression bop = (STAR | SLASH | PERCENT) expression           
@@ -77,6 +77,10 @@ expression returns [Expression e]
     | literal
     ;
 
+nondetExpression returns [Expression e]
+	: QUES LPAREN expression (COMMA expression)+ RPAREN		
+	;
+	
 primary returns [TermPrimary tp]
     : THIS
     | SUPER
