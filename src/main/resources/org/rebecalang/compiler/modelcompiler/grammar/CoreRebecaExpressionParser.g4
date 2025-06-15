@@ -32,8 +32,7 @@ methodCall returns [Expression e]
     ;
 
 expression returns [Expression e]
-    : <assoc = right> expression (dot = DOT expression)+
-    | primary
+    : 
     //| expression LBRACKET expression RBRACKET
     //| IDENTIFIER (LBRACKET expression RBRACKET)+
     //| expression bop = DOT (
@@ -42,7 +41,7 @@ expression returns [Expression e]
     //    | THIS
     //)
     //| methodCall                                                    
-    | expression postfix = (PLUSPLUS | SUBSUB)                            
+      expression postfix = (PLUSPLUS | SUBSUB)                            
     | prefix = (PLUS | SUB | PLUSPLUS | SUBSUB | TILDA | BANG) expression     
     | parenExp = LPAREN expression RPAREN       		
     | LPAREN castType = type RPAREN expression
@@ -74,6 +73,8 @@ expression returns [Expression e]
         | LTLTEQ
         | PERCENTEQ
     ) expression
+    | <assoc = right> expression (dot = DOT primary)+
+    | primary
     | literal
     ;
 

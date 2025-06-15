@@ -34,7 +34,6 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrim
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryVariableInitializer;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ParentSuffixPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PlusSubExpression;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PrimaryExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaCode;
@@ -586,7 +585,7 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
     }
 
     public boolean isPrimary(CoreRebecaCompleteParser.ExpressionContext ctx) {
-    	return ctx.primary() != null;
+    	return ctx.primary().size() == 1 && ctx.dot == null;
     }
     
     public boolean isLiteral(CoreRebecaCompleteParser.ExpressionContext ctx) {
@@ -600,7 +599,7 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
     @Override
     public void exitExpression(CoreRebecaCompleteParser.ExpressionContext ctx) {
         if (isPrimary(ctx)) {
-            ctx.e = ctx.primary().tp;
+            ctx.e = ctx.primary().get(0).tp;
         } else if (isParenExp(ctx)) {
         	ctx.e = ctx.expression(0).e;
         } else if (isTernaryExpression(ctx)) {
@@ -654,19 +653,20 @@ public class CoreRebecaListener extends CoreRebecaCompleteBaseListener {
         	ctx.e = ce;
         } else if (isDotExpression(ctx)) {
         	DotPrimary dp = new DotPrimary();
+        	List<CoreRebecaCompleteParser.PrimaryContext> primary = ctx.primary();
     		dp.setLeft(ctx.expression(0).e);
-    		dp.setRight(ctx.expression(1).e);
-        	dp.setCharacter(ctx.DOT(0).getSymbol().getCharPositionInLine());
-        	dp.setLineNumber(ctx.DOT(0).getSymbol().getLine());
+    		dp.setRight(primary.get(0).tp);
+    		dp.setCharacter(ctx.DOT(0).getSymbol().getCharPositionInLine());
+    		dp.setLineNumber(ctx.DOT(0).getSymbol().getLine());
+    		for(int cnt = 1; cnt < primary.size(); cnt++) {
+    			DotPrimary tempDotPrimary = new DotPrimary();
+    			tempDotPrimary.setLeft(dp.getRight());
+    			tempDotPrimary.setRight(primary.get(cnt).tp);
+    			tempDotPrimary.setCharacter(ctx.DOT(cnt).getSymbol().getCharPositionInLine());
+    			tempDotPrimary.setLineNumber(ctx.DOT(cnt).getSymbol().getLine());
+    			dp.setRight(tempDotPrimary);
+    		}
         	ctx.e = dp;
-        	for(int cnt = 2; cnt < ctx.expression().size(); cnt++) {
-    			DotPrimary dpTemp = new DotPrimary();
-    			dpTemp.setLeft((PrimaryExpression) dp.getRight());
-    			dpTemp.setRight(ctx.expression(cnt).e);
-    			dpTemp.setCharacter(ctx.DOT(cnt - 1).getSymbol().getCharPositionInLine());
-    			dpTemp.setLineNumber(ctx.DOT(cnt - 1).getSymbol().getLine());
-    			dp.setRight(dpTemp);
-        	}
         } else if (isInstanceofExpression(ctx)) {
             InstanceofExpression instanceofExpression = new InstanceofExpression();
             instanceofExpression.setValue(ctx.expression(0).e);

@@ -1,15 +1,61 @@
 package org.rebecalang.compiler.modelcompiler.hybridrebeca.compiler;
 
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
-import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
-import org.rebecalang.compiler.modelcompiler.hybridrebeca.HybridrebecaUtils;
-import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.*;
-import org.rebecalang.compiler.modelcompiler.timedrebeca.objectmodel.TimedRebecaParentSuffixPrimary;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.rebecalang.compiler.modelcompiler.corerebeca.CoreRebecaTypeSystem;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Annotation;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ArrayVariableInitializer;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BlockStatement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BreakStatement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConditionalStatement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConstructorDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForInitializer;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ForStatement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FormalParameterDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.GenericTypeInstance;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InstanceofExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.InterfaceDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MainDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MainRebecDefinition;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.MsgsrvDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.NonDetExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryPrimitiveType;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryVariableInitializer;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.PlusSubExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReactiveClassDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ReturnStatement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SwitchStatement;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SwitchStatementGroup;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.SynchMethodDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TernaryExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Type;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.UnaryExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableDeclarator;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableInitializer;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.WhileStatement;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.HybridrebecaUtils;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.GuardDeclaration;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.HybridRebecaCode;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.HybridTermPrimary;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.InvariantDeclaration;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.ModeDeclaration;
+import org.rebecalang.compiler.modelcompiler.hybridrebeca.objectmodel.PhysicalClassDeclaration;
+import org.rebecalang.compiler.modelcompiler.timedrebeca.objectmodel.TimedRebecaParentSuffixPrimary;
 
 public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
 
@@ -659,7 +705,7 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
     }
 
     public boolean isPrimary(HybridRebecaCompleteParser.ExpressionContext ctx) {
-    	return ctx.primary() != null;
+    	return ctx.primary().size() == 1 && ctx.dot == null;
     }
     
     public boolean isLiteral(HybridRebecaCompleteParser.ExpressionContext ctx) {
@@ -673,7 +719,7 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
     @Override
     public void exitExpression(HybridRebecaCompleteParser.ExpressionContext ctx) {
         if (isPrimary(ctx)) {
-            ctx.e = ctx.primary().tp;
+            ctx.e = ctx.primary().get(0).tp;
         } else if (isParenExp(ctx)) {
         	ctx.e = ctx.expression(0).e;
         } else if (isTernaryExpression(ctx)) {
@@ -727,19 +773,20 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
         	ctx.e = ce;
         } else if (isDotExpression(ctx)) {
         	DotPrimary dp = new DotPrimary();
+        	List<HybridRebecaCompleteParser.PrimaryContext> primary = ctx.primary();
     		dp.setLeft(ctx.expression(0).e);
-    		dp.setRight(ctx.expression(1).e);
-        	dp.setCharacter(ctx.DOT(0).getSymbol().getCharPositionInLine());
-        	dp.setLineNumber(ctx.DOT(0).getSymbol().getLine());
+    		dp.setRight(primary.get(0).tp);
+    		dp.setCharacter(ctx.DOT(0).getSymbol().getCharPositionInLine());
+    		dp.setLineNumber(ctx.DOT(0).getSymbol().getLine());
+    		for(int cnt = 1; cnt < primary.size(); cnt++) {
+    			DotPrimary tempDotPrimary = new DotPrimary();
+    			tempDotPrimary.setLeft(dp.getRight());
+    			tempDotPrimary.setRight(primary.get(cnt).tp);
+    			tempDotPrimary.setCharacter(ctx.DOT(cnt).getSymbol().getCharPositionInLine());
+    			tempDotPrimary.setLineNumber(ctx.DOT(cnt).getSymbol().getLine());
+    			dp.setRight(tempDotPrimary);
+    		}
         	ctx.e = dp;
-        	for(int cnt = 2; cnt < ctx.expression().size(); cnt++) {
-    			DotPrimary dpTemp = new DotPrimary();
-    			dpTemp.setLeft((PrimaryExpression) dp.getRight());
-    			dpTemp.setRight(ctx.expression(cnt).e);
-    			dpTemp.setCharacter(ctx.DOT(cnt - 1).getSymbol().getCharPositionInLine());
-    			dpTemp.setLineNumber(ctx.DOT(cnt - 1).getSymbol().getLine());
-    			dp.setRight(dpTemp);
-        	}
         } else if (isInstanceofExpression(ctx)) {
             InstanceofExpression instanceofExpression = new InstanceofExpression();
             instanceofExpression.setValue(ctx.expression(0).e);
