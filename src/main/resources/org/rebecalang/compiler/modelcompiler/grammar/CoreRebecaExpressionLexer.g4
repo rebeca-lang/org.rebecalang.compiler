@@ -2,7 +2,7 @@ lexer grammar CoreRebecaExpressionLexer;
 
 INSTANCEOF		:	'instanceof';
 NEW				:	'new';
-THIS			:   'this';
+SELF			:   'self';
 SUPER			:   'super';
 
 LPAREN

@@ -580,6 +580,18 @@ public class ProbabilisticRebecaCompleteBaseListener implements ProbabilisticReb
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCoreExpression(ProbabilisticRebecaCompleteParser.CoreExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCoreExpression(ProbabilisticRebecaCompleteParser.CoreExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPrimary(ProbabilisticRebecaCompleteParser.PrimaryContext ctx) { }
 	/**
 	 * {@inheritDoc}

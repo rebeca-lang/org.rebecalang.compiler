@@ -509,6 +509,16 @@ public interface ProbabilisticTimedRebecaCompleteListener extends ParseTreeListe
 	 */
 	void exitExpression(ProbabilisticTimedRebecaCompleteParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#coreExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCoreExpression(ProbabilisticTimedRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#coreExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCoreExpression(ProbabilisticTimedRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ProbabilisticTimedRebecaCompleteParser#arguments}.
 	 * @param ctx the parse tree
 	 */

@@ -29,7 +29,7 @@ modeDeclaration returns[ModeDeclaration md]
 	;
     
 primary returns [TermPrimary tp]
-    : THIS
+    : SELF
     | SUPER
     | IDENTIFIER (arguments after? deadline?)? (LBRACKET expression RBRACKET)* PRIME*
     ;

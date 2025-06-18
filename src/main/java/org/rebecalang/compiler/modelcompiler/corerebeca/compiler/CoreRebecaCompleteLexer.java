@@ -23,7 +23,7 @@ public class CoreRebecaCompleteLexer extends Lexer {
 		IF=9, RETURN=10, SWITCH=11, WHILE=12, ENV=13, FEATUREVAR=14, IMPORT=15, 
 		PACKAGE=16, PRIVATE=17, PROTECTED=18, PUBLIC=19, RECORD=20, REACTIVECLASS=21, 
 		INTERFACE=22, ABSTRACT=23, EXTENDS=24, IMPLEMENTS=25, MSGSRV=26, MAIN=27, 
-		STATEVARS=28, KNOWNREBECS=29, INSTANCEOF=30, NEW=31, THIS=32, SUPER=33, 
+		STATEVARS=28, KNOWNREBECS=29, INSTANCEOF=30, NEW=31, SELF=32, SUPER=33, 
 		LPAREN=34, RPAREN=35, LBRACE=36, RBRACE=37, LBRACKET=38, RBRACKET=39, 
 		SEMI=40, COMMA=41, DOT=42, EQ=43, BANG=44, TILDA=45, QUES=46, COLON=47, 
 		EQEQ=48, AMPAMP=49, BARBAR=50, PLUSPLUS=51, SUBSUB=52, PLUS=53, SUB=54, 
@@ -47,7 +47,7 @@ public class CoreRebecaCompleteLexer extends Lexer {
 			"GOTO", "IF", "RETURN", "SWITCH", "WHILE", "ENV", "FEATUREVAR", "IMPORT", 
 			"PACKAGE", "PRIVATE", "PROTECTED", "PUBLIC", "RECORD", "REACTIVECLASS", 
 			"INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", "MSGSRV", "MAIN", "STATEVARS", 
-			"KNOWNREBECS", "INSTANCEOF", "NEW", "THIS", "SUPER", "LPAREN", "RPAREN", 
+			"KNOWNREBECS", "INSTANCEOF", "NEW", "SELF", "SUPER", "LPAREN", "RPAREN", 
 			"LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "SEMI", "COMMA", "DOT", "EQ", 
 			"BANG", "TILDA", "QUES", "COLON", "EQEQ", "AMPAMP", "BARBAR", "PLUSPLUS", 
 			"SUBSUB", "PLUS", "SUB", "STAR", "SLASH", "AMP", "BAR", "CARET", "PERCENT", 
@@ -69,7 +69,7 @@ public class CoreRebecaCompleteLexer extends Lexer {
 			"'featurevar'", "'import'", "'package'", "'private'", "'protected'", 
 			"'public'", "'record'", "'reactiveclass'", "'interface'", "'abstract'", 
 			"'extends'", "'implements'", "'msgsrv'", "'main'", "'statevars'", "'knownrebecs'", 
-			"'instanceof'", "'new'", "'this'", "'super'", "'('", "')'", "'{'", "'}'", 
+			"'instanceof'", "'new'", "'self'", "'super'", "'('", "')'", "'{'", "'}'", 
 			"'['", "']'", "';'", "','", "'.'", "'='", "'!'", "'~'", "'?'", "':'", 
 			"'=='", "'&&'", "'||'", "'++'", "'--'", "'+'", "'-'", "'*'", "'/'", "'&'", 
 			"'|'", "'^'", "'%'", "'+='", "'-='", "'*='", "'/='", "'&='", "'|='", 
@@ -85,7 +85,7 @@ public class CoreRebecaCompleteLexer extends Lexer {
 			"GOTO", "IF", "RETURN", "SWITCH", "WHILE", "ENV", "FEATUREVAR", "IMPORT", 
 			"PACKAGE", "PRIVATE", "PROTECTED", "PUBLIC", "RECORD", "REACTIVECLASS", 
 			"INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", "MSGSRV", "MAIN", "STATEVARS", 
-			"KNOWNREBECS", "INSTANCEOF", "NEW", "THIS", "SUPER", "LPAREN", "RPAREN", 
+			"KNOWNREBECS", "INSTANCEOF", "NEW", "SELF", "SUPER", "LPAREN", "RPAREN", 
 			"LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "SEMI", "COMMA", "DOT", "EQ", 
 			"BANG", "TILDA", "QUES", "COLON", "EQEQ", "AMPAMP", "BARBAR", "PLUSPLUS", 
 			"SUBSUB", "PLUS", "SUB", "STAR", "SLASH", "AMP", "BAR", "CARET", "PERCENT", 
@@ -316,8 +316,8 @@ public class CoreRebecaCompleteLexer extends Lexer {
 		"\u01a1\7u\2\2\u01a1\u01a2\7v\2\2\u01a2\u01a3\7c\2\2\u01a3\u01a4\7p\2\2"+
 		"\u01a4\u01a5\7e\2\2\u01a5\u01a6\7g\2\2\u01a6\u01a7\7q\2\2\u01a7\u01a8"+
 		"\7h\2\2\u01a8>\3\2\2\2\u01a9\u01aa\7p\2\2\u01aa\u01ab\7g\2\2\u01ab\u01ac"+
-		"\7y\2\2\u01ac@\3\2\2\2\u01ad\u01ae\7v\2\2\u01ae\u01af\7j\2\2\u01af\u01b0"+
-		"\7k\2\2\u01b0\u01b1\7u\2\2\u01b1B\3\2\2\2\u01b2\u01b3\7u\2\2\u01b3\u01b4"+
+		"\7y\2\2\u01ac@\3\2\2\2\u01ad\u01ae\7u\2\2\u01ae\u01af\7g\2\2\u01af\u01b0"+
+		"\7n\2\2\u01b0\u01b1\7h\2\2\u01b1B\3\2\2\2\u01b2\u01b3\7u\2\2\u01b3\u01b4"+
 		"\7w\2\2\u01b4\u01b5\7r\2\2\u01b5\u01b6\7g\2\2\u01b6\u01b7\7t\2\2\u01b7"+
 		"D\3\2\2\2\u01b8\u01b9\7*\2\2\u01b9F\3\2\2\2\u01ba\u01bb\7+\2\2\u01bbH"+
 		"\3\2\2\2\u01bc\u01bd\7}\2\2\u01bdJ\3\2\2\2\u01be\u01bf\7\177\2\2\u01bf"+

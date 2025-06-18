@@ -509,6 +509,16 @@ public interface HybridRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitExpression(HybridRebecaCompleteParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#coreExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCoreExpression(HybridRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HybridRebecaCompleteParser#coreExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCoreExpression(HybridRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HybridRebecaCompleteParser#nondetExpression}.
 	 * @param ctx the parse tree
 	 */

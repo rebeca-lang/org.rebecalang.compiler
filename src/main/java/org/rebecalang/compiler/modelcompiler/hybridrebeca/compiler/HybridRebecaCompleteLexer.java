@@ -25,7 +25,7 @@ public class HybridRebecaCompleteLexer extends Lexer {
 		FEATUREVAR=22, IMPORT=23, PACKAGE=24, PRIVATE=25, PROTECTED=26, PUBLIC=27, 
 		RECORD=28, REACTIVECLASS=29, INTERFACE=30, ABSTRACT=31, EXTENDS=32, IMPLEMENTS=33, 
 		MSGSRV=34, MAIN=35, STATEVARS=36, KNOWNREBECS=37, INSTANCEOF=38, NEW=39, 
-		THIS=40, SUPER=41, LPAREN=42, RPAREN=43, LBRACE=44, RBRACE=45, LBRACKET=46, 
+		SELF=40, SUPER=41, LPAREN=42, RPAREN=43, LBRACE=44, RBRACE=45, LBRACKET=46, 
 		RBRACKET=47, SEMI=48, COMMA=49, DOT=50, EQ=51, BANG=52, TILDA=53, QUES=54, 
 		COLON=55, EQEQ=56, AMPAMP=57, BARBAR=58, PLUSPLUS=59, SUBSUB=60, PLUS=61, 
 		SUB=62, STAR=63, SLASH=64, AMP=65, BAR=66, CARET=67, PERCENT=68, PLUSEQ=69, 
@@ -50,7 +50,7 @@ public class HybridRebecaCompleteLexer extends Lexer {
 			"FOR", "GOTO", "IF", "RETURN", "SWITCH", "WHILE", "ENV", "FEATUREVAR", 
 			"IMPORT", "PACKAGE", "PRIVATE", "PROTECTED", "PUBLIC", "RECORD", "REACTIVECLASS", 
 			"INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", "MSGSRV", "MAIN", "STATEVARS", 
-			"KNOWNREBECS", "INSTANCEOF", "NEW", "THIS", "SUPER", "LPAREN", "RPAREN", 
+			"KNOWNREBECS", "INSTANCEOF", "NEW", "SELF", "SUPER", "LPAREN", "RPAREN", 
 			"LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "SEMI", "COMMA", "DOT", "EQ", 
 			"BANG", "TILDA", "QUES", "COLON", "EQEQ", "AMPAMP", "BARBAR", "PLUSPLUS", 
 			"SUBSUB", "PLUS", "SUB", "STAR", "SLASH", "AMP", "BAR", "CARET", "PERCENT", 
@@ -73,7 +73,7 @@ public class HybridRebecaCompleteLexer extends Lexer {
 			"'while'", "'env'", "'featurevar'", "'import'", "'package'", "'private'", 
 			"'protected'", "'public'", "'record'", "'reactiveclass'", "'interface'", 
 			"'abstract'", "'extends'", "'implements'", "'msgsrv'", "'main'", "'statevars'", 
-			"'knownrebecs'", "'instanceof'", "'new'", "'this'", "'super'", "'('", 
+			"'knownrebecs'", "'instanceof'", "'new'", "'self'", "'super'", "'('", 
 			"')'", "'{'", "'}'", "'['", "']'", "';'", "','", "'.'", "'='", "'!'", 
 			"'~'", "'?'", "':'", "'=='", "'&&'", "'||'", "'++'", "'--'", "'+'", "'-'", 
 			"'*'", "'/'", "'&'", "'|'", "'^'", "'%'", "'+='", "'-='", "'*='", "'/='", 
@@ -90,7 +90,7 @@ public class HybridRebecaCompleteLexer extends Lexer {
 			"ELSE", "FOR", "GOTO", "IF", "RETURN", "SWITCH", "WHILE", "ENV", "FEATUREVAR", 
 			"IMPORT", "PACKAGE", "PRIVATE", "PROTECTED", "PUBLIC", "RECORD", "REACTIVECLASS", 
 			"INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", "MSGSRV", "MAIN", "STATEVARS", 
-			"KNOWNREBECS", "INSTANCEOF", "NEW", "THIS", "SUPER", "LPAREN", "RPAREN", 
+			"KNOWNREBECS", "INSTANCEOF", "NEW", "SELF", "SUPER", "LPAREN", "RPAREN", 
 			"LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "SEMI", "COMMA", "DOT", "EQ", 
 			"BANG", "TILDA", "QUES", "COLON", "EQEQ", "AMPAMP", "BARBAR", "PLUSPLUS", 
 			"SUBSUB", "PLUS", "SUB", "STAR", "SLASH", "AMP", "BAR", "CARET", "PERCENT", 
@@ -344,7 +344,7 @@ public class HybridRebecaCompleteLexer extends Lexer {
 		"\u01eb\u01ec\7c\2\2\u01ec\u01ed\7p\2\2\u01ed\u01ee\7e\2\2\u01ee\u01ef"+
 		"\7g\2\2\u01ef\u01f0\7q\2\2\u01f0\u01f1\7h\2\2\u01f1N\3\2\2\2\u01f2\u01f3"+
 		"\7p\2\2\u01f3\u01f4\7g\2\2\u01f4\u01f5\7y\2\2\u01f5P\3\2\2\2\u01f6\u01f7"+
-		"\7v\2\2\u01f7\u01f8\7j\2\2\u01f8\u01f9\7k\2\2\u01f9\u01fa\7u\2\2\u01fa"+
+		"\7u\2\2\u01f7\u01f8\7g\2\2\u01f8\u01f9\7n\2\2\u01f9\u01fa\7h\2\2\u01fa"+
 		"R\3\2\2\2\u01fb\u01fc\7u\2\2\u01fc\u01fd\7w\2\2\u01fd\u01fe\7r\2\2\u01fe"+
 		"\u01ff\7g\2\2\u01ff\u0200\7t\2\2\u0200T\3\2\2\2\u0201\u0202\7*\2\2\u0202"+
 		"V\3\2\2\2\u0203\u0204\7+\2\2\u0204X\3\2\2\2\u0205\u0206\7}\2\2\u0206Z"+

@@ -3,7 +3,7 @@ parser grammar TimedRebecaParser;
 import CoreRebecaParser;
 
 primary returns [TermPrimary tp]
-    : THIS
+    : SELF
     | SUPER
     | IDENTIFIER (arguments after? deadline?)? (LBRACKET expression RBRACKET)*
     ;

@@ -479,6 +479,16 @@ public interface ProbabilisticRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitExpression(ProbabilisticRebecaCompleteParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#coreExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCoreExpression(ProbabilisticRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ProbabilisticRebecaCompleteParser#coreExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCoreExpression(ProbabilisticRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ProbabilisticRebecaCompleteParser#primary}.
 	 * @param ctx the parse tree
 	 */

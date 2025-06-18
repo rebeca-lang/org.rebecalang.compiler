@@ -113,7 +113,6 @@ public class ModelStructureTest {
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		extension.add(CompilerExtension.TIMED_REBECA);
 		compiler.compileRebecaFile(model, extension, CoreVersion.CORE_2_1);
-		exceptionContainer.print(System.out);
 		Assertions.assertTrue(exceptionContainer.exceptionsIsEmpty());
 	}	
 	

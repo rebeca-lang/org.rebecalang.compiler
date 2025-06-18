@@ -14,6 +14,7 @@
 		<org.projectlombok.version>1.18.30</org.projectlombok.version>
 		<compilerversion>17</compilerversion>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>

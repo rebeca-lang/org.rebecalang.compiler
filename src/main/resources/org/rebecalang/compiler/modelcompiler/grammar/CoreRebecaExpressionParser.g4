@@ -40,12 +40,11 @@ expression returns [Expression e]
     //    | methodCall
     //    | THIS
     //)
-    //| methodCall                                                    
-      expression postfix = (PLUSPLUS | SUBSUB)                            
+    //| methodCall       
+      coreExpression                                           
+    | NEW type LPAREN knownrebecsList = expressionList? RPAREN COLON LPAREN constructorParams = expressionList? RPAREN
+    | expression postfix = (PLUSPLUS | SUBSUB)                            
     | prefix = (PLUS | SUB | PLUSPLUS | SUBSUB | TILDA | BANG) expression     
-    | parenExp = LPAREN expression RPAREN       		
-    | LPAREN castType = type RPAREN expression
-    | nondetExpression
     //| '(' annotation* IDENTIFIER ')' expression       				
     | NEW IDENTIFIER arguments COLON arguments                                                
     | expression bop = (STAR | SLASH | PERCENT) expression           
@@ -73,17 +72,34 @@ expression returns [Expression e]
         | LTLTEQ
         | PERCENTEQ
     ) expression
-    | <assoc = right> expression (dot = DOT primary)+
-    | primary
-    | literal
     ;
 
+coreExpression returns [Expression e]
+	:
+	<assoc = right> 
+	(
+		  LPAREN castType = type RPAREN coreExpression 
+		| LPAREN expression RPAREN 
+		| leftPrimary = primary 
+		| literal 
+		| nondetExpression
+	)
+    (DOT primary)*
+	
+	/* <assoc = right> coreExpression (dot = DOT primary)+
+    | primary
+    | literal
+    | parenExp = LPAREN expression RPAREN       		
+    | LPAREN castType = type RPAREN expression
+    | nondetExpression*/	
+	;
+	
 nondetExpression returns [Expression e]
 	: QUES LPAREN expression (COMMA expression)+ RPAREN		
 	;
 	
 primary returns [TermPrimary tp]
-    : THIS
+    : SELF
     | SUPER
     | IDENTIFIER arguments? (LBRACKET expression RBRACKET)*
     ;

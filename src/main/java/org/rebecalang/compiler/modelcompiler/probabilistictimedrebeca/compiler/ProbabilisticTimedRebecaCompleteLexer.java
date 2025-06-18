@@ -24,7 +24,7 @@ public class ProbabilisticTimedRebecaCompleteLexer extends Lexer {
 		ENV=17, FEATUREVAR=18, IMPORT=19, PACKAGE=20, PRIVATE=21, PROTECTED=22, 
 		PUBLIC=23, RECORD=24, REACTIVECLASS=25, INTERFACE=26, ABSTRACT=27, EXTENDS=28, 
 		IMPLEMENTS=29, MSGSRV=30, MAIN=31, STATEVARS=32, KNOWNREBECS=33, INSTANCEOF=34, 
-		NEW=35, THIS=36, SUPER=37, LPAREN=38, RPAREN=39, LBRACE=40, RBRACE=41, 
+		NEW=35, SELF=36, SUPER=37, LPAREN=38, RPAREN=39, LBRACE=40, RBRACE=41, 
 		LBRACKET=42, RBRACKET=43, SEMI=44, COMMA=45, DOT=46, EQ=47, BANG=48, TILDA=49, 
 		QUES=50, COLON=51, EQEQ=52, AMPAMP=53, BARBAR=54, PLUSPLUS=55, SUBSUB=56, 
 		PLUS=57, SUB=58, STAR=59, SLASH=60, AMP=61, BAR=62, CARET=63, PERCENT=64, 
@@ -48,7 +48,7 @@ public class ProbabilisticTimedRebecaCompleteLexer extends Lexer {
 			"DEFAULT", "ELSE", "FOR", "GOTO", "IF", "RETURN", "SWITCH", "WHILE", 
 			"ENV", "FEATUREVAR", "IMPORT", "PACKAGE", "PRIVATE", "PROTECTED", "PUBLIC", 
 			"RECORD", "REACTIVECLASS", "INTERFACE", "ABSTRACT", "EXTENDS", "IMPLEMENTS", 
-			"MSGSRV", "MAIN", "STATEVARS", "KNOWNREBECS", "INSTANCEOF", "NEW", "THIS", 
+			"MSGSRV", "MAIN", "STATEVARS", "KNOWNREBECS", "INSTANCEOF", "NEW", "SELF", 
 			"SUPER", "LPAREN", "RPAREN", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", 
 			"SEMI", "COMMA", "DOT", "EQ", "BANG", "TILDA", "QUES", "COLON", "EQEQ", 
 			"AMPAMP", "BARBAR", "PLUSPLUS", "SUBSUB", "PLUS", "SUB", "STAR", "SLASH", 
@@ -70,7 +70,7 @@ public class ProbabilisticTimedRebecaCompleteLexer extends Lexer {
 			"'return'", "'switch'", "'while'", "'env'", "'featurevar'", "'import'", 
 			"'package'", "'private'", "'protected'", "'public'", "'record'", "'reactiveclass'", 
 			"'interface'", "'abstract'", "'extends'", "'implements'", "'msgsrv'", 
-			"'main'", "'statevars'", "'knownrebecs'", "'instanceof'", "'new'", "'this'", 
+			"'main'", "'statevars'", "'knownrebecs'", "'instanceof'", "'new'", "'self'", 
 			"'super'", "'('", "')'", "'{'", "'}'", "'['", "']'", "';'", "','", "'.'", 
 			"'='", "'!'", "'~'", "'?'", "':'", "'=='", "'&&'", "'||'", "'++'", "'--'", 
 			"'+'", "'-'", "'*'", "'/'", "'&'", "'|'", "'^'", "'%'", "'+='", "'-='", 
@@ -87,7 +87,7 @@ public class ProbabilisticTimedRebecaCompleteLexer extends Lexer {
 			"WHILE", "ENV", "FEATUREVAR", "IMPORT", "PACKAGE", "PRIVATE", "PROTECTED", 
 			"PUBLIC", "RECORD", "REACTIVECLASS", "INTERFACE", "ABSTRACT", "EXTENDS", 
 			"IMPLEMENTS", "MSGSRV", "MAIN", "STATEVARS", "KNOWNREBECS", "INSTANCEOF", 
-			"NEW", "THIS", "SUPER", "LPAREN", "RPAREN", "LBRACE", "RBRACE", "LBRACKET", 
+			"NEW", "SELF", "SUPER", "LPAREN", "RPAREN", "LBRACE", "RBRACE", "LBRACKET", 
 			"RBRACKET", "SEMI", "COMMA", "DOT", "EQ", "BANG", "TILDA", "QUES", "COLON", 
 			"EQEQ", "AMPAMP", "BARBAR", "PLUSPLUS", "SUBSUB", "PLUS", "SUB", "STAR", 
 			"SLASH", "AMP", "BAR", "CARET", "PERCENT", "PLUSEQ", "SUBEQ", "STAREQ", 
@@ -328,7 +328,7 @@ public class ProbabilisticTimedRebecaCompleteLexer extends Lexer {
 		"\u01c3\u01c4\7c\2\2\u01c4\u01c5\7p\2\2\u01c5\u01c6\7e\2\2\u01c6\u01c7"+
 		"\7g\2\2\u01c7\u01c8\7q\2\2\u01c8\u01c9\7h\2\2\u01c9F\3\2\2\2\u01ca\u01cb"+
 		"\7p\2\2\u01cb\u01cc\7g\2\2\u01cc\u01cd\7y\2\2\u01cdH\3\2\2\2\u01ce\u01cf"+
-		"\7v\2\2\u01cf\u01d0\7j\2\2\u01d0\u01d1\7k\2\2\u01d1\u01d2\7u\2\2\u01d2"+
+		"\7u\2\2\u01cf\u01d0\7g\2\2\u01d0\u01d1\7n\2\2\u01d1\u01d2\7h\2\2\u01d2"+
 		"J\3\2\2\2\u01d3\u01d4\7u\2\2\u01d4\u01d5\7w\2\2\u01d5\u01d6\7r\2\2\u01d6"+
 		"\u01d7\7g\2\2\u01d7\u01d8\7t\2\2\u01d8L\3\2\2\2\u01d9\u01da\7*\2\2\u01da"+
 		"N\3\2\2\2\u01db\u01dc\7+\2\2\u01dcP\3\2\2\2\u01dd\u01de\7}\2\2\u01deR"+

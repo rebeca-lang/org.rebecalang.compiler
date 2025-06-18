@@ -489,6 +489,16 @@ public interface TimedRebecaCompleteListener extends ParseTreeListener {
 	 */
 	void exitExpression(TimedRebecaCompleteParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#coreExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCoreExpression(TimedRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TimedRebecaCompleteParser#coreExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCoreExpression(TimedRebecaCompleteParser.CoreExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TimedRebecaCompleteParser#nondetExpression}.
 	 * @param ctx the parse tree
 	 */
