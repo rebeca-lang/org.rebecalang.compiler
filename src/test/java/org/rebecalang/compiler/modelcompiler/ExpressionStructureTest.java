@@ -1,15 +1,14 @@
 package org.rebecalang.compiler.modelcompiler;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.rebecalang.compiler.CompilerConfig;
+import org.rebecalang.compiler.Utils;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
@@ -48,7 +47,7 @@ public class ExpressionStructureTest {
 				}
 				main{}
 				""";
-		File rebecaFile = createTempFile(rebecaModel);
+		File rebecaFile = Utils.createTempFile(rebecaModel);
 		
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		RebecaModel model = 
@@ -83,7 +82,7 @@ public class ExpressionStructureTest {
 				main{}
 				
 				""";
-		File rebecaFile = createTempFile(rebecaModel);
+		File rebecaFile = Utils.createTempFile(rebecaModel);
 		
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		RebecaModel model = 
@@ -126,7 +125,7 @@ public class ExpressionStructureTest {
 				main{}
 				
 				""";
-		File rebecaFile = createTempFile(rebecaModel);
+		File rebecaFile = Utils.createTempFile(rebecaModel);
 		
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		RebecaModel model = 
@@ -152,14 +151,6 @@ public class ExpressionStructureTest {
 		TermPrimary method = (TermPrimary) dotPrimary.getRight();
 		Assertions.assertEquals("self", base.getName());
 		Assertions.assertEquals("methoda1", method.getName());
-	}
-	
-	private File createTempFile(String test) throws IOException, FileNotFoundException {
-		File model = File.createTempFile("AfraTest", ".tmp");
-		RandomAccessFile raf = new RandomAccessFile(model, "rw");
-		raf.writeBytes(test);
-		raf.close();
-		return model;
 	}
 	
 }
