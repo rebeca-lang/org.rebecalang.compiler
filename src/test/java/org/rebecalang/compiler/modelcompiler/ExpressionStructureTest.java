@@ -8,7 +8,6 @@ import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.rebecalang.compiler.CompilerConfig;
-import org.rebecalang.compiler.Utils;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
@@ -23,6 +22,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.VariableInit
 import org.rebecalang.compiler.utils.CompilerExtension;
 import org.rebecalang.compiler.utils.CoreVersion;
 import org.rebecalang.compiler.utils.ExceptionContainer;
+import org.rebecalang.compiler.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -47,7 +47,7 @@ public class ExpressionStructureTest {
 				}
 				main{}
 				""";
-		File rebecaFile = Utils.createTempFile(rebecaModel);
+		File rebecaFile = FileUtils.createTempFile(rebecaModel);
 		
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		RebecaModel model = 
@@ -76,13 +76,14 @@ public class ExpressionStructureTest {
 					A methodA(){return null;}
 					msgsrv a() {
 						self.methodA().b = 2;
+						((A)self.methodA()).b = 2;
 						self.b = 3;
 					}
 				}
 				main{}
 				
 				""";
-		File rebecaFile = Utils.createTempFile(rebecaModel);
+		File rebecaFile = FileUtils.createTempFile(rebecaModel);
 		
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		RebecaModel model = 
@@ -106,6 +107,15 @@ public class ExpressionStructureTest {
 		Assertions.assertEquals(TermPrimary.class, dotPrimary.getLeft().getClass());
 		Assertions.assertEquals(DotPrimary.class, dotPrimary.getRight().getClass());
 		
+		statement = model.getRebecaCode().getReactiveClassDeclaration().get(0).getMsgsrvs().
+				get(0).getBlock().getStatements().get(1);
+		Assertions.assertEquals(BinaryExpression.class, statement.getClass());
+		Assertions.assertEquals(DotPrimary.class, ((BinaryExpression) statement).getLeft().getClass());
+		dotPrimary = (DotPrimary) ((BinaryExpression) statement).getLeft();
+		Assertions.assertEquals(CastExpression.class, dotPrimary.getLeft().getClass());
+		
+
+		
 		rebecaFile.delete();
 	}
 
@@ -125,7 +135,7 @@ public class ExpressionStructureTest {
 				main{}
 				
 				""";
-		File rebecaFile = Utils.createTempFile(rebecaModel);
+		File rebecaFile = FileUtils.createTempFile(rebecaModel);
 		
 		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
 		RebecaModel model = 

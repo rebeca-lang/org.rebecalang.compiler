@@ -253,15 +253,6 @@ public class SemanticCheckerUtils {
 		ExpressionParser parser = new SpelExpressionParser();        
         try {
             Expression exp = parser.parseExpression(expressionInString);
-//	        if(type == CoreRebecaTypeSystem.INT_TYPE)
-//	        	return exp.getValue(Integer.class);
-//	        if(type == CoreRebecaTypeSystem.SHORT_TYPE)
-//	        	return exp.getValue(Short.class);
-//	        if(type == CoreRebecaTypeSystem.BYTE_TYPE)
-//	        	return exp.getValue(Byte.class);
-//	        if(type == CoreRebecaTypeSystem.BOOLEAN_TYPE)
-//	        	return exp.getValue(Boolean.class);
-//        	return AbstractExpressionSemanticCheck.NO_VALUE;
         	return exp.getValue();
 
         } catch (EvaluationException evaluationException) {
