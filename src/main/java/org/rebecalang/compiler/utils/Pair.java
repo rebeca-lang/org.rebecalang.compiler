@@ -3,7 +3,7 @@ package org.rebecalang.compiler.utils;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class Pair<A, B> implements Serializable {
+public class Pair<A, B> implements Serializable, Cloneable {
     private A first;
     private B second;
 
@@ -48,5 +48,12 @@ public class Pair<A, B> implements Serializable {
 
     public void setSecond(B second) {
         this.second = second;
+    }
+    
+    public Pair<A,B> clone() {
+    	Pair<A,B> result = new Pair<A,B>();
+    	result.setFirst(this.first);
+    	result.setSecond(this.second);
+    	return result;
     }
 }
