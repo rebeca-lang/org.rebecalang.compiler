@@ -178,6 +178,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 				}
 				if (termPrimary.getIndices().size() == foundTypeInArray.getDimensions().size()) {
 					returnValue.setFirst(foundTypeInArray.getOrdinaryPrimitiveType());
+					termPrimary.setType(foundTypeInArray.getOrdinaryPrimitiveType());
 				} else {
 					ArrayType arrayType = new ArrayType();
 					arrayType.setOrdinaryPrimitiveType(foundTypeInArray.getOrdinaryPrimitiveType());
@@ -185,6 +186,7 @@ public class PrimaryTermExpressionSemanticCheck extends AbstractExpressionSemant
 							- termPrimary.getIndices().size(); cnt++)
 						arrayType.getDimensions().add(foundTypeInArray.getDimensions().get(cnt));
 					returnValue.setFirst(arrayType);
+					termPrimary.setType(arrayType);
 				}
 
 			}
