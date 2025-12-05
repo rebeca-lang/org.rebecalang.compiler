@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.rebecalang.compiler.CompilerConfig;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BinaryExpression;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BlockStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Literal;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.OrdinaryVariableInitializer;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecInstantiationPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.RebecaModel;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Statement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.TermPrimary;
@@ -36,6 +38,44 @@ public class ExpressionStructureTest {
 	@Autowired
 	public ExceptionContainer exceptionContainer;
 
+	@Test
+	public void fieldDeclarationTest() throws IOException {
+		
+		String rebecaModel = 
+				"""
+				reactiveclass Test (2) {
+					msgsrv a() {
+						int a;
+						int b = 10;
+						int c = a;
+						int d = 10 + b;
+						new Test():();
+						new Test():().a();
+						Test t = new Test():();
+						Test t2 = t;
+					}
+				}
+				main{}
+				""";
+		File rebecaFile = FileUtils.createTempFile(rebecaModel);
+		
+		Set<CompilerExtension> extension = new HashSet<CompilerExtension>();
+		RebecaModel model = 
+				compiler.compileRebecaFile(rebecaFile, extension, CoreVersion.CORE_2_2).getFirst();
+
+		BlockStatement block = model.getRebecaCode().getReactiveClassDeclaration().get(0).getMsgsrvs().
+			get(0).getBlock();
+		
+		Assertions.assertEquals(FieldDeclaration.class, block.getStatements().get(0).getClass());
+		Assertions.assertEquals(FieldDeclaration.class, block.getStatements().get(1).getClass());
+		Assertions.assertEquals(FieldDeclaration.class, block.getStatements().get(2).getClass());
+		Assertions.assertEquals(FieldDeclaration.class, block.getStatements().get(3).getClass());
+		Assertions.assertEquals(RebecInstantiationPrimary.class, block.getStatements().get(4).getClass());
+		Assertions.assertEquals(DotPrimary.class, block.getStatements().get(5).getClass());
+		Assertions.assertEquals(FieldDeclaration.class, block.getStatements().get(6).getClass());
+		Assertions.assertEquals(FieldDeclaration.class, block.getStatements().get(7).getClass());
+	}
+	
 	@Test
 	public void GIVEN_IncorrectUsageOfCastOperator_WHEN_CoreIs2_3_THEN_NoErrors() throws IOException {
 		String rebecaModel = 

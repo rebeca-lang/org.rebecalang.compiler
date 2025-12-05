@@ -676,7 +676,7 @@ public class ProbabilisticTimedRebecaListener extends ProbabilisticTimedRebecaCo
 		return ctx.coreExpression() != null;
 	}
 
-	public boolean isNewInstance(ProbabilisticTimedRebecaCompleteParser.ExpressionContext ctx) {
+	public boolean isNewInstance(ProbabilisticTimedRebecaCompleteParser.CoreExpressionContext ctx) {
 		return ctx.NEW() != null;
 	}
 
@@ -722,18 +722,6 @@ public class ProbabilisticTimedRebecaListener extends ProbabilisticTimedRebecaCo
 			te.setCharacter(ctx.bop.getCharPositionInLine());
 			te.setLineNumber(ctx.bop.getLine());
 			ctx.e = te;
-		} else if (isNewInstance(ctx)) {
-			RebecInstantiationPrimary rip = new RebecInstantiationPrimary();
-			OrdinaryPrimitiveType type = new OrdinaryPrimitiveType();
-			type.setName(ctx.type().getText());
-			rip.setType(type);
-			if(ctx.knownrebecsList != null)
-				rip.getBindings().addAll(ctx.knownrebecsList.el);
-			if(ctx.constructorParams != null)
-				rip.getArguments().addAll(ctx.constructorParams.el);
-			rip.setCharacter(ctx.NEW().getSymbol().getCharPositionInLine());
-			rip.setLineNumber(ctx.NEW().getSymbol().getLine());
-			ctx.e = rip;
 		}
 	}
 
@@ -772,6 +760,18 @@ public class ProbabilisticTimedRebecaListener extends ProbabilisticTimedRebecaCo
 			ce.setCharacter(ctx.type().t.getCharacter());
 			ce.setLineNumber(ctx.type().t.getLineNumber());
 			ctx.e = ce;
+		} else if (isNewInstance(ctx)) {
+			RebecInstantiationPrimary rip = new RebecInstantiationPrimary();
+			OrdinaryPrimitiveType type = new OrdinaryPrimitiveType();
+			type.setName(ctx.type().getText());
+			rip.setType(type);
+			if(ctx.knownrebecsList != null)
+				rip.getBindings().addAll(ctx.knownrebecsList.el);
+			if(ctx.constructorParams != null)
+				rip.getArguments().addAll(ctx.constructorParams.el);
+			rip.setCharacter(ctx.NEW().getSymbol().getCharPositionInLine());
+			rip.setLineNumber(ctx.NEW().getSymbol().getLine());
+			ctx.e = rip;
 		} else if (isLiteral(ctx)) {
 			ctx.e = ctx.literal().l;
 		}

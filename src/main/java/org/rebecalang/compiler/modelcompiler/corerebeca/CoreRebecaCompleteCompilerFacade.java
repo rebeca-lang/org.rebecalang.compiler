@@ -240,7 +240,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		if (coreVersion == CoreVersion.CORE_2_2) {
 			expressionSemanticCheckContainer.registerSemanticsChecker(RebecInstantiationPrimary.class,
 					appContext.getBean(RebecInstantiationExpressionSemanticCheck.class, 
-							typeSystem));
+							typeSystem, expressionSemanticCheckContainer));
 		} else {
 			expressionSemanticCheckContainer.registerSemanticsChecker(RebecInstantiationPrimary.class,
 					appContext.getBean(RebecInstantiationExpressionDummySemanticCheck.class, 
@@ -583,7 +583,9 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 			}
 			if (!TypesUtilities.areTheSame(knownRebecsBindingsTypes, exprectedTypes, Type.getCastableComparator())) {
 				CodeCompilationException rce = new CodeCompilationException(
-						createCheckMainBindingsExceptionMessage(knownRebecs, knownRebecsBindingsTypes, rcd.getName()),
+						RebecInstantiationExpressionSemanticCheck.
+							createCheckMainBindingsExceptionMessage(
+									knownRebecs, knownRebecsBindingsTypes, rcd.getName()),
 						mrd.getLineNumber(), mrd.getCharacter());
 				exceptionContainer.addException(rce);
 			}
@@ -634,27 +636,7 @@ public class CoreRebecaCompleteCompilerFacade extends AbstractCompilerFacade {
 		return reactiveClasses;
 	}
 
-	private String createCheckMainBindingsExceptionMessage(
-			List<FieldDeclaration> knownRebecs, List<Type> bindings,
-			String reactiveClassName) {
-		String expected = "", actual = "";
 
-		for (FieldDeclaration fd : knownRebecs)
-			expected += ", " + fd.getType().getTypeName();
-		// remove the first comma from "expected".
-		if (!knownRebecs.isEmpty())
-			expected = expected.substring(2);
-
-		for (Type type : bindings) {
-			actual += ", " + type.getTypeName();
-		}
-		// remove the first comma from "actual".
-		if (!bindings.isEmpty())
-			actual = actual.substring(2);
-
-		return "The " + reactiveClassName + " knownrebecs type binding of (" + expected + ")"
-				+ " is not applicable for the arguments (" + actual + ")";
-	}
 
 	@SafeVarargs
 	protected final void addMethodToSymbolTable(Label methodLabel, Type base, String name, Type returnType,

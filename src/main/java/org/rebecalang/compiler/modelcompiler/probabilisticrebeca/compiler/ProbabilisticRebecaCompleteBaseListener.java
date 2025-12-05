@@ -1,7 +1,11 @@
 // Generated from src/main/resources/org/rebecalang/compiler/modelcompiler/grammar/ProbabilisticRebecaComplete.g4 by ANTLR 4.8
 
 	package org.rebecalang.compiler.modelcompiler.probabilisticrebeca.compiler;
-	import org.antlr.v4.runtime.ParserRuleContext;
+	import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.*;
+	import org.rebecalang.compiler.modelcompiler.probabilisticrebeca.objectmodel.*;
+
+
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 

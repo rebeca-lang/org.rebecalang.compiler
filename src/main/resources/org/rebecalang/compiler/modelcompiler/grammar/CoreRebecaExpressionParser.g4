@@ -42,11 +42,9 @@ expression returns [Expression e]
     //)
     //| methodCall       
       coreExpression                                           
-    | NEW type LPAREN knownrebecsList = expressionList? RPAREN COLON LPAREN constructorParams = expressionList? RPAREN
     | expression postfix = (PLUSPLUS | SUBSUB)                            
     | prefix = (PLUS | SUB | PLUSPLUS | SUBSUB | TILDA | BANG) expression     
     //| '(' annotation* IDENTIFIER ')' expression       				
-    | NEW IDENTIFIER arguments COLON arguments                                                
     | expression bop = (STAR | SLASH | PERCENT) expression           
     | expression bop = (PLUS | SUB) expression                 
     | expression bop = (LTLT | GTGT) expression 
@@ -83,6 +81,7 @@ coreExpression returns [Expression e]
 		| leftPrimary = primary 
 		| literal 
 		| nondetExpression
+		| NEW t = IDENTIFIER LPAREN knownrebecsList = expressionList? RPAREN COLON LPAREN constructorParams = expressionList? RPAREN
 	)
     (DOT primary)*
 	
