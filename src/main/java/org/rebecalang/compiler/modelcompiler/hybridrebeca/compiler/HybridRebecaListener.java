@@ -15,6 +15,7 @@ import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.BreakStateme
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.CastExpression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConditionalStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ConstructorDeclaration;
+import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.ContinueStatement;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.DotPrimary;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.Expression;
 import org.rebecalang.compiler.modelcompiler.corerebeca.objectmodel.FieldDeclaration;
@@ -647,7 +648,7 @@ public class HybridRebecaListener extends HybridRebecaCompleteBaseListener {
             breakStmt.setCharacter(ctx.BREAK().getSymbol().getCharPositionInLine());
             ctx.s = breakStmt;
         } else if (ctx.CONTINUE() != null) {
-            BreakStatement continueStmt = new BreakStatement();
+        	ContinueStatement continueStmt = new ContinueStatement();
             continueStmt.setLineNumber(ctx.CONTINUE().getSymbol().getLine());
             continueStmt.setCharacter(ctx.CONTINUE().getSymbol().getCharPositionInLine());
             ctx.s = continueStmt;

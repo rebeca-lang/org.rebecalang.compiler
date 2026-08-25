@@ -28,5 +28,9 @@ public abstract class AbstractSemanticCheck {
 		private Object readResolve() {
 			return NO_VALUE;
 		}
+		
+		public String toString() {
+			return "No-Value";
+		}
 	}
 }
